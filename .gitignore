@@ -1,0 +1,6 @@
+.kotlin/
+.gradle/
+build/
+KMVNRepo.iml
+**/build/
+backend/repositories/
