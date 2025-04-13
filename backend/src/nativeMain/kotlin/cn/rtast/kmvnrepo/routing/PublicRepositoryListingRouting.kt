@@ -30,21 +30,28 @@ fun Routing.configurePublicRepositoriesListing() {
                     return@get
                 }
                 val fileList = fullPath.listFiles().sortedWith(compareBy({ !it.isDirectory() }, { it.name }))
+                val nameList = fileList.map { it.name + if (it.isDirectory()) "/" else "" }
+                val maxNameLength = nameList.maxOfOrNull { it.length } ?: 0
                 val html = buildString {
                     appendLine("<!DOCTYPE html>")
                     appendLine("<html><head><meta charset='utf-8'><title>Index of /${repo.name}/$relativePath</title></head><body>")
                     appendLine("<h1>Index of /${repo.name}/$relativePath</h1>")
-                    appendLine("<ul style=\"font-family: monospace; line-height: 1.6;\">")
+                    appendLine("<pre style=\"font-family: monospace; line-height: 1.6;\">")
                     if (pathParts.isNotEmpty()) {
                         val parent = pathParts.dropLast(1).joinToString("/")
-                        appendLine("""<li><a href="/listing/${repo.name}/$parent">../</a></li>""")
+                        appendLine("""<a href="/listing/${repo.name}/$parent">../</a>""")
                     }
-                    fileList.forEach { file ->
-                        val name = file.name + if (file.isDirectory()) "/" else ""
+                    fileList.forEachIndexed { index, file ->
+                        val name = nameList[index]
                         val href = (pathParts + file.name).joinToString("/")
-                        appendLine("""<li><a href="/listing/${repo.name}/$href">$name</a></li>""")
+                        val padding = " ".repeat(maxNameLength - name.length + 2)
+                        val sizeText = if (file.isFile()) {
+                            val sizeInKB = file.size()
+                            "(${sizeInKB} B)"
+                        } else "( - )"
+                        appendLine("""<a href="/listing/${repo.name}/$href">$name</a>$padding$sizeText""")
                     }
-                    appendLine("</ul></body></html>")
+                    appendLine("</pre></body></html>")
                 }
                 call.respondText(html, ContentType.Text.Html)
             }
