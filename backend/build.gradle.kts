@@ -14,7 +14,6 @@ plugins {
 
 kotlin {
     linuxX64()
-    linuxArm64()
     mingwX64()
 
     targets.withType<KotlinNativeTarget>().configureEach {
