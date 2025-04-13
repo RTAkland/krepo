@@ -12,6 +12,7 @@ import cn.rtast.kmvnrepo.routing.api.configureAPIArtifactsRouting
 import cn.rtast.kmvnrepo.routing.api.configureAPIUserRouting
 import cn.rtast.kmvnrepo.routing.configureDownloadRouting
 import cn.rtast.kmvnrepo.routing.configureUploadArtifactRouting
+import cn.rtast.kmvnrepo.util.ConfigManager
 import cn.rtast.kmvnrepo.util.UserManager
 import io.ktor.server.auth.*
 import io.ktor.server.cio.*
@@ -19,9 +20,10 @@ import io.ktor.server.engine.*
 import io.ktor.server.routing.*
 
 val userManager = UserManager()
+val configManager = ConfigManager()
 
 fun main() {
-    embeddedServer(CIO, 9098) {
+    embeddedServer(CIO, configManager.getConfig().port) {
         authentication {
             basic(name = "maven-common") {
                 validate { credentials ->

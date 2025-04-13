@@ -8,6 +8,7 @@
 
 package cn.rtast.kmvnrepo
 
+import cn.rtast.kmvnrepo.entity.Config
 import cn.rtast.kmvnrepo.entity.RepositoryInfo
 import cn.rtast.kmvnrepo.enums.RepositoryVisibility
 import cn.rtast.kmvnrepo.util.mkdirs
@@ -25,3 +26,7 @@ val repositories = mutableListOf<RepositoryInfo>(
 
 val publicRepositories = repositories.filter { it.visibility == RepositoryVisibility.Public }
 val internalRepositories = repositories.filter { it.visibility == RepositoryVisibility.Internal }
+
+val DEFAULT_CONFIG = Config(
+    9098, false
+)

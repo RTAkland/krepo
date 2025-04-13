@@ -10,7 +10,7 @@ plugins {
     id("maven-publish")
 }
 
-version = "0.0.2"
+version = "0.0.3"
 
 kotlin {
     mingwX64()
@@ -19,15 +19,16 @@ kotlin {
 
 repositories {
     mavenLocal()
-    maven("http://127.0.0.1:9098/releases")
 }
 
 publishing {
     repositories {
-        maven("http://127.0.0.1:9098/releases") {
+//        maven("http://lan.rtast.cn:9098/snapshots") {
+        maven("http://127.0.0.1:9098/snapshots") {
+            isAllowInsecureProtocol = true
             credentials {
-                username = "RTAkland"
-                password = "123456"
+                username = "admin"
+                password = "42262a85-dffa-4898-a944-170690e124b2"
             }
         }
     }
