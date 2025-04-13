@@ -9,17 +9,18 @@
 package cn.rtast.kmvnrepo
 
 import cn.rtast.kmvnrepo.routing.api.configureAPIArtifactsRouting
+import cn.rtast.kmvnrepo.routing.api.configureAPIRepositoryRouting
 import cn.rtast.kmvnrepo.routing.api.configureAPIUserRouting
 import cn.rtast.kmvnrepo.routing.configureDownloadRouting
 import cn.rtast.kmvnrepo.routing.configurePublicRepositoriesListing
 import cn.rtast.kmvnrepo.routing.configureUploadArtifactRouting
 import cn.rtast.kmvnrepo.util.ConfigManager
 import cn.rtast.kmvnrepo.util.UserManager
-import io.ktor.server.application.install
+import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
-import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.routing.*
 
 val userManager = UserManager()
@@ -42,6 +43,7 @@ fun main() {
             configureAPIArtifactsRouting()
             configureAPIUserRouting()
             configurePublicRepositoriesListing()
+            configureAPIRepositoryRouting()
         }
     }.start(wait = true)
 }
