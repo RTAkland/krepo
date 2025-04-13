@@ -11,13 +11,17 @@ package cn.rtast.kmvnrepo
 import cn.rtast.kmvnrepo.entity.RepositoryInfo
 import cn.rtast.kmvnrepo.enums.RepositoryVisibility
 import cn.rtast.kmvnrepo.util.mkdirs
+import cn.rtast.kmvnrepo.util.rootPathOf
 import kotlinx.io.files.Path
 
 const val ROOT_PATH_STRING = "./repositories"
 val ROOT_PATH = Path(ROOT_PATH_STRING)
 
 val repositories = mutableListOf<RepositoryInfo>(
-    RepositoryInfo("releases", RepositoryVisibility.Public, Path(ROOT_PATH, "releases")),
-    RepositoryInfo("snapshots", RepositoryVisibility.Public, Path(ROOT_PATH, "snapshots")),
-    RepositoryInfo("private", RepositoryVisibility.Internal, Path(ROOT_PATH, "private"))
-).apply { forEach { it.path.mkdirs() } }
+    RepositoryInfo("releases", RepositoryVisibility.Public),
+    RepositoryInfo("snapshots", RepositoryVisibility.Public),
+    RepositoryInfo("private", RepositoryVisibility.Internal)
+).apply { forEach { rootPathOf(it.name).mkdirs() } }
+
+val publicRepositories = repositories.filter { it.visibility == RepositoryVisibility.Public }
+val internalRepositories = repositories.filter { it.visibility == RepositoryVisibility.Internal }

@@ -9,10 +9,10 @@
 package cn.rtast.kmvnrepo.entity
 
 import cn.rtast.kmvnrepo.enums.RepositoryVisibility
-import kotlinx.io.files.Path
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class RepositoryInfo(
     val name: String,
-    val visibility: RepositoryVisibility,
-    val path: Path
+    val visibility: RepositoryVisibility
 )

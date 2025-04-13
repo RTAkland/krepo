@@ -14,11 +14,11 @@ import cn.rtast.kmvnrepo.ROOT_PATH
 import cn.rtast.kmvnrepo.entity.User
 import kotlinx.io.files.Path
 import kotlin.uuid.ExperimentalUuidApi
-
+import kotlin.uuid.Uuid
 
 class UserManager {
     private val file = Path(ROOT_PATH, "data.json").apply {
-        if (!exists()) writeText("[]")
+        if (!exists()) writeText(listOf(User("admin", Uuid.random().toString())).toJson())
     }
 
     private var users = file.readText().fromJson<MutableList<User>>()
@@ -32,17 +32,24 @@ class UserManager {
         readUsers()
     }
 
-    fun addUser(username: String, password: String) {
-        if (users.any { it.name == username }) return
+    fun addUser(username: String, password: String): Boolean {
+        if (users.any { it.name == username }) return false
         users.add(User(username, password))
         sync()
+        return true
+    }
+
+    fun addUser(user: User): Boolean {
+        return this.addUser(user.name, user.password!!)
     }
 
     fun validateUser(username: String, password: String): Boolean {
         return users.any { it.name == username && it.password == password }
     }
 
-    fun removeUser(username: String) {
-        users.removeAll { it.name == username }
+    fun removeUser(username: String): Boolean {
+        return users.removeAll { it.name == username }
     }
+
+    fun getUser(name: String): User? = users.find { it.name == name }
 }

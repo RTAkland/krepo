@@ -17,7 +17,7 @@ import io.ktor.server.routing.*
 
 fun Routing.configureUploadArtifactRouting() {
     repositories.forEach {
-        authenticate("maven-upload") {
+        authenticate("maven-common") {
             route(it.name) {
                 put("{path...}") {
                     val path = call.request.uri.drop(1)

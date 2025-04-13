@@ -23,6 +23,8 @@ kotlin {
         }
     }
 
+    val ktorVersion = "3.1.2"
+
     sourceSets {
         commonMain.dependencies {
             implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.7.0")
@@ -30,9 +32,11 @@ kotlin {
             implementation("io.github.pdvrieze.xmlutil:core:0.91.0")
             implementation("io.github.pdvrieze.xmlutil:serialization:0.91.0")
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-            implementation("io.ktor:ktor-server-core:3.1.2")
-            implementation("io.ktor:ktor-server-cio:3.1.2")
-            implementation("io.ktor:ktor-server-auth:3.1.2")
+            implementation("io.ktor:ktor-server-core:$ktorVersion")
+            implementation("io.ktor:ktor-server-cio:$ktorVersion")
+            implementation("io.ktor:ktor-server-auth:$ktorVersion")
+            implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
         }
     }
 }

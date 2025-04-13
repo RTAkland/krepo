@@ -8,6 +8,8 @@
 
 package cn.rtast.kmvnrepo
 
+import cn.rtast.kmvnrepo.routing.api.configureAPIArtifactsRouting
+import cn.rtast.kmvnrepo.routing.api.configureAPIUserRouting
 import cn.rtast.kmvnrepo.routing.configureDownloadRouting
 import cn.rtast.kmvnrepo.routing.configureUploadArtifactRouting
 import cn.rtast.kmvnrepo.util.UserManager
@@ -21,7 +23,7 @@ val userManager = UserManager()
 fun main() {
     embeddedServer(CIO, 9098) {
         authentication {
-            basic(name = "maven-upload") {
+            basic(name = "maven-common") {
                 validate { credentials ->
                     if (userManager.validateUser(credentials.name, credentials.password))
                         UserIdPrincipal(credentials.name) else null
@@ -31,6 +33,8 @@ fun main() {
         routing {
             configureUploadArtifactRouting()
             configureDownloadRouting()
+            configureAPIArtifactsRouting()
+            configureAPIUserRouting()
         }
     }.start(wait = true)
 }

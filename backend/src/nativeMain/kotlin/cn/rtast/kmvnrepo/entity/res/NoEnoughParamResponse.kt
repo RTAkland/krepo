@@ -1,16 +1,17 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 2025/4/13 22:51
+ * Date: 2025/4/14 01:32
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-package cn.rtast.kmvnrepo.entity
+
+package cn.rtast.kmvnrepo.entity.res
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class User(
-    val name: String,
-    val password: String? = null,
+data class NoEnoughParamResponse(
+    val code: Int,
+    val message: String
 )
