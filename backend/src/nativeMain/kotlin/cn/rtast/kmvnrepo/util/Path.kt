@@ -6,15 +6,21 @@
  */
 
 @file:Suppress("unused")
+@file:OptIn(ExperimentalForeignApi::class, UnsafeNumber::class)
 
 package cn.rtast.kmvnrepo.util
 
 import cn.rtast.kmvnrepo.ROOT_PATH
 import io.ktor.utils.io.core.*
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.alloc
+import kotlinx.cinterop.memScoped
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
 import kotlinx.io.readByteArray
+import kotlinx.cinterop.*
+import platform.posix.*
 
 fun Path.mkdirs(): Path {
     SystemFileSystem.createDirectories(this)
@@ -42,3 +48,9 @@ fun rootPathOf(path: String): Path {
 }
 
 fun Path.exists(): Boolean = SystemFileSystem.exists(this)
+
+fun Path.isFile(): Boolean = SystemFileSystem.metadataOrNull(this)!!.isRegularFile
+
+fun Path.isDirectory() = SystemFileSystem.metadataOrNull(this)!!.isDirectory
+
+fun Path.listFiles() = SystemFileSystem.list(this)
