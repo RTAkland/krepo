@@ -26,7 +26,7 @@ kotlin {
 repositories {
     mavenLocal()
 //    maven("http://127.0.0.1:9098/releases")
-    maven("http://lan.rtast.cn:9098/snapshots") {
+    maven("http://192.168.10.222:9098/snapshots") {
         isAllowInsecureProtocol = true
     }
 }

@@ -16,6 +16,7 @@ import kotlinx.serialization.json.Json
 
 
 val json: Json = Json {
+    prettyPrint = true
     ignoreUnknownKeys = true
     explicitNulls = false
     classDiscriminator = "_json_type_"

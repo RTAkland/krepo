@@ -11,21 +11,24 @@ package cn.rtast.kmvnrepo.routing
 import cn.rtast.kmvnrepo.registry.deployMavenArtifact
 import cn.rtast.kmvnrepo.repositories
 import io.ktor.http.*
+import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Routing.configureUploadArtifactRouting() {
-    repositories.forEach {
-        authenticate("maven-common") {
-            route(it.name) {
-                put("{path...}") {
-                    val path = call.request.uri.drop(1)
-                    val bytes = call.receive<ByteArray>()
-                    val result = deployMavenArtifact(path, bytes)
-                    if (result) call.respond(status = HttpStatusCode.Created, "Success!")
-                    else call.respond(status = HttpStatusCode.Conflict, "Conflict!")
+fun Application.configureUploadArtifactRouting() {
+    routing {
+        repositories.forEach {
+            authenticate("maven-common") {
+                route(it.name) {
+                    put("{path...}") {
+                        val path = call.request.uri.drop(1)
+                        val bytes = call.receive<ByteArray>()
+                        val result = deployMavenArtifact(path, bytes)
+                        if (result) call.respond(status = HttpStatusCode.Created, "Success!")
+                        else call.respond(status = HttpStatusCode.Conflict, "Conflict!")
+                    }
                 }
             }
         }

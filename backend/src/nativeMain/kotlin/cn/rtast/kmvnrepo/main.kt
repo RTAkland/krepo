@@ -17,33 +17,24 @@ import cn.rtast.kmvnrepo.routing.configureUploadArtifactRouting
 import cn.rtast.kmvnrepo.util.ConfigManager
 import cn.rtast.kmvnrepo.util.UserManager
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
-import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.routing.*
 
 val userManager = UserManager()
 val configManager = ConfigManager().apply { initRepositories() }
 
 fun main() {
-    embeddedServer(CIO, configManager.getConfig().port) {
-        install(ContentNegotiation)
-        authentication {
-            basic(name = "maven-common") {
-                validate { credentials ->
-                    if (userManager.validateUser(credentials.name, credentials.password))
-                        UserIdPrincipal(credentials.name) else null
-                }
-            }
-        }
-        routing {
-            configureUploadArtifactRouting()
-            configureDownloadRouting()
-            configureAPIArtifactsRouting()
-            configureAPIUserRouting()
-            configurePublicRepositoriesListing()
-            configureAPIRepositoryRouting()
-        }
-    }.start(wait = true)
+    embeddedServer(
+        CIO, port = configManager.getConfig().port, host = "0.0.0.0",
+        module = Application::module
+    ).start(wait = true)
+}
+
+fun Application.module() {
+    configurePublicRepositoriesListing()
+    configureUploadArtifactRouting()
+    configureDownloadRouting()
+    configureAPIUserRouting()
+    configureAPIRepositoryRouting()
+    configureAPIArtifactsRouting()
 }

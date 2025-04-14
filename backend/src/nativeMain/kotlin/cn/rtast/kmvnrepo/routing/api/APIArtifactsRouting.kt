@@ -23,7 +23,7 @@ private suspend fun ApplicationCall.search(repository: String) {
     }
 }
 
-fun Routing.configureAPIArtifactsRouting() {
+fun Application.configureAPIArtifactsRouting() {
 //    publicRepositories.forEach {
 //        route("/api/search/${it.name}") {
 //            get("{path...}") { call.search(it.name) }

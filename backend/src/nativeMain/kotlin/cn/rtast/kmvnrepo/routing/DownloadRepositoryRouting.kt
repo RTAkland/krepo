@@ -15,7 +15,7 @@ import cn.rtast.kmvnrepo.util.readBytes
 import cn.rtast.kmvnrepo.util.rootPathOf
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.authenticate
+import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -25,17 +25,19 @@ private suspend fun ApplicationCall.serveFile() {
     if (file.exists()) this.respondBytes(file.readBytes()) else this.respond(HttpStatusCode.NotFound)
 }
 
-fun Routing.configureDownloadRouting() {
-    publicRepositories.forEach {
-        route(it.name) {
-            get("{path...}") { call.serveFile() }
-        }
-    }
-
-    internalRepositories.forEach {
-        authenticate("maven-common") {
+fun Application.configureDownloadRouting() {
+    routing {
+        publicRepositories.forEach {
             route(it.name) {
                 get("{path...}") { call.serveFile() }
+            }
+        }
+
+        internalRepositories.forEach {
+            authenticate("maven-common") {
+                route(it.name) {
+                    get("{path...}") { call.serveFile() }
+                }
             }
         }
     }

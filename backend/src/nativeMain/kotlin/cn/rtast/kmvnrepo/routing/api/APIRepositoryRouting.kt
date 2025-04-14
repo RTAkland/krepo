@@ -21,7 +21,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 private suspend fun ApplicationCall.handleRequest() {
-    val fullPath = rootPathOf(request.uri.replace("/api/listing/", ""))
+    val fullPath = rootPathOf(request.uri.replace("/#/api/listing/", ""))
     if (!fullPath.exists()) {
         respondText(APIListingResponse(-200, 0, emptyList()).toJson(), ContentType.Application.Json)
         return
@@ -37,17 +37,19 @@ private suspend fun ApplicationCall.handleRequest() {
 }
 
 
-fun Routing.configureAPIRepositoryRouting() {
-    publicRepositories.forEach {
-        route("/api/listing/${it.name}") {
-            get("{path...}") { call.handleRequest() }
-        }
-    }
-
-    internalRepositories.forEach {
-        route("/api/listing/${it.name}") {
-            authenticate("maven-common") {
+fun Application.configureAPIRepositoryRouting() {
+    routing {
+        publicRepositories.forEach {
+            route("/#/api/listing/${it.name}") {
                 get("{path...}") { call.handleRequest() }
+            }
+        }
+
+        internalRepositories.forEach {
+            route("/#/api/listing/${it.name}") {
+                authenticate("maven-common") {
+                    get("{path...}") { call.handleRequest() }
+                }
             }
         }
     }

@@ -14,5 +14,6 @@ import kotlinx.serialization.Serializable
 data class Config(
     val port: Int,
     val allowRedeploy: Boolean,
-    val repositories: List<ConfigRepository>
+    val repositories: List<ConfigRepository>,
+    val allowFileListing: Boolean
 )

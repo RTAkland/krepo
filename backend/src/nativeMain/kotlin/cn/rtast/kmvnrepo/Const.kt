@@ -23,7 +23,7 @@ val DEFAULT_CONFIG = Config(
         ConfigRepository("releases", RepositoryVisibility.Public),
         ConfigRepository("snapshots", RepositoryVisibility.Public),
         ConfigRepository("private", RepositoryVisibility.Internal),
-    )
+    ), true
 )
 
 val publicRepositories

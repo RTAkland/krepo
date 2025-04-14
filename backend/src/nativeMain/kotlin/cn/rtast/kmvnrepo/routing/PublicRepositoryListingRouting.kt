@@ -8,16 +8,48 @@
 
 package cn.rtast.kmvnrepo.routing
 
+import cn.rtast.kmvnrepo.configManager
 import cn.rtast.kmvnrepo.publicRepositories
+import cn.rtast.kmvnrepo.userManager
 import cn.rtast.kmvnrepo.util.*
 import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Routing.configurePublicRepositoriesListing() {
-    publicRepositories.forEach { repo ->
-        route("/listing/${repo.name}") {
-            get("{path...}") {
+fun Application.configurePublicRepositoriesListing() {
+    install(ContentNegotiation)
+    authentication {
+        basic(name = "maven-common") {
+            validate { credentials ->
+                if (userManager.validateUser(credentials.name, credentials.password))
+                    UserIdPrincipal(credentials.name) else null
+            }
+        }
+    }
+    if (!configManager.getConfig().allowFileListing) return
+    routing {
+        route("/@/") {
+            get {
+                val html = buildString {
+                    appendLine("<!DOCTYPE html>")
+                    appendLine("<html><head><meta charset='utf-8'><title>Public Repositories</title></head><body>")
+                    appendLine("<h1>Public Repositories</h1>")
+                    appendLine("<ul>")
+                    publicRepositories.forEach { repo ->
+                        appendLine("""<li>Repository -> <a href="/@/${repo.name}">${repo.name}</a></li>""")
+                    }
+                    appendLine("</ul>")
+                    appendLine("</body></html>")
+                }
+                call.respondText(html, ContentType.Text.Html)
+            }
+        }
+
+        publicRepositories.forEach { repo ->
+            get("/@/${repo.name}/{path...}") {
                 val pathParts = call.parameters.getAll("path") ?: emptyList()
                 val relativePath = pathParts.joinToString("/")
                 val fullPath = rootPathOf("${repo.name}/$relativePath")
@@ -39,7 +71,7 @@ fun Routing.configurePublicRepositoriesListing() {
                     appendLine("<pre style=\"font-family: monospace; line-height: 1.6;\">")
                     if (pathParts.isNotEmpty()) {
                         val parent = pathParts.dropLast(1).joinToString("/")
-                        appendLine("""<a href="/listing/${repo.name}/$parent">../</a>""")
+                        appendLine("""<a href="/#/${repo.name}/$parent">../</a>""")
                     }
                     fileList.forEachIndexed { index, file ->
                         val name = nameList[index]
@@ -49,11 +81,18 @@ fun Routing.configurePublicRepositoriesListing() {
                             val sizeInKB = file.size()
                             "(${sizeInKB} B)"
                         } else "( - )"
-                        appendLine("""<a href="/listing/${repo.name}/$href">$name</a>$padding$sizeText""")
+                        appendLine("""<a href="/@/${repo.name}/$href">$name</a>$padding$sizeText""")
                     }
                     appendLine("</pre></body></html>")
                 }
                 call.respondText(html, ContentType.Text.Html)
+            }
+
+            route("/listing/${repo.name}") {
+                get("{path...}") {
+                    val pathParts = call.parameters.getAll("path")?.joinToString("/") ?: ""
+                    call.respondRedirect("/@/${repo.name}/$pathParts")
+                }
             }
         }
     }
