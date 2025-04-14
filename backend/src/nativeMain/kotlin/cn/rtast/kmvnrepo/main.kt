@@ -24,7 +24,7 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.routing.*
 
 val userManager = UserManager()
-val configManager = ConfigManager()
+val configManager = ConfigManager().apply { initRepositories() }
 
 fun main() {
     embeddedServer(CIO, configManager.getConfig().port) {

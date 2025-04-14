@@ -9,11 +9,22 @@
 package cn.rtast.kmvnrepo.util
 
 import cn.rtast.kmvnrepo.DEFAULT_CONFIG
-import cn.rtast.kmvnrepo.entity.Config
+import cn.rtast.kmvnrepo.entity.config.Config
+import cn.rtast.kmvnrepo.repositories
 
 class ConfigManager {
-    private val file = rootPathOf("config.json").apply {
-        if (!exists()) writeText(DEFAULT_CONFIG.toJson())
+    private val file = rootPathOf("config.json")
+
+    init {
+        if (!file.exists()) {
+            file.writeText(DEFAULT_CONFIG.toJson())
+        }
+    }
+
+    fun initRepositories() {
+        getConfig().repositories.forEach {
+            repositories.add(it.apply { rootPathOf(it.name).mkdirs() })
+        }
     }
 
     fun getConfig() = file.readText().fromJson<Config>()

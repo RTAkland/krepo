@@ -8,6 +8,9 @@
 
 package cn.rtast.kmvnrepo.enums
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class RepositoryVisibility {
     Internal, Public
 }

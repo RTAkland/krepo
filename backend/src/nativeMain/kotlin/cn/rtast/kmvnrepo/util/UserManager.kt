@@ -17,7 +17,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 class UserManager {
-    private val file = Path(ROOT_PATH, "data.json").apply {
+    private val file = Path(ROOT_PATH, "users.json").apply {
         if (!exists()) writeText(listOf(User("admin", Uuid.random().toString())).toJson())
     }
 
