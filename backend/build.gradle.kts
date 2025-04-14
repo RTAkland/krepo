@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
+    id("xyz.dussim.gradle-ssh") version "0.0.3"
 }
 
 kotlin {
