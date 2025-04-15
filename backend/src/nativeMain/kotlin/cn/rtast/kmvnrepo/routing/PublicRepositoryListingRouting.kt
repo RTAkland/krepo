@@ -42,8 +42,7 @@ fun Application.configurePublicRepositoriesListing() {
                     appendLine("<h1>Public Repositories</h1>")
                     appendLine("<ul>")
                     publicRepositories.forEach { repo ->
-                        val repoSize = rootPathOf(repo.name).dirSize().toFloat() / 1024f / 1024f
-                        appendLine("""<li><a href="/@/contents/${repo.name}">${repo.name}</a> (${repoSize.round()} MB)</li>""")
+                        appendLine("""<li><a href="/@/contents/${repo.name}">${repo.name}</a></li>""")
                     }
                     appendLine("</ul>")
                     appendLine("</body></html>")
