@@ -8,19 +8,24 @@
 
 package cn.rtast.kmvnrepo.routing.api
 
+import cn.rtast.kmvnrepo.entity.FileEntry
 import cn.rtast.kmvnrepo.entity.MavenMetadata
+import cn.rtast.kmvnrepo.entity.kmp.KotlinToolchainMetadata
+import cn.rtast.kmvnrepo.entity.res.APIListingResponse
 import cn.rtast.kmvnrepo.entity.res.ArtifactMetadata
+import cn.rtast.kmvnrepo.entity.res.CommonResponse
+import cn.rtast.kmvnrepo.enums.KotlinMultiplatformProjectType
 import cn.rtast.kmvnrepo.internalRepositories
 import cn.rtast.kmvnrepo.publicRepositories
-import cn.rtast.kmvnrepo.util.fromXmlString
-import cn.rtast.kmvnrepo.util.readText
-import cn.rtast.kmvnrepo.util.rootPathOf
-import cn.rtast.kmvnrepo.util.toJson
+import cn.rtast.kmvnrepo.util.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.io.files.Path
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 private suspend fun ApplicationCall.serveLatestVersion(repository: String) {
     val path = parameters.getAll("path")!!.joinToString("/")
@@ -30,11 +35,81 @@ private suspend fun ApplicationCall.serveLatestVersion(repository: String) {
     respondText(contentType = ContentType.Application.Json, text = response.toJson())
 }
 
+private suspend fun ApplicationCall.handleRequest(repository: String) {
+    val fullPath = rootPathOf("$repository/${parameters.getAll("path")!!.joinToString("/")}")
+    if (!fullPath.exists()) {
+        respondText(APIListingResponse(-200, 0, emptyList()).toJson(), ContentType.Application.Json)
+        return
+    }
+    val entries = fullPath.listFiles().map {
+        FileEntry(
+            name = it.name,
+            isDirectory = it.isDirectory(),
+            size = if (it.isFile()) it.size() else -1
+        )
+    }
+    respondText(APIListingResponse(200, entries.size, entries).toJson(), ContentType.Application.Json)
+}
+
+private suspend fun ApplicationCall.deleteArtifact(
+    repo: String,
+    group: String,
+    artifact: String,
+    version: String,
+    klib: Boolean
+) {
+    try {
+        val artifactPath = rootPathOf("$repo/${group.replace(".", "/")}/$artifact/$version")
+        if (klib) {
+            val toolchainMetadata = Path(artifactPath, "test-publish-0.0.3-kotlin-tooling-metadata.json")
+                .readText().fromJson<KotlinToolchainMetadata>()
+            val extraModules = mutableListOf<String>()
+            toolchainMetadata.projectTargets.filter { it.platformType != KotlinMultiplatformProjectType.common }
+                .forEach {
+                    when (it.platformType) {
+                        KotlinMultiplatformProjectType.js -> extraModules.add("js")
+                        KotlinMultiplatformProjectType.wasm -> extraModules.add("wasm-js")
+                        KotlinMultiplatformProjectType.common -> null
+                        KotlinMultiplatformProjectType.jvm -> extraModules.add("jvm")
+                        KotlinMultiplatformProjectType.native -> {
+                            val targetExtension = it.extras!!["native"]
+                                ?.jsonObject?.get("konanTarget")
+                                ?.jsonPrimitive?.content!!
+                            extraModules.add(targetExtension.replace("_", ""))
+                        }
+                    }
+                }
+            extraModules.forEach {
+                rootPathOf("$repo/${group.replace(".", "/")}/${artifact}-$it/$version").deleteRec()
+            }
+        }
+        artifactPath.deleteRec()
+        respondText(contentType = ContentType.Application.Json, text = CommonResponse(200, "删除成功").toJson())
+    } catch (e: Exception) {
+        respondText(contentType = ContentType.Application.Json, text = CommonResponse(-200, "删除失败 ${e.message}").toJson())
+    }
+}
+
 fun Application.configureAPIArtifactsRouting() {
     routing {
+        authenticate("maven-common") {
+            delete("/@/api/artifacts") {
+                val repository = call.queryParameters["repo"] ?: return@delete
+                val group = call.queryParameters["group"] ?: return@delete
+                val artifactId = call.queryParameters["artifact"] ?: return@delete
+                val version = call.queryParameters["version"] ?: return@delete
+                val klib = call.queryParameters["klib"]?.toBoolean() == true
+                call.deleteArtifact(repository, group, artifactId, version, klib)
+            }
+        }
+
         publicRepositories.forEach {
             route("/@/api/artifacts/versions/latest/${it.name}") {
                 get("{path...}") { call.serveLatestVersion(it.name) }
+            }
+
+            route("/@/api/contents/${it.name}") {
+                get("{path...}") { call.handleRequest(it.name) }
             }
         }
 
@@ -42,6 +117,12 @@ fun Application.configureAPIArtifactsRouting() {
             route("/@/api/artifacts/versions/latest/${it.name}") {
                 authenticate("maven-common") {
                     get("{path...}") { call.serveLatestVersion(it.name) }
+                }
+            }
+
+            route("/@/api/contents/${it.name}") {
+                authenticate("maven-common") {
+                    get("{path...}") { call.handleRequest(it.name) }
                 }
             }
         }

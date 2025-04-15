@@ -1,16 +1,15 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 2025/4/14 01:32
+ * Date: 2025/4/15 20:38
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-package cn.rtast.kmvnrepo.entity.res
+package cn.rtast.kmvnrepo.entity
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserAPIResponseMessage(
-    val code: Int,
-    val message: String
+data class UserSession(
+    val name: String
 )

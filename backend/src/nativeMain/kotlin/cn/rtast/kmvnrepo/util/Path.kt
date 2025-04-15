@@ -13,11 +13,11 @@ package cn.rtast.kmvnrepo.util
 import cn.rtast.kmvnrepo.ROOT_PATH
 import io.ktor.utils.io.core.*
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.UnsafeNumber
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
 import kotlinx.io.readByteArray
-import kotlinx.cinterop.*
 
 fun Path.mkdirs(): Path {
     SystemFileSystem.createDirectories(this)
@@ -53,3 +53,17 @@ fun Path.isDirectory() = SystemFileSystem.metadataOrNull(this)!!.isDirectory
 fun Path.listFiles() = SystemFileSystem.list(this)
 
 fun Path.size() = SystemFileSystem.metadataOrNull(this)!!.size
+
+fun Path.delete() = SystemFileSystem.delete(this, false)
+
+fun Path.deleteRec() = deleteFolderRecursively(this)
+
+fun deleteFolderRecursively(path: Path) {
+    val metadata = SystemFileSystem.metadataOrNull(path) ?: return
+    if (metadata.isDirectory) {
+        SystemFileSystem.list(path).forEach { child ->
+            deleteFolderRecursively(child)
+        }
+    }
+    SystemFileSystem.delete(path)
+}

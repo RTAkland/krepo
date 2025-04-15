@@ -48,7 +48,7 @@ class UserManager {
     }
 
     fun removeUser(username: String): Boolean {
-        return users.removeAll { it.name == username }
+        return users.removeAll { it.name == username }.apply { sync() }
     }
 
     fun getUser(name: String): User? = users.find { it.name == name }
