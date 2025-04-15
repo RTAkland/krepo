@@ -58,6 +58,8 @@ fun Path.delete() = SystemFileSystem.delete(this, false)
 
 fun Path.deleteRec() = deleteFolderRecursively(this)
 
+fun Path.dirSize() = getFolderContentSize(this)
+
 fun deleteFolderRecursively(path: Path) {
     val metadata = SystemFileSystem.metadataOrNull(path) ?: return
     if (metadata.isDirectory) {
@@ -66,4 +68,18 @@ fun deleteFolderRecursively(path: Path) {
         }
     }
     SystemFileSystem.delete(path)
+}
+
+fun getFolderContentSize(path: Path): Long {
+    val fs = SystemFileSystem
+    var totalSize = 0L
+    fs.list(path).forEach { sub ->
+        val metadata = fs.metadataOrNull(sub)
+        totalSize += if (metadata?.isDirectory == true) {
+            getFolderContentSize(sub)
+        } else {
+            metadata?.size ?: 0L
+        }
+    }
+    return totalSize
 }
