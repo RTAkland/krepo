@@ -18,7 +18,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation("cn.rtast.kmvnrepo:test-publish:0.0.3")
+//            implementation("cn.rtast.kmvnrepo:test-publish:0.0.3")
         }
     }
 }

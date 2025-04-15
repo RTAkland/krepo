@@ -13,11 +13,15 @@ import cn.rtast.kmvnrepo.entity.res.UserAPIResponseMessage
 import cn.rtast.kmvnrepo.userManager
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Application.configureAPIUserRouting() {
+    install(CORS) {
+        anyHost()
+    }
     routing {
         authenticate("maven-common") {
             get("/api/auth/test") {
