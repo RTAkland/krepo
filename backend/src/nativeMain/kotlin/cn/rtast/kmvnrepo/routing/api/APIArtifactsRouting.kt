@@ -33,13 +33,13 @@ private suspend fun ApplicationCall.serveLatestVersion(repository: String) {
 fun Application.configureAPIArtifactsRouting() {
     routing {
         publicRepositories.forEach {
-            route("/api/artifacts/versions/latest/${it.name}") {
+            route("/@/api/artifacts/versions/latest/${it.name}") {
                 get("{path...}") { call.serveLatestVersion(it.name) }
             }
         }
 
         internalRepositories.forEach {
-            route("/api/artifacts/versions/latest/${it.name}") {
+            route("/@/api/artifacts/versions/latest/${it.name}") {
                 authenticate("maven-common") {
                     get("{path...}") { call.serveLatestVersion(it.name) }
                 }
