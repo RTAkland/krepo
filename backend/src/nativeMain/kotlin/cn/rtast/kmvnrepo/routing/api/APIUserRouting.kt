@@ -14,6 +14,7 @@ import cn.rtast.kmvnrepo.entity.res.CommonResponse
 import cn.rtast.kmvnrepo.userManager
 import cn.rtast.kmvnrepo.util.respondJson
 import cn.rtast.kmvnrepo.util.toJson
+import cn.rtast.kmvnrepo.util.validateSession
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -48,38 +49,33 @@ fun Application.configureAPIUserRouting() {
         }
 
         get("/@/api/user") {
-            if (call.sessions.get<UserSession>() == null) {
-                call.unauthorized()
-                return@get
+            validateSession {
+                call.respondText("test")
             }
         }
 
         post("/@/api/user") {
-            if (call.sessions.get<UserSession>() == null) {
-                call.unauthorized()
-                return@post
-            }
-            val user = call.receive<User>()
-            if (userManager.addUser(user)) {
-                call.respond(CommonResponse(200, "添加成功 -> ${user.name}"))
-            } else {
-                call.respond(CommonResponse(-200, "添加失败, 该用户已存在"))
+            validateSession {
+                val user = call.receive<User>()
+                if (userManager.addUser(user)) {
+                    call.respond(CommonResponse(200, "添加成功 -> ${user.name}"))
+                } else {
+                    call.respond(CommonResponse(-200, "添加失败, 该用户已存在"))
+                }
             }
         }
 
         delete("/@/api/user/{username}") {
-            if (call.sessions.get<UserSession>() == null) {
-                call.unauthorized()
-                return@delete
-            }
-            try {
-                if (userManager.removeUser(call.parameters["username"]!!)) {
-                    call.respond(CommonResponse(200, "删除成功"))
-                } else {
-                    call.respond(CommonResponse(-200, "删除失败, 该用户不存在"))
+            validateSession {
+                try {
+                    if (userManager.removeUser(call.parameters["username"]!!)) {
+                        call.respond(CommonResponse(200, "删除成功"))
+                    } else {
+                        call.respond(CommonResponse(-200, "删除失败, 该用户不存在"))
+                    }
+                } catch (e: Exception) {
+                    call.respond(CommonResponse(-2000, "删除失败, ${e.message}"))
                 }
-            } catch (e: Exception) {
-                call.respond(CommonResponse(-2000, "删除失败, ${e.message}"))
             }
         }
     }

@@ -1,6 +1,6 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 2025/4/13 22:51
+ * Date: 2025/4/16 01:27
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
@@ -8,10 +8,11 @@
 
 @file:OptIn(ExperimentalUuidApi::class)
 
-package cn.rtast.kmvnrepo.util
+package cn.rtast.kmvnrepo.util.manager
 
 import cn.rtast.kmvnrepo.ROOT_PATH
 import cn.rtast.kmvnrepo.entity.User
+import cn.rtast.kmvnrepo.util.*
 import kotlinx.io.files.Path
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid

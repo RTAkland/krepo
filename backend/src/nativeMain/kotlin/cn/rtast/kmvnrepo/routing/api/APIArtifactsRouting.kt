@@ -13,6 +13,7 @@ import cn.rtast.kmvnrepo.entity.MavenMetadata
 import cn.rtast.kmvnrepo.entity.kmp.KotlinToolchainMetadata
 import cn.rtast.kmvnrepo.entity.res.APIListingResponse
 import cn.rtast.kmvnrepo.entity.res.ArtifactMetadata
+import cn.rtast.kmvnrepo.entity.res.ArtifactSearchResponse
 import cn.rtast.kmvnrepo.entity.res.CommonResponse
 import cn.rtast.kmvnrepo.enums.KotlinMultiplatformProjectType
 import cn.rtast.kmvnrepo.internalRepositories
@@ -20,7 +21,6 @@ import cn.rtast.kmvnrepo.publicRepositories
 import cn.rtast.kmvnrepo.util.*
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.io.files.Path
@@ -86,28 +86,59 @@ private suspend fun ApplicationCall.deleteArtifact(
         artifactPath.deleteRec()
         respondText(contentType = ContentType.Application.Json, text = CommonResponse(200, "删除成功").toJson())
     } catch (e: Exception) {
-        respondText(contentType = ContentType.Application.Json, text = CommonResponse(-200, "删除失败 ${e.message}").toJson())
+        respondText(
+            contentType = ContentType.Application.Json,
+            text = CommonResponse(-200, "删除失败 ${e.message}").toJson()
+        )
+    }
+}
+
+private suspend fun RoutingCall.searchArtifacts(repo: String) {
+    try {
+        val name = queryParameters["name"] ?: return
+        val path = rootPathOf(repo)
+        val searchResult = path.searchDirectory(name)
+        val resultList = mutableListOf<ArtifactSearchResponse.Artifact>()
+        searchResult.forEach {
+            val versions = it.listFiles().filter { it.isDirectory() }.map { it.name }
+            val repository = it.toString().split("/")[2]
+            val group = it.toString().split("/").dropLast(1).drop(3)
+            val groupCoordinate = group.joinToString(".")
+            val groupSlashed = group.joinToString("/")
+            val artifactId = it.toString().split("/").last()
+            resultList.add(
+                ArtifactSearchResponse.Artifact(
+                    groupCoordinate, groupSlashed, repository,
+                    artifactId, versions
+                )
+            )
+        }
+        val result = ArtifactSearchResponse(200, "搜索成功", resultList.size, resultList)
+        respondJson(result)
+    } catch (e: Exception) {
+        respondJson(ArtifactSearchResponse(-200, "搜索失败 ${e.message}", 0, emptyList()))
     }
 }
 
 fun Application.configureAPIArtifactsRouting() {
     routing {
-        authenticate("maven-common") {
-            delete("/@/api/artifacts") {
-                val repository = call.queryParameters["repo"] ?: return@delete
-                val group = call.queryParameters["group"] ?: return@delete
-                val artifactId = call.queryParameters["artifact"] ?: return@delete
-                val version = call.queryParameters["version"] ?: return@delete
+        delete("/@/api/artifacts") {
+            validateSession {
+                val repository = call.queryParameters["repo"] ?: return@validateSession
+                val group = call.queryParameters["group"] ?: return@validateSession
+                val artifactId = call.queryParameters["artifact"] ?: return@validateSession
+                val version = call.queryParameters["version"] ?: return@validateSession
                 val klib = call.queryParameters["klib"]?.toBoolean() == true
                 call.deleteArtifact(repository, group, artifactId, version, klib)
             }
         }
 
+        get("/@/api/artifacts/search/{repo}") { call.searchArtifacts(call.parameters["repo"]!!) }
+
         publicRepositories.forEach {
             route("/@/api/artifacts/versions/latest/${it.name}") {
                 get("{path...}") { call.serveLatestVersion(it.name) }
             }
-
             route("/@/api/contents/${it.name}") {
                 get("{path...}") { call.handleRequest(it.name) }
             }
@@ -115,15 +146,22 @@ fun Application.configureAPIArtifactsRouting() {
 
         internalRepositories.forEach {
             route("/@/api/artifacts/versions/latest/${it.name}") {
-                authenticate("maven-common") {
-                    get("{path...}") { call.serveLatestVersion(it.name) }
+                get("{path...}") {
+                    validateSession {
+                        call.serveLatestVersion(
+                            it.name
+                        )
+                    }
+                }
+            }
+            route("/@/api/contents/${it.name}") {
+                get("{path...}") {
+                    validateSession { call.handleRequest(it.name) }
                 }
             }
 
-            route("/@/api/contents/${it.name}") {
-                authenticate("maven-common") {
-                    get("{path...}") { call.handleRequest(it.name) }
-                }
+            get("/@/api/artifacts/search/{repo}") {
+                validateSession { call.searchArtifacts(call.parameters["repo"]!!) }
             }
         }
     }

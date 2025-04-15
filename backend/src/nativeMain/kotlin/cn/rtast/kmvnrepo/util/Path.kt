@@ -83,3 +83,18 @@ fun getFolderContentSize(path: Path): Long {
     }
     return totalSize
 }
+
+fun Path.searchDirectory(name: String): MutableList<Path> {
+    val result = mutableListOf<Path>()
+    fun search(dir: Path) {
+        if (!dir.isDirectory()) return
+        if (dir.name.contains(name)) {
+            result.add(dir)
+        }
+        dir.listFiles().filter { it.isDirectory() }.forEach {
+            search(it)
+        }
+    }
+    search(this)
+    return result
+}

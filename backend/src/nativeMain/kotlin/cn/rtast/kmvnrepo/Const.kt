@@ -20,9 +20,9 @@ val repositories = mutableListOf<ConfigRepository>()
 
 val DEFAULT_CONFIG = Config(
     9098, false, listOf(
-        ConfigRepository("releases", RepositoryVisibility.Public),
-        ConfigRepository("snapshots", RepositoryVisibility.Public),
-        ConfigRepository("private", RepositoryVisibility.Internal),
+        ConfigRepository("releases", RepositoryVisibility.Public, listOf("jar", "klib")),
+        ConfigRepository("snapshots", RepositoryVisibility.Public, listOf("jar", "klib")),
+        ConfigRepository("private", RepositoryVisibility.Internal, listOf("jar", "klib")),
     ), true
 )
 
