@@ -20,6 +20,11 @@ plugins {
 val fritz2Version = "1.0-RC20"
 val ktorVersion = "3.1.2"
 
+repositories {
+    mavenCentral()
+    maven("https://repo.maven.rtast.cn/releases/")
+}
+
 kotlin {
     js(IR) {
         browser {
@@ -43,6 +48,7 @@ kotlin {
             implementation("io.ktor:ktor-client-core:$ktorVersion")
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+            implementation("cn.rtast.rutil:string:0.0.1")
         }
     }
 }
