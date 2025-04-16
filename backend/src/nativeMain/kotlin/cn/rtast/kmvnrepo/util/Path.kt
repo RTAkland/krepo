@@ -6,14 +6,11 @@
  */
 
 @file:Suppress("unused")
-@file:OptIn(ExperimentalForeignApi::class, UnsafeNumber::class)
 
 package cn.rtast.kmvnrepo.util
 
 import cn.rtast.kmvnrepo.ROOT_PATH
 import io.ktor.utils.io.core.*
-import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.cinterop.UnsafeNumber
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
@@ -58,7 +55,7 @@ fun Path.delete() = SystemFileSystem.delete(this, false)
 
 fun Path.deleteRec() = deleteFolderRecursively(this)
 
-fun Path.dirSize() = getFolderContentSize(this)
+fun Path.metadata() = SystemFileSystem.metadataOrNull(this)!!
 
 fun deleteFolderRecursively(path: Path) {
     val metadata = SystemFileSystem.metadataOrNull(path) ?: return
@@ -68,20 +65,6 @@ fun deleteFolderRecursively(path: Path) {
         }
     }
     SystemFileSystem.delete(path)
-}
-
-fun getFolderContentSize(path: Path): Long {
-    val fs = SystemFileSystem
-    var totalSize = 0L
-    fs.list(path).forEach { sub ->
-        val metadata = fs.metadataOrNull(sub)
-        totalSize += if (metadata?.isDirectory == true) {
-            getFolderContentSize(sub)
-        } else {
-            metadata?.size ?: 0L
-        }
-    }
-    return totalSize
 }
 
 fun Path.searchDirectory(name: String): MutableList<Path> {
@@ -100,3 +83,15 @@ fun Path.searchDirectory(name: String): MutableList<Path> {
 }
 
 fun String.toPath() = Path(this)
+
+fun Path.calculateDirectorySize(): Float {
+    var totalSize = 0f
+    this.listFiles().forEach {
+        totalSize += if (it.isDirectory()) {
+            it.calculateDirectorySize()
+        } else {
+            it.metadata().size.toFloat()
+        }
+    }
+    return totalSize
+}

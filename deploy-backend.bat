@@ -18,7 +18,12 @@ if errorlevel 1 (
 )
 
 echo Moving file and restart services...
-ssh %SERVER% "systemctl stop reposilite && rm %REMOTE_DIR%/backend.kexe || true && mv /tmp/backend.kexe %REMOTE_DIR%/backend.kexe && chmod +x %REMOTE_DIR%/backend.kexe && systemctl restart reposilite"
+ssh %SERVER% "systemctl stop reposilite
+timeout /t 1 >nul
+rm %REMOTE_DIR%/backend.kexe || true
+mv /tmp/backend.kexe %REMOTE_DIR%/backend.kexe
+timeout /t 1 >nul
+chmod +x %REMOTE_DIR%/backend.kexe && systemctl restart reposilite"
 
 if errorlevel 1 (
     echo execution failure
