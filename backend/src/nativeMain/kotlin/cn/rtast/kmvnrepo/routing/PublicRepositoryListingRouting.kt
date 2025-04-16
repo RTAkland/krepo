@@ -10,12 +10,9 @@
 
 package cn.rtast.kmvnrepo.routing
 
-import cn.rtast.kmvnrepo.configManager
 import cn.rtast.kmvnrepo.publicRepositories
 import cn.rtast.kmvnrepo.tokenManager
 import cn.rtast.kmvnrepo.userManager
-import cn.rtast.kmvnrepo.util.*
-import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -46,70 +43,13 @@ fun Application.configurePublicRepositoriesListing() {
             }
         }
     }
-    if (!configManager.getConfig().allowFileListing) return
-    routing {
-        route("/@/contents") {
-            get {
-                val html = buildString {
-                    appendLine("<!DOCTYPE html>")
-                    appendLine("<html><head><meta charset='utf-8'><title>Public Repositories</title></head><body>")
-                    appendLine("<h1>Public Repositories</h1>")
-                    appendLine("<ul>")
-                    publicRepositories.forEach { repo ->
-                        val size = rootPathOf(repo.name).calculateDirectorySize().toFloat() / 1024f / 1024f
-                        appendLine("""<li><a href="/@/contents/${repo.name}">${repo.name}</a> ( ${size.round()}MB )</li>""")
-                    }
-                    appendLine("</ul>")
-                    appendLine("</body></html>")
-                }
-                call.respondText(html, ContentType.Text.Html)
-            }
-        }
 
-        publicRepositories.forEach { repo ->
-            get("/@/contents/${repo.name}/{path...}") {
-                val pathParts = call.parameters.getAll("path") ?: emptyList()
-                val relativePath = pathParts.joinToString("/")
-                val fullPath = rootPathOf("${repo.name}/$relativePath")
-                if (!fullPath.exists()) {
-                    call.respond(HttpStatusCode.NotFound, "Path not found.")
-                    return@get
-                }
-                if (fullPath.isFile()) {
-                    call.respondSource(fullPath.rawSource())
-                    return@get
-                }
-                val fileList = fullPath.listFiles().sortedWith(compareBy({ !it.isDirectory() }, { it.name }))
-                val nameList = fileList.map { it.name + if (it.isDirectory()) "/" else "" }
-                val maxNameLength = nameList.maxOfOrNull { it.length } ?: 0
-                val html = buildString {
-                    appendLine("<!DOCTYPE html>")
-                    appendLine("<html><head><meta charset='utf-8'><title>Index of /${repo.name}/$relativePath</title></head><body>")
-                    appendLine("<h1>Index of /${repo.name}/$relativePath</h1>")
-                    appendLine("<pre style=\"font-family: monospace; line-height: 1.6;\">")
-                    if (pathParts.isNotEmpty()) {
-                        val parent = pathParts.dropLast(1).joinToString("/")
-                        appendLine("""<a href="/@/contents/${repo.name}/$parent">../</a>""")
-                    }
-                    fileList.forEachIndexed { index, file ->
-                        val name = nameList[index]
-                        val href = (pathParts + file.name).joinToString("/")
-                        val padding = " ".repeat(maxNameLength - name.length + 2)
-                        val sizeText = if (file.isFile()) {
-                            val sizeInKB = file.size()
-                            "(${sizeInKB} B)"
-                        } else "( - )"
-                        appendLine("""<a href="/@/contents/${repo.name}/$href">$name</a>$padding$sizeText""")
-                    }
-                    appendLine("</pre></body></html>")
-                }
-                call.respondText(html, ContentType.Text.Html)
-            }
-
-            route("/listing/${repo.name}") {
+    publicRepositories.forEach {
+        routing {
+            route("/listing/${it.name}") {
                 get("{path...}") {
                     val pathParts = call.parameters.getAll("path")?.joinToString("/") ?: ""
-                    call.respondRedirect("/@/contents/${repo.name}/$pathParts")
+                    call.respondRedirect("https://mvnrepo.rtast.cn/#/${it.name}/$pathParts")
                 }
             }
         }
