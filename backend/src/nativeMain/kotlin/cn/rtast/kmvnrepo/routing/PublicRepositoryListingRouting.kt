@@ -10,9 +10,13 @@
 
 package cn.rtast.kmvnrepo.routing
 
+import cn.rtast.kmvnrepo.configManager
+import cn.rtast.kmvnrepo.entity.res.CommonResponse
 import cn.rtast.kmvnrepo.publicRepositories
 import cn.rtast.kmvnrepo.tokenManager
 import cn.rtast.kmvnrepo.userManager
+import cn.rtast.kmvnrepo.util.manager.i18n
+import cn.rtast.kmvnrepo.util.respondJson
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -44,12 +48,24 @@ fun Application.configurePublicRepositoriesListing() {
         }
     }
 
-    publicRepositories.forEach {
-        routing {
-            route("/listing/${it.name}") {
-                get("{path...}") {
-                    val pathParts = call.parameters.getAll("path")?.joinToString("/") ?: ""
-                    call.respondRedirect("https://mvnrepo.rtast.cn/#/${it.name}/$pathParts")
+    if (!configManager.getConfig().allowFileListing) {
+        publicRepositories.forEach {
+            routing {
+                route("/listing/${it.name}") {
+                    get("{path...}") {
+                        call.respondJson(CommonResponse(403, call.i18n("file-listing-disabled")), 403)
+                    }
+                }
+            }
+        }
+    } else {
+        publicRepositories.forEach {
+            routing {
+                route("/listing/${it.name}") {
+                    get("{path...}") {
+                        val pathParts = call.parameters.getAll("path")?.joinToString("/") ?: ""
+                        call.respondRedirect("${configManager.getConfig().frontend}/#/${it.name}/$pathParts")
+                    }
                 }
             }
         }

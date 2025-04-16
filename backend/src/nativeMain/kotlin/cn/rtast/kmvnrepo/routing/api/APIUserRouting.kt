@@ -16,12 +16,12 @@ import cn.rtast.kmvnrepo.entity.res.CommonResponse
 import cn.rtast.kmvnrepo.entity.res.LogoutResponse
 import cn.rtast.kmvnrepo.tokenManager
 import cn.rtast.kmvnrepo.userManager
+import cn.rtast.kmvnrepo.util.manager.i18n
 import cn.rtast.kmvnrepo.util.respondJson
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.request.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlin.uuid.ExperimentalUuidApi
 
@@ -34,14 +34,14 @@ fun Application.configureAPIUserRouting() {
             post("/@/api/login") {
                 val username = call.principal<UserIdPrincipal>()?.name!!
                 val token = tokenManager.grant(username)
-                call.respondJson(AuthSuccessResponse(200, "登陆成功", token.toString()))
+                call.respondJson(AuthSuccessResponse(200, call.i18n("login"), token.toString()))
             }
         }
 
         authenticate("api") {
             post("/@/api/logout") {
                 tokenManager.revoke(call.principal<UserIdPrincipal>()!!.name)
-                call.respondJson(LogoutResponse(200, "登出成功"))
+                call.respondJson(LogoutResponse(200, call.i18n("logout")))
             }
 
             get("/@/api/user") {
@@ -52,21 +52,21 @@ fun Application.configureAPIUserRouting() {
             post("/@/api/user") {
                 val user = call.receive<User>()
                 if (userManager.addUser(user)) {
-                    call.respond(CommonResponse(200, "添加成功 -> ${user.name}"))
+                    call.respondJson(CommonResponse(200, "${call.i18n("user.add.success")} -> ${user.name}"))
                 } else {
-                    call.respond(CommonResponse(-200, "添加失败, 该用户已存在"))
+                    call.respondJson(CommonResponse(-200, call.i18n("user.add.failed")), 401)
                 }
             }
 
             delete("/@/api/user/{username}") {
                 try {
                     if (userManager.removeUser(call.parameters["username"]!!)) {
-                        call.respond(CommonResponse(200, "删除成功"))
+                        call.respondJson(CommonResponse(200, call.i18n("user.delete.success")))
                     } else {
-                        call.respond(CommonResponse(-200, "删除失败, 该用户不存在"))
+                        call.respondJson(CommonResponse(-200, call.i18n("user.delete.failure.not.exists")), 404)
                     }
                 } catch (e: Exception) {
-                    call.respond(CommonResponse(-2000, "删除失败, ${e.message}"))
+                    call.respondJson(CommonResponse(-2000, "${call.i18n("user.delete.failure")}, ${e.message}"), 400)
                 }
             }
         }

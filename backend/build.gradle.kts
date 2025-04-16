@@ -10,6 +10,12 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
+    id("cn.rtast.kembeddable") version "1.2.4"
+}
+
+repositories {
+    mavenCentral()
+    maven("https://repo.maven.rtast.cn/releases")
 }
 
 kotlin {
@@ -43,4 +49,10 @@ kotlin {
 //            implementation("io.ktor:ktor-client-core:$ktorVersion")
         }
     }
+}
+
+kembeddable {
+    compression = true
+    resourcePath.add("nativeMain/resources")
+    packageName = "cn.rtast.kmvnrepo.resources"
 }

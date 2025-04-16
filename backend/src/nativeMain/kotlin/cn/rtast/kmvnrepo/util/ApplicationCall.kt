@@ -11,6 +11,10 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 
-suspend inline fun <reified T> ApplicationCall.respondJson(content: T) {
-    respondText(contentType = ContentType.Application.Json, text = content.toJson())
+suspend inline fun <reified T> ApplicationCall.respondJson(content: T, code: Int = 200) {
+    respondText(
+        contentType = ContentType.Application.Json,
+        text = content.toJson(),
+        status = HttpStatusCode.fromValue(code)
+    )
 }

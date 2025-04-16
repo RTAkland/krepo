@@ -15,5 +15,6 @@ data class Config(
     val port: Int,
     val allowRedeploy: Boolean,
     val repositories: List<ConfigRepository>,
-    val allowFileListing: Boolean
+    val allowFileListing: Boolean,
+    val frontend: String
 )

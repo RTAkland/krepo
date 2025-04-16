@@ -20,6 +20,7 @@ import cn.rtast.kmvnrepo.enums.RepositoryVisibility
 import cn.rtast.kmvnrepo.internalRepositories
 import cn.rtast.kmvnrepo.publicRepositories
 import cn.rtast.kmvnrepo.util.*
+import cn.rtast.kmvnrepo.util.manager.i18n
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -86,11 +87,14 @@ private suspend fun ApplicationCall.deleteArtifact(
             }
         }
         artifactPath.deleteRec()
-        respondText(contentType = ContentType.Application.Json, text = CommonResponse(200, "删除成功").toJson())
+        respondText(
+            contentType = ContentType.Application.Json,
+            text = CommonResponse(200, i18n("artifact.delete.success")).toJson()
+        )
     } catch (e: Exception) {
         respondText(
             contentType = ContentType.Application.Json,
-            text = CommonResponse(-200, "删除失败 ${e.message}").toJson()
+            text = CommonResponse(-200, "${i18n("artifact.delete.failure")} ${e.message}").toJson()
         )
     }
 }
@@ -115,10 +119,10 @@ private suspend fun RoutingCall.searchArtifacts(repo: String) {
                 )
             )
         }
-        val result = ArtifactSearchResponse(200, "搜索成功", resultList.size, resultList)
+        val result = ArtifactSearchResponse(200, i18n("search.success"), resultList.size, resultList)
         respondJson(result)
     } catch (e: Exception) {
-        respondJson(ArtifactSearchResponse(-200, "搜索失败 ${e.message}", 0, emptyList()))
+        respondJson(ArtifactSearchResponse(-200, "${i18n("search.failure")} ${e.message}", 0, emptyList()))
     }
 }
 
