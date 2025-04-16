@@ -10,7 +10,7 @@ plugins {
     id("maven-publish")
 }
 
-version = "0.0.3"
+version = "0.0.1"
 
 kotlin {
     mingwX64()

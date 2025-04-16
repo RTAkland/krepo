@@ -23,13 +23,12 @@ fun deployMavenArtifact(path: String, bytes: ByteArray): Boolean {
     val dir = splitPath.dropLast(1).joinToString("/")
     val targetDir = rootPathOf(dir).apply { mkdirs() }
     val targetFile = Path(targetDir, filename)
-    if (targetFile.exists() && !configManager.getConfig().allowRedeploy) {
-        return false
-    } else {
-        val extension = path.split(".").last()
-        val repoName = path.split("/").first()
-        val repo = repositories.find { it.name == repoName }!!
-        if (extension !in repo.acceptExtensions) return false
+    val fileExtension = targetFile.toString().split(".").last()
+    val repositoryConfig = repositories.find { it.name == splitPath.first() } ?: return false
+    if (targetFile.exists() &&
+        fileExtension in repositoryConfig.acceptExtensions &&
+        !configManager.getConfig().allowRedeploy
+    ) return false else {
         targetFile.writeByteArray(bytes)
         return true
     }

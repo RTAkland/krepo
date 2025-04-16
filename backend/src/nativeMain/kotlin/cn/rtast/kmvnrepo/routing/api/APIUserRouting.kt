@@ -6,56 +6,50 @@
  */
 
 
+@file:OptIn(ExperimentalUuidApi::class)
+
 package cn.rtast.kmvnrepo.routing.api
 
 import cn.rtast.kmvnrepo.entity.User
-import cn.rtast.kmvnrepo.entity.UserSession
+import cn.rtast.kmvnrepo.entity.res.AuthSuccessResponse
 import cn.rtast.kmvnrepo.entity.res.CommonResponse
+import cn.rtast.kmvnrepo.entity.res.LogoutResponse
+import cn.rtast.kmvnrepo.tokenManager
 import cn.rtast.kmvnrepo.userManager
 import cn.rtast.kmvnrepo.util.respondJson
-import cn.rtast.kmvnrepo.util.toJson
-import cn.rtast.kmvnrepo.util.validateSession
-import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.server.sessions.*
-import kotlin.time.Duration.Companion.hours
-
-suspend fun ApplicationCall.unauthorized() {
-    respondText(contentType = ContentType.Application.Json, text = CommonResponse(401, "请先登录").toJson())
-}
+import kotlin.uuid.ExperimentalUuidApi
 
 fun Application.configureAPIUserRouting() {
     install(CORS) {
         anyHost()
     }
-    install(Sessions) {
-        cookie<UserSession>("user_session", SessionStorageMemory()) {
-            cookie.maxAge = 6.hours
-        }
-    }
-
     routing {
         authenticate("maven-common") {
             post("/@/api/login") {
                 val username = call.principal<UserIdPrincipal>()?.name!!
-                call.sessions.set(UserSession(username))
-                call.respondJson(CommonResponse(200, "登陆成功"))
+                val token = tokenManager.grant(username)
+                call.respondJson(AuthSuccessResponse(200, "登陆成功", token.toString()))
             }
         }
 
-        get("/@/api/user") {
-            validateSession {
-                call.respondText("test")
+        authenticate("api") {
+            post("/@/api/logout") {
+                tokenManager.revoke(call.principal<UserIdPrincipal>()!!.name)
+                call.respondJson(LogoutResponse(200, "登出成功"))
             }
-        }
 
-        post("/@/api/user") {
-            validateSession {
+            get("/@/api/user") {
+                val credential = call.principal<UserIdPrincipal>()!!.name
+                call.respondJson(CommonResponse(200, credential))
+            }
+
+            post("/@/api/user") {
                 val user = call.receive<User>()
                 if (userManager.addUser(user)) {
                     call.respond(CommonResponse(200, "添加成功 -> ${user.name}"))
@@ -63,10 +57,8 @@ fun Application.configureAPIUserRouting() {
                     call.respond(CommonResponse(-200, "添加失败, 该用户已存在"))
                 }
             }
-        }
 
-        delete("/@/api/user/{username}") {
-            validateSession {
+            delete("/@/api/user/{username}") {
                 try {
                     if (userManager.removeUser(call.parameters["username"]!!)) {
                         call.respond(CommonResponse(200, "删除成功"))

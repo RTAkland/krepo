@@ -6,10 +6,13 @@
  */
 
 
+@file:OptIn(ExperimentalUuidApi::class)
+
 package cn.rtast.kmvnrepo.routing
 
 import cn.rtast.kmvnrepo.configManager
 import cn.rtast.kmvnrepo.publicRepositories
+import cn.rtast.kmvnrepo.tokenManager
 import cn.rtast.kmvnrepo.userManager
 import cn.rtast.kmvnrepo.util.*
 import io.ktor.http.*
@@ -19,12 +22,23 @@ import io.ktor.server.auth.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 fun Application.configurePublicRepositoriesListing() {
     install(ContentNegotiation) {
         json()
     }
-    authentication {
+    install(Authentication) {
+        bearer("api") {
+            authenticate { tokenCredential ->
+                val id = Uuid.parse(tokenCredential.token)
+                if (tokenManager.validate(id)) {
+                    val validatedUser = tokenManager.getName(id)!!
+                    UserIdPrincipal(validatedUser)
+                } else null
+            }
+        }
         basic(name = "maven-common") {
             validate { credentials ->
                 if (userManager.validateUser(credentials.name, credentials.password))

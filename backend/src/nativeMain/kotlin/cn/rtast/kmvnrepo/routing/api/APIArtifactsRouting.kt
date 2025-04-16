@@ -16,11 +16,13 @@ import cn.rtast.kmvnrepo.entity.res.ArtifactMetadata
 import cn.rtast.kmvnrepo.entity.res.ArtifactSearchResponse
 import cn.rtast.kmvnrepo.entity.res.CommonResponse
 import cn.rtast.kmvnrepo.enums.KotlinMultiplatformProjectType
+import cn.rtast.kmvnrepo.enums.RepositoryVisibility
 import cn.rtast.kmvnrepo.internalRepositories
 import cn.rtast.kmvnrepo.publicRepositories
 import cn.rtast.kmvnrepo.util.*
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.io.files.Path
@@ -122,46 +124,34 @@ private suspend fun RoutingCall.searchArtifacts(repo: String) {
 
 fun Application.configureAPIArtifactsRouting() {
     routing {
-        delete("/@/api/artifacts") {
-            validateSession {
-                val repository = call.queryParameters["repo"] ?: return@validateSession
-                val group = call.queryParameters["group"] ?: return@validateSession
-                val artifactId = call.queryParameters["artifact"] ?: return@validateSession
-                val version = call.queryParameters["version"] ?: return@validateSession
+        authenticate("api") {
+            delete("/@/api/artifacts") {
+                val repository = call.queryParameters["repo"] ?: return@delete
+                val group = call.queryParameters["group"] ?: return@delete
+                val artifactId = call.queryParameters["artifact"] ?: return@delete
+                val version = call.queryParameters["version"] ?: return@delete
                 val klib = call.queryParameters["klib"]?.toBoolean() == true
                 call.deleteArtifact(repository, group, artifactId, version, klib)
             }
         }
 
-        get("/@/api/artifacts/search/{repo}") { call.searchArtifacts(call.parameters["repo"]!!) }
-
-        publicRepositories.forEach {
-            route("/@/api/artifacts/versions/latest/${it.name}") {
-                get("{path...}") { call.serveLatestVersion(it.name) }
-            }
-            route("/@/api/contents/${it.name}") {
-                get("{path...}") { call.handleRequest(it.name) }
-            }
-        }
-
-        internalRepositories.forEach {
-            route("/@/api/artifacts/versions/latest/${it.name}") {
-                get("{path...}") {
-                    validateSession {
-                        call.serveLatestVersion(
-                            it.name
-                        )
-                    }
+        (publicRepositories + internalRepositories).forEach { repo ->
+            val routeBuilder: Route.() -> Unit = {
+                get("/@/api/artifacts/versions/latest/${repo.name}/{path...}") {
+                    call.serveLatestVersion(repo.name)
                 }
-            }
-            route("/@/api/contents/${it.name}") {
-                get("{path...}") {
-                    validateSession { call.handleRequest(it.name) }
+                get("/@/api/contents/${repo.name}/{path...}") {
+                    call.handleRequest(repo.name)
+                }
+                get("/@/api/artifacts/search/${repo.name}") {
+                    call.searchArtifacts(repo.name)
                 }
             }
 
-            get("/@/api/artifacts/search/{repo}") {
-                validateSession { call.searchArtifacts(call.parameters["repo"]!!) }
+            if (repo.visibility == RepositoryVisibility.Internal) {
+                authenticate("api", build = routeBuilder)
+            } else {
+                routeBuilder(this)
             }
         }
     }

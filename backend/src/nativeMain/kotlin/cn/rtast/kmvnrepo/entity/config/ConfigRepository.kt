@@ -14,5 +14,5 @@ import kotlinx.serialization.Serializable
 data class ConfigRepository(
     val name: String,
     val visibility: RepositoryVisibility,
-    val acceptExtensions: List<String>
+    val acceptExtensions: List<String>,
 )

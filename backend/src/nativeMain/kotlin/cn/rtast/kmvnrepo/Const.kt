@@ -18,11 +18,14 @@ val ROOT_PATH = Path(ROOT_PATH_STRING)
 
 val repositories = mutableListOf<ConfigRepository>()
 
+private val defaultAcceptExtensions = listOf("jar", "klib", "aar")
+
 val DEFAULT_CONFIG = Config(
-    9098, false, listOf(
-        ConfigRepository("releases", RepositoryVisibility.Public, listOf("jar", "klib")),
-        ConfigRepository("snapshots", RepositoryVisibility.Public, listOf("jar", "klib")),
-        ConfigRepository("private", RepositoryVisibility.Internal, listOf("jar", "klib")),
+    9098, false,
+    listOf(
+        ConfigRepository("releases", RepositoryVisibility.Public, defaultAcceptExtensions),
+        ConfigRepository("snapshots", RepositoryVisibility.Public, defaultAcceptExtensions),
+        ConfigRepository("private", RepositoryVisibility.Internal, defaultAcceptExtensions),
     ), true
 )
 

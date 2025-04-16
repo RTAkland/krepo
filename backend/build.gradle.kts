@@ -35,7 +35,7 @@ kotlin {
             implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
             implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
             implementation("io.ktor:ktor-server-cors:$ktorVersion")
-            implementation("io.ktor:ktor-server-sessions:$ktorVersion")
+            implementation("io.ktor:ktor-server-auth:$ktorVersion")
             implementation("io.github.pdvrieze.xmlutil:core:0.90.3")
             implementation("io.github.pdvrieze.xmlutil:serialization:0.90.3")
 //            implementation("io.ktor:ktor-client-cio:$ktorVersion")

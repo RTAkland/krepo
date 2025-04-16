@@ -98,3 +98,5 @@ fun Path.searchDirectory(name: String): MutableList<Path> {
     search(this)
     return result
 }
+
+fun String.toPath() = Path(this)
