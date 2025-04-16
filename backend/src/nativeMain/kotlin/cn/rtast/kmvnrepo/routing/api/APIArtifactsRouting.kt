@@ -101,13 +101,13 @@ private suspend fun RoutingCall.searchArtifacts(repo: String) {
         val path = rootPathOf(repo)
         val searchResult = path.searchDirectory(name)
         val resultList = mutableListOf<ArtifactSearchResponse.Artifact>()
-        searchResult.forEach {
-            val versions = it.listFiles().filter { it.isDirectory() }.map { it.name }
-            val repository = it.toString().split("/")[2]
-            val group = it.toString().split("/").dropLast(1).drop(3)
+        searchResult.forEach { result ->
+            val versions = result.listFiles().filter { it.isDirectory() }.map { it.name }
+            val repository = result.toString().split("/")[2]
+            val group = result.toString().split("/").dropLast(1).drop(3)
             val groupCoordinate = group.joinToString(".")
             val groupSlashed = group.joinToString("/")
-            val artifactId = it.toString().split("/").last()
+            val artifactId = result.toString().split("/").last()
             resultList.add(
                 ArtifactSearchResponse.Artifact(
                     groupCoordinate, groupSlashed, repository,
