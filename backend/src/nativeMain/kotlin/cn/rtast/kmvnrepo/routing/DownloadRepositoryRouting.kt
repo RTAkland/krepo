@@ -11,7 +11,7 @@ package cn.rtast.kmvnrepo.routing
 import cn.rtast.kmvnrepo.internalRepositories
 import cn.rtast.kmvnrepo.publicRepositories
 import cn.rtast.kmvnrepo.util.exists
-import cn.rtast.kmvnrepo.util.readBytes
+import cn.rtast.kmvnrepo.util.rawSource
 import cn.rtast.kmvnrepo.util.rootPathOf
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -22,7 +22,7 @@ import io.ktor.server.routing.*
 
 private suspend fun ApplicationCall.serveFile() {
     val file = rootPathOf(request.uri)
-    if (file.exists()) this.respondBytes(file.readBytes()) else this.respond(HttpStatusCode.NotFound)
+    if (file.exists()) this.respondSource(file.rawSource()) else this.respond(HttpStatusCode.NotFound)
 }
 
 fun Application.configureDownloadRouting() {

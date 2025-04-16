@@ -20,6 +20,7 @@ kotlin {
         binaries.executable {
             entryPoint = "cn.rtast.kmvnrepo.main"
         }
+        compilerOptions.freeCompilerArgs.add("-Xallocator=std")
     }
 
     val ktorVersion = "3.1.2"

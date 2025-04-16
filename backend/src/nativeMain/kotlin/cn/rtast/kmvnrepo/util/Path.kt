@@ -37,6 +37,8 @@ fun Path.readBytes(): ByteArray {
     return SystemFileSystem.source(this).buffered().use { it.readByteArray() }
 }
 
+fun Path.rawSource() = SystemFileSystem.source(this)
+
 fun rootPathOf(path: String): Path {
     return Path(ROOT_PATH, path)
 }

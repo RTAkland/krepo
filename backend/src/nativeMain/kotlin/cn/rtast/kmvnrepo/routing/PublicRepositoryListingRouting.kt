@@ -76,7 +76,7 @@ fun Application.configurePublicRepositoriesListing() {
                     return@get
                 }
                 if (fullPath.isFile()) {
-                    call.respondBytes(fullPath.readBytes())
+                    call.respondSource(fullPath.rawSource())
                     return@get
                 }
                 val fileList = fullPath.listFiles().sortedWith(compareBy({ !it.isDirectory() }, { it.name }))
