@@ -23,9 +23,9 @@ private val defaultAcceptExtensions = listOf("jar", "klib", "aar")
 val DEFAULT_CONFIG = Config(
     9098, false,
     listOf(
-        ConfigRepository("releases", RepositoryVisibility.Public, defaultAcceptExtensions),
-        ConfigRepository("snapshots", RepositoryVisibility.Public, defaultAcceptExtensions),
-        ConfigRepository("private", RepositoryVisibility.Internal, defaultAcceptExtensions),
+        ConfigRepository("releases", RepositoryVisibility.Public, defaultAcceptExtensions, false),
+        ConfigRepository("snapshots", RepositoryVisibility.Public, defaultAcceptExtensions, true),
+        ConfigRepository("private", RepositoryVisibility.Internal, defaultAcceptExtensions, true),
     ), true, "https://mvnrepo.rtast.cn"
 )
 

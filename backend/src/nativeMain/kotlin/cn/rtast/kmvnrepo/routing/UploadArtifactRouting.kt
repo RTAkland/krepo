@@ -8,6 +8,7 @@
 
 package cn.rtast.kmvnrepo.routing
 
+import cn.rtast.kmvnrepo.enums.DeployStatus
 import cn.rtast.kmvnrepo.registry.deployMavenArtifact
 import cn.rtast.kmvnrepo.repositories
 import io.ktor.http.*
@@ -26,8 +27,14 @@ fun Application.configureUploadArtifactRouting() {
                         val path = call.request.uri.drop(1)
                         val bytes = call.receive<ByteArray>()
                         val result = deployMavenArtifact(path, bytes)
-                        if (result) call.respond(status = HttpStatusCode.Created, "Success!")
-                        else call.respond(status = HttpStatusCode.Conflict, "Conflict!")
+                        when (result) {
+                            DeployStatus.Success -> call.respond(status = HttpStatusCode.Created, "Success!")
+                            DeployStatus.Conflict -> call.respond(status = HttpStatusCode.Conflict, "Conflict!")
+                            DeployStatus.NotAllowSNAPSHOT -> call.respond(
+                                status = HttpStatusCode.BadRequest,
+                                "Repository NOT ALLOW Snapshot version"
+                            )
+                        }
                     }
                 }
             }
