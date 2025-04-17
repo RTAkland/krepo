@@ -28,4 +28,4 @@ jobs:
           projectName: "kmvnrepo"
           apiToken: ${{ secrets.CF_API_TOKEN }}
           directory: frontend/build/dist/js/developmentExecutable/
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          gitHubToken: ${{ secrets.GH_TOKEN }}
