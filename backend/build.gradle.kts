@@ -47,7 +47,7 @@ kotlin {
             implementation("io.ktor:ktor-client-core:${ktorVersion}")
             implementation("io.github.pdvrieze.xmlutil:core:0.90.3")
             implementation("io.github.pdvrieze.xmlutil:serialization:0.90.3")
-            implementation("cn.rtast.klogging:klogging:0.1.0")
+            implementation("cn.rtast.klogging:klogging:0.1.1")
         }
     }
 }
