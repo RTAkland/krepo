@@ -57,3 +57,32 @@ kembeddable {
     resourcePath.add("nativeMain/resources")
     packageName = "cn.rtast.kmvnrepo.resources"
 }
+
+tasks.register("deployBackend") {
+    dependsOn(tasks.named("linkReleaseExecutableLinuxX64"))
+    doLast {
+        exec {
+            commandLine(
+                "scp",
+                "build/bin/linuxX64/releaseExecutable/backend.kexe",
+                "root@lan.rtast.cn:/tmp/backend.kexe"
+            )
+            isIgnoreExitValue = true
+        }
+        exec {
+            commandLine("ssh", "root@lan.rtast.cn", "rm /root/reposilite/backend.kexe")
+            isIgnoreExitValue = true
+        }
+        exec {
+            commandLine("ssh", "root@lan.rtast.cn", "mv /tmp/backend.kexe /root/reposilite")
+            isIgnoreExitValue = true
+        }
+        exec {
+            commandLine("ssh", "root@lan.rtast.cn", "chmod +x /root/reposilite/backend.kexe")
+        }
+        exec {
+            commandLine("ssh", "root@lan.rtast.cn", "systemctl restart reposilite.service")
+            isIgnoreExitValue = true
+        }
+    }
+}
