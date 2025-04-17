@@ -55,3 +55,19 @@ kotlin {
 
 dependencies.kspCommonMainMetadata("dev.fritz2:lenses-annotation-processor:$fritz2Version")
 kotlin.sourceSets.commonMain { tasks.withType<KspTaskMetadata> { kotlin.srcDir(destinationDirectory) } }
+
+val isDevelopmentModeTask by tasks.registering {
+    if (System.getenv("_DEVELOPMENT_MODE") != null) {
+        project.layout.projectDirectory.dir("src/jsMain/kotlin/cn/rtast/kmvnrepo/development.kt")
+            .asFile.writeText("package cn.rtast.kmvnrepo\npublic const val developmentMode = true")
+    } else {
+        project.layout.projectDirectory.dir("src/jsMain/kotlin/cn/rtast/kmvnrepo/development.kt")
+            .asFile.writeText("package cn.rtast.kmvnrepo\npublic const val developmentMode = false")
+    }
+}
+
+tasks.all {
+    if (this.name != "isDevelopmentModeTask") {
+        this.dependsOn(isDevelopmentModeTask)
+    }
+}

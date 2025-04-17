@@ -11,5 +11,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Config(
-    val backendUrl: String
+    val backend: String
 )
