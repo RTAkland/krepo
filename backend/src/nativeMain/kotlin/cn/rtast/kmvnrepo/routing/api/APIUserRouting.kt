@@ -10,6 +10,8 @@
 
 package cn.rtast.kmvnrepo.routing.api
 
+import cn.rtast.klogging.KLogging
+import cn.rtast.klogging.LogLevel
 import cn.rtast.kmvnrepo.entity.User
 import cn.rtast.kmvnrepo.entity.res.AuthSuccessResponse
 import cn.rtast.kmvnrepo.entity.res.CommonResponse
@@ -25,6 +27,8 @@ import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import kotlin.uuid.ExperimentalUuidApi
 
+val logger = KLogging.getLogger("MVNRepo:API").apply { setLoggingLevel(LogLevel.DEBUG) }
+
 fun Application.configureAPIUserRouting() {
     install(CORS) {
         anyHost()
@@ -34,38 +38,48 @@ fun Application.configureAPIUserRouting() {
             post("/@/api/login") {
                 val username = call.principal<UserIdPrincipal>()?.name!!
                 val token = tokenManager.grant(username)
+                logger.debug("User authed $username")
                 call.respondJson(AuthSuccessResponse(200, call.i18n("login"), token.toString()))
             }
         }
 
         authenticate("api") {
             post("/@/api/logout") {
-                tokenManager.revoke(call.principal<UserIdPrincipal>()!!.name)
+                val username = call.principal<UserIdPrincipal>()!!.name
+                tokenManager.revoke(username)
+                logger.debug("User logout $username")
                 call.respondJson(LogoutResponse(200, call.i18n("logout")))
             }
 
             get("/@/api/user") {
                 val credential = call.principal<UserIdPrincipal>()!!.name
+                logger.debug("User test $credential")
                 call.respondJson(CommonResponse(200, credential))
             }
 
             post("/@/api/user") {
                 val user = call.receive<User>()
                 if (userManager.addUser(user)) {
+                    logger.debug("User added ${user.name}")
                     call.respondJson(CommonResponse(200, "${call.i18n("user.add.success")} -> ${user.name}"))
                 } else {
+                    logger.debug("User add failed ${user.name}")
                     call.respondJson(CommonResponse(-200, call.i18n("user.add.failed")), 401)
                 }
             }
 
             delete("/@/api/user/{username}") {
                 try {
-                    if (userManager.removeUser(call.parameters["username"]!!)) {
+                    val username = call.parameters["username"]!!
+                    if (userManager.removeUser(username)) {
+                        logger.debug("User removed $username")
                         call.respondJson(CommonResponse(200, call.i18n("user.delete.success")))
                     } else {
+                        logger.debug("User not deleted, user not exists $username")
                         call.respondJson(CommonResponse(-200, call.i18n("user.delete.failure.not.exists")), 404)
                     }
                 } catch (e: Exception) {
+                    logger.debug("User delete failed")
                     call.respondJson(CommonResponse(-2000, "${call.i18n("user.delete.failure")}, ${e.message}"), 400)
                 }
             }
