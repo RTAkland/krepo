@@ -34,18 +34,21 @@ fun main() {
                 val responseJson = response.body().fromJson<Contents>()
                 h3 { +"Index of $currentPath" }
                 ul {
-                    responseJson.data.sortedBy { !it.isDirectory }.forEach { file ->
+                    val directories = responseJson.data.filter { it.isDirectory }.sortedBy { it.name }
+                    val files = responseJson.data.filter { !it.isDirectory }
+                    directories.forEach { dir ->
                         li {
-                            if (file.isDirectory) {
-                                a(id = "regularFolder") {
-                                    href("/#$currentPath/${file.name}")
-                                    +file.name
-                                }
-                            } else {
-                                a(id = "regularFile") {
-                                    href("https://repo.maven.rtast.cn$currentPath/${file.name}")
-                                    +file.name
-                                }
+                            a(id = "regularFolder") {
+                                href("/#$currentPath/${dir.name}")
+                                +dir.name
+                            }
+                        }
+                    }
+                    files.forEach { file ->
+                        li {
+                            a(id = "regularFile") {
+                                href("https://repo.maven.rtast.cn$currentPath/${file.name}")
+                                +file.name
                             }
                         }
                     }
