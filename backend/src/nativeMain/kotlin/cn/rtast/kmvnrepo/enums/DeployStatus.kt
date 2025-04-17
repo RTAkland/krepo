@@ -8,5 +8,5 @@
 package cn.rtast.kmvnrepo.enums
 
 enum class DeployStatus {
-    Success, Conflict, NotAllowSNAPSHOT
+    Success, Conflict, NotAllowSNAPSHOT, NotFound
 }

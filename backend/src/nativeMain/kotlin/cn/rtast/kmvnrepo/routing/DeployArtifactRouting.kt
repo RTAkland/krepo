@@ -49,6 +49,14 @@ fun Application.configureUploadArtifactRouting() {
                                     "Repository NOT ALLOW Snapshot version"
                                 )
                             }
+
+                            DeployStatus.NotFound -> {
+                                logger.debug("Deploy failed: Repository(${it.name} not found")
+                                call.respond(
+                                    status = HttpStatusCode.NotFound,
+                                    "Repository not found"
+                                )
+                            }
                         }
                     }
                 }

@@ -27,7 +27,7 @@ fun deployMavenArtifact(path: String, bytes: ByteArray): DeployStatus {
     val targetDir = rootPathOf(dir).apply { mkdirs() }
     val targetFile = Path(targetDir, filename)
     val fileExtension = targetFile.toString().split(".").last()
-    val repositoryConfig = repositories.find { it.name == splitPath.first() } ?: return DeployStatus.Conflict
+    val repositoryConfig = repositories.find { it.name == splitPath.first() } ?: return DeployStatus.NotFound
     if (targetFile.exists() &&
         fileExtension in repositoryConfig.acceptExtensions &&
         !configManager.getConfig().allowRedeploy
