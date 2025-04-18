@@ -5,11 +5,14 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:OptIn(ExperimentalTime::class)
+
 package cn.rtast.kmvnrepo
 
 import cn.rtast.kmvnrepo.entity.Config
 import cn.rtast.kmvnrepo.entity.Contents
 import cn.rtast.kmvnrepo.util.fromJson
+import cn.rtast.kmvnrepo.util.getDate
 import dev.fritz2.core.href
 import dev.fritz2.core.render
 import dev.fritz2.remote.http
@@ -17,6 +20,7 @@ import dev.fritz2.routing.routerOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.time.ExperimentalTime
 
 val router = routerOf("contents")
 var currentPath = ""
@@ -36,27 +40,35 @@ fun main() {
                     }
                     require(response.ok)
                     val responseJson = response.body().fromJson<Contents>()
+                    val allEntries = responseJson.data
+                    val maxNameLength = allEntries.maxOf { it.name.length }
                     h3 { +"Index of $currentPath" }
-                    ul {
-                        val directories = responseJson.data.filter { it.isDirectory }.sortedBy { it.name }
-                        val files = responseJson.data.filter { !it.isDirectory }
-                        directories.forEach { dir ->
-                            li {
-                                a(id = "regularFolder") {
-                                    href("/#$currentPath/${dir.name}")
-                                    +dir.name
-                                }
+                    hr {}
+                    val directories = responseJson.data.filter { it.isDirectory }.sortedBy { it.name }
+                    val files = responseJson.data.filter { !it.isDirectory }
+                    directories.forEach { dir ->
+                        span {
+                            val paddedName = dir.name.padEnd(maxNameLength, ' ')
+                            a(id = "regularFolder") {
+                                href("/#$currentPath/${dir.name}")
+                                +dir.name
                             }
-                        }
-                        files.forEach { file ->
-                            li {
-                                a(id = "regularFile") {
-                                    href("https://repo.maven.rtast.cn$currentPath/${file.name}")
-                                    +file.name
-                                }
-                            }
+                            +paddedName.removePrefix(dir.name)
+                            +" ${getDate(dir.timestamp)}    -"
                         }
                     }
+                    files.forEach { file ->
+                        span {
+                            val paddedName = file.name.padEnd(maxNameLength, ' ')
+                            a(id = "regularFile") {
+                                href("https://repo.maven.rtast.cn$currentPath/${file.name}")
+                                +file.name
+                            }
+                            +paddedName.removePrefix(file.name)
+                            +" ${getDate(file.timestamp)}    ${file.size} B"
+                        }
+                    }
+                    hr {}
                 }
             }
         }

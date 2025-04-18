@@ -14,5 +14,6 @@ import kotlinx.serialization.Serializable
 data class FileEntry(
     val name: String,
     val isDirectory: Boolean,
-    val size: Long
+    val size: Long,
+    val timestamp: Long
 )

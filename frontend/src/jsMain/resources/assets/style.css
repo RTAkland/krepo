@@ -5,10 +5,15 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-#regularFolder {
-    color: deeppink;
+#regularFile, #regularFolder {
+    font-family: monospace;
+    white-space: pre;
+    font-size: 14px;
 }
 
-#regularFile {
-    color: hotpink;
+span {
+    font-family: monospace;
+    white-space: pre;
+    font-size: 14px;
+    display: block;
 }

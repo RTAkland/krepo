@@ -8,8 +8,6 @@
 
 package cn.rtast.kmvnrepo.routing
 
-import cn.rtast.klogging.KLogging
-import cn.rtast.klogging.LogLevel
 import cn.rtast.kmvnrepo.internalRepositories
 import cn.rtast.kmvnrepo.publicRepositories
 import cn.rtast.kmvnrepo.util.exists
@@ -21,14 +19,11 @@ import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-private val logger = KLogging.getLogger("KMVNRepo:Dispatch").apply { setLoggingLevel(LogLevel.DEBUG) }
-
 private suspend fun ApplicationCall.serveFile(repository: String) {
     val path = repository + "/" + parameters.getAll("path")!!.joinToString("/")
     val file = rootPathOf(path)
     if (file.exists()) {
         this.respondSource(file.rawSource())
-        logger.debug("Dispatching $path")
     } else this.respond(HttpStatusCode.NotFound)
 }
 

@@ -6,11 +6,13 @@
  */
 
 @file:Suppress("unused")
+@file:OptIn(ExperimentalForeignApi::class)
 
 package cn.rtast.kmvnrepo.util
 
 import cn.rtast.kmvnrepo.ROOT_PATH
 import io.ktor.utils.io.core.*
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem

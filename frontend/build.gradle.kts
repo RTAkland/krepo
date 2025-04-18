@@ -49,6 +49,7 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
             implementation("cn.rtast.rutil:string:0.0.1")
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
         }
     }
 }

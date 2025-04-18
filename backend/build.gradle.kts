@@ -47,7 +47,6 @@ kotlin {
             implementation("io.ktor:ktor-client-core:${ktorVersion}")
             implementation("io.github.pdvrieze.xmlutil:core:0.90.3")
             implementation("io.github.pdvrieze.xmlutil:serialization:0.90.3")
-            implementation("cn.rtast.klogging:klogging:0.1.1")
         }
     }
 }
@@ -79,6 +78,7 @@ tasks.register("deployBackend") {
         }
         exec {
             commandLine("ssh", "root@lan.rtast.cn", "chmod +x /root/reposilite/backend.kexe")
+            isIgnoreExitValue = true
         }
         exec {
             commandLine("ssh", "root@lan.rtast.cn", "systemctl restart reposilite.service")
