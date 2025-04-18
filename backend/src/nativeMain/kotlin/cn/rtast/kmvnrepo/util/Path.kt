@@ -6,17 +6,24 @@
  */
 
 @file:Suppress("unused")
-@file:OptIn(ExperimentalForeignApi::class)
+@file:OptIn(ExperimentalForeignApi::class, ExperimentalTime::class, ExperimentalNativeApi::class)
 
 package cn.rtast.kmvnrepo.util
 
 import cn.rtast.kmvnrepo.ROOT_PATH
 import io.ktor.utils.io.core.*
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.memScoped
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
 import kotlinx.io.readByteArray
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
+import kotlinx.cinterop.*
+import platform.posix.*
+import kotlin.experimental.ExperimentalNativeApi
+import kotlin.time.*
 
 fun Path.mkdirs(): Path {
     SystemFileSystem.createDirectories(this)
@@ -99,3 +106,6 @@ fun Path.calculateDirectorySize(): Float {
     }
     return totalSize
 }
+
+expect fun Path.getFileModifiedTimestamp(): Long
+

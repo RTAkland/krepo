@@ -49,7 +49,7 @@ private suspend fun ApplicationCall.handleRequest(repository: String) {
             name = it.name,
             isDirectory = it.isDirectory(),
             size = if (it.isFile()) it.size() else -1,
-            timestamp = 0L
+            timestamp = if (it.isFile()) it.getFileModifiedTimestamp() else -25940275200L
         )
     }
     respondText(APIListingResponse(200, entries.size, entries).toJson(), ContentType.Application.Json)

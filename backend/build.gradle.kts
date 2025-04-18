@@ -19,8 +19,22 @@ repositories {
 }
 
 kotlin {
-    linuxX64()
-    mingwX64()
+    linuxX64 {
+        compilations["main"].cinterops {
+            val fileTimeLinux by creating {
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/file_time_linuxx64.def").asFile
+                compilerOpts("-Isrc/cinterop/")
+            }
+        }
+    }
+    mingwX64 {
+        compilations["main"].cinterops {
+            val fileTimeMingw by creating {
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/file_time_mingwx64.def").asFile
+                compilerOpts("-Isrc/cinterop/")
+            }
+        }
+    }
 
     targets.withType<KotlinNativeTarget>().configureEach {
         binaries.executable {
@@ -47,6 +61,10 @@ kotlin {
             implementation("io.ktor:ktor-client-core:${ktorVersion}")
             implementation("io.github.pdvrieze.xmlutil:core:0.90.3")
             implementation("io.github.pdvrieze.xmlutil:serialization:0.90.3")
+        }
+
+        commonTest.dependencies {
+            implementation(kotlin("test"))
         }
     }
 }
