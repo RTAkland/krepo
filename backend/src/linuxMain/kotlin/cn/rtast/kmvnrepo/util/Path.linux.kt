@@ -14,5 +14,9 @@ import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.io.files.Path
 
 actual fun Path.getFileModifiedTimestamp(): Long {
-    return get_file_modified_time(this.toString())
+    return try {
+        get_file_modified_time(this.toString())
+    } catch (_: Exception) {
+        -26034180322L
+    }
 }
