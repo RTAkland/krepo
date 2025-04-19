@@ -6,7 +6,7 @@ It does not have a "Regular" frontend, instead, the frontend module
 is just a file listing page.
 
 I have already used it to store my artifacts, See backend https://repo.maven.rtast.cn and
-frontend https://mvnrepo.rtast.cn/#/releases/
+frontend https://pkg.rtast.cn/#/releases/
 
 # Build backend from source
 
