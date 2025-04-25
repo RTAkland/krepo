@@ -46,6 +46,17 @@ fun main() {
                     hr {}
                     val directories = responseJson.data.filter { it.isDirectory }.sortedBy { it.name }
                     val files = responseJson.data.filter { !it.isDirectory }
+                    if (currentPath.isNotEmpty()) {
+                        span {
+                            a(id = "parentFolder") {
+                                val parentPath = currentPath
+                                    .trimEnd('/')
+                                    .substringBeforeLast('/', "")
+                                href("/#$parentPath")
+                                +".."
+                            }
+                        }
+                    }
                     directories.forEach { dir ->
                         span {
                             val paddedName = dir.name.padEnd(maxNameLength, ' ')
@@ -65,7 +76,7 @@ fun main() {
                                 +file.name
                             }
                             +paddedName.removePrefix(file.name)
-                            +" ${getDate(file.timestamp)}    ${file.size} B"
+                            +" ${getDate(file.timestamp)}    ${file.size}"
                         }
                     }
                     hr {}

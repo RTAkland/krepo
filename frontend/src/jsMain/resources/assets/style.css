@@ -17,3 +17,9 @@ span {
     font-size: 14px;
     display: block;
 }
+
+#parentFolder {
+    color: blue;
+    font-weight: bold;
+    text-decoration: underline;
+}
