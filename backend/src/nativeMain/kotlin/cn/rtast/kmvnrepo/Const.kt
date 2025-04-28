@@ -11,10 +11,11 @@ package cn.rtast.kmvnrepo
 import cn.rtast.kmvnrepo.entity.config.Config
 import cn.rtast.kmvnrepo.entity.config.ConfigRepository
 import cn.rtast.kmvnrepo.enums.RepositoryVisibility
+import cn.rtast.kmvnrepo.util.mkdirs
 import kotlinx.io.files.Path
 
 const val ROOT_PATH_STRING = "./repositories"
-val ROOT_PATH = Path(ROOT_PATH_STRING)
+val ROOT_PATH = Path(ROOT_PATH_STRING).apply { mkdirs() }
 
 val repositories = mutableListOf<ConfigRepository>()
 
