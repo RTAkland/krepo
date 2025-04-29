@@ -16,6 +16,7 @@ import cn.rtast.kmvnrepo.util.rootPathOf
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.plugins.autohead.AutoHeadResponse
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
@@ -28,6 +29,7 @@ private suspend fun ApplicationCall.serveFile(repository: String) {
 }
 
 fun Application.configureDownloadRouting() {
+    install(AutoHeadResponse)
     routing {
         publicRepositories.forEach {
             route(it.name) {
