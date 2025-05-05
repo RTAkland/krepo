@@ -18,6 +18,7 @@ import cn.rtast.kmvnrepo.util.jsonContentType
 import cn.rtast.kmvnrepo.util.string.fromJson
 import cn.rtast.kmvnrepo.util.string.toBase64
 import dev.fritz2.core.*
+import dev.fritz2.headless.components.tooltip
 import dev.fritz2.remote.http
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
@@ -33,9 +34,11 @@ fun RenderContext.navbar() {
         attr("role", "navigation")
         attr("aria-label", "main navigation")
         div("navbar-brand") {
-            a("navbar-item") {
+            a("navbar-item is-rounded") {
                 href("#")
-                +"Maven repo of RTAST"
+                +"Maven repository of RTAST"
+            }.tooltip {
+                +"Back to home page"
             }
             a("navbar-burger") {
                 attr("role", "button")
@@ -143,6 +146,7 @@ fun RenderContext.navbar() {
                 val avatarUrl = "https://gravatar.rtast.cn/avatar/$emailMd5?d=identicon"
                 LocalStorage.EMAIL_ADDRESS = response.email
                 LocalStorage.AVATAR = avatarUrl
+                LocalStorage.HIDDEN_HASH_FILES = true
                 infoToast("登陆成功")
                 window.location.reload()
             } else warningToast("用户名或密码不正确!")

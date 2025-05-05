@@ -1,6 +1,6 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 2025/5/5 15:21
+ * Date: 2025/5/6 00:00
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
@@ -32,11 +32,15 @@ object LocalStorage {
     var AVATAR
         get() = getLocalStorage("mvn_avatar")
         set(value) = if (value == null) removeLocalStorage("mvn_avatar") else setLocalStorage("mvn_avatar", value)
+    var HIDDEN_HASH_FILES
+        get() = getLocalStorage("mvn_hidden_hash_files") == "true"
+        set(value) = setLocalStorage("mvn_hidden_hash_files", value.toString())
 
     fun clearAll() {
         TOKEN = null
         CURRENT_USERNAME = null
         EMAIL_ADDRESS = null
         AVATAR = null
+        HIDDEN_HASH_FILES = false
     }
 }

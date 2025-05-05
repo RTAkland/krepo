@@ -52,6 +52,11 @@ kotlin {
             implementation("cn.rtast.rutil:string:0.0.1")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
             implementation("org.kotlincrypto.hash:md:0.6.1")
+            implementation("io.github.pdvrieze.xmlutil:core:0.90.3")
+            implementation("io.github.pdvrieze.xmlutil:serialization:0.90.3")
+        }
+        jsMain.dependencies {
+            implementation("io.github.pdvrieze.xmlutil:core-js:0.90.3")
         }
     }
 }

@@ -7,7 +7,15 @@
 
 package cn.rtast.kmvnrepo
 
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
 
 val client = HttpClient(CIO)
+
+fun getRepositoryTemplate(repo: String): String = """
+    |maven("${backend}/$repo")
+""".trimMargin()
+
+fun getDependenciesTemplate(group: String, name: String, version: String) ="""
+    |implementation("$group:$name:$version")
+""".trimMargin()
