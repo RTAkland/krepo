@@ -8,6 +8,7 @@
 
 package cn.rtast.kmvnrepo.routing.api
 
+import cn.rtast.kmvnrepo.entity.DeleteGavRequest
 import cn.rtast.kmvnrepo.entity.FileEntry
 import cn.rtast.kmvnrepo.entity.MavenMetadata
 import cn.rtast.kmvnrepo.entity.kmp.KotlinToolchainMetadata
@@ -24,6 +25,7 @@ import cn.rtast.kmvnrepo.util.manager.i18n
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.io.files.Path
@@ -137,6 +139,13 @@ fun Application.configureAPIArtifactsRouting() {
                 val version = call.queryParameters["version"] ?: return@delete
                 val klib = call.queryParameters["klib"]?.toBoolean() == true
                 call.deleteArtifact(repository, group, artifactId, version, klib)
+            }
+
+            delete("/@/api/gav") {
+                val gav = call.receive<DeleteGavRequest>().gav
+                val path = ("repositories/$gav").toPath()
+                if (path.cIsDirectory()) path.deleteRec() else path.delete()
+                call.respond(HttpStatusCode.OK, CommonResponse(200, "删除成功"))
             }
         }
 

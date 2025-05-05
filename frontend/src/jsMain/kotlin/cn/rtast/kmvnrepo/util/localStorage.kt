@@ -11,17 +11,32 @@ import kotlinx.browser.localStorage
 import org.w3c.dom.get
 import org.w3c.dom.set
 
-fun getLocalStorage(key: String): String = localStorage[key]!!
+fun getLocalStorage(key: String): String? = localStorage[key]
 
 fun setLocalStorage(key: String, value: String) {
     localStorage[key] = value
 }
 
+fun removeLocalStorage(key: String) = localStorage.removeItem(key)
+
 object LocalStorage {
     var TOKEN
         get() = getLocalStorage("mvn_token")
-        set(value) = setLocalStorage("mvn_token", value)
+        set(value) = if (value == null) removeLocalStorage("mvn_token") else setLocalStorage("mvn_token", value)
     var CURRENT_USERNAME
         get() = getLocalStorage("mvn_user")
-        set(value) = setLocalStorage("mvn_user", value)
+        set(value) = if (value == null) removeLocalStorage("mvn_user") else setLocalStorage("mvn_user", value)
+    var EMAIL_ADDRESS
+        get() = getLocalStorage("mvn_email")
+        set(value) = if (value == null) removeLocalStorage("mvn_email") else setLocalStorage("mvn_email", value)
+    var AVATAR
+        get() = getLocalStorage("mvn_avatar")
+        set(value) = if (value == null) removeLocalStorage("mvn_avatar") else setLocalStorage("mvn_avatar", value)
+
+    fun clearAll() {
+        TOKEN = null
+        CURRENT_USERNAME = null
+        EMAIL_ADDRESS = null
+        AVATAR = null
+    }
 }

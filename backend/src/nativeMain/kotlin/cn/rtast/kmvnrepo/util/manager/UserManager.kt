@@ -19,7 +19,7 @@ import kotlin.uuid.Uuid
 
 class UserManager {
     private val file = Path(ROOT_PATH, "users.json").apply {
-        if (!exists()) writeText(listOf(User("admin", Uuid.random().toString())).toJson())
+        if (!exists()) writeText(listOf(User("admin", Uuid.random().toString(), "admin@rtast.cn")).toJson())
     }
 
     private var users = file.readText().fromJson<MutableList<User>>()
@@ -33,15 +33,15 @@ class UserManager {
         readUsers()
     }
 
-    fun addUser(username: String, password: String): Boolean {
+    fun addUser(username: String, password: String, email: String): Boolean {
         if (users.any { it.name == username }) return false
-        users.add(User(username, password))
+        users.add(User(username, password, email))
         sync()
         return true
     }
 
     fun addUser(user: User): Boolean {
-        return this.addUser(user.name, user.password!!)
+        return this.addUser(user.name, user.password!!, user.email)
     }
 
     fun validateUser(username: String, password: String): Boolean {

@@ -28,13 +28,17 @@ import kotlin.uuid.ExperimentalUuidApi
 fun Application.configureAPIUserRouting() {
     install(CORS) {
         anyHost()
+        anyMethod()
+        allowNonSimpleContentTypes = true
+        allowHeaders { true }
     }
     routing {
         authenticate("maven-common") {
             post("/@/api/login") {
                 val username = call.principal<UserIdPrincipal>()?.name!!
+                val user = userManager.getUser(username)!!
                 val token = tokenManager.grant(username)
-                call.respondJson(AuthSuccessResponse(200, call.i18n("login"), token.toString()))
+                call.respondJson(AuthSuccessResponse(200, call.i18n("login"), token.toString(), user.email, user.name))
             }
         }
 

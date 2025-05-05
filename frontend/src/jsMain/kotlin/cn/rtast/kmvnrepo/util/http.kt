@@ -15,7 +15,7 @@ import dev.fritz2.remote.http
 
 fun httpRequest(url: String): Request = http(backend + url)
 
-fun Request.auth() = header("Authorization", "Bearer ${LocalStorage.TOKEN}")
+fun Request.auth() = header("Authorization", "Bearer ${LocalStorage.TOKEN!!}")
 
 fun Request.jsonContentType() = this.contentType("application/json")
 
