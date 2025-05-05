@@ -74,7 +74,7 @@ fun RenderContext.publicContentListingPage() {
         val api = httpRequest("/@/api/contents/$currentPath")
         val response = api.get()
         if (response.status == 404) {
-            div("notification is-danger") { +"404 - Not Found" }
+            div("notification has-text-centered") { +"404 - Not Found" }
             return@launch
         }
         require(response.ok) { errorToast("获取文件列表失败!") }
