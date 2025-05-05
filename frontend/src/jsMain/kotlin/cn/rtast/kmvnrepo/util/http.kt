@@ -10,12 +10,14 @@
 package cn.rtast.kmvnrepo.util
 
 import cn.rtast.kmvnrepo.backend
+import cn.rtast.kmvnrepo.util.file.LocalStorage
+import cn.rtast.kmvnrepo.util.string.toJson
 import dev.fritz2.remote.Request
 import dev.fritz2.remote.http
 
 fun httpRequest(url: String): Request = http(backend + url)
 
-fun Request.auth() = header("Authorization", "Bearer ${LocalStorage.TOKEN!!}")
+fun Request.auth() = LocalStorage.TOKEN?.let { header("Authorization", "Bearer $it") } ?: this
 
 fun Request.jsonContentType() = this.contentType("application/json")
 

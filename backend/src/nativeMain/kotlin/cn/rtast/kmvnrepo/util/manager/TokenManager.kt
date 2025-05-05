@@ -9,18 +9,18 @@
 
 package cn.rtast.kmvnrepo.util.manager
 
+import cn.rtast.kmvnrepo.util.generateSecureRandomString
 import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 class TokenManager {
-    private val validatedTokens = mutableMapOf<String, Uuid>()
+    private val validatedTokens = mutableMapOf<String, String>()
 
-    fun revoke(name: String): Uuid? {
+    fun revoke(name: String): String? {
         return validatedTokens.remove(name)
     }
 
-    fun grant(name: String): Uuid {
-        return Uuid.random().apply {
+    fun grant(name: String): String {
+        return generateSecureRandomString().apply {
             if (validatedTokens.containsKey(name)) {
                 validatedTokens.remove(name)
             }
@@ -28,7 +28,7 @@ class TokenManager {
         }
     }
 
-    fun getName(id: Uuid): String? = validatedTokens.entries.find { it.value == id }?.key
+    fun getName(id: String): String? = validatedTokens.entries.find { it.value == id }?.key
 
-    fun validate(id: Uuid): Boolean = validatedTokens.containsValue(id)
+    fun validate(id: String): Boolean = validatedTokens.containsValue(id)
 }

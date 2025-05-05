@@ -5,7 +5,7 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-package cn.rtast.kmvnrepo.util
+package cn.rtast.kmvnrepo.util.file
 
 fun formatSize(bytes: Long): String {
     if (bytes < 1024) return "$bytes B"

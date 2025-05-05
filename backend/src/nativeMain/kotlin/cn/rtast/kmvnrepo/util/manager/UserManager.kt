@@ -53,4 +53,6 @@ class UserManager {
     }
 
     fun getUser(name: String): User? = users.find { it.name == name }
+
+    fun getAllUsers(): List<User> = users
 }

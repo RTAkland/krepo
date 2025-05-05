@@ -11,17 +11,17 @@
 package cn.rtast.kmvnrepo.routing.api
 
 import cn.rtast.kmvnrepo.entity.User
-import cn.rtast.kmvnrepo.entity.res.AuthSuccessResponse
-import cn.rtast.kmvnrepo.entity.res.CommonResponse
-import cn.rtast.kmvnrepo.entity.res.LogoutResponse
+import cn.rtast.kmvnrepo.entity.res.*
 import cn.rtast.kmvnrepo.tokenManager
 import cn.rtast.kmvnrepo.userManager
 import cn.rtast.kmvnrepo.util.manager.i18n
 import cn.rtast.kmvnrepo.util.respondJson
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlin.uuid.ExperimentalUuidApi
 
@@ -38,7 +38,7 @@ fun Application.configureAPIUserRouting() {
                 val username = call.principal<UserIdPrincipal>()?.name!!
                 val user = userManager.getUser(username)!!
                 val token = tokenManager.grant(username)
-                call.respondJson(AuthSuccessResponse(200, call.i18n("login"), token.toString(), user.email, user.name))
+                call.respondJson(AuthSuccessResponse(200, call.i18n("login"), token, user.email, user.name))
             }
         }
 
@@ -52,6 +52,20 @@ fun Application.configureAPIUserRouting() {
             get("/@/api/user") {
                 val credential = call.principal<UserIdPrincipal>()!!.name
                 call.respondJson(CommonResponse(200, credential))
+            }
+
+            get("/@/api/user/") {
+                val users = userManager.getAllUsers().map { NoSensitiveUser(it.name, it.email) }
+                call.respond(HttpStatusCode.OK, CommonDataResponse(200, users))
+            }
+
+            get("/@/api/user/{name}") {
+                val user = userManager.getUser(call.parameters["name"]!!)
+                if (user == null) {
+                    call.respond(HttpStatusCode.NotFound, CommonDataResponse(404, null))
+                } else {
+                    call.respond(HttpStatusCode.OK, CommonDataResponse(200, NoSensitiveUser(user.name, user.email)))
+                }
             }
 
             post("/@/api/user") {

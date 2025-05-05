@@ -7,7 +7,7 @@
 
 @file:OptIn(ExperimentalEncodingApi::class)
 
-package cn.rtast.kmvnrepo.util
+package cn.rtast.kmvnrepo.util.string
 
 import io.ktor.utils.io.core.toByteArray
 import kotlin.io.encoding.Base64

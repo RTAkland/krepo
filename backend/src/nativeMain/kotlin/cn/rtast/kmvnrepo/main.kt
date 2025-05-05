@@ -10,6 +10,7 @@ package cn.rtast.kmvnrepo
 
 import cn.rtast.kmvnrepo.routing.api.configureAPIArtifactsRouting
 import cn.rtast.kmvnrepo.routing.api.configureAPIUserRouting
+import cn.rtast.kmvnrepo.routing.api.configureRepositoriesRouting
 import cn.rtast.kmvnrepo.routing.configureDownloadRouting
 import cn.rtast.kmvnrepo.routing.configurePublicRepositoriesListing
 import cn.rtast.kmvnrepo.routing.configureUploadArtifactRouting
@@ -39,4 +40,5 @@ fun Application.module() {
     configureDownloadRouting()
     configureAPIUserRouting()
     configureAPIArtifactsRouting()
+    configureRepositoriesRouting()
 }

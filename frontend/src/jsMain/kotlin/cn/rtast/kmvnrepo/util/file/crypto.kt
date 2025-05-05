@@ -7,7 +7,7 @@
 
 @file:OptIn(ExperimentalStdlibApi::class)
 
-package cn.rtast.kmvnrepo.util
+package cn.rtast.kmvnrepo.util.file
 
 import org.kotlincrypto.hash.md.MD5
 
