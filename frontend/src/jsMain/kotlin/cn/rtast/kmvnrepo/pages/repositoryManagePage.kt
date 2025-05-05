@@ -31,6 +31,7 @@ import dev.fritz2.headless.components.tooltip
 import dev.fritz2.remote.http
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 fun RenderContext.publicContentListingPage() {
     val showDeleteFileEntryDialog = storeOf(false)
@@ -210,8 +211,8 @@ fun RenderContext.publicContentListingPage() {
         }
     }) {
         LocalStorage.HIDDEN_HASH_FILES = hiddenHashFilesToggle.current.toString().toBoolean()
-        window.location.reload()
         infoToast("保存成功")
+        window.setTimeout({ window.location.reload() }, 0.5.seconds.inWholeMilliseconds.toInt())
     }
 }
 
