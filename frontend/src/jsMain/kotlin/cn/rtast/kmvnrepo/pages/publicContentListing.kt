@@ -18,7 +18,6 @@ import cn.rtast.kmvnrepo.util.getDate
 import cn.rtast.kmvnrepo.util.httpRequest
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.href
-import dev.fritz2.remote.http
 import kotlinx.coroutines.launch
 
 //fun RenderContext.publicContentListingPage() {
@@ -82,7 +81,7 @@ fun RenderContext.publicContentListingPage() {
         val responseJson = response.body().fromJson<Contents>()
         div("container") {
             br {}
-            h4("title is-4 has-text-centered") { i { +"Index of $currentPath" } }
+            h4("title is-4 has-text-centered") { +"Index of $currentPath" }
             hr { }
             if (currentPath.isNotEmpty()) {
                 div("mb-4") {
