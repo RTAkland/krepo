@@ -35,7 +35,7 @@ fun RenderContext.navbar() {
         div("navbar-brand") {
             a("navbar-item") {
                 href("#")
-                +"🏷️ KMavenRepo"
+                +"Maven repo of RTAST"
             }
             a("navbar-burger") {
                 attr("role", "button")
