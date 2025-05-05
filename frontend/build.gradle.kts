@@ -44,6 +44,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation("dev.fritz2:core:$fritz2Version")
+            implementation("dev.fritz2:headless:$fritz2Version")
             implementation("io.ktor:ktor-client-cio:$ktorVersion")
             implementation("io.ktor:ktor-client-core:$ktorVersion")
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")

@@ -17,7 +17,7 @@ data class Contents(
     data class Content(
         val name: String,
         val isDirectory: Boolean,
-        val size: Int,
+        val size: Long,
         val timestamp: Long
     )
 }

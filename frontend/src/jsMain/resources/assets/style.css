@@ -23,3 +23,12 @@ span {
     font-weight: bold;
     text-decoration: underline;
 }
+
+.toast-container {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    color: #222;
+}
