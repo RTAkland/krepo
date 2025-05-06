@@ -62,8 +62,9 @@ fun Application.configurePublicRepositoriesListing() {
             routing {
                 route("/listing/${it.name}") {
                     get("{path...}") {
-                        val pathParts = call.parameters.getAll("path")?.joinToString("/") ?: ""
-                        call.respondRedirect("${configManager.getConfig().frontend}/#/${it.name}/$pathParts")
+                        val pathParts = (call.parameters.getAll("path")
+                            ?.joinToString("/") ?: "")
+                        call.respondRedirect("${configManager.getConfig().frontend}/#/${it.name}${if (!pathParts.isBlank()) "/" else ""}$pathParts")
                     }
                 }
             }
