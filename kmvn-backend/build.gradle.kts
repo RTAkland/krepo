@@ -101,7 +101,12 @@ tasks.register("deployBackend") {
             isIgnoreExitValue = true
         }
         exec {
-            commandLine("ssh", "root@lan.rtast.cn", "systemctl restart reposilite.service")
+            commandLine("ssh", "root@lan.rtast.cn", "systemctl stop reposilite.service")
+            isIgnoreExitValue = true
+        }
+        Thread.sleep(1000)
+        exec {
+            commandLine("ssh", "root@lan.rtast.cn", "systemctl start reposilite.service")
             isIgnoreExitValue = true
         }
     }
