@@ -8,17 +8,32 @@
 package cn.rtast.kmvnrepo.components
 
 import cn.rtast.kmvnrepo.frontendConfig
+import cn.rtast.kmvnrepo.util.string.getCurrentYear
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.href
 import dev.fritz2.core.target
 
 fun RenderContext.pageFooter() {
-    if (frontendConfig.icpLicense != null) {
-        div("content has-text-centered page-footer-icp") {
-            a {
-                href("https://beian.miit.gov.cn/")
-                +frontendConfig.icpLicense!!
-                target("_blank")
+    div("page-footer-icp") {
+        div("footer-inner columns is-mobile is-vcentered is-multiline") {
+            div("column has-text-centered is-flex-grow-1") {
+                if (frontendConfig.icpLicense != null) {
+                    a {
+                        href("https://beian.miit.gov.cn/")
+                        +frontendConfig.icpLicense!!
+                        target("_blank")
+                    }
+                }
+            }
+            val originCopyright = frontendConfig.copyright
+                .replace("#YEAR#", getCurrentYear().toString())
+            val targetLink = originCopyright.split("|")[1]
+            div("column is-narrow has-text-right") {
+                a("is-size-8") {
+                    href(targetLink)
+                    +originCopyright.split("|").first()
+                    target("_blank")
+                }
             }
         }
     }

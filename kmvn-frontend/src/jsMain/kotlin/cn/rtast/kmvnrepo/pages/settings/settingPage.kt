@@ -29,6 +29,7 @@ fun RenderContext.settingPage() {
         val pageTitleStore = storeOf(frontendConfig.pageTitle)
         val icpLicenseStore = storeOf(frontendConfig.icpLicense)
         val descriptionStore = storeOf(frontendConfig.description)
+        val copyrightStore = storeOf(frontendConfig.copyright)
         val showSubmitSettingDialog = storeOf(false)
         val showResetFrontConfigDialog = storeOf(false)
         coroutineScope.launch {
@@ -65,6 +66,16 @@ fun RenderContext.settingPage() {
                             }
                         }
                     }
+                    div("field") {
+                        label("label") { +"版权信息" }
+                        div("control") {
+                            input("input") {
+                                type("text")
+                                value(copyrightStore.current)
+                                changes.values() handledBy copyrightStore.update
+                            }
+                        }
+                    }
                     div("field is-grouped mt-4") {
                         div("control") {
                             button("button is-primary") {
@@ -88,10 +99,11 @@ fun RenderContext.settingPage() {
             val pageTitle = pageTitleStore.current
             val icpLicense = icpLicenseStore.current
             val description = descriptionStore.current
+            val copyright = copyrightStore.current
             coroutineScope.launch {
                 httpRequest("/@/api/config/frontend")
                     .auth().acceptJson().jsonContentType()
-                    .setBody(FrontendConfig(pageTitle, icpLicense, description))
+                    .setBody(FrontendConfig(pageTitle, icpLicense, description, copyright))
                     .put()
                 infoToast("更改成功!")
                 window.location.reload()

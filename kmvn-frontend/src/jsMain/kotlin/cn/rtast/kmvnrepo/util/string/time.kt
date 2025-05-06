@@ -7,6 +7,7 @@
 
 package cn.rtast.kmvnrepo.util.string
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -22,3 +23,8 @@ fun getDate(timestamp: Long): String {
 
     return formattedTime
 }
+
+val currentDatetime
+    get() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+
+fun getCurrentYear() = currentDatetime.year
