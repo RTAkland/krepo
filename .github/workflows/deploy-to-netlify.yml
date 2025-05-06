@@ -17,11 +17,11 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Build
-        run: ./gradlew :frontend:jsBrowserDevelopmentExecutableDistribution
+        run: ./gradlew :kmvn-frontend:jsBrowserDevelopmentExecutableDistribution
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
-          publish-dir: './frontend/build/dist/js/developmentExecutable/'
+          publish-dir: './kmvn-frontend/build/dist/js/developmentExecutable/'
           production-branch: master
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions"

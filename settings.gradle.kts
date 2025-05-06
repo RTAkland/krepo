@@ -1,12 +1,15 @@
 @file:Suppress("UnstableApiUsage")
 
-rootProject.name = "KMVNRepo"
+rootProject.name = "kmvnrepo"
 
-include(":test-publish")
-include(":test-publish2")
-include(":backend")
-include(":common")
-include(":frontend")
+listOf(
+    "frontend",
+    "backend",
+    "common",
+    "common",
+    "test:test-publish",
+    "test:test-publish2",
+).forEach { include("kmvn-$it") }
 
 pluginManagement {
     repositories {
