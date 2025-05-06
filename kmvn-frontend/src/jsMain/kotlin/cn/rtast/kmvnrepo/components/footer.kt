@@ -16,7 +16,7 @@ import dev.fritz2.core.target
 fun RenderContext.pageFooter() {
     div("page-footer-icp") {
         div("footer-inner columns is-mobile is-vcentered is-multiline") {
-            div("column has-text-centered is-flex-grow-1") {
+            div("column is-flex-grow-1 has-text-right") {
                 if (frontendConfig.icpLicense != null) {
                     a {
                         href("https://beian.miit.gov.cn/")
