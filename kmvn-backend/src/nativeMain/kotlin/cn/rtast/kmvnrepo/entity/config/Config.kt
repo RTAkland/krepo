@@ -8,6 +8,7 @@
 
 package cn.rtast.kmvnrepo.entity.config
 
+import cn.rtast.kmvnrepo.entity.ConfigRepository
 import kotlinx.serialization.Serializable
 
 @Serializable

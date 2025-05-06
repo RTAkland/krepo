@@ -7,7 +7,6 @@
 
 package cn.rtast.kmvnrepo.entity
 
-import cn.rtast.kmvnrepo.enums.RepositoryVisibility
 import kotlinx.serialization.Serializable
 
 @Serializable

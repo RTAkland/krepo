@@ -9,8 +9,8 @@
 package cn.rtast.kmvnrepo
 
 import cn.rtast.kmvnrepo.entity.config.Config
-import cn.rtast.kmvnrepo.entity.config.ConfigRepository
-import cn.rtast.kmvnrepo.enums.RepositoryVisibility
+import cn.rtast.kmvnrepo.entity.ConfigRepository
+import cn.rtast.kmvnrepo.entity.RepositoryVisibility
 import cn.rtast.kmvnrepo.util.mkdirs
 import kotlinx.io.files.Path
 

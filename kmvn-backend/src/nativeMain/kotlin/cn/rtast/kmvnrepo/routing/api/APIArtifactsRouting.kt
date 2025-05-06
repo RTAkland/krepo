@@ -17,7 +17,7 @@ import cn.rtast.kmvnrepo.entity.res.ArtifactMetadata
 import cn.rtast.kmvnrepo.entity.res.ArtifactSearchResponse
 import cn.rtast.kmvnrepo.entity.res.CommonResponse
 import cn.rtast.kmvnrepo.enums.KotlinMultiplatformProjectType
-import cn.rtast.kmvnrepo.enums.RepositoryVisibility
+import cn.rtast.kmvnrepo.entity.RepositoryVisibility
 import cn.rtast.kmvnrepo.internalRepositories
 import cn.rtast.kmvnrepo.publicRepositories
 import cn.rtast.kmvnrepo.util.*

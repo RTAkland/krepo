@@ -79,6 +79,10 @@ fun RenderContext.navbar() {
                                 +"前端设置"
                                 href("/#/setting")
                             }
+                            a("navbar-item") {
+                                +"仓库设置"
+                                href("/#/setting/repository")
+                            }
                         }
                     }
                 }
@@ -99,6 +103,7 @@ fun RenderContext.navbar() {
                                     className("is-rounded")
                                 }
                             }
+                            span { b { +LocalStorage.CURRENT_USERNAME!! } }
                             a("button is-light") {
                                 +"登出"
                                 clicks handledBy { showLogoutDialog.update(true) }
@@ -160,7 +165,7 @@ fun RenderContext.navbar() {
             LocalStorage.AVATAR = null
             LocalStorage.EMAIL_ADDRESS = null
             infoToast("登出成功")
-            window.location.reload()
+            window.location.href = "/#/"
         }
         infoToast("正在退出登录...")
     }

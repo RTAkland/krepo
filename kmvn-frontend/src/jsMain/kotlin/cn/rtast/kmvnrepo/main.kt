@@ -14,6 +14,7 @@ import cn.rtast.kmvnrepo.entity.FrontendConfig
 import cn.rtast.kmvnrepo.entity.GetFrontendConfigResponse
 import cn.rtast.kmvnrepo.pages.homePage
 import cn.rtast.kmvnrepo.pages.publicContentListingPage
+import cn.rtast.kmvnrepo.pages.settings.mavenRepositorySettingPage
 import cn.rtast.kmvnrepo.pages.settings.settingPage
 import cn.rtast.kmvnrepo.pages.users.editUserPage
 import cn.rtast.kmvnrepo.pages.users.newUserPage
@@ -41,6 +42,7 @@ lateinit var frontendConfig: FrontendConfig
 fun main() {
     toastContainer("default", "toast-container")
     coroutineScope.launch {
+//        http("/config.json").get().body().fromJson<Config>().backend
         if (!developmentMode) backend = http("/config.json").get().body().fromJson<Config>().backend
         frontendConfig = httpRequest("/@/api/config/frontend")
             .auth().acceptJson()
@@ -58,6 +60,7 @@ fun main() {
                         "/user/manage" -> userManagePage()
                         "/user/create" -> newUserPage()
                         "/setting" -> settingPage()
+                        "/setting/repository" -> mavenRepositorySettingPage()
                         else -> publicContentListingPage()
                     }
                 }
