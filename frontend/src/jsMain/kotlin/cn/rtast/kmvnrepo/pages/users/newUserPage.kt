@@ -10,6 +10,7 @@ package cn.rtast.kmvnrepo.pages.users
 import cn.rtast.kmvnrepo.components.errorToast
 import cn.rtast.kmvnrepo.components.infoToast
 import cn.rtast.kmvnrepo.components.navbar
+import cn.rtast.kmvnrepo.components.pageFooter
 import cn.rtast.kmvnrepo.components.showDialog
 import cn.rtast.kmvnrepo.components.warningToast
 import cn.rtast.kmvnrepo.coroutineScope
@@ -50,11 +51,11 @@ fun RenderContext.newUserPage() {
                         }
                     }
                     div("field") {
-                        label("label") { +"邮箱" }
+                        label("label") { +"邮件地址" }
                         div("control has-icons-left") {
                             input("input") {
                                 type("email")
-                                placeholder("请输入邮箱地址")
+                                placeholder("请输入邮件地址")
                                 value(email.data)
                                 changes.values() handledBy email.update
                             }
@@ -115,4 +116,5 @@ fun RenderContext.newUserPage() {
             }
         }
     }
+    pageFooter()
 }

@@ -49,8 +49,8 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(project(":common"))
             implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.7.0")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
             implementation("io.ktor:ktor-server-auto-head-response:${ktorVersion}")
             implementation("io.ktor:ktor-server-core:$ktorVersion")

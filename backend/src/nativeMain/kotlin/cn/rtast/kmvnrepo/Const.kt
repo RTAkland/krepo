@@ -27,7 +27,8 @@ val DEFAULT_CONFIG = Config(
         ConfigRepository("releases", RepositoryVisibility.Public, defaultAcceptExtensions, false),
         ConfigRepository("snapshots", RepositoryVisibility.Public, defaultAcceptExtensions, true),
         ConfigRepository("private", RepositoryVisibility.Internal, defaultAcceptExtensions, true),
-    ), true, "https://pkg.rtast.cn"
+    ), true, "https://pkg.rtast.cn",
+    "Maven Repo of RTAST", "皖ICP备2024066235-1号"
 )
 
 val publicRepositories

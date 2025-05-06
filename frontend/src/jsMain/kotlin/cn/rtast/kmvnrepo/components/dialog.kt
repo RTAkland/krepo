@@ -20,6 +20,7 @@ fun RenderContext.showDialog(
     showDialog.data.render { visible ->
         if (visible) {
             div("modal is-active") {
+                inlineStyle("z-index: 9999;")
                 div("modal-background") {
                     clicks handledBy { showDialog.update(false) }
                 }

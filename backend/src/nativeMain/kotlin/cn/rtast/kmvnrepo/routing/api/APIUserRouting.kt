@@ -43,6 +43,13 @@ fun Application.configureAPIUserRouting() {
         }
 
         authenticate("api") {
+            put("/@/api/user/{username}") {
+                val userInfo = call.receive<User>()
+                userManager.removeUser(userInfo.name)
+                userManager.addUser(userInfo)
+                call.respond(HttpStatusCode.OK, CommonResponse(200, "修改成功"))
+            }
+
             post("/@/api/logout") {
                 val username = call.principal<UserIdPrincipal>()!!.name
                 tokenManager.revoke(username)

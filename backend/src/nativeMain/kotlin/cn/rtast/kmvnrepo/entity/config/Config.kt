@@ -16,5 +16,7 @@ data class Config(
     val allowRedeploy: Boolean,
     val repositories: List<ConfigRepository>,
     val allowFileListing: Boolean,
-    val frontend: String
+    val frontend: String,
+    val pageTitle: String,
+    val icpLicense: String?,
 )

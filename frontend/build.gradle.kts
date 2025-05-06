@@ -43,12 +43,11 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(project(":common"))
             implementation("dev.fritz2:core:$fritz2Version")
             implementation("dev.fritz2:headless:$fritz2Version")
             implementation("io.ktor:ktor-client-cio:$ktorVersion")
             implementation("io.ktor:ktor-client-core:$ktorVersion")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
             implementation("cn.rtast.rutil:string:0.0.1")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
             implementation("org.kotlincrypto.hash:md:0.6.1")

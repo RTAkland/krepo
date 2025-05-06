@@ -9,6 +9,7 @@ package cn.rtast.kmvnrepo.pages
 
 import cn.rtast.kmvnrepo.components.infoToast
 import cn.rtast.kmvnrepo.components.navbar
+import cn.rtast.kmvnrepo.components.pageFooter
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.entity.GetRepositoriesResponse
 import cn.rtast.kmvnrepo.getRepositoryTemplate
@@ -75,5 +76,6 @@ fun RenderContext.homePage() {
             }
             hr {}
         }
+        pageFooter()
     }
 }

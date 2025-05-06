@@ -11,6 +11,7 @@ import cn.rtast.kmvnrepo.backend
 import cn.rtast.kmvnrepo.components.errorToast
 import cn.rtast.kmvnrepo.components.infoToast
 import cn.rtast.kmvnrepo.components.navbar
+import cn.rtast.kmvnrepo.components.pageFooter
 import cn.rtast.kmvnrepo.components.showDialog
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.currentPath
@@ -180,6 +181,7 @@ fun RenderContext.publicContentListingPage() {
             }
             hr { className("mt-6") }
         }
+        pageFooter()
     }
     showDialog(showDeleteFileEntryDialog, "删除构件/包", "是否删除以下内容?", {
         i { +selectedFileEntry.current }

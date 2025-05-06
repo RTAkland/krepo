@@ -29,4 +29,6 @@ class ConfigManager {
     }
 
     fun getConfig() = file.readText().fromJson<Config>()
+
+    fun write(data: Config) = file.writeText(data.toJson())
 }

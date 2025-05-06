@@ -1,0 +1,16 @@
+/*
+ * Copyright © 2025 RTAkland
+ * Date: 2025/5/6 13:34
+ * Open Source Under Apache-2.0 License
+ * https://www.apache.org/licenses/LICENSE-2.0
+ */
+
+.page-footer-icp {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    z-index: 100;
+}

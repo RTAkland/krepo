@@ -9,6 +9,7 @@ package cn.rtast.kmvnrepo.pages.users
 
 import cn.rtast.kmvnrepo.components.infoToast
 import cn.rtast.kmvnrepo.components.navbar
+import cn.rtast.kmvnrepo.components.pageFooter
 import cn.rtast.kmvnrepo.components.showDialog
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.entity.GetUsersResponse
@@ -61,10 +62,11 @@ fun RenderContext.userManagePage() {
                     }
                 }
             }
+            pageFooter()
         }
         showDialog(showDeleteUserDialog, "删除用户", "是否要删除该用户", {}) {
             coroutineScope.launch {
-                httpRequest("/@/api/user/${selectedUser.current}")
+                httpRequest("/@/api/user/${selectedUser.current!!.name}")
                     .auth().acceptJson().jsonContentType()
                     .delete()
                 infoToast("删除成功")

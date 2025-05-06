@@ -10,6 +10,7 @@ package cn.rtast.kmvnrepo.components
 import cn.rtast.kmvnrepo.backend
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.entity.LoginSuccessResponse
+import cn.rtast.kmvnrepo.frontendConfig
 import cn.rtast.kmvnrepo.util.auth
 import cn.rtast.kmvnrepo.util.file.LocalStorage
 import cn.rtast.kmvnrepo.util.file.md5
@@ -36,7 +37,7 @@ fun RenderContext.navbar() {
         div("navbar-brand") {
             a("navbar-item is-rounded") {
                 href("#")
-                +"Maven repository of RTAST"
+                +frontendConfig.pageTitle
             }.tooltip {
                 +"Back to home page"
             }
@@ -75,10 +76,8 @@ fun RenderContext.navbar() {
                         }
                         div("navbar-dropdown") {
                             a("navbar-item") {
-                                +"系统设置"
-                            }
-                            a("navbar-item") {
-                                +"仓库配置"
+                                +"前端设置"
+                                href("/#/setting")
                             }
                         }
                     }
