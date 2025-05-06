@@ -35,8 +35,11 @@ private fun Route.configureResetFrontendConfigRouting() {
     put("/frontend/reset") {
         val newConfig = configManager.getConfig()
             .copy(
-                pageTitle = DEFAULT_CONFIG.pageTitle,
-                icpLicense = DEFAULT_CONFIG.icpLicense
+                frontendConfig = FrontendConfig(
+                    DEFAULT_CONFIG.frontendConfig.pageTitle,
+                    DEFAULT_CONFIG.frontendConfig.icpLicense,
+                    DEFAULT_CONFIG.frontendConfig.description
+                ),
             )
         configManager.write(newConfig)
         call.respond(HttpStatusCode.OK, CommonResponse(200, "重置成功"))
@@ -50,8 +53,7 @@ private fun Route.configureUpdateFrontendConfigRouting() {
         val icpLicense = if (putConfig.icpLicense.isNullOrBlank()) null
         else putConfig.icpLicense
         val newConfig = currentConfig.copy(
-            pageTitle = putConfig.pageTitle,
-            icpLicense = icpLicense
+            frontendConfig = FrontendConfig(putConfig.pageTitle, icpLicense, putConfig.description),
         )
         configManager.write(newConfig)
         call.respond(HttpStatusCode.OK, CommonResponse(200, "更新成功"))
@@ -60,11 +62,11 @@ private fun Route.configureUpdateFrontendConfigRouting() {
 
 private fun Route.configureGetFrontendConfigRouting() {
     get("/frontend") {
-        val config = configManager.getConfig()
+        val config = configManager.getConfig().frontendConfig
         call.respond(
             HttpStatusCode.OK, CommonDataResponse(
                 200,
-                FrontendConfig(config.pageTitle, config.icpLicense)
+                FrontendConfig(config.pageTitle, config.icpLicense, config.description)
             )
         )
     }

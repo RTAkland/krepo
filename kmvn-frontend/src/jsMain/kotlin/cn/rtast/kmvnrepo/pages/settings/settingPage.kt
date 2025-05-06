@@ -28,6 +28,7 @@ fun RenderContext.settingPage() {
         navbar()
         val pageTitleStore = storeOf(frontendConfig.pageTitle)
         val icpLicenseStore = storeOf(frontendConfig.icpLicense)
+        val descriptionStore = storeOf(frontendConfig.description)
         val showSubmitSettingDialog = storeOf(false)
         val showResetFrontConfigDialog = storeOf(false)
         coroutineScope.launch {
@@ -54,6 +55,16 @@ fun RenderContext.settingPage() {
                             }
                         }
                     }
+                    div("field") {
+                        label("label") { +"网站描述" }
+                        div("control") {
+                            input("input") {
+                                type("text")
+                                value(descriptionStore.current ?: "")
+                                changes.values() handledBy descriptionStore.update
+                            }
+                        }
+                    }
                     div("field is-grouped mt-4") {
                         div("control") {
                             button("button is-primary") {
@@ -76,10 +87,11 @@ fun RenderContext.settingPage() {
         showDialog(showSubmitSettingDialog, "保存更改", "是否要保存更改?", {}) {
             val pageTitle = pageTitleStore.current
             val icpLicense = icpLicenseStore.current
+            val description = descriptionStore.current
             coroutineScope.launch {
                 httpRequest("/@/api/config/frontend")
                     .auth().acceptJson().jsonContentType()
-                    .setBody(FrontendConfig(pageTitle, icpLicense))
+                    .setBody(FrontendConfig(pageTitle, icpLicense, description))
                     .put()
                 infoToast("更改成功!")
                 window.location.reload()

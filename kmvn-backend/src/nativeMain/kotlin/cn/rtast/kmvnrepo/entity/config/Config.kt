@@ -9,6 +9,7 @@
 package cn.rtast.kmvnrepo.entity.config
 
 import cn.rtast.kmvnrepo.entity.ConfigRepository
+import cn.rtast.kmvnrepo.entity.FrontendConfig
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -18,6 +19,5 @@ data class Config(
     val repositories: List<ConfigRepository>,
     val allowFileListing: Boolean,
     val frontend: String,
-    val pageTitle: String,
-    val icpLicense: String?,
+    val frontendConfig: FrontendConfig
 )

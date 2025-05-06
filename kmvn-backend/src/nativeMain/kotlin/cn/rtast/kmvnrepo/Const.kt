@@ -8,9 +8,10 @@
 
 package cn.rtast.kmvnrepo
 
-import cn.rtast.kmvnrepo.entity.config.Config
 import cn.rtast.kmvnrepo.entity.ConfigRepository
+import cn.rtast.kmvnrepo.entity.FrontendConfig
 import cn.rtast.kmvnrepo.entity.RepositoryVisibility
+import cn.rtast.kmvnrepo.entity.config.Config
 import cn.rtast.kmvnrepo.util.mkdirs
 import kotlinx.io.files.Path
 
@@ -28,7 +29,11 @@ val DEFAULT_CONFIG = Config(
         ConfigRepository("snapshots", RepositoryVisibility.Public, defaultAcceptExtensions, true),
         ConfigRepository("private", RepositoryVisibility.Internal, defaultAcceptExtensions, true),
     ), true, "https://pkg.rtast.cn",
-    "Maven Repo of RTAST", "皖ICP备2024066235-1号"
+    FrontendConfig(
+        "Maven Repo of RTAST",
+        "皖ICP备2024066235-1号",
+        "这里是RTAST的Maven仓库!"
+    )
 )
 
 val publicRepositories

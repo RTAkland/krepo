@@ -18,12 +18,13 @@ import kotlinx.serialization.json.Json
 val json: Json = Json {
     prettyPrint = true
     ignoreUnknownKeys = true
-    explicitNulls = false
     classDiscriminator = "_json_type_"
     encodeDefaults = true
     coerceInputValues = true
     decodeEnumsCaseInsensitive = true
     isLenient = true
+    encodeDefaults = true
+    explicitNulls = true
 }
 
 inline fun <reified T> T.toJson(): String {

@@ -12,5 +12,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FrontendConfig(
     val pageTitle: String,
-    val icpLicense: String?
+    val icpLicense: String?,
+    val description: String?
 )

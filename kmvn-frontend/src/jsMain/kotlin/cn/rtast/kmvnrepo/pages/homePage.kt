@@ -12,6 +12,7 @@ import cn.rtast.kmvnrepo.components.navbar
 import cn.rtast.kmvnrepo.components.pageFooter
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.entity.GetRepositoriesResponse
+import cn.rtast.kmvnrepo.frontendConfig
 import cn.rtast.kmvnrepo.getRepositoryTemplate
 import cn.rtast.kmvnrepo.util.auth
 import cn.rtast.kmvnrepo.util.file.LocalStorage
@@ -35,6 +36,12 @@ fun RenderContext.homePage() {
         div("container") {
             hr {}
             h1("title is-2 has-text-centered mt-5") { +"仓库列表" }
+            if (frontendConfig.description != null) {
+                p("has-text-weight-bold mb-1 has-text-centered") {
+                    +frontendConfig.description!!
+                    hr("description-hr") {}
+                }
+            }
             div("columns is-multiline is-centered") {
                 repositories.forEach { repo ->
                     div("column is-3") {

@@ -83,7 +83,7 @@ tasks.register("deployBackend") {
         exec {
             commandLine(
                 "scp",
-                "build/bin/linuxX64/releaseExecutable/backend.kexe",
+                "build/bin/linuxX64/releaseExecutable/kmvn-backend.kexe",
                 "root@lan.rtast.cn:/tmp/backend.kexe"
             )
             isIgnoreExitValue = true
