@@ -8,11 +8,7 @@
 package cn.rtast.kmvnrepo.pages
 
 import cn.rtast.kmvnrepo.backend
-import cn.rtast.kmvnrepo.components.errorToast
-import cn.rtast.kmvnrepo.components.infoToast
-import cn.rtast.kmvnrepo.components.navbar
-import cn.rtast.kmvnrepo.components.pageFooter
-import cn.rtast.kmvnrepo.components.showDialog
+import cn.rtast.kmvnrepo.components.*
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.currentPath
 import cn.rtast.kmvnrepo.entity.Contents
@@ -63,10 +59,11 @@ fun RenderContext.publicContentListingPage() {
         val artifacts = responseJson.data.toMutableList()
         if (LocalStorage.HIDDEN_HASH_FILES) artifacts.removeAll {
             !it.isDirectory &&
-                    (it.name.endsWith("md5") ||
-                            it.name.endsWith("sha256") ||
-                            it.name.endsWith("sha512") ||
-                            it.name.endsWith("sha1"))
+                    (it.name.endsWith("md5")
+                            || it.name.endsWith("sha256")
+                            || it.name.endsWith("sha512")
+                            || it.name.endsWith("sha1")
+                            || it.name.endsWith("asc"))
         }
         div("container") {
             br {}
@@ -208,8 +205,8 @@ fun RenderContext.publicContentListingPage() {
                 }
                 span("slider round") {}
             }
-            span("ml-2") { +"隐藏 .sha1 / .sha256 / .sha512 / .md5 等文件列出" }
-                .tooltip { +"Hidden hash files like .sha1 / .sha256 / .sha512 / .md5 to prevent them be listed" }
+            span("ml-2") { +"隐藏 .sha1 / .sha256 / .sha512 / .md5 / .asc 等文件列出" }
+                .tooltip { +"Hidden hash files like .sha1 / .sha256 / .sha512 / .md5 / .asc to prevent them be listed" }
         }
     }) {
         LocalStorage.HIDDEN_HASH_FILES = hiddenHashFilesToggle.current.toString().toBoolean()
