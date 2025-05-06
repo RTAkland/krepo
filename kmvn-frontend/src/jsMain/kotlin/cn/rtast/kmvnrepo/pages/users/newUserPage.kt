@@ -34,7 +34,7 @@ fun RenderContext.newUserPage() {
         val showCreateUserDialog = storeOf(false)
         div("section") {
             div("container") {
-                h3("title is-3 has-text-centered mb-6") { +"创建用户" }
+                h3("title is-3 has-text-centered mb-6") { +"➕ 创建用户" }
                 div("box") {
                     div("field") {
                         label("label") { +"用户名" }

@@ -33,7 +33,9 @@ fun RenderContext.userManagePage() {
                 .auth().acceptJson().jsonContentType()
                 .get().body().fromJson<GetUsersResponse>().data
             div("container") {
-                h2("title is-3 mt-4 mb-4") { +"用户列表" }
+                h2("title is-3 mt-4 mb-4") {
+                    +"\uD83D\uDC69\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66 用户列表"
+                }
                 div("columns is-multiline") {
                     users.forEach { user ->
                         div("column is-one-third") {

@@ -35,7 +35,7 @@ fun RenderContext.editUserPage() {
         val showUpdateUserDialog = storeOf(false)
         div("section") {
             div("container") {
-                h3("title is-3 has-text-centered mb-6") { +"创建用户" }
+                h3("title is-3 has-text-centered mb-6") { +"\uD83D\uDCAD 修改用户信息" }
                 div("box") {
                     div("field") {
                         label("label") { +"用户名" }

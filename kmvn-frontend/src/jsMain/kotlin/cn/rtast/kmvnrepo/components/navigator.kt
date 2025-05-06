@@ -57,30 +57,30 @@ fun RenderContext.navbar() {
                 div("navbar-start") {
                     div("navbar-item has-dropdown is-hoverable") {
                         a("navbar-link") {
-                            +"用户"
+                            +"\uD83E\uDDD1\u200D\uD83E\uDD1D\u200D\uD83E\uDDD1 用户"
                         }
                         div("navbar-dropdown") {
                             a("navbar-item") {
                                 href("/#/user/manage")
-                                +"用户列表"
+                                +"\uD83D\uDC68\u200D\uD83D\uDC66\u200D\uD83D\uDC66 用户列表"
                             }
                             a("navbar-item") {
                                 href("/#/user/create")
-                                +"新增用户"
+                                +"➕\uFE0F 新增用户"
                             }
                         }
                     }
                     div("navbar-item has-dropdown is-hoverable") {
                         a("navbar-link") {
-                            +"设置"
+                            +"⚙\uFE0F 设置"
                         }
                         div("navbar-dropdown") {
                             a("navbar-item") {
-                                +"前端设置"
+                                +"\uD83C\uDF10 前端设置"
                                 href("/#/setting")
                             }
                             a("navbar-item") {
-                                +"仓库设置"
+                                +"\uD83C\uDFD8\uFE0F 仓库设置"
                                 href("/#/setting/repository")
                             }
                         }
