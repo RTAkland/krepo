@@ -34,7 +34,6 @@ fun RenderContext.homePage() {
             .auth().acceptJson().jsonContentType()
             .get().body().fromJson<GetRepositoriesResponse>().data
         div("container") {
-            hr {}
             h1("title is-2 has-text-centered mt-5") { +"仓库列表" }
             if (frontendConfig.description != null) {
                 p("has-text-weight-bold mb-1 has-text-centered") {

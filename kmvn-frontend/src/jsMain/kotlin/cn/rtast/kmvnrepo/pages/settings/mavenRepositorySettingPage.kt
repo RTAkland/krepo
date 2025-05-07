@@ -65,7 +65,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                     }
                     repositories.forEach { repo ->
                         div("box is-flex is-justify-content-space-between is-align-items-center") {
-                            span { b { +repo.name } }
+                            span { b { +"${repo.name} - ${repo.visibility.desc}" } }
                             div {
                                 button("button is-small is-info mr-2") {
                                     +"编辑"
@@ -89,7 +89,7 @@ fun RenderContext.mavenRepositorySettingPage() {
             pageFooter()
         }
 
-        showDialog(showDeleteRepositoryDialog, "删除仓库", "是否要删除仓库?", {}) {
+        showDialog(showDeleteRepositoryDialog, "删除仓库", "是否要删除仓库? 删除仓库只是逻辑上删除, 文件夹并不会被删除", {}) {
             coroutineScope.launch {
                 val result = httpRequest("/@/api/repositories/delete")
                     .auth().acceptJson().jsonContentType()
