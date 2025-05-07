@@ -57,14 +57,6 @@ fun RenderContext.publicContentListingPage() {
         require(response.ok) { errorToast("获取文件列表失败!") }
         val responseJson = response.body().fromJson<Contents>()
         val artifacts = responseJson.data.toMutableList()
-        if (LocalStorage.HIDDEN_HASH_FILES) artifacts.removeAll {
-            !it.isDirectory &&
-                    (it.name.endsWith("md5")
-                            || it.name.endsWith("sha256")
-                            || it.name.endsWith("sha512")
-                            || it.name.endsWith("sha1")
-                            || it.name.endsWith("asc"))
-        }
         div("container") {
             br {}
             div("level-left") { h4("title is-4") { +"Index of $currentPath" } }
@@ -121,6 +113,14 @@ fun RenderContext.publicContentListingPage() {
                 }
             }
             div("columns is-multiline") {
+                if (LocalStorage.HIDDEN_HASH_FILES) artifacts.removeAll {
+                    !it.isDirectory &&
+                            (it.name.endsWith("md5")
+                                    || it.name.endsWith("sha256")
+                                    || it.name.endsWith("sha512")
+                                    || it.name.endsWith("sha1")
+                                    || it.name.endsWith("asc"))
+                }
                 artifacts.sortedWith(compareBy({ !it.isDirectory }, { it.name })).forEach { entry ->
                     div("column is-one-third") {
                         div("box") {

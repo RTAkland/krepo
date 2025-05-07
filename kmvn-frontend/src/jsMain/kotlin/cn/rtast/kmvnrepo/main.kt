@@ -45,14 +45,17 @@ lateinit var frontendConfig: FrontendConfig
 fun main() {
     toastContainer("default", "toast-container")
     coroutineScope.launch {
-        if (window.location.hostname != "localhost") backend = http("/config.json").get().body().fromJson<Config>().backend
-        val checkSessionValid = http("$backend/@/api/user/")
-            .auth().acceptJson().jsonContentType()
-            .get()
-        if (checkSessionValid.status == 401) {
-            warningToast("登录已过期")
-            LocalStorage.clearAll()
-            window.location.href = "/#/"
+        if (window.location.hostname != "localhost") backend =
+            http("/config.json").get().body().fromJson<Config>().backend
+        try {
+            val checkSessionValid = http("$backend/@/api/user/")
+                .auth().acceptJson().jsonContentType()
+                .get()
+            if (checkSessionValid.status == 401 && LocalStorage.TOKEN != null) {
+                warningToast("登录已过期")
+                LocalStorage.clearAll()
+            }
+        } catch (_: Exception) {
         }
         frontendConfig = httpRequest("/@/api/config/frontend")
             .auth().acceptJson()
