@@ -9,6 +9,7 @@
 
 package cn.rtast.kmvnrepo
 
+import cn.rtast.kmvnrepo.components.warningToast
 import cn.rtast.kmvnrepo.entity.Config
 import cn.rtast.kmvnrepo.entity.FrontendConfig
 import cn.rtast.kmvnrepo.entity.GetFrontendConfigResponse
@@ -20,6 +21,7 @@ import cn.rtast.kmvnrepo.pages.users.editUserPage
 import cn.rtast.kmvnrepo.pages.users.newUserPage
 import cn.rtast.kmvnrepo.pages.users.userManagePage
 import cn.rtast.kmvnrepo.util.auth
+import cn.rtast.kmvnrepo.util.file.LocalStorage
 import cn.rtast.kmvnrepo.util.httpRequest
 import cn.rtast.kmvnrepo.util.jsonContentType
 import cn.rtast.kmvnrepo.util.string.fromJson
@@ -44,6 +46,14 @@ fun main() {
     toastContainer("default", "toast-container")
     coroutineScope.launch {
         if (window.location.hostname != "localhost") backend = http("/config.json").get().body().fromJson<Config>().backend
+        val checkSessionValid = http("$backend/@/api/user/")
+            .auth().acceptJson().jsonContentType()
+            .get()
+        if (checkSessionValid.status == 401) {
+            warningToast("登录已过期")
+            LocalStorage.clearAll()
+            window.location.href = "/#/"
+        }
         frontendConfig = httpRequest("/@/api/config/frontend")
             .auth().acceptJson()
             .jsonContentType().get()

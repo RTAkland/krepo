@@ -41,6 +41,5 @@ object LocalStorage {
         CURRENT_USERNAME = null
         EMAIL_ADDRESS = null
         AVATAR = null
-        HIDDEN_HASH_FILES = false
     }
 }
