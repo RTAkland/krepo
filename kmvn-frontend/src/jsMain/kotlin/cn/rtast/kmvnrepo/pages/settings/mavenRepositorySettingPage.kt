@@ -54,10 +54,14 @@ fun RenderContext.mavenRepositorySettingPage() {
                 div("container") {
                     div("level") {
                         div("level-left") {
-                            h3("title is-4") { +"仓库列表" }
+                            h3("title is-4") {
+                                i("fa-solid fa-house") {}
+                                +"仓库列表"
+                            }
                         }
                         div("level-right") {
                             button("button is-primary") {
+                                i("fa-solid fa-plus") {}
                                 +"添加仓库"
                                 clicks handledBy { showCreateRepositoryFormDialog.update(true) }
                             }
@@ -65,16 +69,38 @@ fun RenderContext.mavenRepositorySettingPage() {
                     }
                     repositories.forEach { repo ->
                         div("box is-flex is-justify-content-space-between is-align-items-center") {
-                            span { b { +"${repo.name} - ${repo.visibility.desc}" } }
+                            span {
+                                when (repo.visibility) {
+                                    RepositoryVisibility.Internal -> i("fa-solid fa-eye-slash") {}
+                                    RepositoryVisibility.Public -> i("fa-solid fa-eye") {}
+                                }
+                                b {
+                                    a {
+                                        +" ${repo.name}"
+                                        href("/#/${repo.name}")
+                                    }
+                                    i {
+                                        p {
+                                            when (repo.visibility) {
+                                                RepositoryVisibility.Internal -> inlineStyle("color: red;")
+                                                RepositoryVisibility.Public -> inlineStyle("color: green;")
+                                            }
+                                            +" ${repo.visibility.desc}"
+                                        }
+                                    }
+                                }
+                            }
                             div {
                                 button("button is-small is-info mr-2") {
-                                    +"编辑"
+                                    i("fa-solid fa-user-pen") {}
+                                    +" 编辑"
                                     clicks handledBy {
                                         selectedRepositoryName.update(repo.name)
                                         showModifyRepositoryStore.update(true)
                                     }
                                 }
                                 button("button is-small is-danger") {
+                                    i("fa-solid fa-trash") {}
                                     +"删除"
                                     clicks handledBy {
                                         selectedRepositoryName.update(repo.name)
@@ -89,7 +115,11 @@ fun RenderContext.mavenRepositorySettingPage() {
             pageFooter()
         }
 
-        showDialog(showDeleteRepositoryDialog, "删除仓库", "是否要删除仓库? 删除仓库只是逻辑上删除, 文件夹并不会被删除", {}) {
+        showDialog(
+            showDeleteRepositoryDialog,
+            "删除仓库",
+            "是否要删除仓库? 删除仓库只是逻辑上删除, 文件夹并不会被删除",
+            {}) {
             coroutineScope.launch {
                 val result = httpRequest("/@/api/repositories/delete")
                     .auth().acceptJson().jsonContentType()
@@ -109,7 +139,8 @@ fun RenderContext.mavenRepositorySettingPage() {
             visibilityStore,
             allowedExtensionsStore,
             snapshotStore,
-            "创建仓库"
+            "创建仓库",
+            selectedRepositoryName
         ) {
             coroutineScope.launch {
                 val name = nameStore.current
@@ -134,7 +165,8 @@ fun RenderContext.mavenRepositorySettingPage() {
             visibilityStore,
             allowedExtensionsStore,
             snapshotStore,
-            "修改仓库配置"
+            "修改仓库配置",
+            selectedRepositoryName
         ) {
             coroutineScope.launch {
                 val name = nameStore.current
@@ -170,6 +202,7 @@ fun RenderContext.createModifyRepositoryDialog(
     allowedExtensionsStore: Store<String>,
     snapshotStore: Store<Boolean>,
     title: String,
+    selectedRepo: Store<String>,
     action: RenderContext.() -> Unit
 ) {
     showDialog(showDialog, title, null, {
@@ -179,7 +212,7 @@ fun RenderContext.createModifyRepositoryDialog(
                 div("control") {
                     input("input") {
                         placeholder("输入仓库名称")
-                        value(nameStore.data)
+                        value(selectedRepo.data)
                         changes.values() handledBy nameStore.update
                     }
                 }

@@ -16,13 +16,7 @@ import cn.rtast.kmvnrepo.util.httpRequest
 import cn.rtast.kmvnrepo.util.jsonContentType
 import cn.rtast.kmvnrepo.util.setBody
 import cn.rtast.kmvnrepo.util.string.validateEmail
-import dev.fritz2.core.RenderContext
-import dev.fritz2.core.disabled
-import dev.fritz2.core.placeholder
-import dev.fritz2.core.storeOf
-import dev.fritz2.core.type
-import dev.fritz2.core.value
-import dev.fritz2.core.values
+import dev.fritz2.core.*
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
 
@@ -35,55 +29,69 @@ fun RenderContext.editUserPage() {
         val showUpdateUserDialog = storeOf(false)
         div("section") {
             div("container") {
-                h3("title is-3 has-text-centered mb-6") { +"\uD83D\uDCAD 修改用户信息" }
-                div("box") {
-                    div("field") {
-                        label("label") { +"用户名" }
-                        div("control has-icons-left") {
-                            input("input") {
-                                disabled(true)
-                                type("text")
-                                placeholder("用户名")
-                                value(user)
-                            }
-                            span("icon is-small is-left") {
-                                i("fas fa-user") {}
-                            }
-                        }
-                    }
-                    div("field") {
-                        label("label") { +"邮件地址" }
-                        div("control has-icons-left") {
-                            input("input") {
-                                type("email")
-                                placeholder("输入邮件地址")
-                                value(email.data)
-                                changes.values() handledBy email.update
-                            }
-                            span("icon is-small is-left") {
-                                i("fas fa-envelope") {}
+                inlineStyle("max-width: 600px;")
+                h3("title is-3 has-text-centered mb-6") {
+                    i("fas fa-user-pen") {}
+                    +"修改用户信息"
+                }
+                div("box mx-auto") {
+                    div("columns is-multiline") {
+                        div("column is-full") {
+                            div("field") {
+                                label("label") { +"用户名" }
+                                div("control has-icons-left") {
+                                    input("input") {
+                                        disabled(true)
+                                        type("text")
+                                        placeholder("用户名")
+                                        value(user)
+                                    }
+                                    span("icon is-small is-left") {
+                                        i("fas fa-user") {}
+                                    }
+                                }
                             }
                         }
-                    }
-                    div("field") {
-                        label("label") { +"密码" }
-                        div("control has-icons-left") {
-                            input("input") {
-                                type("password")
-                                placeholder("输入密码")
-                                value(password.data)
-                                changes.values() handledBy password.update
-                            }
-                            span("icon is-small is-left") {
-                                i("fas fa-lock") {}
+                        div("column is-full") {
+                            div("field") {
+                                label("label") { +"邮件地址" }
+                                div("control has-icons-left") {
+                                    input("input") {
+                                        type("email")
+                                        placeholder("输入邮件地址")
+                                        value(email.data)
+                                        changes.values() handledBy email.update
+                                    }
+                                    span("icon is-small is-left") {
+                                        i("fas fa-envelope") {}
+                                    }
+                                }
                             }
                         }
-                    }
-                    div("field is-grouped is-grouped-right mt-5") {
-                        div("control") {
-                            button("button is-link") {
-                                +"更新"
-                                clicks handledBy { showUpdateUserDialog.update(true) }
+                        div("column is-full") {
+                            div("field") {
+                                label("label") { +"密码" }
+                                div("control has-icons-left") {
+                                    input("input") {
+                                        type("password")
+                                        placeholder("输入密码")
+                                        value(password.data)
+                                        changes.values() handledBy password.update
+                                    }
+                                    span("icon is-small is-left") {
+                                        i("fas fa-lock") {}
+                                    }
+                                }
+                            }
+                            div("column is-full") {
+                                div("field is-grouped is-grouped-right mt-5") {
+                                    div("control") {
+                                        button("button is-link") {
+                                            +"更新"
+                                            clicks handledBy { showUpdateUserDialog.update(true) }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

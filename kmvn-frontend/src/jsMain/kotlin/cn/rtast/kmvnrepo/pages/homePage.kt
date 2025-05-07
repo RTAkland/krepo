@@ -32,7 +32,7 @@ fun RenderContext.homePage() {
             if (LocalStorage.TOKEN == null) "/@/api/repositories/public" else "/@/api/repositories/all"
         val repositories = httpRequest(repositoriesAPIEndpoint)
             .auth().acceptJson().jsonContentType()
-            .get().body().fromJson<GetRepositoriesResponse>().data
+            .get().body().fromJson<GetRepositoriesResponse>().data.sortedBy { it.visibility }
         div("container") {
             h1("title is-2 has-text-centered mt-5") { +"仓库列表" }
             if (frontendConfig.description != null) {
@@ -48,9 +48,7 @@ fun RenderContext.homePage() {
                             div("card-content") {
                                 div("media") {
                                     div("media-left") {
-                                        span("icon is-large has-text-primary") {
-                                            i("fas fa-repository fa-2x") {}
-                                        }
+                                        span("icon is-large has-text-primary") { i("fas fa-repository fa-2x") {} }
                                     }
                                     div("media-content") {
                                         p("title is-4") {
@@ -66,14 +64,16 @@ fun RenderContext.homePage() {
                             footer("card-footer") {
                                 a("card-footer-item has-text-link") {
                                     href("/#/${repo.name}")
-                                    +"\uD83D\uDC40 查看仓库"
+                                    i("fa-solid fa-eye") {}
+                                    span("ml-2") { b { +"查看仓库" } }
                                 }.tooltip { +"View the artifacts & files" }
                                 a("card-footer-item has-text-link") {
                                     clicks handledBy {
                                         window.navigator.clipboard.writeText(getRepositoryTemplate(repo.name))
                                         infoToast("复制成功")
                                     }
-                                    +"\uD83D\uDCCB 复制地址"
+                                    i("fa-solid fa-clipboard") {}
+                                    span("ml-2") { b { +"复制地址" } }
                                 }.tooltip { +"Copy the maven repository config for gradle(Kotlin dsl)" }
                             }
                         }

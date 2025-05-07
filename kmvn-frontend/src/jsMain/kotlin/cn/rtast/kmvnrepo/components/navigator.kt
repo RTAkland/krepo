@@ -37,9 +37,8 @@ fun RenderContext.navbar() {
         div("navbar-brand") {
             a("navbar-item is-rounded") {
                 href("#")
+                i("fas fa-house") {}
                 +frontendConfig.pageTitle
-            }.tooltip {
-                +"Back to home page"
             }
             a("navbar-burger") {
                 attr("role", "button")
@@ -57,30 +56,36 @@ fun RenderContext.navbar() {
                 div("navbar-start") {
                     div("navbar-item has-dropdown is-hoverable") {
                         a("navbar-link") {
-                            +"\uD83E\uDDD1\u200D\uD83E\uDD1D\u200D\uD83E\uDDD1 用户"
+                            i("fa-solid fa-users") {}
+                            +"用户"
                         }
                         div("navbar-dropdown") {
                             a("navbar-item") {
                                 href("/#/user/manage")
-                                +"\uD83D\uDC68\u200D\uD83D\uDC66\u200D\uD83D\uDC66 用户列表"
+                                i("fa-solid fa-users") {}
+                                +"用户列表"
                             }
                             a("navbar-item") {
                                 href("/#/user/create")
-                                +"➕\uFE0F 新增用户"
+                                i("fa-solid fa-user-plus") {}
+                                +"新增用户"
                             }
                         }
                     }
                     div("navbar-item has-dropdown is-hoverable") {
                         a("navbar-link") {
-                            +"⚙\uFE0F 设置"
+                            i("fa-solid fa-gear") {}
+                            +"设置"
                         }
                         div("navbar-dropdown") {
                             a("navbar-item") {
-                                +"\uD83C\uDF10 前端设置"
+                                i("fa-solid fa-globe") {}
+                                +"前端设置"
                                 href("/#/setting")
                             }
                             a("navbar-item") {
-                                +"\uD83C\uDFD8\uFE0F 仓库设置"
+                                i("fa-solid fa-house") {}
+                                +"仓库设置"
                                 href("/#/setting/repository")
                             }
                         }
@@ -92,7 +97,8 @@ fun RenderContext.navbar() {
                     div("buttons") {
                         if (LocalStorage.TOKEN == null) {
                             a("button is-light") {
-                                +"登录"
+                                i("fa-solid fa-right-to-bracket") {}
+                                span("ml-2") { +"登录" }
                                 clicks handledBy { showLoginDialog.update(true) }
                             }
                         } else {
@@ -103,9 +109,17 @@ fun RenderContext.navbar() {
                                     className("is-rounded")
                                 }
                             }
-                            span { b { +LocalStorage.CURRENT_USERNAME!! } }
+                            span {
+                                b {
+                                    a {
+                                        href("/#/user/edit?username=${LocalStorage.CURRENT_USERNAME!!}")
+                                        +LocalStorage.CURRENT_USERNAME!!
+                                    }
+                                }
+                            }.tooltip { +"Edit my info" }
                             a("button is-light") {
-                                +"登出"
+                                i("fa-solid fa-right-from-bracket") {}
+                                span("ml-2") { +"登出" }
                                 clicks handledBy { showLogoutDialog.update(true) }
                             }
                         }

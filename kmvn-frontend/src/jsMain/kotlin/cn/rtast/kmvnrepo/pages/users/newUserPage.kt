@@ -7,12 +7,7 @@
 
 package cn.rtast.kmvnrepo.pages.users
 
-import cn.rtast.kmvnrepo.components.errorToast
-import cn.rtast.kmvnrepo.components.infoToast
-import cn.rtast.kmvnrepo.components.navbar
-import cn.rtast.kmvnrepo.components.pageFooter
-import cn.rtast.kmvnrepo.components.showDialog
-import cn.rtast.kmvnrepo.components.warningToast
+import cn.rtast.kmvnrepo.components.*
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.util.auth
 import cn.rtast.kmvnrepo.util.file.checkSession
@@ -32,57 +27,69 @@ fun RenderContext.newUserPage() {
         val email = storeOf("")
         val password = storeOf("")
         val showCreateUserDialog = storeOf(false)
+
         div("section") {
             div("container") {
+                inlineStyle("max-width: 600px;")
                 h3("title is-3 has-text-centered mb-6") { +"➕ 创建用户" }
-                div("box") {
-                    div("field") {
-                        label("label") { +"用户名" }
-                        div("control has-icons-left") {
-                            input("input") {
-                                type("text")
-                                placeholder("请输入用户名")
-                                value(username.data)
-                                changes.values() handledBy username.update
-                            }
-                            span("icon is-small is-left") {
-                                i("fas fa-user") {}
-                            }
-                        }
-                    }
-                    div("field") {
-                        label("label") { +"邮件地址" }
-                        div("control has-icons-left") {
-                            input("input") {
-                                type("email")
-                                placeholder("请输入邮件地址")
-                                value(email.data)
-                                changes.values() handledBy email.update
-                            }
-                            span("icon is-small is-left") {
-                                i("fas fa-envelope") {}
+                div("box mx-auto") {
+                    div("columns is-multiline") {
+                        div("column is-full") {
+                            div("field") {
+                                label("label") { +"用户名" }
+                                div("control has-icons-left") {
+                                    input("input") {
+                                        type("text")
+                                        placeholder("请输入用户名")
+                                        value(username.data)
+                                        changes.values() handledBy username.update
+                                    }
+                                    span("icon is-small is-left") {
+                                        i("fas fa-user") {}
+                                    }
+                                }
                             }
                         }
-                    }
-                    div("field") {
-                        label("label") { +"密码" }
-                        div("control has-icons-left") {
-                            input("input") {
-                                type("password")
-                                placeholder("请输入密码")
-                                value(password.data)
-                                changes.values() handledBy password.update
-                            }
-                            span("icon is-small is-left") {
-                                i("fas fa-lock") {}
+                        div("column is-full") {
+                            div("field") {
+                                label("label") { +"邮件地址" }
+                                div("control has-icons-left") {
+                                    input("input") {
+                                        type("email")
+                                        placeholder("请输入邮件地址")
+                                        value(email.data)
+                                        changes.values() handledBy email.update
+                                    }
+                                    span("icon is-small is-left") {
+                                        i("fas fa-envelope") {}
+                                    }
+                                }
                             }
                         }
-                    }
-                    div("field is-grouped is-grouped-right mt-5") {
-                        div("control") {
-                            button("button is-link") {
-                                +"创建"
-                                clicks handledBy { showCreateUserDialog.update(true) }
+                        div("column is-full") {
+                            div("field") {
+                                label("label") { +"密码" }
+                                div("control has-icons-left") {
+                                    input("input") {
+                                        type("password")
+                                        placeholder("请输入密码")
+                                        value(password.data)
+                                        changes.values() handledBy password.update
+                                    }
+                                    span("icon is-small is-left") {
+                                        i("fas fa-lock") {}
+                                    }
+                                }
+                            }
+                        }
+                        div("column is-full") {
+                            div("field is-grouped is-grouped-right mt-5") {
+                                div("control") {
+                                    button("button is-link") {
+                                        +"创建"
+                                        clicks handledBy { showCreateUserDialog.update(true) }
+                                    }
+                                }
                             }
                         }
                     }
@@ -115,6 +122,6 @@ fun RenderContext.newUserPage() {
                 }
             }
         }
+        pageFooter()
     }
-    pageFooter()
 }

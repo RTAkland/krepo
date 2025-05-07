@@ -35,62 +35,78 @@ fun RenderContext.settingPage() {
         coroutineScope.launch {
             section("section") {
                 div("container") {
-                    h1("title is-4") { +"前端配置" }
-                    div("field") {
-                        label("label") { +"页面标题" }
-                        div("control") {
-                            input("input") {
-                                type("text")
-                                value(pageTitleStore.data)
-                                changes.values() handledBy pageTitleStore.update
+                    div("box mx-auto") {
+                        h1("title is-4") { +"前端配置" }
+                        div("columns is-multiline") {
+                            div("column is-full") {
+                                div("field") {
+                                    label("label") { +"页面标题" }
+                                    div("control") {
+                                        input("input") {
+                                            type("text")
+                                            value(pageTitleStore.data)
+                                            changes.values() handledBy pageTitleStore.update
+                                        }
+                                    }
+                                }
+                            }
+                            div("column is-full") {
+                                div("field") {
+                                    label("label") {
+                                        +"ICP备案"
+                                        div("control") {
+                                            input("input") {
+                                                type("text")
+                                                value(icpLicenseStore.current ?: "")
+                                                changes.values() handledBy icpLicenseStore.update
+                                            }
+                                        }
+                                    }
+                                }
+                                div("column is-full") {
+                                    div("field") {
+                                        label("label") {
+                                            +"网站描述"
+                                        }
+                                        div("control") {
+                                            input("input") {
+                                                type("text")
+                                                value(descriptionStore.current ?: "")
+                                                changes.values() handledBy descriptionStore.update
+                                            }
+                                        }
+                                    }
+                                }
+                                div("column is-full") {
+                                    div("field") {
+                                        label("label") { +"版权信息" }
+                                        div("control") {
+                                            input("input") {
+                                                type("text")
+                                                value(copyrightStore.current)
+                                                changes.values() handledBy copyrightStore.update
+                                            }
+                                        }
+                                    }
+                                }
+                                div("field is-grouped mt-4") {
+                                    div("control") {
+                                        button("button is-primary") {
+                                            +"保存设置"
+                                            clicks handledBy { showSubmitSettingDialog.update(true) }
+                                        }
+                                    }
+                                    div("control") {
+                                        button("button is-danger") {
+                                            +"重置为默认"
+                                            clicks handledBy { showResetFrontConfigDialog.update(true) }
+                                        }
+                                    }
+                                }
+                                hr {}
                             }
                         }
                     }
-                    div("field") {
-                        label("label") { +"ICP备案" }
-                        div("control") {
-                            input("input") {
-                                type("text")
-                                value(icpLicenseStore.current ?: "")
-                                changes.values() handledBy icpLicenseStore.update
-                            }
-                        }
-                    }
-                    div("field") {
-                        label("label") { +"网站描述" }
-                        div("control") {
-                            input("input") {
-                                type("text")
-                                value(descriptionStore.current ?: "")
-                                changes.values() handledBy descriptionStore.update
-                            }
-                        }
-                    }
-                    div("field") {
-                        label("label") { +"版权信息" }
-                        div("control") {
-                            input("input") {
-                                type("text")
-                                value(copyrightStore.current)
-                                changes.values() handledBy copyrightStore.update
-                            }
-                        }
-                    }
-                    div("field is-grouped mt-4") {
-                        div("control") {
-                            button("button is-primary") {
-                                +"保存设置"
-                                clicks handledBy { showSubmitSettingDialog.update(true) }
-                            }
-                        }
-                        div("control") {
-                            button("button is-danger") {
-                                +"重置为默认"
-                                clicks handledBy { showResetFrontConfigDialog.update(true) }
-                            }
-                        }
-                    }
-                    hr {}
                 }
             }
             pageFooter()

@@ -34,7 +34,8 @@ fun RenderContext.userManagePage() {
                 .get().body().fromJson<GetUsersResponse>().data
             div("container") {
                 h2("title is-3 mt-4 mb-4") {
-                    +"\uD83D\uDC69\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66 用户列表"
+                    i("fa-solid fa-users") {}
+                    +"用户列表"
                 }
                 div("columns is-multiline") {
                     users.forEach { user ->
@@ -45,12 +46,14 @@ fun RenderContext.userManagePage() {
                                     p("subtitle is-6 has-text-grey") { +user.email }
                                     div("buttons") {
                                         button("button is-small is-link") {
+                                            i("fa-solid fa-user-pen") {}
                                             +"编辑"
                                             clicks handledBy {
                                                 window.location.href = "/#/user/edit?username=${user.name}"
                                             }
                                         }
                                         button("button is-small is-danger") {
+                                            i("fa-solid fa-trash") {}
                                             +"删除"
                                             clicks handledBy {
                                                 selectedUser.update(user)
