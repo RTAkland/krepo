@@ -12,6 +12,7 @@ import cn.rtast.kmvnrepo.entity.ConfigRepository
 import cn.rtast.kmvnrepo.entity.FrontendConfig
 import cn.rtast.kmvnrepo.entity.RepositoryVisibility
 import cn.rtast.kmvnrepo.entity.config.Config
+import cn.rtast.kmvnrepo.enums.RepositoryStatus
 import cn.rtast.kmvnrepo.util.mkdirs
 import kotlinx.io.files.Path
 
@@ -25,9 +26,27 @@ private val defaultAcceptExtensions = listOf("jar", "klib", "aar")
 val DEFAULT_CONFIG = Config(
     9098, false,
     listOf(
-        ConfigRepository("releases", RepositoryVisibility.Public, defaultAcceptExtensions, false),
-        ConfigRepository("snapshots", RepositoryVisibility.Public, defaultAcceptExtensions, true),
-        ConfigRepository("private", RepositoryVisibility.Internal, defaultAcceptExtensions, true),
+        ConfigRepository(
+            "releases",
+            RepositoryVisibility.Public,
+            defaultAcceptExtensions,
+            false,
+            RepositoryStatus.Available
+        ),
+        ConfigRepository(
+            "snapshots",
+            RepositoryVisibility.Public,
+            defaultAcceptExtensions,
+            true,
+            RepositoryStatus.Available
+        ),
+        ConfigRepository(
+            "private",
+            RepositoryVisibility.Internal,
+            defaultAcceptExtensions,
+            true,
+            RepositoryStatus.Available
+        ),
     ), true, "https://pkg.rtast.cn",
     FrontendConfig(
         "Maven Repo of RTAST",

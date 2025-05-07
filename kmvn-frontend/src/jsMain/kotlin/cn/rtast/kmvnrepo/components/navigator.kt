@@ -116,7 +116,7 @@ fun RenderContext.navbar() {
                                         +LocalStorage.CURRENT_USERNAME!!
                                     }
                                 }
-                            }.tooltip { +"Edit my info" }
+                            }
                             a("button is-light") {
                                 i("fa-solid fa-right-from-bracket") {}
                                 span("ml-2") { +"登出" }

@@ -1,0 +1,46 @@
+/*
+ * Copyright © 2025 RTAkland
+ * Date: 2025/5/7 20:20
+ * Open Source Under Apache-2.0 License
+ * https://www.apache.org/licenses/LICENSE-2.0
+ */
+
+.badge-created {
+    background-color: purple;
+    border-radius: 12px;
+    padding: 4px 10px;
+    font-size: 0.875rem;
+    font-weight: bold;
+    display: inline-block;
+    color: white;
+}
+
+.badge-deleted {
+    background-color: mediumvioletred;
+    border-radius: 12px;
+    padding: 4px 10px;
+    font-size: 0.875rem;
+    font-weight: bold;
+    display: inline-block;
+    color: white;
+}
+
+.badge-modified {
+    background-color: yellowgreen;
+    border-radius: 12px;
+    padding: 4px 10px;
+    font-size: 0.875rem;
+    font-weight: bold;
+    display: inline-block;
+    color: white;
+}
+
+.badge-available {
+    background-color: limegreen;
+    border-radius: 12px;
+    padding: 4px 10px;
+    font-size: 0.875rem;
+    font-weight: bold;
+    display: inline-block;
+    color: white;
+}

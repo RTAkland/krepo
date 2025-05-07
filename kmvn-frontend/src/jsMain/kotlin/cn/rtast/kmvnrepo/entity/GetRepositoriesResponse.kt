@@ -11,13 +11,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetRepositoriesResponse(
-    val data: List<Repository>
-) {
-    @Serializable
-    data class Repository(
-        val name: String,
-        val acceptExtensions: List<String>,
-        val allowSnapshot: Boolean,
-        val visibility: RepositoryVisibility
-    )
-}
+    val data: List<ConfigRepository>
+)

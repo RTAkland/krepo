@@ -10,12 +10,14 @@ package cn.rtast.kmvnrepo.pages.settings
 import cn.rtast.kmvnrepo.components.*
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.entity.*
+import cn.rtast.kmvnrepo.enums.RepositoryStatus
 import cn.rtast.kmvnrepo.util.auth
 import cn.rtast.kmvnrepo.util.file.checkSession
 import cn.rtast.kmvnrepo.util.httpRequest
 import cn.rtast.kmvnrepo.util.jsonContentType
 import cn.rtast.kmvnrepo.util.setBody
 import cn.rtast.kmvnrepo.util.string.fromJson
+import cn.rtast.kmvnrepo.util.string.toJson
 import dev.fritz2.core.*
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
@@ -85,7 +87,28 @@ fun RenderContext.mavenRepositorySettingPage() {
                                                 RepositoryVisibility.Internal -> inlineStyle("color: red;")
                                                 RepositoryVisibility.Public -> inlineStyle("color: green;")
                                             }
-                                            +" ${repo.visibility.desc}"
+                                            +" ${repo.visibility.desc} "
+                                            when (repo.status) {
+                                                RepositoryStatus.Deleted -> badge(
+                                                    "已删除",
+                                                    "badge-deleted"
+                                                )
+
+                                                RepositoryStatus.Created -> badge(
+                                                    "已创建",
+                                                    "badge-created"
+                                                )
+
+                                                RepositoryStatus.Available -> badge(
+                                                    "可用",
+                                                    "badge-available"
+                                                )
+
+                                                RepositoryStatus.Modified -> badge(
+                                                    "已修改",
+                                                    "badge-modified"
+                                                )
+                                            }
                                         }
                                     }
                                 }
@@ -149,7 +172,12 @@ fun RenderContext.mavenRepositorySettingPage() {
                 val allowSnapshot = snapshotStore.current
                 val result = httpRequest("/@/api/repositories/new")
                     .auth().acceptJson().jsonContentType()
-                    .setBody(CreateRepository(name, visibility, allowedExtensions.split("\n"), allowSnapshot))
+                    .setBody(
+                        CreateRepository(
+                            name, visibility, allowedExtensions.split("\n"), allowSnapshot,
+                            RepositoryStatus.Created
+                        )
+                    )
                     .post().body().fromJson<CreateRepositoryResponse>()
                 when (result.code) {
                     200 -> infoToast(result.message)
@@ -181,8 +209,9 @@ fun RenderContext.mavenRepositorySettingPage() {
                             name,
                             visibility,
                             allowedExtensions.split("\n"),
-                            allowSnapshot
-                        )
+                            allowSnapshot,
+                            RepositoryStatus.Modified
+                        ).apply { println(this.toJson()) }
                     ).put().body().fromJson<ModifyRepositoryResponse>()
                 when (result.code) {
                     200 -> infoToast(result.message)

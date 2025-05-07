@@ -49,7 +49,8 @@ private fun Route.configureModifyRepositoryRouting() {
                                     data.newName,
                                     data.visibility,
                                     data.acceptExtensions,
-                                    data.allowSnapshot
+                                    data.allowSnapshot,
+                                    data.status
                                 )
                             )
                         }
@@ -96,7 +97,9 @@ private fun Route.configureAddRepositoryRouting() {
 private fun Route.configureGetPublicRepositoriesRouting() {
     get("/@/api/repositories/public") {
         val repositories = configManager.getConfig().repositories
-            .toMutableList().apply { removeAll { it.visibility == RepositoryVisibility.Internal } }
+            .toMutableList().apply {
+                removeAll { it.visibility == RepositoryVisibility.Internal }
+            }
         call.respond(HttpStatusCode.OK, CommonDataResponse(200, repositories))
     }
 }

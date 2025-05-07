@@ -7,6 +7,7 @@
 
 package cn.rtast.kmvnrepo.entity
 
+import cn.rtast.kmvnrepo.enums.RepositoryStatus
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,7 +15,8 @@ data class ConfigRepository(
     val name: String,
     val visibility: RepositoryVisibility,
     val acceptExtensions: List<String>,
-    val allowSnapshot: Boolean
+    val allowSnapshot: Boolean,
+    var status: RepositoryStatus
 )
 
 typealias CreateRepository = ConfigRepository
@@ -26,4 +28,5 @@ data class ModifyRepository(
     val visibility: RepositoryVisibility,
     val acceptExtensions: List<String>,
     val allowSnapshot: Boolean,
+    var status: RepositoryStatus
 )

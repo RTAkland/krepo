@@ -10,6 +10,7 @@ package cn.rtast.kmvnrepo.util.manager
 
 import cn.rtast.kmvnrepo.DEFAULT_CONFIG
 import cn.rtast.kmvnrepo.entity.config.Config
+import cn.rtast.kmvnrepo.enums.RepositoryStatus
 import cn.rtast.kmvnrepo.repositories
 import cn.rtast.kmvnrepo.util.*
 
@@ -20,6 +21,11 @@ class ConfigManager {
         if (!file.exists()) {
             file.writeText(DEFAULT_CONFIG.toJson())
         }
+        val config = this.getConfig()
+        config.repositories.forEach {
+            it.status = RepositoryStatus.Available
+        }
+        this.write(config)
     }
 
     fun initRepositories() {
