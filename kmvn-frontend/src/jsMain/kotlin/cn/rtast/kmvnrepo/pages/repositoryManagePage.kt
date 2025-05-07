@@ -91,7 +91,8 @@ fun RenderContext.publicContentListingPage() {
                                         val simplePath = currentPath
                                             .removeSuffix("/").split("/").drop(2)
                                             .joinToString("/")
-                                        val (group, name, version) = parseGAV(simplePath)
+                                        val repo = currentPath.removePrefix("/").split("/").first()
+                                        val (group, name, version) = parseGAV(simplePath, repo)
                                         window.navigator.clipboard.writeText(
                                             getDependenciesTemplate(group, name, version)
                                         )

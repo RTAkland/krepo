@@ -7,8 +7,8 @@
 
 package cn.rtast.kmvnrepo.util.string
 
-fun parseGAV(path: String): Triple<String, String, String> {
-    val parts = path.removePrefix("/releases/").trim('/').split("/")
+fun parseGAV(path: String, repo: String): Triple<String, String, String> {
+    val parts = path.removePrefix("/$repo/").trim('/').split("/")
     val version = parts.last()
     val artifactId = parts[parts.size - 2]
     val groupParts = parts.subList(0, parts.size - 2)
