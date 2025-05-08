@@ -9,7 +9,13 @@ package cn.rtast.kmvnrepo.components
 
 import dev.fritz2.core.RenderContext
 
-fun RenderContext.badge(text: String, classes: String): RenderContext {
-    span(classes) { +text }
+fun RenderContext.badge(
+    text: String, classes: String,
+    extraContent: RenderContext.() -> Unit
+): RenderContext {
+    span(classes) {
+        extraContent()
+        +text
+    }
     return this
 }

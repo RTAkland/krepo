@@ -113,63 +113,63 @@ fun RenderContext.publicContentListingPage() {
                     }
                 }
             }
-            div("columns is-multiline") {
-                if (LocalStorage.HIDDEN_HASH_FILES) artifacts.removeAll {
-                    !it.isDirectory &&
-                            (it.name.endsWith("md5")
-                                    || it.name.endsWith("sha256")
-                                    || it.name.endsWith("sha512")
-                                    || it.name.endsWith("sha1")
-                                    || it.name.endsWith("asc"))
+            table("table is-fullwidth is-striped is-hoverable") {
+                thead {
+                    tr {
+                        th { +"名称" }
+                        th { +"修改时间" }
+                        th { +"大小" }
+                        if (LocalStorage.TOKEN != null) {
+                            th { +"操作" }
+                        }
+                    }
                 }
-                artifacts.sortedWith(compareBy({ !it.isDirectory }, { it.name })).forEach { entry ->
-                    div("column is-one-third") {
-                        div("box") {
-                            inlineStyle("cursor: pointer;")
-                            div("level") {
-                                div("level-left") {
-                                    div("truncate-text") {
-                                        className("has-text-dark")
-                                        if (entry.isDirectory) {
-                                            i {
-                                                +"${entry.name}/"
-                                                clicks handledBy {
-                                                    window.location.href = "/#$currentPath/${entry.name}"
-                                                }
-                                            }
-                                        } else {
-                                            b {
-                                                +entry.name
-                                                clicks handledBy {
-                                                    window.location.href = "$backend$currentPath/${entry.name}"
-                                                }
-                                            }
+                tbody {
+                    if (LocalStorage.HIDDEN_HASH_FILES) artifacts.removeAll {
+                        !it.isDirectory &&
+                                (it.name.endsWith("md5")
+                                        || it.name.endsWith("sha256")
+                                        || it.name.endsWith("sha512")
+                                        || it.name.endsWith("sha1")
+                                        || it.name.endsWith("asc"))
+                    }
+                    artifacts.sortedWith(compareBy({ !it.isDirectory }, { it.name })).forEach { entry ->
+                        tr {
+                            td {
+                                if (entry.isDirectory) {
+                                    a {
+                                        className("has-text-link")
+                                        +("${entry.name}/")
+                                        clicks handledBy {
+                                            window.location.href = "/#$currentPath/${entry.name}"
                                         }
                                     }
-                                }
-                                div("level-right") {
-                                    if (LocalStorage.TOKEN != null) {
-                                        button("button is-danger is-small") {
-                                            img {
-                                                src("assets/trash.svg")
-                                                attr("alt", "Delete icon")
-                                                inlineStyle("width: 1.2rem; height: 1.2rem;")
-                                            }
-                                            clicks handledBy {
-                                                showDeleteFileEntryDialog.update(true)
-                                                selectedFileEntry.update("$currentPath/${entry.name}".removePrefix("/"))
-                                            }
+                                } else {
+                                    a {
+                                        className("has-text-dark")
+                                        +entry.name
+                                        clicks handledBy {
+                                            window.location.href = "$backend$currentPath/${entry.name}"
                                         }
                                     }
                                 }
                             }
-                            div("level is-mobile") {
-                                div("level-left") {
-                                    i { span("has-text-grey") { +getDate(entry.timestamp) } }
-                                }
-                                div("level-right") {
-                                    span("has-text-grey") {
-                                        b { if (!entry.isDirectory) +formatSize(entry.size) else +"-" }
+                            td { +getDate(entry.timestamp) }
+                            td {
+                                if (!entry.isDirectory) +formatSize(entry.size) else +"-"
+                            }
+                            if (LocalStorage.TOKEN != null) {
+                                td {
+                                    button("button is-danger is-small") {
+                                        img {
+                                            src("assets/trash.svg")
+                                            attr("alt", "Delete icon")
+                                            inlineStyle("width: 1.2rem; height: 1.2rem;")
+                                        }
+                                        clicks handledBy {
+                                            showDeleteFileEntryDialog.update(true)
+                                            selectedFileEntry.update("$currentPath/${entry.name}".removePrefix("/"))
+                                        }
                                     }
                                 }
                             }

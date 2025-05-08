@@ -76,40 +76,38 @@ fun RenderContext.mavenRepositorySettingPage() {
                                     RepositoryVisibility.Internal -> i("fa-solid fa-eye-slash") {}
                                     RepositoryVisibility.Public -> i("fa-solid fa-eye") {}
                                 }
-                                b {
-                                    a {
-                                        +" ${repo.name}"
-                                        href("/#/${repo.name}")
-                                    }
-                                    i {
-                                        p {
-                                            when (repo.visibility) {
-                                                RepositoryVisibility.Internal -> inlineStyle("color: red;")
-                                                RepositoryVisibility.Public -> inlineStyle("color: green;")
-                                            }
-                                            +" ${repo.visibility.desc} "
-                                            when (repo.status) {
-                                                RepositoryStatus.Deleted -> badge(
-                                                    "已删除",
-                                                    "badge-deleted"
-                                                )
-
-                                                RepositoryStatus.Created -> badge(
-                                                    "已创建",
-                                                    "badge-created"
-                                                )
-
-                                                RepositoryStatus.Available -> badge(
-                                                    "可用",
-                                                    "badge-available"
-                                                )
-
-                                                RepositoryStatus.Modified -> badge(
-                                                    "已修改",
-                                                    "badge-modified"
-                                                )
-                                            }
+                                a {
+                                    +" ${repo.name}"
+                                    href("/#/${repo.name}")
+                                }
+                                i {
+                                    p {
+                                        when (repo.visibility) {
+                                            RepositoryVisibility.Internal -> inlineStyle("color: #D2B48C;")
+                                            RepositoryVisibility.Public -> inlineStyle("color: green;")
                                         }
+                                        when (repo.status) {
+                                            RepositoryStatus.Deleted -> badge(
+                                                "已删除",
+                                                "badge-deleted"
+                                            ) { i("fa-solid fa-xmark") {} }
+
+                                            RepositoryStatus.Created -> badge(
+                                                "已创建",
+                                                "badge-created"
+                                            ) { i("fa-solid fa-hourglass") {} }
+
+                                            RepositoryStatus.Available -> badge(
+                                                "可用",
+                                                "badge-available"
+                                            ) { i("fa-solid fa-check") {} }
+
+                                            RepositoryStatus.Modified -> badge(
+                                                "已修改",
+                                                "badge-modified"
+                                            ) { i("fa-solid fa-hourglass") {} }
+                                        }
+                                        +" ${repo.visibility.desc} "
                                     }
                                 }
                             }
