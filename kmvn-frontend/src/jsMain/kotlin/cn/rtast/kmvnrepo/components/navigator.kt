@@ -186,6 +186,7 @@ fun RenderContext.navbar() {
             LocalStorage.EMAIL_ADDRESS = null
             infoToast("登出成功")
             window.location.href = "/#/"
+            window.location.reload()
         }
         infoToast("正在退出登录...")
     }
