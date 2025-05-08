@@ -170,67 +170,93 @@ fun RenderContext.publicContentListingPage() {
                     }
                 }
             }
-            table("table is-fullwidth is-striped is-hoverable") {
-                thead {
-                    tr {
-                        th { +"名称" }
-                        th { +"修改时间" }
-                        th { +"大小" }
-                        if (LocalStorage.TOKEN != null) {
-                            th { +"操作" }
+            if (artifacts.isNotEmpty()) {
+                table("table is-fullwidth is-striped is-hoverable") {
+                    thead {
+                        tr {
+                            th { +"名称 / Name" }
+                            th {
+                                inlineStyle("text-align: center;")
+                                +"修改时间 / Last modified date"
+                            }
+                            th {
+                                inlineStyle("text-align: center;")
+                                +"大小 / Size"
+                            }
+                            if (LocalStorage.TOKEN != null) {
+                                th {
+                                    inlineStyle("text-align: center;")
+                                    +"操作 / Action"
+                                }
+                            }
+                        }
+                    }
+                    tbody {
+                        if (LocalStorage.HIDDEN_HASH_FILES) artifacts.removeAll {
+                            !it.isDirectory &&
+                                    (it.name.endsWith("md5")
+                                            || it.name.endsWith("sha256")
+                                            || it.name.endsWith("sha512")
+                                            || it.name.endsWith("sha1")
+                                            || it.name.endsWith("asc"))
+                        }
+                        artifacts.sortedWith(compareBy({ !it.isDirectory }, { it.name })).forEach { entry ->
+                            tr {
+                                td {
+                                    if (entry.isDirectory) {
+                                        a {
+                                            className("has-text-link")
+                                            +("${entry.name}/")
+                                            clicks handledBy {
+                                                window.location.href = "/#$currentPath/${entry.name}"
+                                            }
+                                        }
+                                    } else {
+                                        a {
+                                            className("has-text-dark")
+                                            +entry.name
+                                            clicks handledBy {
+                                                window.location.href = "$backend$currentPath/${entry.name}"
+                                            }
+                                        }
+                                    }
+                                }
+                                td {
+                                    inlineStyle("text-align: center;")
+                                    +getDate(entry.timestamp)
+                                }
+                                td {
+                                    inlineStyle("text-align: center;")
+                                    if (!entry.isDirectory) +formatSize(entry.size) else +"-"
+                                }
+                                if (LocalStorage.TOKEN != null) {
+                                    td {
+                                        inlineStyle("text-align: center;")
+                                        button("button is-danger is-small") {
+                                            img {
+                                                src("assets/trash.svg")
+                                                attr("alt", "Delete icon")
+                                                inlineStyle("width: 1.2rem; height: 1.2rem;")
+                                            }
+                                            clicks handledBy {
+                                                showDeleteFileEntryDialog.update(true)
+                                                selectedFileEntry.update("$currentPath/${entry.name}".removePrefix("/"))
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-                tbody {
-                    if (LocalStorage.HIDDEN_HASH_FILES) artifacts.removeAll {
-                        !it.isDirectory &&
-                                (it.name.endsWith("md5")
-                                        || it.name.endsWith("sha256")
-                                        || it.name.endsWith("sha512")
-                                        || it.name.endsWith("sha1")
-                                        || it.name.endsWith("asc"))
+            } else {
+                h3("title is-3 has-text-centered") {
+                    span("material-symbols-outlined") { +"psychology_alt" }
+                    h4("title is-4 has-text-centered") {
+                        +"这个仓库什么都没有"
                     }
-                    artifacts.sortedWith(compareBy({ !it.isDirectory }, { it.name })).forEach { entry ->
-                        tr {
-                            td {
-                                if (entry.isDirectory) {
-                                    a {
-                                        className("has-text-link")
-                                        +("${entry.name}/")
-                                        clicks handledBy {
-                                            window.location.href = "/#$currentPath/${entry.name}"
-                                        }
-                                    }
-                                } else {
-                                    a {
-                                        className("has-text-dark")
-                                        +entry.name
-                                        clicks handledBy {
-                                            window.location.href = "$backend$currentPath/${entry.name}"
-                                        }
-                                    }
-                                }
-                            }
-                            td { +getDate(entry.timestamp) }
-                            td {
-                                if (!entry.isDirectory) +formatSize(entry.size) else +"-"
-                            }
-                            if (LocalStorage.TOKEN != null) {
-                                td {
-                                    button("button is-danger is-small") {
-                                        img {
-                                            src("assets/trash.svg")
-                                            attr("alt", "Delete icon")
-                                            inlineStyle("width: 1.2rem; height: 1.2rem;")
-                                        }
-                                        clicks handledBy {
-                                            showDeleteFileEntryDialog.update(true)
-                                            selectedFileEntry.update("$currentPath/${entry.name}".removePrefix("/"))
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                    h4("title is-4 has-text-centered") {
+                        +"There's nothing in this repository."
                     }
                 }
             }
