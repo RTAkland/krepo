@@ -52,7 +52,7 @@ val DEFAULT_CONFIG = Config(
         "Maven Repo of RTAST",
         "皖ICP备2024066235-1号",
         "这里是RTAST的Maven仓库!",
-        "© #YEAR# RTAkland|https://github.com/RTAkland|"
+        "© #YEAR#  Made by  <a href=\"https://github.com/RTAkland\" target=\"_blank\">RTAkland</a>"
     )
 )
 

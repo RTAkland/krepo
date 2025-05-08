@@ -25,16 +25,9 @@ fun RenderContext.pageFooter() {
                     }
                 }
             }
-            val originCopyright = frontendConfig.copyright
+            val copyrightInfo = frontendConfig.copyright
                 .replace("#YEAR#", getCurrentYear().toString())
-            val targetLink = originCopyright.split("|")[1]
-            div("column is-narrow has-text-right") {
-                a("is-size-8") {
-                    href(targetLink)
-                    +originCopyright.split("|").first()
-                    target("_blank")
-                }
-            }
+            div("column is-narrow has-text-right") { span("is-size-8") { domNode.innerHTML = copyrightInfo } }
         }
     }
 }
