@@ -63,48 +63,48 @@ fun RenderContext.settingPage() {
                                         }
                                     }
                                 }
-                                div("column is-full") {
-                                    div("field") {
-                                        label("label") {
-                                            +"网站描述"
-                                        }
-                                        div("control") {
-                                            input("input") {
-                                                type("text")
-                                                value(descriptionStore.current ?: "")
-                                                changes.values() handledBy descriptionStore.update
-                                            }
-                                        }
-                                    }
-                                }
-                                div("column is-full") {
-                                    div("field") {
-                                        label("label") { +"版权信息" }
-                                        div("control") {
-                                            input("input") {
-                                                type("text")
-                                                value(copyrightStore.current)
-                                                changes.values() handledBy copyrightStore.update
-                                            }
-                                        }
-                                    }
-                                }
-                                div("field is-grouped mt-4") {
-                                    div("control") {
-                                        button("button is-primary") {
-                                            +"保存设置"
-                                            clicks handledBy { showSubmitSettingDialog.update(true) }
-                                        }
-                                    }
-                                    div("control") {
-                                        button("button is-danger") {
-                                            +"重置为默认"
-                                            clicks handledBy { showResetFrontConfigDialog.update(true) }
-                                        }
-                                    }
-                                }
-                                hr {}
                             }
+                            div("column is-full") {
+                                div("field") {
+                                    label("label") {
+                                        +"网站描述"
+                                    }
+                                    div("control") {
+                                        input("input") {
+                                            type("text")
+                                            value(descriptionStore.current ?: "")
+                                            changes.values() handledBy descriptionStore.update
+                                        }
+                                    }
+                                }
+                            }
+                            div("column is-full") {
+                                div("field") {
+                                    label("label") { +"版权信息" }
+                                    div("control") {
+                                        input("input") {
+                                            type("text")
+                                            value(copyrightStore.current)
+                                            changes.values() handledBy copyrightStore.update
+                                        }
+                                    }
+                                }
+                            }
+                            div("field is-grouped mt-4") {
+                                div("control") {
+                                    button("button is-primary") {
+                                        +"保存设置"
+                                        clicks handledBy { showSubmitSettingDialog.update(true) }
+                                    }
+                                }
+                                div("control") {
+                                    button("button is-danger") {
+                                        +"重置为默认"
+                                        clicks handledBy { showResetFrontConfigDialog.update(true) }
+                                    }
+                                }
+                            }
+                            hr {}
                         }
                     }
                 }

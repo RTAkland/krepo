@@ -97,10 +97,10 @@ fun RenderContext.navbar() {
                     div("buttons") {
                         if (LocalStorage.TOKEN == null) {
                             a("button is-light") {
-                                i("fa-solid fa-right-to-bracket") {}
-                                span("ml-2") { +"登录" }
+                                i("fa-solid fa-right-to-bracket mr-2") {}
+                                +"登录"
                                 clicks handledBy { showLoginDialog.update(true) }
-                            }
+                            }.tooltip { +"Login" }
                         } else {
                             figure("image is-32x26 mr-2") {
                                 img {
@@ -114,14 +114,15 @@ fun RenderContext.navbar() {
                                     a {
                                         href("/#/user/edit?username=${LocalStorage.CURRENT_USERNAME!!}")
                                         +LocalStorage.CURRENT_USERNAME!!
+                                        title("修改用户信息 / Modify user info")
                                     }
                                 }
                             }
                             a("button is-light") {
-                                i("fa-solid fa-right-from-bracket") {}
-                                span("ml-2") { +"登出" }
+                                i("fa-solid fa-right-from-bracket mr-2") {}
+                                +"登出"
                                 clicks handledBy { showLogoutDialog.update(true) }
-                            }
+                            }.tooltip { +"Logout" }
                         }
                     }
                 }

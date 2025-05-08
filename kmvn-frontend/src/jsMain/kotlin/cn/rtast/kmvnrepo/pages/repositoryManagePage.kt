@@ -13,16 +13,13 @@ import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.currentPath
 import cn.rtast.kmvnrepo.entity.Contents
 import cn.rtast.kmvnrepo.entity.DeleteGavRequest
-import cn.rtast.kmvnrepo.getDependenciesTemplate
 import cn.rtast.kmvnrepo.util.auth
 import cn.rtast.kmvnrepo.util.file.LocalStorage
 import cn.rtast.kmvnrepo.util.file.formatSize
 import cn.rtast.kmvnrepo.util.httpRequest
 import cn.rtast.kmvnrepo.util.jsonContentType
 import cn.rtast.kmvnrepo.util.setBody
-import cn.rtast.kmvnrepo.util.string.fromJson
-import cn.rtast.kmvnrepo.util.string.getDate
-import cn.rtast.kmvnrepo.util.string.parseGAV
+import cn.rtast.kmvnrepo.util.string.*
 import dev.fritz2.core.*
 import dev.fritz2.headless.components.tooltip
 import dev.fritz2.remote.http
@@ -80,25 +77,85 @@ fun RenderContext.publicContentListingPage() {
                                             it.name != "maven-metadata.xml.sha512" &&
                                             it.name.endsWith("sha1")
                                 }) {
-                                a {
-                                    img {
-                                        src("assets/link.svg")
-                                        inlineStyle("width: 1.5rem; height: 1.5rem; margin-right: 0.5rem;")
+                                val simplePath = currentPath
+                                    .removeSuffix("/").split("/").drop(2)
+                                    .joinToString("/")
+                                val repo = currentPath.removePrefix("/").split("/").first()
+                                val (group, name, version) = parseGAV(simplePath, repo)
+                                div("dropdown has-dropdown is-hoverable has-background") {
+                                    button("button") {
+                                        i("fa-solid fa-copy mr-2") {}
+                                        +"复制坐标"
+                                        clicks handledBy {
+                                            window.navigator.clipboard.writeText(
+                                                getGradleKotlinDslDependenciesTemplate(group, name, version)
+                                            )
+                                            infoToast("已复制Gradle Kotlin DSL")
+                                        }
                                     }
-                                    className("button is-link")
-                                    +" 复制构件坐标"
-                                    clicks handledBy {
-                                        val simplePath = currentPath
-                                            .removeSuffix("/").split("/").drop(2)
-                                            .joinToString("/")
-                                        val repo = currentPath.removePrefix("/").split("/").first()
-                                        val (group, name, version) = parseGAV(simplePath, repo)
-                                        window.navigator.clipboard.writeText(
-                                            getDependenciesTemplate(group, name, version)
-                                        )
-                                        infoToast("复制成功!")
+                                    div("dropdown-menu") {
+                                        id("dropdown-menu")
+                                        attr("role", "menu")
+                                        div("dropdown-content") {
+                                            a("dropdown-item") {
+                                                img("mr-2") {
+                                                    width(14)
+                                                    src("/assets/img/gradle_kotlin.svg")
+                                                    alt("Gradle Kotlin DSL")
+                                                }
+                                                +"Gradle Kotlin DSL"
+                                                clicks handledBy {
+                                                    window.navigator.clipboard.writeText(
+                                                        getGradleKotlinDslDependenciesTemplate(group, name, version)
+                                                    )
+                                                    infoToast("已复制Gradle Kotlin DSL依赖坐标")
+                                                }
+                                            }
+                                            a("dropdown-item") {
+                                                img("mr-2") {
+                                                    width(14)
+                                                    src("/assets/img/gradle.svg")
+                                                    alt("Gradle Groovy DSL")
+                                                }
+                                                +"Gradle Groovy DSL"
+                                                clicks handledBy {
+                                                    window.navigator.clipboard.writeText(
+                                                        getGradleGroovyDslDependenciesTemplate(group, name, version)
+                                                    )
+                                                    infoToast("已复制Gradle Groovy DSL依赖坐标")
+                                                }
+                                            }
+                                            a("dropdown-item") {
+                                                img("mr-2") {
+                                                    width(14)
+                                                    src("/assets/img/maven.svg")
+                                                    alt("Maven")
+                                                }
+                                                +"Maven"
+                                                clicks handledBy {
+                                                    window.navigator.clipboard.writeText(
+                                                        getMavenDependenciesTemplate(group, name, version)
+                                                    )
+                                                    infoToast("已复制Maven依赖坐标")
+                                                }
+                                            }
+                                            a("dropdown-item") {
+                                                img("mr-2") {
+                                                    width(14)
+                                                    src("/assets/img/scala.svg")
+                                                    alt("SBT")
+                                                }
+                                                +"SBT"
+                                                clicks handledBy {
+                                                    window.navigator.clipboard.writeText(
+                                                        getSBTDependenciesTemplate(group, name, version)
+                                                    )
+                                                    infoToast("已复制SBT依赖坐标")
+                                                }
+                                            }
+                                        }
                                     }
-                                }.tooltip { +"Copy the artifact coordinate to clipboard" }
+                                }
                             }
                             a {
                                 img {
@@ -215,4 +272,3 @@ fun RenderContext.publicContentListingPage() {
         window.setTimeout({ window.location.reload() }, 0.5.seconds.inWholeMilliseconds.toInt())
     }
 }
-

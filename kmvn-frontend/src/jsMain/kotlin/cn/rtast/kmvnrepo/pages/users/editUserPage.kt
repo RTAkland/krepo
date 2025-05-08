@@ -31,7 +31,7 @@ fun RenderContext.editUserPage() {
             div("container") {
                 inlineStyle("max-width: 600px;")
                 h3("title is-3 has-text-centered mb-6") {
-                    i("fas fa-user-pen") {}
+                    i("fas fa-user-pen mr-2") {}
                     +"修改用户信息"
                 }
                 div("box mx-auto") {
@@ -87,7 +87,8 @@ fun RenderContext.editUserPage() {
                                 div("field is-grouped is-grouped-right mt-5") {
                                     div("control") {
                                         button("button is-link") {
-                                            +"更新"
+                                            i("fa-solid fa-pen-to-square mr-2") {}
+                                            +"更新用户信息"
                                             clicks handledBy { showUpdateUserDialog.update(true) }
                                         }
                                     }

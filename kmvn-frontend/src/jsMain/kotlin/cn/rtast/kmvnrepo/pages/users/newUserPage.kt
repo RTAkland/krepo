@@ -31,7 +31,7 @@ fun RenderContext.newUserPage() {
         div("section") {
             div("container") {
                 inlineStyle("max-width: 600px;")
-                h3("title is-3 has-text-centered mb-6") { +"➕ 创建用户" }
+                h3("title is-3 has-text-centered mb-6") { +"创建用户" }
                 div("box mx-auto") {
                     div("columns is-multiline") {
                         div("column is-full") {
@@ -86,6 +86,7 @@ fun RenderContext.newUserPage() {
                             div("field is-grouped is-grouped-right mt-5") {
                                 div("control") {
                                     button("button is-link") {
+                                        i("fa-solid fa-plus mr-2") {}
                                         +"创建"
                                         clicks handledBy { showCreateUserDialog.update(true) }
                                     }

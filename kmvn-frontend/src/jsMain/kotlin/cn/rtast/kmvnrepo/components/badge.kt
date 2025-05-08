@@ -13,7 +13,7 @@ fun RenderContext.badge(
     text: String, classes: String,
     extraContent: RenderContext.() -> Unit
 ): RenderContext {
-    span(classes) {
+    span("$classes mr-2") {
         extraContent()
         +text
     }

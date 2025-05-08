@@ -13,14 +13,12 @@ import cn.rtast.kmvnrepo.components.pageFooter
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.entity.GetRepositoriesResponse
 import cn.rtast.kmvnrepo.frontendConfig
-import cn.rtast.kmvnrepo.getRepositoryTemplate
 import cn.rtast.kmvnrepo.util.auth
 import cn.rtast.kmvnrepo.util.file.LocalStorage
 import cn.rtast.kmvnrepo.util.httpRequest
 import cn.rtast.kmvnrepo.util.jsonContentType
-import cn.rtast.kmvnrepo.util.string.fromJson
-import dev.fritz2.core.RenderContext
-import dev.fritz2.core.href
+import cn.rtast.kmvnrepo.util.string.*
+import dev.fritz2.core.*
 import dev.fritz2.headless.components.tooltip
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
@@ -64,17 +62,87 @@ fun RenderContext.homePage() {
                             footer("card-footer") {
                                 a("card-footer-item has-text-link") {
                                     href("/#/${repo.name}")
-                                    i("fa-solid fa-eye") {}
-                                    span("ml-2") { b { +"查看仓库" } }
-                                }.tooltip { +"View the artifacts & files" }
+                                    i("fa-solid fa-eye mr-2") {}
+                                    span { b { +"查看仓库" } }
+                                }.tooltip { +"View the artifacts and files in this repository" }
                                 a("card-footer-item has-text-link") {
-                                    clicks handledBy {
-                                        window.navigator.clipboard.writeText(getRepositoryTemplate(repo.name))
-                                        infoToast("复制成功")
+                                    div("dropdown has-dropdown is-hoverable") {
+                                        span {
+                                            b {
+                                                i("fa-solid fa-copy mr-2") {}
+                                                +"复制仓库URL"
+                                                clicks handledBy {
+                                                    window.navigator.clipboard.writeText(
+                                                        getGradleKotlinDslRepositoryTemplate(repo.name)
+                                                    )
+                                                    infoToast("已复制Gradle Kotlin DSL仓库URL")
+                                                }
+                                            }
+                                            div("dropdown-menu") {
+                                                id("dropdown-menu")
+                                                attr("role", "menu")
+                                                div("dropdown-content") {
+                                                    a("dropdown-item") {
+                                                        img("mr-2") {
+                                                            width(14)
+                                                            src("/assets/img/gradle_kotlin.svg")
+                                                            alt("Gradle Kotlin DSL")
+                                                        }
+                                                        +"Gradle Kotlin DSL"
+                                                        clicks handledBy {
+                                                            window.navigator.clipboard.writeText(
+                                                                getGradleKotlinDslRepositoryTemplate(repo.name)
+                                                            )
+                                                            infoToast("已复制Gradle Kotlin DSL仓库URL")
+                                                        }
+                                                    }
+                                                    a("dropdown-item") {
+                                                        img("mr-2") {
+                                                            width(14)
+                                                            src("/assets/img/gradle.svg")
+                                                            alt("Gradle Groovy DSL")
+                                                        }
+                                                        +"Gradle Groovy DSL"
+                                                        clicks handledBy {
+                                                            window.navigator.clipboard.writeText(
+                                                                getGradleGroovyDslRepositoryTemplate(repo.name)
+                                                            )
+                                                            infoToast("已复制Gradle Groovy DSL仓库URL")
+                                                        }
+                                                    }
+                                                    a("dropdown-item") {
+                                                        img("mr-2") {
+                                                            width(14)
+                                                            src("/assets/img/maven.svg")
+                                                            alt("Maven")
+                                                        }
+                                                        +"Maven"
+                                                        clicks handledBy {
+                                                            window.navigator.clipboard.writeText(
+                                                                getMavenRepositoryTemplate(repo.name)
+                                                            )
+                                                            infoToast("已复制Maven仓库URL")
+                                                        }
+                                                    }
+                                                    a("dropdown-item") {
+                                                        img("mr-2") {
+                                                            width(14)
+                                                            src("/assets/img/scala.svg")
+                                                            alt("SBT")
+                                                        }
+                                                        +"SBT"
+                                                        clicks handledBy {
+                                                            window.navigator.clipboard.writeText(
+                                                                getSBTRepositoryTemplate(repo.name)
+                                                            )
+                                                            infoToast("已复制SBT仓库URL")
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
-                                    i("fa-solid fa-clipboard") {}
-                                    span("ml-2") { b { +"复制地址" } }
-                                }.tooltip { +"Copy the maven repository config for gradle(Kotlin dsl)" }
+                                }
                             }
                         }
                     }

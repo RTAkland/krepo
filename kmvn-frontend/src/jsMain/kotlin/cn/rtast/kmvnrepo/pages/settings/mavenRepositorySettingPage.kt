@@ -57,13 +57,13 @@ fun RenderContext.mavenRepositorySettingPage() {
                     div("level") {
                         div("level-left") {
                             h3("title is-4") {
-                                i("fa-solid fa-house") {}
+                                i("fa-solid fa-house mr-2") {}
                                 +"仓库列表"
                             }
                         }
                         div("level-right") {
                             button("button is-primary") {
-                                i("fa-solid fa-plus") {}
+                                i("fa-solid fa-plus mr-2") {}
                                 +"添加仓库"
                                 clicks handledBy { showCreateRepositoryFormDialog.update(true) }
                             }
@@ -73,55 +73,55 @@ fun RenderContext.mavenRepositorySettingPage() {
                         div("box is-flex is-justify-content-space-between is-align-items-center") {
                             span {
                                 when (repo.visibility) {
-                                    RepositoryVisibility.Internal -> i("fa-solid fa-eye-slash") {}
-                                    RepositoryVisibility.Public -> i("fa-solid fa-eye") {}
+                                    RepositoryVisibility.Internal -> i("fa-solid fa-eye-slash mr-2") {}
+                                    RepositoryVisibility.Public -> i("fa-solid fa-eye mr-2") {}
                                 }
-                                a {
-                                    +" ${repo.name}"
+                                a("is-size-5") {
+                                    +repo.name
                                     href("/#/${repo.name}")
                                 }
                                 i {
                                     p {
                                         when (repo.visibility) {
-                                            RepositoryVisibility.Internal -> inlineStyle("color: #D2B48C;")
+                                            RepositoryVisibility.Internal -> inlineStyle("color: purple;")
                                             RepositoryVisibility.Public -> inlineStyle("color: green;")
                                         }
                                         when (repo.status) {
                                             RepositoryStatus.Deleted -> badge(
                                                 "已删除",
                                                 "badge-deleted"
-                                            ) { i("fa-solid fa-xmark") {} }
+                                            ) { i("fa-solid fa-xmark mr-2") {} }
 
                                             RepositoryStatus.Created -> badge(
                                                 "已创建",
                                                 "badge-created"
-                                            ) { i("fa-solid fa-hourglass") {} }
+                                            ) { i("fa-solid fa-hourglass mr-2") {} }
 
                                             RepositoryStatus.Available -> badge(
                                                 "可用",
                                                 "badge-available"
-                                            ) { i("fa-solid fa-check") {} }
+                                            ) { i("fa-solid fa-check mr-2") {} }
 
                                             RepositoryStatus.Modified -> badge(
                                                 "已修改",
                                                 "badge-modified"
-                                            ) { i("fa-solid fa-hourglass") {} }
+                                            ) { i("fa-solid fa-hourglass mr-2") {} }
                                         }
-                                        +" ${repo.visibility.desc} "
+                                        +repo.visibility.desc
                                     }
                                 }
                             }
                             div {
                                 button("button is-small is-info mr-2") {
-                                    i("fa-solid fa-user-pen") {}
-                                    +" 编辑"
+                                    i("fa-solid fa-user-pen mr-2") {}
+                                    +"编辑"
                                     clicks handledBy {
                                         selectedRepositoryName.update(repo.name)
                                         showModifyRepositoryStore.update(true)
                                     }
                                 }
                                 button("button is-small is-danger") {
-                                    i("fa-solid fa-trash") {}
+                                    i("fa-solid fa-trash mr-2") {}
                                     +"删除"
                                     clicks handledBy {
                                         selectedRepositoryName.update(repo.name)
