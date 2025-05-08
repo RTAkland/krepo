@@ -19,6 +19,8 @@ jobs:
         run: chmod +x ./gradlew
       - name: Build
         run: ./gradlew :kmvn-frontend:jsBrowserDistribution
+      - name: Install Vercel CLI
+        run: npm install -g vercel@22.0.1
       - name: Deploy to Vercel Action
         uses: BetaHuhn/deploy-to-vercel-action@latest
         with:
