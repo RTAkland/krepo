@@ -39,12 +39,12 @@ fun RenderContext.showDialog(
                     footer("modal-card-foot") {
                         div("buttons is-right") {
                             button("button is-right") {
-                                i("fa-solid fa-ban") {}
+                                i("fa-solid fa-ban mr-2") {}
                                 +"取消"
                                 clicks handledBy { showDialog.update(false) }
                             }
                             button("button is-info is-right") {
-                                i("fa-solid fa-check") {}
+                                i("fa-solid fa-check mr-2") {}
                                 +"确认"
                                 clicks handledBy {
                                     showDialog.update(false)

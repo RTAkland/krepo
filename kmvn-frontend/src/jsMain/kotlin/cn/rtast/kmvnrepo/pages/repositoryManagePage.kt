@@ -32,7 +32,6 @@ fun RenderContext.publicContentListingPage() {
     val selectedFileEntry = storeOf("")
     val showLocalConfigDialog = storeOf(false)
     val hiddenHashFilesToggle = storeOf(true)
-    navbar()
     coroutineScope.launch {
         try {
             if (LocalStorage.TOKEN != null) {
@@ -48,7 +47,7 @@ fun RenderContext.publicContentListingPage() {
             .auth().acceptJson().jsonContentType()
         val response = api.get()
         if (response.status == 404) {
-            div("notification has-text-centered") { +"404 - Not Found" }
+            div("has-text-centered") { notFoundPage() }
             return@launch
         }
         require(response.ok) { errorToast("获取文件列表失败!") }
@@ -251,7 +250,12 @@ fun RenderContext.publicContentListingPage() {
                 }
             } else {
                 h3("title is-3 has-text-centered") {
-                    span("material-symbols-outlined") { +"psychology_alt" }
+                    img {
+                        width(24)
+                        src("assets/img/psychology_alt_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.svg")
+                        alt("assets/img/psychology_alt_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.svg")
+                    }
+                    span("material-symbols-outlined") {}
                     h4("title is-4 has-text-centered") {
                         +"这个仓库什么都没有"
                     }
@@ -262,7 +266,6 @@ fun RenderContext.publicContentListingPage() {
             }
             hr { className("mt-6") }
         }
-        pageFooter()
     }
     showDialog(showDeleteFileEntryDialog, "删除构件/包", "是否删除以下内容?", {
         i { +selectedFileEntry.current }

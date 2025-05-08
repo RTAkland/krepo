@@ -24,7 +24,6 @@ import kotlinx.browser.window
 import kotlinx.coroutines.launch
 
 fun RenderContext.homePage() {
-    navbar()
     coroutineScope.launch {
         val repositoriesAPIEndpoint =
             if (LocalStorage.TOKEN == null) "/@/api/repositories/public" else "/@/api/repositories/all"
@@ -150,6 +149,5 @@ fun RenderContext.homePage() {
             }
             hr {}
         }
-        pageFooter()
     }
 }

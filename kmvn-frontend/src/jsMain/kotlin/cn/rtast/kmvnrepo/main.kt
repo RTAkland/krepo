@@ -9,6 +9,8 @@
 
 package cn.rtast.kmvnrepo
 
+import cn.rtast.kmvnrepo.components.navbar
+import cn.rtast.kmvnrepo.components.pageFooter
 import cn.rtast.kmvnrepo.components.warningToast
 import cn.rtast.kmvnrepo.entity.Config
 import cn.rtast.kmvnrepo.entity.FrontendConfig
@@ -46,7 +48,7 @@ fun main() {
     toastContainer("default", "toast-container")
     coroutineScope.launch {
 //        if (window.location.hostname != "localhost")
-            backend = http("/config.json").get().body().fromJson<Config>().backend
+            backend = http("/config.json").get().body().fromJson<Config >().backend
         try {
             val checkSessionValid = http("$backend/@/api/user/")
                 .auth().acceptJson().jsonContentType()
@@ -63,21 +65,25 @@ fun main() {
             .body().fromJson<GetFrontendConfigResponse>().data
         document.title = frontendConfig.pageTitle
         render("#target") {
-            router.data.render { site ->
-                currentPath = site
-                println(site)
-                if (site.startsWith("/user/edit")) editUserPage()
-                else {
-                    when (site) {
-                        "/", "contents" -> homePage()
-                        "/user/manage" -> userManagePage()
-                        "/user/create" -> newUserPage()
-                        "/setting" -> settingPage()
-                        "/setting/repository" -> mavenRepositorySettingPage()
-                        else -> publicContentListingPage()
+            navbar()
+            main {
+                router.data.render { site ->
+                    currentPath = site
+                    println(site)
+                    if (site.startsWith("/user/edit")) editUserPage()
+                    else {
+                        when (site) {
+                            "/", "contents" -> homePage()
+                            "/user/manage" -> userManagePage()
+                            "/user/create" -> newUserPage()
+                            "/setting" -> settingPage()
+                            "/setting/repository" -> mavenRepositorySettingPage()
+                            else -> publicContentListingPage()
+                        }
                     }
                 }
             }
+            pageFooter()
             portalRoot()
         }
     }

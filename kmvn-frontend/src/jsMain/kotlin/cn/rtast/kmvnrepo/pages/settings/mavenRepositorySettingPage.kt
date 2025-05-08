@@ -10,6 +10,7 @@ package cn.rtast.kmvnrepo.pages.settings
 import cn.rtast.kmvnrepo.components.*
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.entity.*
+import cn.rtast.kmvnrepo.enums.BadgeType
 import cn.rtast.kmvnrepo.enums.RepositoryStatus
 import cn.rtast.kmvnrepo.util.auth
 import cn.rtast.kmvnrepo.util.file.checkSession
@@ -39,7 +40,6 @@ fun RenderContext.prettyCheckbox(labelText: String, store: Store<Boolean>) {
 
 fun RenderContext.mavenRepositorySettingPage() {
     checkSession {
-        navbar()
         val showCreateRepositoryFormDialog = storeOf(false)
         val showDeleteRepositoryDialog = storeOf(false)
         val nameStore = storeOf("")
@@ -79,6 +79,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                                 a("is-size-5") {
                                     +repo.name
                                     href("/#/${repo.name}")
+                                    title("点击查看仓库内容 / Click to view the content of this repository")
                                 }
                                 i {
                                     p {
@@ -87,25 +88,10 @@ fun RenderContext.mavenRepositorySettingPage() {
                                             RepositoryVisibility.Public -> inlineStyle("color: green;")
                                         }
                                         when (repo.status) {
-                                            RepositoryStatus.Deleted -> badge(
-                                                "已删除",
-                                                "badge-deleted"
-                                            ) { i("fa-solid fa-xmark mr-2") {} }
-
-                                            RepositoryStatus.Created -> badge(
-                                                "已创建",
-                                                "badge-created"
-                                            ) { i("fa-solid fa-hourglass mr-2") {} }
-
-                                            RepositoryStatus.Available -> badge(
-                                                "可用",
-                                                "badge-available"
-                                            ) { i("fa-solid fa-check mr-2") {} }
-
-                                            RepositoryStatus.Modified -> badge(
-                                                "已修改",
-                                                "badge-modified"
-                                            ) { i("fa-solid fa-hourglass mr-2") {} }
+                                            RepositoryStatus.Deleted -> badge(BadgeType.Deleted) { i("fa-solid fa-xmark mr-2") {} }
+                                            RepositoryStatus.Created -> badge(BadgeType.Created) { i("fa-solid fa-hourglass mr-2") {} }
+                                            RepositoryStatus.Available -> badge(BadgeType.Available) { i("fa-solid fa-check mr-2") {} }
+                                            RepositoryStatus.Modified -> badge(BadgeType.Modified) { i("fa-solid fa-hourglass mr-2") {} }
                                         }
                                         +repo.visibility.desc
                                     }
@@ -133,7 +119,6 @@ fun RenderContext.mavenRepositorySettingPage() {
                     }
                 }
             }
-            pageFooter()
         }
 
         showDialog(

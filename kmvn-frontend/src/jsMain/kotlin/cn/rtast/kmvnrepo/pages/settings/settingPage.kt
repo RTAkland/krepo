@@ -25,7 +25,6 @@ import kotlinx.coroutines.launch
 
 fun RenderContext.settingPage() {
     checkSession {
-        navbar()
         val pageTitleStore = storeOf(frontendConfig.pageTitle)
         val icpLicenseStore = storeOf(frontendConfig.icpLicense)
         val descriptionStore = storeOf(frontendConfig.description)
@@ -109,7 +108,6 @@ fun RenderContext.settingPage() {
                     }
                 }
             }
-            pageFooter()
         }
         showDialog(showSubmitSettingDialog, "保存更改", "是否要保存更改?", {}) {
             val pageTitle = pageTitleStore.current

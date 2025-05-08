@@ -22,7 +22,6 @@ import kotlinx.coroutines.launch
 
 fun RenderContext.editUserPage() {
     checkSession {
-        navbar()
         val user = currentPath.split("?").last().split("&").first().split("=").last()
         val email = storeOf("")
         val password = storeOf("")
@@ -119,6 +118,5 @@ fun RenderContext.editUserPage() {
                 }
             }
         }
-        pageFooter()
     }
 }

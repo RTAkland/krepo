@@ -25,7 +25,6 @@ import kotlinx.coroutines.launch
 
 fun RenderContext.userManagePage() {
     checkSession {
-        navbar()
         val showDeleteUserDialog = storeOf(false)
         val selectedUser = storeOf<GetUsersResponse.User?>(null)
         coroutineScope.launch {
@@ -67,7 +66,6 @@ fun RenderContext.userManagePage() {
                     }
                 }
             }
-            pageFooter()
         }
         showDialog(showDeleteUserDialog, "删除用户", "是否要删除该用户", {}) {
             coroutineScope.launch {

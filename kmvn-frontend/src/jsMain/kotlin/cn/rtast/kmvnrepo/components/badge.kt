@@ -7,15 +7,16 @@
 
 package cn.rtast.kmvnrepo.components
 
+import cn.rtast.kmvnrepo.enums.BadgeType
 import dev.fritz2.core.RenderContext
 
 fun RenderContext.badge(
-    text: String, classes: String,
+    type: BadgeType,
     extraContent: RenderContext.() -> Unit
 ): RenderContext {
-    span("$classes mr-2") {
+    span("mr-2 tag ${type.classes} is-light") {
         extraContent()
-        +text
+        +type.chinese
     }
     return this
 }

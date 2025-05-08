@@ -22,12 +22,10 @@ import kotlinx.coroutines.launch
 
 fun RenderContext.newUserPage() {
     checkSession {
-        navbar()
         val username = storeOf("")
         val email = storeOf("")
         val password = storeOf("")
         val showCreateUserDialog = storeOf(false)
-
         div("section") {
             div("container") {
                 inlineStyle("max-width: 600px;")
@@ -123,6 +121,5 @@ fun RenderContext.newUserPage() {
                 }
             }
         }
-        pageFooter()
     }
 }

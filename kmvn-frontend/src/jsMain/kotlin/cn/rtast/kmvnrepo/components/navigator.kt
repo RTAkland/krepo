@@ -35,7 +35,7 @@ fun RenderContext.navbar() {
         attr("role", "navigation")
         attr("aria-label", "main navigation")
         div("navbar-brand") {
-            a("navbar-item is-rounded") {
+            a("navbar-item is-rounded ml-2") {
                 href("#")
                 i("fas fa-house") {}
                 +frontendConfig.pageTitle
@@ -84,7 +84,11 @@ fun RenderContext.navbar() {
                                 href("/#/setting")
                             }
                             a("navbar-item") {
-                                i("fa-solid fa-house") {}
+                                img {
+                                    width(14)
+                                    src("assets/img/garage_door_16dp_1F1F1F_FILL0_wght400_GRAD0_opsz20.svg")
+                                    alt("assets/img/garage_door_16dp_1F1F1F_FILL0_wght400_GRAD0_opsz20.svg")
+                                }
                                 +"仓库设置"
                                 href("/#/setting/repository")
                             }
@@ -102,19 +106,20 @@ fun RenderContext.navbar() {
                                 clicks handledBy { showLoginDialog.update(true) }
                             }.tooltip { +"Login" }
                         } else {
-                            figure("image is-32x26 mr-2") {
+                            figure("image is-32x26") {
                                 img {
                                     src(LocalStorage.AVATAR!!)
                                     attr("alt", "Avatar")
                                     className("is-rounded")
                                 }
+                                title(LocalStorage.CURRENT_USERNAME!!)
                             }
-                            span {
+                            span("mr-2") {
                                 b {
                                     a {
                                         href("/#/user/edit?username=${LocalStorage.CURRENT_USERNAME!!}")
                                         +LocalStorage.CURRENT_USERNAME!!
-                                        title("修改用户信息 / Modify user info")
+                                        title("修改用户信息 / Update my info")
                                     }
                                 }
                             }

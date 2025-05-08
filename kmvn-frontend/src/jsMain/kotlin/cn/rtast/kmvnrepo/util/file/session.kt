@@ -9,11 +9,7 @@ package cn.rtast.kmvnrepo.util.file
 
 import cn.rtast.kmvnrepo.pages.noPermission
 import dev.fritz2.core.RenderContext
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
 
 fun RenderContext.checkSession(
-    redirect: String = "/#/",
-    duration: Duration = 3.seconds,
     content: RenderContext.() -> Unit
-) = if (LocalStorage.TOKEN != null) content() else noPermission(redirect, duration)
+) = if (LocalStorage.TOKEN != null) content() else noPermission()
