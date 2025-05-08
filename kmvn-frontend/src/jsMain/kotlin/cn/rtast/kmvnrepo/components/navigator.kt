@@ -68,7 +68,7 @@ fun RenderContext.navbar() {
                             a("navbar-item") {
                                 href("/#/user/create")
                                 i("fa-solid fa-user-plus") {}
-                                +"新增用户"
+                                +"创建用户"
                             }
                         }
                     }
