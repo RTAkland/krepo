@@ -69,7 +69,6 @@ fun main() {
             main {
                 router.data.render { site ->
                     currentPath = site
-                    println(site)
                     if (site.startsWith("/user/edit")) editUserPage()
                     else {
                         when (site) {

@@ -8,7 +8,9 @@
 package cn.rtast.kmvnrepo.pages
 
 import cn.rtast.kmvnrepo.backend
-import cn.rtast.kmvnrepo.components.*
+import cn.rtast.kmvnrepo.components.errorToast
+import cn.rtast.kmvnrepo.components.infoToast
+import cn.rtast.kmvnrepo.components.showDialog
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.currentPath
 import cn.rtast.kmvnrepo.entity.Contents
@@ -55,7 +57,21 @@ fun RenderContext.publicContentListingPage() {
         val artifacts = responseJson.data.toMutableList()
         div("container") {
             br {}
-            div("level-left") { h4("title is-4") { +"Index of $currentPath" } }
+            div("level-left") {
+                h4("title is-4") {
+                    +"Index of /"
+                    val segments = currentPath.trim('/').split("/")
+                    val basePath = StringBuilder("/#")
+                    segments.forEachIndexed { index, segment ->
+                        basePath.append("/").append(segment)
+                        a {
+                            href(basePath.toString())
+                            +segment
+                        }
+                        if (index != segments.lastIndex) +"/"
+                    }
+                }
+            }
             hr {}
             if (currentPath.isNotEmpty()) {
                 div("mb-4") {
