@@ -7,3 +7,4 @@ backend/repositories/
 frontend/src/wasmJsMain/resources/assets/NotoSansSC-Medium.subset.ttf
 kotlin-js-store/
 kmvn-backend/repositories
+.vercel
