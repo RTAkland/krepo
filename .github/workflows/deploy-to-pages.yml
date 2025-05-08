@@ -20,12 +20,12 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Build
-        run: ./gradlew :kmvn-frontend:jsBrowserDevelopmentExecutableDistribution
+        run: ./gradlew :kmvn-frontend:jsBrowserDistribution
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           projectName: "kmvnrepo"
           apiToken: ${{ secrets.CF_API_TOKEN }}
-          directory: kmvn-frontend/build/dist/js/developmentExecutable/
+          directory: kmvn-frontend/build/dist/js/productionExecutable/
           gitHubToken: ${{ secrets.GH_TOKEN }}
