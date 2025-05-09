@@ -11,18 +11,44 @@ package cn.rtast.kmvnrepo.util.manager
 
 import cn.rtast.kmvnrepo.entity.auth.TokenPayload
 import cn.rtast.kmvnrepo.util.generateSecureRandomString
+import kotlinx.coroutines.*
 import kotlin.time.Clock
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
 import kotlin.uuid.ExperimentalUuidApi
 
 class TokenManager {
     private val validatedTokens = mutableListOf<TokenPayload>()
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+
+    init {
+        this.startScheduler()
+    }
+
+    private fun cleanupExpiredTokens() {
+        val now = Clock.System.now().epochSeconds
+        validatedTokens.removeAll { it.expiredAt <= now }
+    }
+
+    fun startScheduler() =
+        coroutineScope.launch {
+            while (isActive) {
+                try {
+                    delay(5.minutes)
+                    cleanupExpiredTokens()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+
 
     fun revoke(name: String) {
         validatedTokens.removeAll { it.name == name }
     }
 
     fun grant(name: String): String {
+        this.cleanupExpiredTokens()
         return generateSecureRandomString().apply {
             if (validatedTokens.any { it.name == name }) {
                 this@TokenManager.revoke(name)
@@ -34,6 +60,7 @@ class TokenManager {
     fun getName(id: String): String? = validatedTokens.find { it.value == id }?.name
 
     fun validate(id: String): Boolean {
+        this.cleanupExpiredTokens()
         val payload = validatedTokens.find { it.value == id } ?: return false
         if (payload.expiredAt <= Clock.System.now().epochSeconds) {
             this.revoke(payload.name)
