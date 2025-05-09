@@ -10,7 +10,6 @@ package cn.rtast.kmvnrepo.pages
 import cn.rtast.kmvnrepo.backend
 import cn.rtast.kmvnrepo.components.errorToast
 import cn.rtast.kmvnrepo.components.infoToast
-import cn.rtast.kmvnrepo.components.pageFooter
 import cn.rtast.kmvnrepo.components.showDialog
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.currentPath
@@ -24,7 +23,6 @@ import cn.rtast.kmvnrepo.util.jsonContentType
 import cn.rtast.kmvnrepo.util.setBody
 import cn.rtast.kmvnrepo.util.string.*
 import dev.fritz2.core.*
-import dev.fritz2.headless.components.tooltip
 import dev.fritz2.remote.http
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
@@ -81,7 +79,7 @@ fun RenderContext.publicContentListingPage() {
                             a("button") {
                                 val parentPath = currentPath.trimEnd('/').substringBeforeLast('/', "")
                                 href("/#$parentPath")
-                                +"Go Up"
+                                img { src("/assets/img/back.svg") }
                             }
                         }
                         div("level-right") {
@@ -97,10 +95,9 @@ fun RenderContext.publicContentListingPage() {
                                     .joinToString("/")
                                 val repo = currentPath.removePrefix("/").split("/").first()
                                 val (group, name, version) = parseGAV(simplePath, repo)
-                                div("dropdown has-dropdown is-hoverable has-background") {
+                                div("dropdown has-dropdown is-hoverable has-background is-centered") {
                                     button("button") {
-                                        i("fa-solid fa-copy mr-2") {}
-                                        +"Copy Dependencies URL"
+                                        i("fa-solid fa-copy") {}
                                         clicks handledBy {
                                             window.navigator.clipboard.writeText(
                                                 getGradleKotlinDslDependenciesTemplate(group, name, version)
@@ -172,12 +169,8 @@ fun RenderContext.publicContentListingPage() {
                                     }
                                 }
                             }
-                            a {
-                                img {
-                                    src("assets/img/settings.svg")
-                                    inlineStyle("width: 1.5rem; height: 1.5rem; margin-right: 0.5rem;")
-                                }
-                                className("button mr-2")
+                            a("button mr-2") {
+                                img { src("assets/img/settings.svg") }
                                 clicks handledBy { showLocalConfigDialog.update(true) }
                             }
                         }
@@ -218,7 +211,7 @@ fun RenderContext.publicContentListingPage() {
                             tr {
                                 td {
                                     if (entry.isDirectory) {
-                                        i("fa-solid fa-folder-open mr-2") {}
+                                        i("fa-regular fa-folder-open mr-2") {}
                                         a {
                                             className("has-text-link")
                                             +("${entry.name}/")
@@ -227,7 +220,7 @@ fun RenderContext.publicContentListingPage() {
                                             }
                                         }
                                     } else {
-                                        i("fa-solid fa-file mr-2") {}
+                                        i("fa-regular fa-file mr-2") {}
                                         a {
                                             className("has-text-dark")
                                             +entry.name

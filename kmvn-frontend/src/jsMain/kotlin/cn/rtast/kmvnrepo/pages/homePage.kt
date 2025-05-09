@@ -8,7 +8,6 @@
 package cn.rtast.kmvnrepo.pages
 
 import cn.rtast.kmvnrepo.components.infoToast
-import cn.rtast.kmvnrepo.components.pageFooter
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.entity.GetRepositoriesResponse
 import cn.rtast.kmvnrepo.entity.RepositoryVisibility
@@ -34,9 +33,7 @@ fun RenderContext.homePage() {
             div("container") {
                 h1("title is-3 has-text-left mt-4 mb-2") { +"Repositories" }
                 if (frontendConfig.description != null) {
-                    p("has-text-grey-dark mb-4") {
-                        +frontendConfig.description!!
-                    }
+                    p("has-text-grey-dark mb-4") { domNode.innerText = frontendConfig.description!! }
                 }
                 table("table is-striped is-hoverable is-fullwidth") {
                     thead {
@@ -58,10 +55,6 @@ fun RenderContext.homePage() {
                                 }
                                 td("is-narrow") {
                                     span("tag") {
-                                        when (repo.visibility) {
-                                            RepositoryVisibility.Public -> img("mr-2") { src("/assets/img/public-repo.svg") }
-                                            RepositoryVisibility.Internal -> img("mr-2") { width(14);src("/assets/img/protected-repo.svg") }
-                                        }
                                         b { +repo.visibility.desc }
                                     }
                                 }
