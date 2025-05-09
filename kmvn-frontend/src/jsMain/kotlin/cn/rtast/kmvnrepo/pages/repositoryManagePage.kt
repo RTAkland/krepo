@@ -65,7 +65,7 @@ fun RenderContext.publicContentListingPage() {
                     val basePath = StringBuilder("/#")
                     segments.forEachIndexed { index, segment ->
                         basePath.append("/").append(segment)
-                        a {
+                        a("path-hover") {
                             href(basePath.toString())
                             +segment
                         }
