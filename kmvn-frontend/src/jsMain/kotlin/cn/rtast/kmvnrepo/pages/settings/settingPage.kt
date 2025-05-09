@@ -8,7 +8,6 @@
 package cn.rtast.kmvnrepo.pages.settings
 
 import cn.rtast.kmvnrepo.components.infoToast
-import cn.rtast.kmvnrepo.components.pageFooter
 import cn.rtast.kmvnrepo.components.showDialog
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.entity.FrontendConfig
@@ -31,78 +30,68 @@ fun RenderContext.settingPage() {
         val showSubmitSettingDialog = storeOf(false)
         val showResetFrontConfigDialog = storeOf(false)
         coroutineScope.launch {
-            section("section") {
-                div("container") {
-                    div("box mx-auto") {
-                        h1("title is-4") { +"Frontend Settings" }
-                        div("columns is-multiline") {
-                            div("column is-full") {
-                                div("field") {
-                                    label("label") { +"Title" }
-                                    div("control") {
-                                        input("input") {
-                                            type("text")
-                                            value(pageTitleStore.data)
-                                            changes.values() handledBy pageTitleStore.update
-                                        }
-                                    }
-                                }
+            div("container") {
+                inlineStyle("max-width: 60%;")
+                h3("title is-3") { +"Update frontend settings" }
+                div("box") {
+                    div("field") {
+                        label("label") { +"Title" }
+                        div("control") {
+                            input("input") {
+                                type("text")
+                                placeholder("Fill in the frontend title here")
+                                value(pageTitleStore.current)
+                                changes.values() handledBy pageTitleStore.update
                             }
-                            div("column is-full") {
-                                div("field") {
-                                    label("label") {
-                                        +"ICP License"
-                                        div("control") {
-                                            input("input") {
-                                                type("text")
-                                                value(icpLicenseStore.current ?: "")
-                                                changes.values() handledBy icpLicenseStore.update
-                                            }
-                                        }
-                                    }
-                                }
+                        }
+                    }
+                    div("field") {
+                        label("label") { +"Description" }
+                        div("control") {
+                            input("input") {
+                                type("text")
+                                placeholder("Fill in the frontend description here")
+                                value(descriptionStore.current ?: "")
+                                changes.values() handledBy descriptionStore.update
                             }
-                            div("column is-full") {
-                                div("field") {
-                                    label("label") {
-                                        +"Description"
-                                    }
-                                    div("control") {
-                                        input("input") {
-                                            type("text")
-                                            value(descriptionStore.current ?: "")
-                                            changes.values() handledBy descriptionStore.update
-                                        }
-                                    }
-                                }
+                        }
+                    }
+                    div("field") {
+                        label("label") { +"Copyright" }
+                        div("control") {
+                            input("input") {
+                                type("text")
+                                placeholder("Fill in the frontend copyright here")
+                                value(copyrightStore.current)
+                                changes.values() handledBy copyrightStore.update
                             }
-                            div("column is-full") {
-                                div("field") {
-                                    label("label") { +"Copyright" }
-                                    div("control") {
-                                        input("input") {
-                                            type("text")
-                                            value(copyrightStore.current)
-                                            changes.values() handledBy copyrightStore.update
-                                        }
-                                    }
-                                }
+                        }
+                    }
+                    div("field") {
+                        label("label") { +"ICP License" }
+                        div("control") {
+                            input("input") {
+                                type("text")
+                                placeholder("Fill in the frontend ICP License here")
+                                value(icpLicenseStore.current ?: "")
+                                changes.values() handledBy icpLicenseStore.update
                             }
-                            div("field is-grouped mt-4") {
-                                div("control") {
-                                    button("button is-primary") {
-                                        +"Save"
-                                        clicks handledBy { showSubmitSettingDialog.update(true) }
-                                    }
-                                }
-                                div("control") {
-                                    button("button is-danger") {
-                                        +"Reset"
-                                        clicks handledBy { showResetFrontConfigDialog.update(true) }
-                                    }
-                                }
+                        }
+                    }
+                    div("is-grouped is-right buttons") {
+                        div("control") {
+                            button("button is-danger") {
+                                img("mr-2") { src("/assets/img/reset.svg") }
+                                +"Reset"
+                                clicks handledBy { showResetFrontConfigDialog.update(true) }
                             }
-                            hr {}
+                        }
+                        div("control") {
+                            button("button is-info") {
+                                img("mr-2") { src("/assets/img/save.svg") }
+                                +"Save"
+                                clicks handledBy { showSubmitSettingDialog.update(true) }
+                            }
                         }
                     }
                 }

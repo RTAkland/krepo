@@ -7,7 +7,10 @@
 
 package cn.rtast.kmvnrepo.pages.users
 
-import cn.rtast.kmvnrepo.components.*
+import cn.rtast.kmvnrepo.components.errorToast
+import cn.rtast.kmvnrepo.components.infoToast
+import cn.rtast.kmvnrepo.components.showDialog
+import cn.rtast.kmvnrepo.components.warningToast
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.util.auth
 import cn.rtast.kmvnrepo.util.file.checkSession
@@ -26,70 +29,51 @@ fun RenderContext.newUserPage() {
         val email = storeOf("")
         val password = storeOf("")
         val showCreateUserDialog = storeOf(false)
-        div("section") {
-            div("container") {
-                inlineStyle("max-width: 600px;")
-                h3("title is-3 has-text-centered mb-6") { +"Create User" }
-                div("box mx-auto") {
-                    div("columns is-multiline") {
-                        div("column is-full") {
-                            div("field") {
-                                label("label") { +"Username" }
-                                div("control has-icons-left") {
-                                    input("input") {
-                                        type("text")
-                                        placeholder("Username here")
-                                        value(username.data)
-                                        changes.values() handledBy username.update
-                                    }
-                                    span("icon is-small is-left") {
-                                        i("fas fa-user") {}
-                                    }
-                                }
-                            }
+        div("container") {
+            h3("title is-3") { +"Create a new user" }
+            inlineStyle("max-width: 50%;")
+            div("box") {
+                div("field") {
+                    label("label") { +"Username" }
+                    div("control has-icons-left") {
+                        span("icon is-small is-left mr-2") { i("fa-solid fa-user") {} }
+                        input("input") {
+                            type("text")
+                            placeholder("Fill in the username here")
+                            value(username.current)
+                            changes.values() handledBy username.update
                         }
-                        div("column is-full") {
-                            div("field") {
-                                label("label") { +"Email" }
-                                div("control has-icons-left") {
-                                    input("input") {
-                                        type("email")
-                                        placeholder("Email here")
-                                        value(email.data)
-                                        changes.values() handledBy email.update
-                                    }
-                                    span("icon is-small is-left") {
-                                        i("fas fa-envelope") {}
-                                    }
-                                }
-                            }
+                    }
+                }
+                div("field") {
+                    label("label") { +"Email" }
+                    div("control has-icons-left") {
+                        span("icon is-small is-left mr-2") { i("fa-solid fa-envelope") {} }
+                        input("input") {
+                            type("email")
+                            placeholder("Fill in the email here")
+                            value(email.current)
+                            changes.values() handledBy email.update
                         }
-                        div("column is-full") {
-                            div("field") {
-                                label("label") { +"Password" }
-                                div("control has-icons-left") {
-                                    input("input") {
-                                        type("password")
-                                        placeholder("Password here")
-                                        value(password.data)
-                                        changes.values() handledBy password.update
-                                    }
-                                    span("icon is-small is-left") {
-                                        i("fas fa-lock") {}
-                                    }
-                                }
-                            }
+                    }
+                }
+                div("field") {
+                    label("label") { +"Password" }
+                    div("control has-icons-left") {
+                        span("icon is-small is-key mr-2") { i("fa-solid fa-user") {} }
+                        input("input") {
+                            type("password")
+                            placeholder("Fill in the password here")
+                            value(password.current)
+                            changes.values() handledBy password.update
                         }
-                        div("column is-full") {
-                            div("field is-grouped is-grouped-right mt-5") {
-                                div("control") {
-                                    button("button is-link") {
-                                        i("fa-solid fa-plus mr-2") {}
-                                        +"Create"
-                                        clicks handledBy { showCreateUserDialog.update(true) }
-                                    }
-                                }
-                            }
+                    }
+                }
+                div("is-grouped is-right buttons") {
+                    div("control") {
+                        button("button is-info") {
+                            +"Confirm"
+                            clicks handledBy { showCreateUserDialog.update(true) }
                         }
                     }
                 }

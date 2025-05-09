@@ -52,67 +52,66 @@ fun RenderContext.mavenRepositorySettingPage() {
             val repositories = httpRequest("/@/api/repositories/all")
                 .auth().acceptJson().jsonContentType()
                 .get().body().fromJson<GetRepositoriesResponse>().data
-            section("section") {
-                div("container") {
-                    div("level") {
-                        div("level-left") {
-                            h3("title is-4") {
-                                i("fa-solid fa-house mr-2") {}
-                                +"Repository List"
-                            }
-                        }
-                        div("level-right") {
-                            button("button is-primary") {
-                                i("fa-solid fa-plus mr-2") {}
-                                +"Add Repository"
-                                clicks handledBy { showCreateRepositoryFormDialog.update(true) }
-                            }
+            section("container") {
+                inlineStyle("max-width: 60%")
+                div("level") {
+                    div("level-left") {
+                        h3("title is-4") {
+                            i("fa-solid fa-house mr-2") {}
+                            +"Repository List"
                         }
                     }
-                    repositories.forEach { repo ->
-                        div("box is-flex is-justify-content-space-between is-align-items-center") {
-                            span {
-                                when (repo.visibility) {
-                                    RepositoryVisibility.Internal -> i("fa-solid fa-eye-slash mr-2") {}
-                                    RepositoryVisibility.Public -> i("fa-solid fa-eye mr-2") {}
-                                }
-                                a("is-size-5") {
-                                    +repo.name
-                                    href("/#/${repo.name}")
-                                    title("Click to view the content of this repository")
-                                }
-                                i {
-                                    p {
-                                        when (repo.visibility) {
-                                            RepositoryVisibility.Internal -> inlineStyle("color: purple;")
-                                            RepositoryVisibility.Public -> inlineStyle("color: green;")
-                                        }
-                                        when (repo.status) {
-                                            RepositoryStatus.Deleted -> badge(BadgeType.Deleted) { i("fa-solid fa-xmark mr-2") {} }
-                                            RepositoryStatus.Created -> badge(BadgeType.Created) { i("fa-solid fa-hourglass mr-2") {} }
-                                            RepositoryStatus.Available -> badge(BadgeType.Available) { i("fa-solid fa-check mr-2") {} }
-                                            RepositoryStatus.Modified -> badge(BadgeType.Modified) { i("fa-solid fa-hourglass mr-2") {} }
-                                        }
-                                        +repo.visibility.desc
+                    div("level-right") {
+                        button("button is-primary") {
+                            i("fa-solid fa-plus mr-2") {}
+                            +"Add Repository"
+                            clicks handledBy { showCreateRepositoryFormDialog.update(true) }
+                        }
+                    }
+                }
+                repositories.forEach { repo ->
+                    div("box is-flex is-justify-content-space-between is-align-items-center") {
+                        span {
+                            when (repo.visibility) {
+                                RepositoryVisibility.Internal -> i("fa-solid fa-eye-slash mr-2") {}
+                                RepositoryVisibility.Public -> i("fa-solid fa-eye mr-2") {}
+                            }
+                            a("is-size-5") {
+                                +repo.name
+                                href("/#/${repo.name}")
+                                title("Click to view the content of this repository")
+                            }
+                            i {
+                                p {
+                                    when (repo.visibility) {
+                                        RepositoryVisibility.Internal -> inlineStyle("color: purple;")
+                                        RepositoryVisibility.Public -> inlineStyle("color: green;")
                                     }
+                                    when (repo.status) {
+                                        RepositoryStatus.Deleted -> badge(BadgeType.Deleted) { i("fa-solid fa-xmark mr-2") {} }
+                                        RepositoryStatus.Created -> badge(BadgeType.Created) { i("fa-solid fa-hourglass mr-2") {} }
+                                        RepositoryStatus.Available -> badge(BadgeType.Available) { i("fa-solid fa-check mr-2") {} }
+                                        RepositoryStatus.Modified -> badge(BadgeType.Modified) { i("fa-solid fa-hourglass mr-2") {} }
+                                    }
+                                    +repo.visibility.desc
                                 }
                             }
-                            div {
-                                button("button is-small is-info mr-2") {
-                                    i("fa-solid fa-user-pen mr-2") {}
-                                    +"Edit"
-                                    clicks handledBy {
-                                        selectedRepositoryName.update(repo.name)
-                                        showModifyRepositoryStore.update(true)
-                                    }
+                        }
+                        div {
+                            button("button is-small is-info mr-2") {
+                                i("fa-solid fa-user-pen mr-2") {}
+                                +"Edit"
+                                clicks handledBy {
+                                    selectedRepositoryName.update(repo.name)
+                                    showModifyRepositoryStore.update(true)
                                 }
-                                button("button is-small is-danger") {
-                                    i("fa-solid fa-trash mr-2") {}
-                                    +"Delete"
-                                    clicks handledBy {
-                                        selectedRepositoryName.update(repo.name)
-                                        showDeleteRepositoryDialog.update(true)
-                                    }
+                            }
+                            button("button is-small is-danger") {
+                                i("fa-solid fa-trash mr-2") {}
+                                +"Delete"
+                                clicks handledBy {
+                                    selectedRepositoryName.update(repo.name)
+                                    showDeleteRepositoryDialog.update(true)
                                 }
                             }
                         }

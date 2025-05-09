@@ -22,3 +22,7 @@ fun RenderContext.validateEmail(store: Store<String>): Boolean {
         false
     } else true
 }
+
+fun String.isEmailValidate(): Boolean =
+    if (this.isBlank()) false
+    else if (!emailRegex.matches(this)) false else true
