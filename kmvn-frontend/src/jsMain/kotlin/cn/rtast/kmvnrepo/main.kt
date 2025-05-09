@@ -54,7 +54,7 @@ fun main() {
                 .auth().acceptJson().jsonContentType()
                 .get()
             if (checkSessionValid.status == 401 && LocalStorage.TOKEN != null) {
-                warningToast("登录已过期")
+                warningToast("Session was expired")
                 LocalStorage.clearAll()
             }
         } catch (_: Exception) {

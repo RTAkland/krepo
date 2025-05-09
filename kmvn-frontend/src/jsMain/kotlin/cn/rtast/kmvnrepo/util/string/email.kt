@@ -15,10 +15,10 @@ private val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}
 
 fun RenderContext.validateEmail(store: Store<String>): Boolean {
     return if (store.current.isBlank()) {
-        warningToast("邮箱不能为空")
+        warningToast("Email must not be empty!")
         false
     } else if (!emailRegex.matches(store.current)) {
-        warningToast("邮箱格式不正确")
+        warningToast("The email format is incorrect!")
         false
     } else true
 }

@@ -8,7 +8,6 @@
 package cn.rtast.kmvnrepo.util.string
 
 import cn.rtast.kmvnrepo.backend
-import cn.rtast.kmvnrepo.frontendConfig
 
 fun getGradleKotlinDslRepositoryTemplate(repo: String): String = """
     |maven("${backend}/$repo")

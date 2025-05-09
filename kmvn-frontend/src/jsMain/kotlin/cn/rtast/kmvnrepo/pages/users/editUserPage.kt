@@ -7,7 +7,9 @@
 
 package cn.rtast.kmvnrepo.pages.users
 
-import cn.rtast.kmvnrepo.components.*
+import cn.rtast.kmvnrepo.components.infoToast
+import cn.rtast.kmvnrepo.components.showDialog
+import cn.rtast.kmvnrepo.components.warningToast
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.currentPath
 import cn.rtast.kmvnrepo.util.auth
@@ -31,18 +33,18 @@ fun RenderContext.editUserPage() {
                 inlineStyle("max-width: 600px;")
                 h3("title is-3 has-text-centered mb-6") {
                     i("fas fa-user-pen mr-2") {}
-                    +"修改用户信息"
+                    +"Update user info"
                 }
                 div("box mx-auto") {
                     div("columns is-multiline") {
                         div("column is-full") {
                             div("field") {
-                                label("label") { +"用户名" }
+                                label("label") { +"Username" }
                                 div("control has-icons-left") {
                                     input("input") {
                                         disabled(true)
                                         type("text")
-                                        placeholder("用户名")
+                                        placeholder("Input username here")
                                         value(user)
                                     }
                                     span("icon is-small is-left") {
@@ -53,11 +55,11 @@ fun RenderContext.editUserPage() {
                         }
                         div("column is-full") {
                             div("field") {
-                                label("label") { +"邮件地址" }
+                                label("label") { +"Email" }
                                 div("control has-icons-left") {
                                     input("input") {
                                         type("email")
-                                        placeholder("输入邮件地址")
+                                        placeholder("Input email address here")
                                         value(email.data)
                                         changes.values() handledBy email.update
                                     }
@@ -69,11 +71,11 @@ fun RenderContext.editUserPage() {
                         }
                         div("column is-full") {
                             div("field") {
-                                label("label") { +"密码" }
+                                label("label") { +"Password" }
                                 div("control has-icons-left") {
                                     input("input") {
                                         type("password")
-                                        placeholder("输入密码")
+                                        placeholder("Input password here")
                                         value(password.data)
                                         changes.values() handledBy password.update
                                     }
@@ -87,7 +89,7 @@ fun RenderContext.editUserPage() {
                                     div("control") {
                                         button("button is-link") {
                                             i("fa-solid fa-pen-to-square mr-2") {}
-                                            +"更新用户信息"
+                                            +"Update user info"
                                             clicks handledBy { showUpdateUserDialog.update(true) }
                                         }
                                     }
@@ -98,9 +100,9 @@ fun RenderContext.editUserPage() {
                 }
             }
         }
-        showDialog(showUpdateUserDialog, "更新用户信息", "是否确定更新用户信息", {}) {
+        showDialog(showUpdateUserDialog, "Update User Info", "Do you want to update the user info?", {}) {
             if (password.current.isBlank() || email.current.isBlank()) {
-                warningToast("请填写所有必要的的信息")
+                warningToast("Please fill in all fields")
             } else {
                 if (validateEmail(email)) {
                     val requestBody = mapOf(
@@ -112,7 +114,7 @@ fun RenderContext.editUserPage() {
                         httpRequest("/@/api/user/$user")
                             .auth().acceptJson().jsonContentType()
                             .setBody(requestBody).put().body()
-                        infoToast("用户信息更新成功")
+                        infoToast("User info updated")
                         window.location.href = "/#/user/manage"
                     }
                 }

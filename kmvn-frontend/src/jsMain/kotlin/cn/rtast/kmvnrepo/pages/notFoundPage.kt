@@ -21,13 +21,10 @@ fun RenderContext.notFoundPage() {
             }
         }
         h1("title is-3") {
-            +"这里啥都没有"
-        }
-        h1("subtitle is-3") {
             +"There's nothing here."
         }
         a("button is-danger") {
-            +"返回主页"
+            +"Back to home page"
             href("/#/")
         }
     }

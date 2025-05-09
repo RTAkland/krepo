@@ -29,16 +29,16 @@ fun RenderContext.newUserPage() {
         div("section") {
             div("container") {
                 inlineStyle("max-width: 600px;")
-                h3("title is-3 has-text-centered mb-6") { +"创建用户" }
+                h3("title is-3 has-text-centered mb-6") { +"Create User" }
                 div("box mx-auto") {
                     div("columns is-multiline") {
                         div("column is-full") {
                             div("field") {
-                                label("label") { +"用户名" }
+                                label("label") { +"Username" }
                                 div("control has-icons-left") {
                                     input("input") {
                                         type("text")
-                                        placeholder("请输入用户名")
+                                        placeholder("Username here")
                                         value(username.data)
                                         changes.values() handledBy username.update
                                     }
@@ -50,11 +50,11 @@ fun RenderContext.newUserPage() {
                         }
                         div("column is-full") {
                             div("field") {
-                                label("label") { +"邮件地址" }
+                                label("label") { +"Email" }
                                 div("control has-icons-left") {
                                     input("input") {
                                         type("email")
-                                        placeholder("请输入邮件地址")
+                                        placeholder("Email here")
                                         value(email.data)
                                         changes.values() handledBy email.update
                                     }
@@ -66,11 +66,11 @@ fun RenderContext.newUserPage() {
                         }
                         div("column is-full") {
                             div("field") {
-                                label("label") { +"密码" }
+                                label("label") { +"Password" }
                                 div("control has-icons-left") {
                                     input("input") {
                                         type("password")
-                                        placeholder("请输入密码")
+                                        placeholder("Password here")
                                         value(password.data)
                                         changes.values() handledBy password.update
                                     }
@@ -85,7 +85,7 @@ fun RenderContext.newUserPage() {
                                 div("control") {
                                     button("button is-link") {
                                         i("fa-solid fa-plus mr-2") {}
-                                        +"创建"
+                                        +"Create"
                                         clicks handledBy { showCreateUserDialog.update(true) }
                                     }
                                 }
@@ -95,9 +95,9 @@ fun RenderContext.newUserPage() {
                 }
             }
         }
-        showDialog(showCreateUserDialog, "创建用户", "是否确定创建用户", {}) {
+        showDialog(showCreateUserDialog, "Create User", "Do you want to create the user?", {}) {
             if (username.current.isBlank() || password.current.isBlank() || email.current.isBlank()) {
-                warningToast("请填写所有必要的的信息")
+                warningToast("Please fill in all fields")
             } else {
                 if (validateEmail(email)) {
                     val requestBody = mapOf(
@@ -111,13 +111,13 @@ fun RenderContext.newUserPage() {
                             .setBody(requestBody).post().body().fromJson<Map<String, String>>()
                         val code = result["code"]!!.toInt()
                         if (code == 200) {
-                            infoToast("用户创建成功")
+                            infoToast("User created")
                             window.location.href = "/#/user/manage"
                         } else {
-                            errorToast("创建用户失败! ${result["message"]}")
+                            errorToast("Failed to create user! ${result["message"]}")
                         }
                     }
-                    infoToast("正在创建中...")
+                    infoToast("Creating...")
                 }
             }
         }

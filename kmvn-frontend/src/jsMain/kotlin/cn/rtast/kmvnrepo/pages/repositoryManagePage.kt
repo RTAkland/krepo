@@ -39,7 +39,7 @@ fun RenderContext.publicContentListingPage() {
             if (LocalStorage.TOKEN != null) {
                 if (!http("$backend/@/api/user").auth().get().ok) {
                     LocalStorage.clearAll()
-                    infoToast("登录已过期~")
+                    infoToast("Session was expired~")
                 }
             }
         } catch (e: Exception) {
@@ -52,7 +52,7 @@ fun RenderContext.publicContentListingPage() {
             div("has-text-centered") { notFoundPage() }
             return@launch
         }
-        require(response.ok) { errorToast("获取文件列表失败!") }
+        require(response.ok) { errorToast("Failed to fetch repository contents!") }
         val responseJson = response.body().fromJson<Contents>()
         val artifacts = responseJson.data.toMutableList()
         div("container") {
@@ -81,8 +81,8 @@ fun RenderContext.publicContentListingPage() {
                                 val parentPath = currentPath.trimEnd('/').substringBeforeLast('/', "")
                                 href("/#$parentPath")
                                 className("button is-link")
-                                +"上一级"
-                            }.tooltip { +"GO UP" }
+                                +"Go Up"
+                            }
                         }
                         div("level-right") {
                             if (artifacts.any {
@@ -100,12 +100,12 @@ fun RenderContext.publicContentListingPage() {
                                 div("dropdown has-dropdown is-hoverable has-background") {
                                     button("button") {
                                         i("fa-solid fa-copy mr-2") {}
-                                        +"复制坐标"
+                                        +"Copy Dependencies URL"
                                         clicks handledBy {
                                             window.navigator.clipboard.writeText(
                                                 getGradleKotlinDslDependenciesTemplate(group, name, version)
                                             )
-                                            infoToast("已复制Gradle Kotlin DSL")
+                                            infoToast("Gradle Kotlin DSL Dependencies Coordinate Copied")
                                         }
                                     }
                                     div("dropdown-menu") {
@@ -123,7 +123,7 @@ fun RenderContext.publicContentListingPage() {
                                                     window.navigator.clipboard.writeText(
                                                         getGradleKotlinDslDependenciesTemplate(group, name, version)
                                                     )
-                                                    infoToast("已复制Gradle Kotlin DSL依赖坐标")
+                                                    infoToast("Gradle Kotlin DSL Dependencies Coordinate Copied")
                                                 }
                                             }
                                             a("dropdown-item") {
@@ -137,7 +137,7 @@ fun RenderContext.publicContentListingPage() {
                                                     window.navigator.clipboard.writeText(
                                                         getGradleGroovyDslDependenciesTemplate(group, name, version)
                                                     )
-                                                    infoToast("已复制Gradle Groovy DSL依赖坐标")
+                                                    infoToast("Gradle Groovy DSL Dependencies Coordinate Copied")
                                                 }
                                             }
                                             a("dropdown-item") {
@@ -151,7 +151,7 @@ fun RenderContext.publicContentListingPage() {
                                                     window.navigator.clipboard.writeText(
                                                         getMavenDependenciesTemplate(group, name, version)
                                                     )
-                                                    infoToast("已复制Maven依赖坐标")
+                                                    infoToast("Maven Dependencies Coordinate Copied")
                                                 }
                                             }
                                             a("dropdown-item") {
@@ -165,7 +165,7 @@ fun RenderContext.publicContentListingPage() {
                                                     window.navigator.clipboard.writeText(
                                                         getSBTDependenciesTemplate(group, name, version)
                                                     )
-                                                    infoToast("已复制SBT依赖坐标")
+                                                    infoToast("SBT Dependencies Coordinate Copied")
                                                 }
                                             }
                                         }
@@ -178,9 +178,9 @@ fun RenderContext.publicContentListingPage() {
                                     inlineStyle("width: 1.5rem; height: 1.5rem; margin-right: 0.5rem;")
                                 }
                                 className("button is-link mr-2")
-                                +" 设置"
+                                +"Settings"
                                 clicks handledBy { showLocalConfigDialog.update(true) }
-                            }.tooltip { +"Settings" }
+                            }
                         }
                     }
                 }
@@ -189,19 +189,19 @@ fun RenderContext.publicContentListingPage() {
                 table("table is-fullwidth is-striped is-hoverable") {
                     thead {
                         tr {
-                            th { +"名称 / Name" }
+                            th { +"Name" }
                             th {
                                 inlineStyle("text-align: center;")
-                                +"修改时间 / Last modified date"
+                                +"Last modified date"
                             }
                             th {
                                 inlineStyle("text-align: center;")
-                                +"大小 / Size"
+                                +"Size"
                             }
                             if (LocalStorage.TOKEN != null) {
                                 th {
                                     inlineStyle("text-align: center;")
-                                    +"操作 / Action"
+                                    +"Action"
                                 }
                             }
                         }
@@ -219,6 +219,7 @@ fun RenderContext.publicContentListingPage() {
                             tr {
                                 td {
                                     if (entry.isDirectory) {
+                                        i("fa-solid fa-folder-open mr-2") {}
                                         a {
                                             className("has-text-link")
                                             +("${entry.name}/")
@@ -227,6 +228,7 @@ fun RenderContext.publicContentListingPage() {
                                             }
                                         }
                                     } else {
+                                        i("fa-solid fa-file mr-2") {}
                                         a {
                                             className("has-text-dark")
                                             +entry.name
@@ -266,15 +268,7 @@ fun RenderContext.publicContentListingPage() {
                 }
             } else {
                 h3("title is-3 has-text-centered") {
-                    img {
-                        width(24)
-                        src("assets/img/psychology_alt_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.svg")
-                        alt("assets/img/psychology_alt_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.svg")
-                    }
-                    span("material-symbols-outlined") {}
-                    h4("title is-4 has-text-centered") {
-                        +"这个仓库什么都没有"
-                    }
+                    img { src("assets/img/thinking.svg") }
                     h4("title is-4 has-text-centered") {
                         +"There's nothing in this repository."
                     }
@@ -283,7 +277,7 @@ fun RenderContext.publicContentListingPage() {
             hr { className("mt-6") }
         }
     }
-    showDialog(showDeleteFileEntryDialog, "删除构件/包", "是否删除以下内容?", {
+    showDialog(showDeleteFileEntryDialog, "Delete the artifacts/packages", "Delete the following contents?", {
         i { +selectedFileEntry.current }
     }) {
         coroutineScope.launch {
@@ -293,9 +287,9 @@ fun RenderContext.publicContentListingPage() {
                 .delete()
             window.location.reload()
         }
-        infoToast("正在删除中...")
+        infoToast("Deleting...")
     }
-    showDialog(showLocalConfigDialog, "更改配置", null, {
+    showDialog(showLocalConfigDialog, "Change Settings", null, {
         div("mb-4") {
             label("switch") {
                 input {
@@ -308,12 +302,11 @@ fun RenderContext.publicContentListingPage() {
                 }
                 span("slider round") {}
             }
-            span("ml-2") { +"隐藏 .sha1 / .sha256 / .sha512 / .md5 / .asc 等文件列出" }
-                .tooltip { +"Hidden hash files like .sha1 / .sha256 / .sha512 / .md5 / .asc to prevent them be listed" }
+            span("ml-2") { +"Hidden hash files" }
         }
     }) {
         LocalStorage.HIDDEN_HASH_FILES = hiddenHashFilesToggle.current.toString().toBoolean()
-        infoToast("保存成功")
+        infoToast("Saved")
         window.setTimeout({ window.location.reload() }, 0.5.seconds.inWholeMilliseconds.toInt())
     }
 }

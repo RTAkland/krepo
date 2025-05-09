@@ -8,8 +8,6 @@
 package cn.rtast.kmvnrepo.pages.settings
 
 import cn.rtast.kmvnrepo.components.infoToast
-import cn.rtast.kmvnrepo.components.navbar
-import cn.rtast.kmvnrepo.components.pageFooter
 import cn.rtast.kmvnrepo.components.showDialog
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.entity.FrontendConfig
@@ -35,11 +33,11 @@ fun RenderContext.settingPage() {
             section("section") {
                 div("container") {
                     div("box mx-auto") {
-                        h1("title is-4") { +"前端配置" }
+                        h1("title is-4") { +"Frontend Settings" }
                         div("columns is-multiline") {
                             div("column is-full") {
                                 div("field") {
-                                    label("label") { +"页面标题" }
+                                    label("label") { +"Title" }
                                     div("control") {
                                         input("input") {
                                             type("text")
@@ -52,7 +50,7 @@ fun RenderContext.settingPage() {
                             div("column is-full") {
                                 div("field") {
                                     label("label") {
-                                        +"ICP备案"
+                                        +"ICP License"
                                         div("control") {
                                             input("input") {
                                                 type("text")
@@ -66,7 +64,7 @@ fun RenderContext.settingPage() {
                             div("column is-full") {
                                 div("field") {
                                     label("label") {
-                                        +"网站描述"
+                                        +"Description"
                                     }
                                     div("control") {
                                         input("input") {
@@ -79,7 +77,7 @@ fun RenderContext.settingPage() {
                             }
                             div("column is-full") {
                                 div("field") {
-                                    label("label") { +"版权信息" }
+                                    label("label") { +"Copyright" }
                                     div("control") {
                                         input("input") {
                                             type("text")
@@ -92,13 +90,13 @@ fun RenderContext.settingPage() {
                             div("field is-grouped mt-4") {
                                 div("control") {
                                     button("button is-primary") {
-                                        +"保存设置"
+                                        +"Save"
                                         clicks handledBy { showSubmitSettingDialog.update(true) }
                                     }
                                 }
                                 div("control") {
                                     button("button is-danger") {
-                                        +"重置为默认"
+                                        +"Reset"
                                         clicks handledBy { showResetFrontConfigDialog.update(true) }
                                     }
                                 }
@@ -109,7 +107,7 @@ fun RenderContext.settingPage() {
                 }
             }
         }
-        showDialog(showSubmitSettingDialog, "保存更改", "是否要保存更改?", {}) {
+        showDialog(showSubmitSettingDialog, "Saving the changes", "Do you want to save these changes?", {}) {
             val pageTitle = pageTitleStore.current
             val icpLicense = icpLicenseStore.current
             val description = descriptionStore.current
@@ -119,16 +117,16 @@ fun RenderContext.settingPage() {
                     .auth().acceptJson().jsonContentType()
                     .setBody(FrontendConfig(pageTitle, icpLicense, description, copyright))
                     .put()
-                infoToast("更改成功!")
+                infoToast("Saved!")
                 window.location.reload()
             }
         }
-        showDialog(showResetFrontConfigDialog, "重置设置", "是否要重置前端设置?", {}) {
+        showDialog(showResetFrontConfigDialog, "Reset", "Do you want to reset the frontend settings?", {}) {
             coroutineScope.launch {
                 httpRequest("/@/api/config/frontend/reset")
                     .auth().acceptJson().jsonContentType()
                     .put()
-                infoToast("重置成功!")
+                infoToast("Rested!")
                 window.location.reload()
             }
         }

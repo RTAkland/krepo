@@ -19,7 +19,6 @@ import cn.rtast.kmvnrepo.util.jsonContentType
 import cn.rtast.kmvnrepo.util.string.fromJson
 import cn.rtast.kmvnrepo.util.string.toBase64
 import dev.fritz2.core.*
-import dev.fritz2.headless.components.tooltip
 import dev.fritz2.remote.http
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
@@ -57,30 +56,30 @@ fun RenderContext.navbar() {
                     div("navbar-item has-dropdown is-hoverable") {
                         a("navbar-link") {
                             i("fa-solid fa-users") {}
-                            +"用户"
+                            +"Users"
                         }
                         div("navbar-dropdown") {
                             a("navbar-item") {
                                 href("/#/user/manage")
                                 i("fa-solid fa-users") {}
-                                +"用户列表"
+                                +"User List"
                             }
                             a("navbar-item") {
                                 href("/#/user/create")
                                 i("fa-solid fa-user-plus") {}
-                                +"创建用户"
+                                +"Create User"
                             }
                         }
                     }
                     div("navbar-item has-dropdown is-hoverable") {
                         a("navbar-link") {
                             i("fa-solid fa-gear") {}
-                            +"设置"
+                            +"Settings"
                         }
                         div("navbar-dropdown") {
                             a("navbar-item") {
                                 i("fa-solid fa-globe") {}
-                                +"前端设置"
+                                +"Frontend Settings"
                                 href("/#/setting")
                             }
                             a("navbar-item") {
@@ -89,7 +88,7 @@ fun RenderContext.navbar() {
                                     src("assets/img/garage_door_16dp_1F1F1F_FILL0_wght400_GRAD0_opsz20.svg")
                                     alt("assets/img/garage_door_16dp_1F1F1F_FILL0_wght400_GRAD0_opsz20.svg")
                                 }
-                                +"仓库设置"
+                                +"Repository Settings"
                                 href("/#/setting/repository")
                             }
                         }
@@ -102,9 +101,9 @@ fun RenderContext.navbar() {
                         if (LocalStorage.TOKEN == null) {
                             a("button is-light") {
                                 i("fa-solid fa-right-to-bracket mr-2") {}
-                                +"登录"
+                                +"Login"
                                 clicks handledBy { showLoginDialog.update(true) }
-                            }.tooltip { +"Login" }
+                            }
                         } else {
                             figure("image is-32x26") {
                                 img {
@@ -119,39 +118,39 @@ fun RenderContext.navbar() {
                                     a {
                                         href("/#/user/edit?username=${LocalStorage.CURRENT_USERNAME!!}")
                                         +LocalStorage.CURRENT_USERNAME!!
-                                        title("修改用户信息 / Update my info")
+                                        title("Update my info")
                                     }
                                 }
                             }
                             a("button is-light") {
                                 i("fa-solid fa-right-from-bracket mr-2") {}
-                                +"登出"
+                                +"Logout"
                                 clicks handledBy { showLogoutDialog.update(true) }
-                            }.tooltip { +"Logout" }
+                            }
                         }
                     }
                 }
             }
         }
     }
-    showDialog(showLoginDialog, "登录", null, {
+    showDialog(showLoginDialog, "Login", null, {
         div("field") {
-            label("label") { +"用户名" }
+            label("label") { +"Username" }
             div("control") {
                 input("input") {
                     type("text")
-                    placeholder("请输入用户名")
+                    placeholder("Fill in username here")
                     value(username.data)
                     changes.values() handledBy username.update
                 }
             }
         }
         div("field") {
-            label("label") { +"密码" }
+            label("label") { +"Password" }
             div("control") {
                 input("input") {
                     type("password")
-                    placeholder("请输入密码")
+                    placeholder("Fill in password here")
                     value(password.data)
                     changes.values() handledBy password.update
                 }
@@ -171,23 +170,21 @@ fun RenderContext.navbar() {
                 LocalStorage.EMAIL_ADDRESS = response.email
                 LocalStorage.AVATAR = avatarUrl
                 LocalStorage.HIDDEN_HASH_FILES = true
-                infoToast("登陆成功")
+                infoToast("Logged in")
                 window.location.reload()
-            } else warningToast("用户名或密码不正确!")
+            } else warningToast("Username or password is incorrect!")
         }
     }
 
-    showDialog(showLogoutDialog, "退出登录", "是否要退出登录", {}) {
+    showDialog(showLogoutDialog, "Logout", "Do you want to logout?", {}) {
         coroutineScope.launch {
             httpRequest("/@/api/logout").auth().acceptJson().jsonContentType().post()
             LocalStorage.TOKEN = null
             LocalStorage.CURRENT_USERNAME = null
             LocalStorage.AVATAR = null
             LocalStorage.EMAIL_ADDRESS = null
-            infoToast("登出成功")
             window.location.href = "/#/"
             window.location.reload()
         }
-        infoToast("正在退出登录...")
     }
 }

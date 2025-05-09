@@ -40,12 +40,12 @@ fun RenderContext.showDialog(
                         div("buttons is-right") {
                             button("button is-right") {
                                 i("fa-solid fa-ban mr-2") {}
-                                +"取消"
+                                +"Cancel"
                                 clicks handledBy { showDialog.update(false) }
                             }
                             button("button is-info is-right") {
                                 i("fa-solid fa-check mr-2") {}
-                                +"确认"
+                                +"Confirm"
                                 clicks handledBy {
                                     showDialog.update(false)
                                     dialogAction()

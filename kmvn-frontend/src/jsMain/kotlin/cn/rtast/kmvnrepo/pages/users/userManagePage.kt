@@ -34,7 +34,7 @@ fun RenderContext.userManagePage() {
             div("container") {
                 h2("title is-3 mt-4 mb-4") {
                     i("fa-solid fa-users mr-2") {}
-                    +"用户列表"
+                    +"User List"
                 }
                 div("columns is-multiline") {
                     users.forEach { user ->
@@ -46,14 +46,14 @@ fun RenderContext.userManagePage() {
                                     div("buttons") {
                                         button("button is-small is-link") {
                                             i("fa-solid fa-user-pen mr-2") {}
-                                            +"编辑"
+                                            +"Edit"
                                             clicks handledBy {
                                                 window.location.href = "/#/user/edit?username=${user.name}"
                                             }
                                         }
                                         button("button is-small is-danger") {
                                             i("fa-solid fa-trash mr-2") {}
-                                            +"删除"
+                                            +"Delete"
                                             clicks handledBy {
                                                 selectedUser.update(user)
                                                 showDeleteUserDialog.update(true)
@@ -67,15 +67,15 @@ fun RenderContext.userManagePage() {
                 }
             }
         }
-        showDialog(showDeleteUserDialog, "删除用户", "是否要删除该用户", {}) {
+        showDialog(showDeleteUserDialog, "Delete User", "Do you want to delete the user?", {}) {
             coroutineScope.launch {
                 httpRequest("/@/api/user/${selectedUser.current!!.name}")
                     .auth().acceptJson().jsonContentType()
                     .delete()
-                infoToast("删除成功")
+                infoToast("Deleted")
                 window.location.reload()
             }
-            infoToast("正在删除中...")
+            infoToast("Deleting...")
         }
     }
 }

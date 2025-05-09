@@ -58,13 +58,13 @@ fun RenderContext.mavenRepositorySettingPage() {
                         div("level-left") {
                             h3("title is-4") {
                                 i("fa-solid fa-house mr-2") {}
-                                +"仓库列表"
+                                +"Repository List"
                             }
                         }
                         div("level-right") {
                             button("button is-primary") {
                                 i("fa-solid fa-plus mr-2") {}
-                                +"添加仓库"
+                                +"Add Repository"
                                 clicks handledBy { showCreateRepositoryFormDialog.update(true) }
                             }
                         }
@@ -79,7 +79,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                                 a("is-size-5") {
                                     +repo.name
                                     href("/#/${repo.name}")
-                                    title("点击查看仓库内容 / Click to view the content of this repository")
+                                    title("Click to view the content of this repository")
                                 }
                                 i {
                                     p {
@@ -100,7 +100,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                             div {
                                 button("button is-small is-info mr-2") {
                                     i("fa-solid fa-user-pen mr-2") {}
-                                    +"编辑"
+                                    +"Edit"
                                     clicks handledBy {
                                         selectedRepositoryName.update(repo.name)
                                         showModifyRepositoryStore.update(true)
@@ -108,7 +108,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                                 }
                                 button("button is-small is-danger") {
                                     i("fa-solid fa-trash mr-2") {}
-                                    +"删除"
+                                    +"Delete"
                                     clicks handledBy {
                                         selectedRepositoryName.update(repo.name)
                                         showDeleteRepositoryDialog.update(true)

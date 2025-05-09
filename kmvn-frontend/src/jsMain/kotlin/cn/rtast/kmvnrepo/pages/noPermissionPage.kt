@@ -7,8 +7,6 @@
 
 package cn.rtast.kmvnrepo.pages
 
-import cn.rtast.kmvnrepo.components.navbar
-import cn.rtast.kmvnrepo.components.pageFooter
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.href
 import kotlinx.browser.window
@@ -19,11 +17,11 @@ fun RenderContext.noPermission() {
     div("container has-text-centered mt-6") {
         div("box") {
             span("icon is-large has-text-danger") { i("fas fa-ban fa-3x") {} }
-            h1("title is-3 mt-4") { +"访问被拒绝" }
-            p("subtitle is-5") { +"你没有权限访问此页面" }
-            p("subtitle is-5") { +"你将在5秒后被重定向到主页" }
+            h1("title is-3 mt-4") { +"Access Denied" }
+            p("subtitle is-5") { +"You Do Not have permission to view this page" }
+            p("subtitle is-5") { +"You will be redirect to / in 5 seconds" }
             a("button is-danger mt-4") {
-                +"返回主页"
+                +"Back to home page"
                 href("/#/")
             }
         }

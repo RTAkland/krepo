@@ -11,5 +11,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class RepositoryVisibility(val desc: String) {
-    Public("公开仓库"), Internal("私有仓库")
+    Public("Public"), Internal("Internal")
 }
