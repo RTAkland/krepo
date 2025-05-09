@@ -9,7 +9,7 @@ package cn.rtast.kmvnrepo.util.manager
 
 import cn.rtast.kmvnrepo.i18nManager
 import cn.rtast.kmvnrepo.resources.getResource
-import cn.rtast.kmvnrepo.util.fromJson
+import cn.rtast.kmvnrepo.util.string.fromJson
 import cn.rtast.kmvnrepo.util.getLanguage
 import io.ktor.server.application.ApplicationCall
 

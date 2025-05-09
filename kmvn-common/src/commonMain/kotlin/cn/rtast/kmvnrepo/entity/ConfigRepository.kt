@@ -16,7 +16,8 @@ data class ConfigRepository(
     val visibility: RepositoryVisibility,
     val acceptExtensions: List<String>,
     val allowSnapshot: Boolean,
-    var status: RepositoryStatus
+    var status: RepositoryStatus,
+    var proxiedRepositories: List<ProxiedRepository>
 )
 
 typealias CreateRepository = ConfigRepository
@@ -28,5 +29,6 @@ data class ModifyRepository(
     val visibility: RepositoryVisibility,
     val acceptExtensions: List<String>,
     val allowSnapshot: Boolean,
-    var status: RepositoryStatus
+    var status: RepositoryStatus,
+    val proxiedRepositories: List<ProxiedRepository>
 )

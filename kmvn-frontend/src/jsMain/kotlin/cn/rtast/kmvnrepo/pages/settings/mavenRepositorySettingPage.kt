@@ -157,7 +157,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                     .setBody(
                         CreateRepository(
                             name, visibility, allowedExtensions.split("\n"), allowSnapshot,
-                            RepositoryStatus.Created
+                            RepositoryStatus.Created, listOf()
                         )
                     )
                     .post().body().fromJson<CreateRepositoryResponse>()
@@ -192,7 +192,8 @@ fun RenderContext.mavenRepositorySettingPage() {
                             visibility,
                             allowedExtensions.split("\n"),
                             allowSnapshot,
-                            RepositoryStatus.Modified
+                            RepositoryStatus.Modified,
+                            listOf()
                         ).apply { println(this.toJson()) }
                     ).put().body().fromJson<ModifyRepositoryResponse>()
                 when (result.code) {

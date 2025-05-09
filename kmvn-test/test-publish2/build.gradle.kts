@@ -14,19 +14,22 @@ version = "0.0.2"
 
 kotlin {
     mingwX64()
-//    jvm()
+    jvm()
 
     sourceSets {
         commonMain.dependencies {
 //            implementation("cn.rtast.kmvnrepo:test-publish:0.0.3")
+        }
+
+        jvmMain.dependencies {
+            implementation("cn.rtast.jvmonly-linter:cn.rtast.jvmonly-linter.gradle.plugin:0.1.18")
         }
     }
 }
 
 repositories {
     mavenLocal()
-//    maven("http://127.0.0.1:9098/releases")
-    maven("http://192.168.10.222:9098/snapshots") {
+    maven("http://127.0.0.1:9098/releases") {
         isAllowInsecureProtocol = true
     }
 }

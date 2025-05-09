@@ -19,5 +19,5 @@ data class Config(
     val repositories: List<ConfigRepository>,
     val allowFileListing: Boolean,
     val frontend: String,
-    val frontendConfig: FrontendConfig
+    val frontendConfig: FrontendConfig,
 )

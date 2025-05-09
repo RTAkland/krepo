@@ -9,7 +9,7 @@
 @file:OptIn(ExperimentalSerializationApi::class)
 @file:Suppress("unused")
 
-package cn.rtast.kmvnrepo.util
+package cn.rtast.kmvnrepo.util.string
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json

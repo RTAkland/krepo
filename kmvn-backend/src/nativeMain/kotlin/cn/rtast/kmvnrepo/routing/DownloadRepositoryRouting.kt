@@ -10,13 +10,14 @@ package cn.rtast.kmvnrepo.routing
 
 import cn.rtast.kmvnrepo.internalRepositories
 import cn.rtast.kmvnrepo.publicRepositories
-import cn.rtast.kmvnrepo.util.exists
-import cn.rtast.kmvnrepo.util.rawSource
-import cn.rtast.kmvnrepo.util.rootPathOf
-import io.ktor.http.*
+import cn.rtast.kmvnrepo.repositories
+import cn.rtast.kmvnrepo.util.string.exists
+import cn.rtast.kmvnrepo.util.getProxiedArtifacts
+import cn.rtast.kmvnrepo.util.string.rawSource
+import cn.rtast.kmvnrepo.util.string.rootPathOf
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.plugins.autohead.AutoHeadResponse
+import io.ktor.server.plugins.autohead.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
@@ -25,7 +26,11 @@ private suspend fun ApplicationCall.serveFile(repository: String) {
     val file = rootPathOf(path)
     if (file.exists()) {
         this.respondSource(file.rawSource())
-    } else this.respond(HttpStatusCode.NotFound)
+    } else getProxiedArtifacts(
+        repositories.find { it.name == repository }!!.proxiedRepositories,
+        parameters.getAll("path")!!.joinToString("/"),
+        repository
+    )
 }
 
 fun Application.configureDownloadRouting() {

@@ -8,7 +8,7 @@
 @file:Suppress("unused")
 @file:OptIn(ExperimentalForeignApi::class, ExperimentalTime::class, ExperimentalNativeApi::class)
 
-package cn.rtast.kmvnrepo.util
+package cn.rtast.kmvnrepo.util.string
 
 import cn.rtast.kmvnrepo.ROOT_PATH
 import io.ktor.utils.io.core.*

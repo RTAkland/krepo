@@ -5,7 +5,7 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-package cn.rtast.kmvnrepo.util
+package cn.rtast.kmvnrepo.util.string
 
 import nl.adaptivity.xmlutil.serialization.XML
 
