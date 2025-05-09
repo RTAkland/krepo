@@ -10,6 +10,7 @@ package cn.rtast.kmvnrepo.pages
 import cn.rtast.kmvnrepo.backend
 import cn.rtast.kmvnrepo.components.errorToast
 import cn.rtast.kmvnrepo.components.infoToast
+import cn.rtast.kmvnrepo.components.pageFooter
 import cn.rtast.kmvnrepo.components.showDialog
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.currentPath
@@ -77,10 +78,9 @@ fun RenderContext.publicContentListingPage() {
                 div("mb-4") {
                     div("level") {
                         div("level-left") {
-                            a {
+                            a("button") {
                                 val parentPath = currentPath.trimEnd('/').substringBeforeLast('/', "")
                                 href("/#$parentPath")
-                                className("button is-link")
                                 +"Go Up"
                             }
                         }
@@ -174,11 +174,10 @@ fun RenderContext.publicContentListingPage() {
                             }
                             a {
                                 img {
-                                    src("assets/setting.svg")
+                                    src("assets/img/settings.svg")
                                     inlineStyle("width: 1.5rem; height: 1.5rem; margin-right: 0.5rem;")
                                 }
-                                className("button is-link mr-2")
-                                +"Settings"
+                                className("button mr-2")
                                 clicks handledBy { showLocalConfigDialog.update(true) }
                             }
                         }

@@ -67,6 +67,7 @@ fun main() {
         render("#target") {
             navbar()
             main {
+                inlineStyle("flex-grow: 1;")
                 router.data.render { site ->
                     currentPath = site
                     if (site.startsWith("/user/edit")) editUserPage()

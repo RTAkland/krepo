@@ -7,6 +7,7 @@
 
 package cn.rtast.kmvnrepo.pages
 
+import cn.rtast.kmvnrepo.components.pageFooter
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.alt
 import dev.fritz2.core.href

@@ -8,6 +8,7 @@
 package cn.rtast.kmvnrepo.pages.settings
 
 import cn.rtast.kmvnrepo.components.infoToast
+import cn.rtast.kmvnrepo.components.pageFooter
 import cn.rtast.kmvnrepo.components.showDialog
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.entity.FrontendConfig

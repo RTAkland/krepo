@@ -120,11 +120,10 @@ fun RenderContext.mavenRepositorySettingPage() {
                 }
             }
         }
-
         showDialog(
             showDeleteRepositoryDialog,
-            "删除仓库",
-            "是否要删除仓库? 删除仓库只是逻辑上删除, 文件夹并不会被删除",
+            "Delete the repository",
+            "Do you want to delete the repository? Deleting a repository is only a logical deletion, the folder will not be deleted",
             {}) {
             coroutineScope.launch {
                 val result = httpRequest("/@/api/repositories/delete")
@@ -134,7 +133,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                 when (result.code) {
                     200 -> infoToast(result.message)
                     409 -> warningToast(result.message)
-                    else -> errorToast("未知错误!")
+                    else -> errorToast("Unknown error!")
                 }
                 window.location.reload()
             }
@@ -145,7 +144,7 @@ fun RenderContext.mavenRepositorySettingPage() {
             visibilityStore,
             allowedExtensionsStore,
             snapshotStore,
-            "创建仓库",
+            "Create Repository",
             selectedRepositoryName
         ) {
             coroutineScope.launch {
@@ -165,7 +164,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                 when (result.code) {
                     200 -> infoToast(result.message)
                     409 -> warningToast(result.message)
-                    else -> errorToast("未知错误!")
+                    else -> errorToast("Unknown error!")
                 }
                 window.location.reload()
             }
@@ -176,7 +175,7 @@ fun RenderContext.mavenRepositorySettingPage() {
             visibilityStore,
             allowedExtensionsStore,
             snapshotStore,
-            "修改仓库配置",
+            "Update repository settings",
             selectedRepositoryName
         ) {
             coroutineScope.launch {
@@ -199,7 +198,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                 when (result.code) {
                     200 -> infoToast(result.message)
                     409 -> warningToast(result.message)
-                    else -> errorToast("未知错误!")
+                    else -> errorToast("Unknown error!")
                 }
                 window.location.reload()
             }
@@ -220,17 +219,17 @@ fun RenderContext.createModifyRepositoryDialog(
     showDialog(showDialog, title, null, {
         div("box") {
             div("field") {
-                label("label") { +"仓库名称" }
+                label("label") { +"Repository name" }
                 div("control") {
                     input("input") {
-                        placeholder("输入仓库名称")
+                        placeholder("Fill in the repository name")
                         value(selectedRepo.data)
                         changes.values() handledBy nameStore.update
                     }
                 }
             }
             div("field") {
-                label("label") { +"可见性" }
+                label("label") { +"Visibility" }
                 RepositoryVisibility.entries.forEach { visibility ->
                     div("control") {
                         label("radio is-flex is-align-items-center mb-2") {
@@ -246,16 +245,16 @@ fun RenderContext.createModifyRepositoryDialog(
                 }
             }
             div("field") {
-                label("label") { +"允许上传的文件后缀(每行一个)" }
+                label("label") { +"File extensions allowed to be uploaded (one per line)" }
                 div("control") {
                     textarea("textarea") {
-                        placeholder("填写允许的后缀名")
+                        placeholder("Fill the allowed extensions")
                         value(allowedExtensionsStore.data)
                         changes.values() handledBy allowedExtensionsStore.update
                     }
                 }
             }
-            prettyCheckbox("允许发布快照版本", snapshotStore)
+            prettyCheckbox("Is allow snapshot version?", snapshotStore)
         }
     }, action)
 }

@@ -8,8 +8,10 @@
 package cn.rtast.kmvnrepo.pages
 
 import cn.rtast.kmvnrepo.components.infoToast
+import cn.rtast.kmvnrepo.components.pageFooter
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.entity.GetRepositoriesResponse
+import cn.rtast.kmvnrepo.entity.RepositoryVisibility
 import cn.rtast.kmvnrepo.frontendConfig
 import cn.rtast.kmvnrepo.util.auth
 import cn.rtast.kmvnrepo.util.file.LocalStorage
@@ -55,7 +57,13 @@ fun RenderContext.homePage() {
                                     }
                                 }
                                 td("is-narrow") {
-                                    span("tag is-light") { +repo.visibility.desc }
+                                    span("tag") {
+                                        when (repo.visibility) {
+                                            RepositoryVisibility.Public -> img("mr-2") { src("/assets/img/public-repo.svg") }
+                                            RepositoryVisibility.Internal -> img("mr-2") { width(14);src("/assets/img/protected-repo.svg") }
+                                        }
+                                        b { +repo.visibility.desc }
+                                    }
                                 }
                                 td("has-text-centered") {
                                     div("dropdown is-hoverable is-centered is-inline-block") {
