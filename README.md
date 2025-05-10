@@ -1,41 +1,49 @@
-# KMVNRepo
+# krepo
 
-This project is a Maven repository application, but made with Kotlin Native,
-with low memory usage(Running for 12h only 10Mb usage).
-It does not have a "Regular" frontend, instead, the frontend module
-is just a file listing page.
+A Maven repository software built with Kotlin/Native and Kotlin/JS
 
-I have already used it to store my artifacts, See backend https://repo.maven.rtast.cn and
-frontend https://pkg.rtast.cn/#/releases/
+It supports linuxX64 and mingwX64 with low memory usage(Running for 12h only 10MB memory)
 
-# Build backend from source
+# Build backend
 
-This app only support mingwX64 or linuxX64 (Maybe you can add the target by yourself)
+NOTE: Before you build the backend, you must edit the `.def` files,
+and modify the file path of c headers
 
-Running the flowing commands to build an executable binary file
+## LinuxX64
 
-```shell
-$ ./gradlew :backend:linkReleaseExecutableLinuxX64  # This is for linuxX64
-$ ./gradlew.bat :backend:linkReleaseExecutableMingwX64  # This is for Windows64(MingwX64)
-```
-
-Then you can find the binary in the `./backend/build/bin/*X64/releaseExecutable/` folder.
-
-# Running the backend
-
-On windows just double-click the exe the server will run on 9098 port by default.
-
-On Linux make sure you have already made it executable.
-
-# Build frontend from source
+Run the following command:
 
 ```shell
-$ ./gradlew :frontend:jsBrowserDevelopmentExecutableDistribution
+$ chmod +x ./gradlew
+$ ./gradlew :kmvn-backend:linkReleaseExecutableLinuxX64
 ```
 
-The dist static files can be found at `./frontend/build/dist/js/developmentExecutable/`
+The executable binary file was generated at `kmvn-backend/build/bin/linuxX64/releaseExecutable/kmvn-backend.kexe`
 
+## Windows(MingwX64)
 
-# Stacks
+```shell
+$ .\gradlew.bat :kmvn-backend:linkReleaseExecutableMingwX64
+```
 
-- Kotlin CInterop -> To get the modification timestamp of file or directory
+The executable binary file was generated at `kmvn-backend/build/bin/mingwX64/debugExecutable/kmvn-backend.exe`
+
+# Build & Deploy Frontend
+
+## Build
+
+```shell
+$ ./gradlew :kmvn-frontend:jsBrowserDistribution
+```
+
+When build success the static html and js files were generated at `kmvn-frontend/build/dist/js/productionExecutable`
+
+## Deploy
+
+There's two ways to deploy the frontend
+
+1. Using nginx or any other http server to serve the static files.
+2. Using PaaS platform to deploy the frontend like vercel, netlify, cloudflare pages and any other.
+
+I deploy the frontend on the vercel you can check the workflow file to see the detail of deployment
+`.github/workflows/deploy-to-vercel.yml`
