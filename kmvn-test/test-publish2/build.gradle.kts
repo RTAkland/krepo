@@ -6,7 +6,8 @@
  */
 
 plugins {
-    kotlin("multiplatform") version "2.1.20"
+    kotlin("multiplatform")
+    kotlin("plugin.serialization")
     id("maven-publish")
 }
 

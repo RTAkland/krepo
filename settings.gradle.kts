@@ -7,6 +7,7 @@ listOf(
     "backend",
     "common",
     "common",
+    "clib",
     "test:test-publish",
     "test:test-publish2",
 ).forEach { include("kmvn-$it") }

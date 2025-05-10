@@ -14,8 +14,3 @@ allprojects {
         mavenCentral()
     }
 }
-
-subprojects {
-    apply(plugin = "org.jetbrains.kotlin.multiplatform")
-    apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
-}
