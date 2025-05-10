@@ -296,7 +296,7 @@ fun RenderContext.publicContentListingPage() {
                 h3("title is-3 has-text-centered") {
                     img { src("assets/img/thinking.svg") }
                     h4("title is-4 has-text-centered") {
-                        +"it seems like nothing here."
+                        +"It seems like nothing here."
                     }
                 }
             }
