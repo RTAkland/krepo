@@ -15,10 +15,7 @@ import cn.rtast.kmvnrepo.routing.api.configureRepositoriesRouting
 import cn.rtast.kmvnrepo.routing.configureDownloadRouting
 import cn.rtast.kmvnrepo.routing.configurePublicRepositoriesListing
 import cn.rtast.kmvnrepo.routing.configureUploadArtifactRouting
-import cn.rtast.kmvnrepo.util.manager.ConfigManager
-import cn.rtast.kmvnrepo.util.manager.I18NManager
-import cn.rtast.kmvnrepo.util.manager.TokenManager
-import cn.rtast.kmvnrepo.util.manager.UserManager
+import cn.rtast.kmvnrepo.util.manager.*
 import io.ktor.server.application.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*

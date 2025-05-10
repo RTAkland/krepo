@@ -13,7 +13,7 @@ import cn.rtast.kmvnrepo.entity.FrontendConfig
 import cn.rtast.kmvnrepo.entity.RepositoryVisibility
 import cn.rtast.kmvnrepo.entity.config.Config
 import cn.rtast.kmvnrepo.enums.RepositoryStatus
-import cn.rtast.kmvnrepo.util.mkdirs
+import cn.rtast.kmvnrepo.util.file.mkdirs
 import kotlinx.io.files.Path
 
 const val ROOT_PATH_STRING = "./repositories"

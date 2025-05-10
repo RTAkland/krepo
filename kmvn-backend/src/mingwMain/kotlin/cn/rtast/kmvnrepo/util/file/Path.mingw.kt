@@ -7,7 +7,7 @@
 
 @file:OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 
-package cn.rtast.kmvnrepo.util
+package cn.rtast.kmvnrepo.util.file
 
 import cn.rtast.kmvnrepo.time.get_file_modified_time
 import cn.rtast.kmvnrepo.time.is_directory

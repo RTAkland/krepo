@@ -5,7 +5,7 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-package cn.rtast.kmvnrepo.util
+package cn.rtast.kmvnrepo.util.string
 
 import io.ktor.server.application.*
 import io.ktor.server.request.*
