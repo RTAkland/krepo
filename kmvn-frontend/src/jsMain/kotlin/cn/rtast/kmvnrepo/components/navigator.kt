@@ -50,9 +50,9 @@ fun RenderContext.navbar() {
             }
         }
         div("navbar-menu") {
-            if (LocalStorage.TOKEN != null) {
-                id("navbarBasic")
-                div("navbar-start") {
+            id("navbarBasic")
+            div("navbar-start") {
+                if (LocalStorage.TOKEN != null) {
                     div("navbar-item has-dropdown is-hoverable") {
                         a("navbar-link") {
                             i("fa-solid fa-users") {}

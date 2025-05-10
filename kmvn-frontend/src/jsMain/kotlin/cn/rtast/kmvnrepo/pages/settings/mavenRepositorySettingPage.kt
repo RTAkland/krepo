@@ -55,12 +55,7 @@ fun RenderContext.mavenRepositorySettingPage() {
             section("container") {
                 inlineStyle("max-width: 60%")
                 div("level") {
-                    div("level-left") {
-                        h3("title is-4") {
-                            i("fa-solid fa-house mr-2") {}
-                            +"Repository List"
-                        }
-                    }
+                    div("level-left") { h3("title is-4") { +"Repository List" } }
                     div("level-right") {
                         button("button is-primary") {
                             i("fa-solid fa-plus mr-2") {}

@@ -1,13 +1,12 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 2025/5/9 01:25
+ * Date: 2025/5/10 14:26
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-package cn.rtast.kmvnrepo.pages
+package cn.rtast.kmvnrepo.pages.other
 
-import cn.rtast.kmvnrepo.components.pageFooter
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.alt
 import dev.fritz2.core.href

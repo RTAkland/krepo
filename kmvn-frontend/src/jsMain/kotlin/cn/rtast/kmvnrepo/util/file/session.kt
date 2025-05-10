@@ -7,7 +7,7 @@
 
 package cn.rtast.kmvnrepo.util.file
 
-import cn.rtast.kmvnrepo.pages.noPermission
+import cn.rtast.kmvnrepo.pages.other.noPermission
 import dev.fritz2.core.RenderContext
 
 fun RenderContext.checkSession(
