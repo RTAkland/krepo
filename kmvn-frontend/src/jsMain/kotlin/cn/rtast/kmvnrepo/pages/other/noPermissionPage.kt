@@ -19,7 +19,7 @@ fun RenderContext.noPermission() {
             span("icon is-large has-text-danger") { i("fas fa-ban fa-3x") {} }
             h1("title is-3 mt-4") { +"Access Denied" }
             p("subtitle is-5") { +"You Do Not have permission to view this page" }
-            p("subtitle is-5") { +"You will be redirect to / in 5 seconds" }
+            p("subtitle is-5") { +"You will be redirect to home page in 5 seconds" }
             a("button is-danger mt-4") {
                 +"Back to home page"
                 href("/#/")
