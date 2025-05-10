@@ -33,6 +33,7 @@ import dev.fritz2.headless.foundation.portalRoot
 import dev.fritz2.remote.http
 import dev.fritz2.routing.routerOf
 import kotlinx.browser.document
+import kotlinx.browser.window
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlin.time.ExperimentalTime
@@ -46,7 +47,7 @@ lateinit var frontendConfig: FrontendConfig
 fun main() {
     toastContainer("default", "toast-container")
     coroutineScope.launch {
-//        if (window.location.hostname != "localhost")
+        if (window.location.hostname != "localhost")
         backend = http("/config.json").get().body().fromJson<Config>().backend
         try {
             val checkSessionValid = http("$backend/@/api/user/")

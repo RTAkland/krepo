@@ -11,9 +11,12 @@ import cn.rtast.kmvnrepo.backend
 import cn.rtast.kmvnrepo.components.errorToast
 import cn.rtast.kmvnrepo.components.infoToast
 import cn.rtast.kmvnrepo.components.showDialog
+import cn.rtast.kmvnrepo.components.warningToast
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.currentPath
 import cn.rtast.kmvnrepo.entity.Contents
+import cn.rtast.kmvnrepo.entity.CreateDirectoryRequest
+import cn.rtast.kmvnrepo.entity.CreateDirectoryResponse
 import cn.rtast.kmvnrepo.entity.DeleteGavRequest
 import cn.rtast.kmvnrepo.pages.other.notFoundPage
 import cn.rtast.kmvnrepo.util.auth
@@ -34,6 +37,8 @@ fun RenderContext.publicContentListingPage() {
     val selectedFileEntry = storeOf("")
     val showLocalConfigDialog = storeOf(false)
     val hiddenHashFilesToggle = storeOf(LocalStorage.HIDDEN_HASH_FILES)
+    val showCreateFolderDialog = storeOf(false)
+    val folderNameStore = storeOf<String?>(null)
     coroutineScope.launch {
         try {
             if (LocalStorage.TOKEN != null) {
@@ -171,6 +176,33 @@ fun RenderContext.publicContentListingPage() {
                                     }
                                 }
                             }
+                            if (LocalStorage.TOKEN != null) {
+//                                label("button") {
+//                                    attr("for", "fileInput")
+//                                    i("fa-solid fa-upload") {}
+//                                }
+//                                input("file-input") {
+//                                    id("fileInput")
+//                                    type("file")
+//                                    className("is-hidden")
+//                                    changes.values() handledBy {
+//                                        val filename = it.split("/").last().split("\\").last()
+//                                        val reader = FileReader()
+//                                        reader.readAsArrayBuffer(File())
+//                                        reader.onload = { event: Event ->
+//                                            val fileContent = reader.result as ArrayBuffer
+//                                            val form = FormData()
+//                                            form.append("file", File(arrayOf(fileContent), filename))
+//                                            form.append("filename", filename)
+//                                            form.append("repoPath", currentPath)
+//                                        }
+//                                    }
+//                                }
+                                a("button") {
+                                    img { src("/assets/img/create-folder.svg") }
+                                    clicks handledBy { showCreateFolderDialog.update(true) }
+                                }
+                            }
                             a("button mr-2") {
                                 img { src("assets/img/settings.svg") }
                                 clicks handledBy { showLocalConfigDialog.update(true) }
@@ -264,11 +296,40 @@ fun RenderContext.publicContentListingPage() {
                 h3("title is-3 has-text-centered") {
                     img { src("assets/img/thinking.svg") }
                     h4("title is-4 has-text-centered") {
-                        +"There's nothing in this repository."
+                        +"it seems like nothing here."
                     }
                 }
             }
             hr { className("mt-6") }
+        }
+    }
+    showDialog(showCreateFolderDialog, "Create a new folder", null, {
+        input("input") {
+            type("text")
+            placeholder("Type a name for the new folder")
+            changes.values() handledBy folderNameStore.update
+        }
+    }) {
+        if (folderNameStore.current == null) {
+            warningToast("Folder must not be null or empty!")
+        } else {
+            coroutineScope.launch {
+                val result = httpRequest("/@/api/repositories/create-directory")
+                    .auth().acceptJson().jsonContentType()
+                    .setBody(
+                        CreateDirectoryRequest(
+                            "${
+                                currentPath.removeSuffix("/").removePrefix("/")
+                            }/${folderNameStore.current}"
+                        )
+                    ).post().body().fromJson<CreateDirectoryResponse>()
+                if (result.code == 200) {
+                    infoToast("New folder successfully created")
+                    window.location.reload()
+                } else {
+                    errorToast("Failed to create the new folder")
+                }
+            }
         }
     }
     showDialog(showDeleteFileEntryDialog, "Delete the artifacts/packages", "Delete the following contents?", {

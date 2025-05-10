@@ -5,29 +5,87 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:OptIn(InternalAPI::class)
+
 package cn.rtast.kmvnrepo.routing.api
 
+import cn.rtast.kmvnrepo.ROOT_PATH_STRING
 import cn.rtast.kmvnrepo.configManager
 import cn.rtast.kmvnrepo.entity.*
 import cn.rtast.kmvnrepo.entity.res.CommonDataResponse
 import cn.rtast.kmvnrepo.entity.res.CommonResponse
+import cn.rtast.kmvnrepo.util.exists
+import cn.rtast.kmvnrepo.util.mkdirs
+import cn.rtast.kmvnrepo.util.toPath
+import cn.rtast.kmvnrepo.util.writeByteArray
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.utils.io.*
+import kotlinx.io.files.Path
+import kotlinx.io.readByteArray
 
 fun Application.configureRepositoriesRouting() {
     routing {
         configureGetPublicRepositoriesRouting()
-        configureGetAllRepositoriesRouting()
         authenticate("api") {
             route("/@/api/repositories") {
+                configureGetAllRepositoriesRouting()
                 configureAddRepositoryRouting()
                 configureDeleteRepositoryRouting()
                 configureModifyRepositoryRouting()
+                configureUploadFileRouting()
+                configureCreateDirectoryRouting()
             }
+        }
+    }
+}
+
+private fun Route.configureCreateDirectoryRouting() {
+    post("/upload") {
+        var filename = ""
+        var uploadRepoPath = ""
+        var fileContent = byteArrayOf()
+        val multipart = call.receiveMultipart()
+        multipart.forEachPart { part ->
+            when (part) {
+                is PartData.FileItem -> {
+                    fileContent = part.provider().readBuffer.readByteArray()
+                }
+
+                is PartData.FormItem -> {
+                    when (part.name) {
+                        "repoPath" -> uploadRepoPath = part.value
+                        "filename" -> filename = part.value
+                    }
+                }
+
+                else -> {}
+            }
+        }
+        val path = Path(uploadRepoPath, filename)
+        if (path.exists()) {
+            call.respond(HttpStatusCode.Conflict, CommonResponse(409, "Conflict"))
+        } else {
+            path.writeByteArray(fileContent)
+            call.respond(HttpStatusCode.OK, CommonResponse(200, "Success"))
+        }
+    }
+}
+
+private fun Route.configureUploadFileRouting() {
+    post("/create-directory") {
+        val requestPath = call.receive<CreateDirectoryRequest>().path
+        val path = "$ROOT_PATH_STRING/$requestPath".toPath()
+        if (path.exists()) {
+            call.respond(HttpStatusCode.Conflict, CommonResponse(409, "Conflict"))
+        } else {
+            path.mkdirs()
+            call.respond(HttpStatusCode.OK, CommonResponse(200, "Success"))
         }
     }
 }
@@ -106,7 +164,7 @@ private fun Route.configureGetPublicRepositoriesRouting() {
 
 private fun Route.configureGetAllRepositoriesRouting() {
     authenticate("api") {
-        get("/@/api/repositories/all") {
+        get("/all") {
             val repositories = configManager.getConfig().repositories
             call.respond(HttpStatusCode.OK, CommonDataResponse(200, repositories))
         }
