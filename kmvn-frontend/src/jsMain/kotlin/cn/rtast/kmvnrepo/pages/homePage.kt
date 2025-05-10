@@ -40,7 +40,7 @@ fun RenderContext.homePage() {
             table("table is-striped is-hoverable is-fullwidth") {
                 thead {
                     tr {
-                        th { +"Repository Name" }
+                        th { +"Repository" }
                         th("is-narrow") { +"Visibility" }
                         th("has-text-centered") { +"Action" }
                     }
@@ -55,11 +55,7 @@ fun RenderContext.homePage() {
                                     +repo.name
                                 }
                             }
-                            td("is-narrow") {
-                                span("tag") {
-                                    b { +repo.visibility.desc }
-                                }
-                            }
+                            td("is-narrow") { span("tag") { b { +repo.visibility.desc } } }
                             td("has-text-centered") {
                                 div("dropdown is-hoverable is-centered is-inline-block") {
                                     div("dropdown-trigger") {
@@ -68,6 +64,12 @@ fun RenderContext.homePage() {
                                             span { +"Copy URL" }
                                             attr("aria-haspopup", "true")
                                             attr("aria-controls", "dropdown-menu-${repo.name}")
+                                            clicks handledBy {
+                                                window.navigator.clipboard.writeText(
+                                                    getGradleKotlinDslRepositoryTemplate(repo.name)
+                                                )
+                                                infoToast("Gradle Kotlin DSL Repository URL Copied")
+                                            }
                                         }
                                     }
                                     div("dropdown-menu") {
