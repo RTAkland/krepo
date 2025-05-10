@@ -8,6 +8,7 @@
 package cn.rtast.kmvnrepo.components
 
 import cn.rtast.kmvnrepo.frontendConfig
+import cn.rtast.kmvnrepo.util.string.castMarkdownToHtml
 import cn.rtast.kmvnrepo.util.string.getCurrentYear
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.href
@@ -25,8 +26,9 @@ fun RenderContext.pageFooter() {
                     }
                 }
             }
-            val copyrightInfo = frontendConfig.copyright
+            val copyrightInfo = frontendConfig.copyright.castMarkdownToHtml()
                 .replace("#YEAR#", getCurrentYear().toString())
+                .removePrefix("<body>").removeSuffix("</body>")
             div("column is-narrow has-text-right") { span("is-size-8") { domNode.innerHTML = copyrightInfo } }
         }
     }

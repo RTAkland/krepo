@@ -32,7 +32,10 @@ fun RenderContext.homePage() {
             inlineStyle("max-width: 60%")
             h1("title is-3 has-text-left mt-4 mb-2") { +"Repositories" }
             if (frontendConfig.description != null) {
-                p("has-text-grey-dark mb-4") { domNode.innerText = frontendConfig.description!! }
+                p("has-text-grey-dark mb-4") {
+                    domNode.innerHTML = frontendConfig.description!!.castMarkdownToHtml()
+                        .removePrefix("<body>").removeSuffix("</body>")
+                }
             }
             table("table is-striped is-hoverable is-fullwidth") {
                 thead {

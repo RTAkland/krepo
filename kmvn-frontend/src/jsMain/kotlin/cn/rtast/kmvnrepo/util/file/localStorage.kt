@@ -33,7 +33,7 @@ object LocalStorage {
         get() = getLocalStorage("mvn_avatar")
         set(value) = if (value == null) removeLocalStorage("mvn_avatar") else setLocalStorage("mvn_avatar", value)
     var HIDDEN_HASH_FILES
-        get() = getLocalStorage("mvn_hidden_hash_files") == "true"
+        get() = getLocalStorage("mvn_hidden_hash_files")?.toBoolean() ?: true
         set(value) = setLocalStorage("mvn_hidden_hash_files", value.toString())
 
     fun clearAll() {

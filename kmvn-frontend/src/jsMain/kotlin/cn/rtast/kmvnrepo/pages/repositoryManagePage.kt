@@ -33,7 +33,7 @@ fun RenderContext.publicContentListingPage() {
     val showDeleteFileEntryDialog = storeOf(false)
     val selectedFileEntry = storeOf("")
     val showLocalConfigDialog = storeOf(false)
-    val hiddenHashFilesToggle = storeOf(true)
+    val hiddenHashFilesToggle = storeOf(LocalStorage.HIDDEN_HASH_FILES)
     coroutineScope.launch {
         try {
             if (LocalStorage.TOKEN != null) {
@@ -57,6 +57,7 @@ fun RenderContext.publicContentListingPage() {
         val artifacts = responseJson.data.toMutableList()
         div("container") {
             br {}
+            inlineStyle("max-width: 65%")
             div("level-left") {
                 h4("title is-4") {
                     +"Index of /"
@@ -290,7 +291,7 @@ fun RenderContext.publicContentListingPage() {
                     id("hiddenHashFiles")
                     inlineStyle("display: none;")
                     className("switch-checkbox")
-                    checked(LocalStorage.HIDDEN_HASH_FILES)
+                    checked(hiddenHashFilesToggle.current)
                     changes.values() handledBy { hiddenHashFilesToggle.update(it.toBoolean()) }
                 }
                 span("slider round") {}
