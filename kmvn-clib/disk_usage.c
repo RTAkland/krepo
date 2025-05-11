@@ -15,7 +15,7 @@
 #include <stdio.h>
 
 static long long get_file_disk_size_win(const char *utf8_path) {
-    int wlen = MultiByteToWideChar(CP_UTF8, 0, utf8_path, -1, NULL, 0);
+    const int wlen = MultiByteToWideChar(CP_UTF8, 0, utf8_path, -1, NULL, 0);
     if (wlen <= 0) return -1;
 
     wchar_t *wpath = (wchar_t *) malloc(wlen * sizeof(wchar_t));
@@ -23,8 +23,8 @@ static long long get_file_disk_size_win(const char *utf8_path) {
 
     MultiByteToWideChar(CP_UTF8, 0, utf8_path, -1, wpath, wlen);
 
-    DWORD low, high;
-    low = GetCompressedFileSizeW(wpath, &high);
+    DWORD high;
+    const DWORD low = GetCompressedFileSizeW(wpath, &high);
     if (low == INVALID_FILE_SIZE && GetLastError() != NO_ERROR) {
         free(wpath);
         return -1;
@@ -38,7 +38,7 @@ long long get_disk_usage(const char *path) {
     WIN32_FIND_DATAA find_data;
     char search_path[MAX_PATH];
 
-    DWORD attrs = GetFileAttributesA(path);
+    const DWORD attrs = GetFileAttributesA(path);
     if (attrs == INVALID_FILE_ATTRIBUTES) return -1;
 
     if (!(attrs & FILE_ATTRIBUTE_DIRECTORY)) {
@@ -46,7 +46,7 @@ long long get_disk_usage(const char *path) {
     }
 
     snprintf(search_path, MAX_PATH, "%s\\*", path);
-    HANDLE hFind = FindFirstFileA(search_path, &find_data);
+    const HANDLE hFind = FindFirstFileA(search_path, &find_data);
     if (hFind == INVALID_HANDLE_VALUE) return -1;
 
     long long total = get_file_disk_size_win(path); // Include the directory entry itself
@@ -57,7 +57,7 @@ long long get_disk_usage(const char *path) {
         char full_path[MAX_PATH];
         snprintf(full_path, MAX_PATH, "%s\\%s", path, find_data.cFileName);
 
-        long long child_size = get_disk_usage(full_path);
+        const long long child_size = get_disk_usage(full_path);
         if (child_size < 0) {
             FindClose(hFind);
             return -1;
