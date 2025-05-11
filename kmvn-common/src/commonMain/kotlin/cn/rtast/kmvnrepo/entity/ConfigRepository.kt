@@ -30,3 +30,13 @@ data class ModifyRepository(
     val allowSnapshot: Boolean,
     var status: RepositoryStatus
 )
+
+@Serializable
+data class ConfigRepositoryWithSize(
+    val name: String,
+    val visibility: RepositoryVisibility,
+    val acceptExtensions: List<String>,
+    val allowSnapshot: Boolean,
+    var status: RepositoryStatus,
+    val size: Long?,
+)

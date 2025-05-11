@@ -14,10 +14,7 @@ import cn.rtast.kmvnrepo.configManager
 import cn.rtast.kmvnrepo.entity.*
 import cn.rtast.kmvnrepo.entity.res.CommonDataResponse
 import cn.rtast.kmvnrepo.entity.res.CommonResponse
-import cn.rtast.kmvnrepo.util.file.exists
-import cn.rtast.kmvnrepo.util.file.mkdirs
-import cn.rtast.kmvnrepo.util.file.toPath
-import cn.rtast.kmvnrepo.util.file.writeByteArray
+import cn.rtast.kmvnrepo.util.file.*
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
@@ -166,6 +163,12 @@ private fun Route.configureGetAllRepositoriesRouting() {
     authenticate("api") {
         get("/all") {
             val repositories = configManager.getConfig().repositories
+                .map {
+                    ConfigRepositoryWithSize(
+                        it.name, it.visibility, it.acceptExtensions, it.allowSnapshot,
+                        it.status, Path(ROOT_PATH_STRING, it.name).diskUsageSize
+                    )
+                }
             call.respond(HttpStatusCode.OK, CommonDataResponse(200, repositories))
         }
     }

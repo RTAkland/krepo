@@ -11,5 +11,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetRepositoriesResponse(
-    val data: List<ConfigRepository>
+    val data: List<ConfigRepositoryWithSize>
 )

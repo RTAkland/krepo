@@ -24,7 +24,11 @@ kotlin {
     linuxX64 {
         compilations["main"].cinterops {
             val fileTimeLinux by creating {
-                definitionFile = project.layout.projectDirectory.dir("src/cinterop/file_time_linuxx64.def").asFile
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_time_linuxx64.def").asFile
+                compilerOpts("-Isrc/cinterop/")
+            }
+            val diskUsageLinux by creating {
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/disk_usage_linuxx64.def").asFile
                 compilerOpts("-Isrc/cinterop/")
             }
         }
@@ -32,7 +36,11 @@ kotlin {
     mingwX64 {
         compilations["main"].cinterops {
             val fileTimeMingw by creating {
-                definitionFile = project.layout.projectDirectory.dir("src/cinterop/file_time_mingwx64.def").asFile
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_time_mingwx64.def").asFile
+                compilerOpts("-Isrc/cinterop/")
+            }
+            val diskUsageMingw by creating {
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/disk_usage_mingwx64.def").asFile
                 compilerOpts("-Isrc/cinterop/")
             }
         }

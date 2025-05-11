@@ -13,6 +13,7 @@ import cn.rtast.kmvnrepo.entity.GetRepositoriesResponse
 import cn.rtast.kmvnrepo.frontendConfig
 import cn.rtast.kmvnrepo.util.auth
 import cn.rtast.kmvnrepo.util.file.LocalStorage
+import cn.rtast.kmvnrepo.util.file.formatSize
 import cn.rtast.kmvnrepo.util.httpRequest
 import cn.rtast.kmvnrepo.util.jsonContentType
 import cn.rtast.kmvnrepo.util.string.*
@@ -42,6 +43,7 @@ fun RenderContext.homePage() {
                     tr {
                         th { +"Repository" }
                         th("is-narrow") { +"Visibility" }
+                        if (LocalStorage.TOKEN != null) th("has-text-centered") { +"Size" }
                         th("has-text-centered") { +"Action" }
                     }
                 }
@@ -56,6 +58,9 @@ fun RenderContext.homePage() {
                                 }
                             }
                             td("is-narrow") { span("tag") { b { +repo.visibility.desc } } }
+                            if (LocalStorage.TOKEN != null) td("has-text-centered") {
+                                span("tag") { +formatSize(repo.size ?: 0L) }
+                            }
                             td("has-text-centered") {
                                 div("dropdown is-hoverable is-centered is-inline-block") {
                                     div("dropdown-trigger") {
