@@ -1,3 +1,0 @@
-[submodule "kmvn-backend/src/cinterop/include/kmvnrepo_ext_api"]
-	path = kmvn-backend/src/cinterop/include/kmvnrepo_ext_api
-	url = https://repo.rtast.cn/RTAkland/lib_file_time.git
