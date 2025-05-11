@@ -6,7 +6,6 @@ listOf(
     "frontend",
     "backend",
     "common",
-    "common",
     "test:test-publish",
     "test:test-publish2",
 ).forEach { include("kmvn-$it") }
