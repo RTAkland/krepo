@@ -119,3 +119,10 @@ tasks.register("deployBackend") {
         }
     }
 }
+
+tasks.all {
+    when (name) {
+        "runDebugExecutableMingwX64",
+        "deployBackend" -> dependsOn(tasks.named("generateResources"))
+    }
+}
