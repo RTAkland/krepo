@@ -8,13 +8,18 @@
 
 package cn.rtast.kmvnrepo.registry
 
+import cn.rtast.kmvnrepo.client
 import cn.rtast.kmvnrepo.configManager
+import cn.rtast.kmvnrepo.entity.MirrorRepository
 import cn.rtast.kmvnrepo.enums.DeployStatus
 import cn.rtast.kmvnrepo.repositories
-import cn.rtast.kmvnrepo.util.file.exists
-import cn.rtast.kmvnrepo.util.file.mkdirs
-import cn.rtast.kmvnrepo.util.file.rootPathOf
-import cn.rtast.kmvnrepo.util.file.writeByteArray
+import cn.rtast.kmvnrepo.util.file.*
+import cn.rtast.kmvnrepo.util.string.encodeToBase64
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
 import kotlinx.io.files.Path
 
 private val validatedArtifactExtension = listOf("klib", "jar", "aar")
@@ -40,5 +45,33 @@ fun deployMavenArtifact(path: String, bytes: ByteArray): DeployStatus {
         }
         targetFile.writeByteArray(bytes)
         return DeployStatus.Success
+    }
+}
+
+
+suspend fun ApplicationCall.getProxiedArtifacts(
+    repository: List<MirrorRepository>,
+    path: String,
+    originRepository: String
+) {
+    try {
+        for (repo in repository) {
+            val response = client.get(repo.url.removeSuffix("/") + "/$path") {
+                repo.credential?.let {
+                    val auth = "${it.username}:${it.password}".encodeToBase64()
+                    header("Authorization", "Basic $auth")
+                }
+            }
+            if (response.status == HttpStatusCode.OK) {
+                val bytes = response.bodyAsBytes()
+                val localPath = "$originRepository/${path.removePrefix("/")}".toPath()
+                if (!localPath.exists()) deployMavenArtifact(localPath.toString(), bytes)
+                this.respondBytes(bytes)
+                return
+            }
+        }
+        this.respond(HttpStatusCode.NotFound)
+    } catch (_: Exception) {
+        this.respond(HttpStatusCode.NotFound)
     }
 }

@@ -10,11 +10,16 @@ package cn.rtast.kmvnrepo
 
 import cn.rtast.kmvnrepo.entity.ConfigRepository
 import cn.rtast.kmvnrepo.entity.FrontendConfig
+import cn.rtast.kmvnrepo.entity.MirrorRepository
 import cn.rtast.kmvnrepo.entity.RepositoryVisibility
 import cn.rtast.kmvnrepo.entity.config.Config
 import cn.rtast.kmvnrepo.enums.RepositoryStatus
 import cn.rtast.kmvnrepo.util.file.mkdirs
+import cn.rtast.kmvnrepo.util.http.httpClientEngine
+import io.ktor.client.*
 import kotlinx.io.files.Path
+
+val client = HttpClient(httpClientEngine)
 
 const val ROOT_PATH_STRING = "./repositories"
 val ROOT_PATH = Path(ROOT_PATH_STRING).apply { mkdirs() }
@@ -31,21 +36,24 @@ val DEFAULT_CONFIG = Config(
             RepositoryVisibility.Public,
             defaultAcceptExtensions,
             false,
-            RepositoryStatus.Available
+            RepositoryStatus.Available,
+            listOf(MirrorRepository("https://example.com", MirrorRepository.Credential("user", "pass")))
         ),
         ConfigRepository(
             "snapshots",
             RepositoryVisibility.Public,
             defaultAcceptExtensions,
             true,
-            RepositoryStatus.Available
+            RepositoryStatus.Available,
+            listOf()
         ),
         ConfigRepository(
             "private",
             RepositoryVisibility.Internal,
             defaultAcceptExtensions,
             true,
-            RepositoryStatus.Available
+            RepositoryStatus.Available,
+            listOf()
         ),
     ), true, "https://pkg.rtast.cn",
     FrontendConfig(

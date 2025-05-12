@@ -16,7 +16,8 @@ data class ConfigRepository(
     val visibility: RepositoryVisibility,
     val acceptExtensions: List<String>,
     val allowSnapshot: Boolean,
-    var status: RepositoryStatus
+    var status: RepositoryStatus,
+    val mirrorRepositories: List<MirrorRepository>
 )
 
 typealias CreateRepository = ConfigRepository

@@ -151,7 +151,8 @@ fun RenderContext.mavenRepositorySettingPage() {
                     .setBody(
                         CreateRepository(
                             name, visibility, allowedExtensions.split("\n"), allowSnapshot,
-                            RepositoryStatus.Created
+                            RepositoryStatus.Created,
+                            listOf()
                         )
                     )
                     .post().body().fromJson<CreateRepositoryResponse>()

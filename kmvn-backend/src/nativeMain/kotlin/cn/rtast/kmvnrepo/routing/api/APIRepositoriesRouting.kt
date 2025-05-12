@@ -90,13 +90,14 @@ private fun Route.configureUploadFileRouting() {
 private fun Route.configureModifyRepositoryRouting() {
     put("/modify") {
         val data = call.receive<ModifyRepository>()
-        val config = configManager.getConfig()
-        if (!config.repositories.any { it.name == data.previousName }) {
+        val currentConfig = configManager.getConfig()
+        val config = currentConfig.repositories.find { it.name == data.previousName }
+        if (config == null) {
             call.respond(HttpStatusCode.NotFound, CommonResponse(404, "仓库不存在"))
         } else {
             configManager.write(
-                config.copy(
-                    repositories = config.repositories.toMutableList()
+                currentConfig.copy(
+                    repositories = currentConfig.repositories.toMutableList()
                         .apply {
                             removeAll { it.name == data.previousName }
                             add(
@@ -105,7 +106,8 @@ private fun Route.configureModifyRepositoryRouting() {
                                     data.visibility,
                                     data.acceptExtensions,
                                     data.allowSnapshot,
-                                    data.status
+                                    data.status,
+                                    config.mirrorRepositories
                                 )
                             )
                         }

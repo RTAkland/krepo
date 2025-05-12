@@ -76,6 +76,14 @@ kotlin {
         commonTest.dependencies {
             implementation(kotlin("test"))
         }
+
+        linuxMain.dependencies {
+            implementation("io.ktor:ktor-client-curl:$ktorVersion")
+        }
+
+        mingwMain.dependencies {
+            implementation("io.ktor:ktor-client-winhttp:$ktorVersion")
+        }
     }
 }
 
