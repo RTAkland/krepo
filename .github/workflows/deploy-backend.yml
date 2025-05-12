@@ -29,9 +29,8 @@ jobs:
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_PORT: ${{ secrets.SSH_PORT }}
           TARGET: /tmp/backend.kexe
-          SCRIPT_BEFORE: |
-            rm /root/reposilite/backend.kexe
           SCRIPT_AFTER: |
+            rm /root/reposilite/backend.kexe
             mv /tmp/backend.kexe /root/reposilite
             chmod +x /root/reposilite/backend.kexe
             systemctl restart reposilite.service
