@@ -10,8 +10,8 @@
 package cn.rtast.kmvnrepo.util.file
 
 import cn.rtast.kmvnrepo.time.get_file_modified_time
-import cn.rtast.kmvnrepo.time.is_directory
-import cn.rtast.kmvnrepo.time.is_regular_file
+import cn.rtast.kmvnrepo.file.is_directory
+import cn.rtast.kmvnrepo.file.is_regular_file
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.io.files.Path
 import kotlin.experimental.ExperimentalNativeApi

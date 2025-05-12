@@ -1,4 +1,1 @@
-src/cinterop/def/disk_usage_linuxx64.def
-src/cinterop/def/disk_usage_mingwx64.def
-src/cinterop/def/file_time_linuxx64.def
-src/cinterop/def/file_time_mingwx64.def
+src/cinterop/def/*.def

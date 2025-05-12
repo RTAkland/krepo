@@ -32,6 +32,10 @@ kotlin {
                 definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/disk_usage_linuxx64.def").asFile
                 compilerOpts("-Isrc/cinterop/")
             }
+            val file by creating {
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_linuxx64.def").asFile
+                compilerOpts("-Isrc/cinterop/")
+            }
         }
     }
     mingwX64 {
@@ -42,6 +46,10 @@ kotlin {
             }
             val diskUsageMingw by creating {
                 definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/disk_usage_mingwx64.def").asFile
+                compilerOpts("-Isrc/cinterop/")
+            }
+            val file by creating {
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_mingwx64.def").asFile
                 compilerOpts("-Isrc/cinterop/")
             }
         }
