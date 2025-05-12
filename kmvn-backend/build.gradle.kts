@@ -94,45 +94,6 @@ kembeddable {
     packageName = "cn.rtast.kmvnrepo.resources"
 }
 
-val sshHost: String? = System.getenv("SSH_HOST")
-val sshPort: String? = System.getenv("SSH_PORT")
-val sshUser: String? = System.getenv("SSH_USER")
-
-tasks.register("deployBackend") {
-    dependsOn(tasks.named("linkReleaseExecutableLinuxX64"))
-    doLast {
-        exec {
-            commandLine(
-                "scp",
-                "${project.layout.buildDirectory.asFile}/bin/linuxX64/releaseExecutable/kmvn-backend.kexe",
-                "$sshUser@$sshHost:/tmp/backend.kexe"
-            )
-            isIgnoreExitValue = true
-        }
-        exec {
-            commandLine("ssh", "$sshUser@$sshHost", "rm /root/reposilite/backend.kexe")
-            isIgnoreExitValue = true
-        }
-        exec {
-            commandLine("ssh", "$sshUser@$sshHost", "mv /tmp/backend.kexe /root/reposilite")
-            isIgnoreExitValue = true
-        }
-        exec {
-            commandLine("ssh", "$sshUser@$sshHost", "chmod +x /root/reposilite/backend.kexe")
-            isIgnoreExitValue = true
-        }
-        exec {
-            commandLine("ssh", "$sshUser@$sshHost", "systemctl stop reposilite.service")
-            isIgnoreExitValue = true
-        }
-        Thread.sleep(1000)
-        exec {
-            commandLine("ssh", "$sshUser@$sshHost", "systemctl start reposilite.service")
-            isIgnoreExitValue = true
-        }
-    }
-}
-
 tasks.all {
     when (name) {
         "runDebugExecutableMingwX64",
@@ -144,5 +105,5 @@ kdef {
     outputDir = project.layout.projectDirectory.dir("src/cinterop/def").asFile
     defFiles.addAll(
         project.layout.projectDirectory.dir("src/cinterop/def/template")
-            .asFile.listFiles()!!.map { it })
+            .asFile.listFiles()!!.toList())
 }
