@@ -26,7 +26,11 @@ val ROOT_PATH = Path(ROOT_PATH_STRING).apply { mkdirs() }
 
 val repositories = mutableListOf<ConfigRepository>()
 
-private val defaultAcceptExtensions = listOf("jar", "klib", "aar")
+private val defaultAcceptExtensions = listOf(
+    "jar", "klib", "aar",
+    "so", "a", "dll",
+    "dylib", "framework"
+)
 
 val DEFAULT_CONFIG = Config(
     9098, false,
