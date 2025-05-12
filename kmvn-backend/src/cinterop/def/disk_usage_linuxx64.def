@@ -1,4 +1,0 @@
-headers = E:\\projects\\KMVNRepo\\kmvn-clib\\disk_usage.h
-package = cn.rtast.kmvnrepo.disk
-staticLibraries = libdisk_usage-linuxx64.a
-libraryPaths = E:\\projects\\KMVNRepo\\kmvn-backend\\src\\cinterop\\libs

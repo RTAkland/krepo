@@ -13,6 +13,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     id("cn.rtast.kembeddable") version "1.2.4"
+    id("cn.rtast.kdef") version "0.1.0"
 }
 
 repositories {
@@ -93,36 +94,40 @@ kembeddable {
     packageName = "cn.rtast.kmvnrepo.resources"
 }
 
+val sshHost: String? = System.getenv("SSH_HOST")
+val sshPort: String? = System.getenv("SSH_PORT")
+val sshUser: String? = System.getenv("SSH_USER")
+
 tasks.register("deployBackend") {
     dependsOn(tasks.named("linkReleaseExecutableLinuxX64"))
     doLast {
         exec {
             commandLine(
                 "scp",
-                "build/bin/linuxX64/releaseExecutable/kmvn-backend.kexe",
-                "root@lan.rtast.cn:/tmp/backend.kexe"
+                "${project.layout.buildDirectory.asFile}/bin/linuxX64/releaseExecutable/kmvn-backend.kexe",
+                "$sshUser@$sshHost:/tmp/backend.kexe"
             )
             isIgnoreExitValue = true
         }
         exec {
-            commandLine("ssh", "root@lan.rtast.cn", "rm /root/reposilite/backend.kexe")
+            commandLine("ssh", "$sshUser@$sshHost", "rm /root/reposilite/backend.kexe")
             isIgnoreExitValue = true
         }
         exec {
-            commandLine("ssh", "root@lan.rtast.cn", "mv /tmp/backend.kexe /root/reposilite")
+            commandLine("ssh", "$sshUser@$sshHost", "mv /tmp/backend.kexe /root/reposilite")
             isIgnoreExitValue = true
         }
         exec {
-            commandLine("ssh", "root@lan.rtast.cn", "chmod +x /root/reposilite/backend.kexe")
+            commandLine("ssh", "$sshUser@$sshHost", "chmod +x /root/reposilite/backend.kexe")
             isIgnoreExitValue = true
         }
         exec {
-            commandLine("ssh", "root@lan.rtast.cn", "systemctl stop reposilite.service")
+            commandLine("ssh", "$sshUser@$sshHost", "systemctl stop reposilite.service")
             isIgnoreExitValue = true
         }
         Thread.sleep(1000)
         exec {
-            commandLine("ssh", "root@lan.rtast.cn", "systemctl start reposilite.service")
+            commandLine("ssh", "$sshUser@$sshHost", "systemctl start reposilite.service")
             isIgnoreExitValue = true
         }
     }
@@ -133,4 +138,11 @@ tasks.all {
         "runDebugExecutableMingwX64",
         "deployBackend" -> dependsOn(tasks.named("generateResources"))
     }
+}
+
+kdef {
+    outputDir = project.layout.projectDirectory.dir("src/cinterop/def").asFile
+    defFiles.addAll(
+        project.layout.projectDirectory.dir("src/cinterop/def/template")
+            .asFile.listFiles()!!.map { it })
 }

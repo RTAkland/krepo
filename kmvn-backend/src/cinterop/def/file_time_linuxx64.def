@@ -1,4 +1,0 @@
-headers = E:\\projects\\KMVNRepo\\kmvn-clib\\file_time.h
-package = cn.rtast.kmvnrepo.time
-staticLibraries = libfiletime-linuxx64.a
-libraryPaths = E:\\projects\\KMVNRepo\\kmvn-backend\\src\\cinterop\\libs
