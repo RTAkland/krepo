@@ -99,9 +99,6 @@ val sshPort: String? = System.getenv("SSH_PORT")
 val sshUser: String? = System.getenv("SSH_USER")
 
 tasks.register("deployBackend") {
-    println(sshPort)
-    println(sshHost)
-    println(sshUser)
     dependsOn(tasks.named("linkReleaseExecutableLinuxX64"))
     doLast {
         exec {
