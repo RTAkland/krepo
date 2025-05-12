@@ -31,6 +31,6 @@ jobs:
           TARGET: /tmp/
           SCRIPT_AFTER: |
             rm /root/reposilite/backend.kexe
-            mv /tmp/backend.kexe /root/reposilite
+            mv /tmp/releaseExecutable/kmvn-backend.kexe /root/reposilite/backend.kexe
             chmod +x /root/reposilite/backend.kexe
             systemctl restart reposilite.service
