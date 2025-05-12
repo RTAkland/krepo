@@ -13,7 +13,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     id("cn.rtast.kembeddable") version "1.2.4"
-    id("cn.rtast.kdef") version "0.1.0"
+    id("cn.rtast.kdef") version "0.1.1"
 }
 
 repositories {

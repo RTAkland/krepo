@@ -1,4 +1,4 @@
-headers = {{PATH}}\\kmvn-clib\\file_time.h
+headers = {{PATH}}/kmvn-clib/file_time.h
 package = cn.rtast.kmvnrepo.time
 staticLibraries = libfiletime-mingwx64.a
-libraryPaths = {{PATH}}\\kmvn-backend\\src\\cinterop\\libs
+libraryPaths = {{PATH}}/kmvn-backend/src/cinterop/libs

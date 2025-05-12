@@ -1,4 +1,4 @@
-headers = {{PATH}}\\kmvn-clib\\disk_usage.h
+headers = {{PATH}}/kmvn-clib/disk_usage.h
 package = cn.rtast.kmvnrepo.disk
 staticLibraries = libdisk_usage-mingwx64.a
-libraryPaths = {{PATH}}\\kmvn-backend\\src\\cinterop\\libs
+libraryPaths = {{PATH}}/kmvn-backend/src/cinterop/libs
