@@ -1,49 +1,69 @@
 # krepo
 
-A Maven repository software built with Kotlin/Native and Kotlin/JS
+`krepo` is a maven repository server, built with Kotlin Native, it supports `linux amd64` and `windows amd64`,
+15MB ~ 20MB is used after running for 12h.
 
-It supports linuxX64 and mingwX64 with low memory usage(Running for 12h only 10MB memory)
+# Features
 
-# Build backend
+1. Low memory usage
+2. High performance
+3. Support mirror other repositories
 
-NOTE: Before you build the backend, you must edit the `.def` files,
-and modify the file path of c headers
+# Build and deploy backend
 
-## LinuxX64
+NOTE: If you want to use it quickly just download the executable binary file in the releases.
 
-Run the following command:
-
-```shell
-$ chmod +x ./gradlew
-$ ./gradlew :kmvn-backend:linkReleaseExecutableLinuxX64
-```
-
-The executable binary file was generated at `kmvn-backend/build/bin/linuxX64/releaseExecutable/kmvn-backend.kexe`
-
-## Windows(MingwX64)
+## Build for linux amd64
 
 ```shell
-$ .\gradlew.bat :kmvn-backend:linkReleaseExecutableMingwX64
+$ ./gradlew replaceDef generateResources linkReleaseExecutableLinuxX64
 ```
 
-The executable binary file was generated at `kmvn-backend/build/bin/mingwX64/debugExecutable/kmvn-backend.exe`
-
-# Build & Deploy Frontend
-
-## Build
+## Build for windows amd64
 
 ```shell
-$ ./gradlew :kmvn-frontend:jsBrowserDistribution
+$ .\gradlew.bat replaceDef generateResources linkReleaseExecutableMingwX64
 ```
 
-When build success the static html and js files were generated at `kmvn-frontend/build/dist/js/productionExecutable`
+This might take a long time to build the binary file
 
 ## Deploy
 
-There's two ways to deploy the frontend
+Just run the executable file.
 
-1. Using nginx or any other http server to serve the static files.
-2. Using PaaS platform to deploy the frontend like vercel, netlify, cloudflare pages and any other.
+## Configure backend
 
-I deploy the frontend on the vercel you can check the workflow file to see the detail of deployment
-`.github/workflows/deploy-to-vercel.yml`
+Open the `config.json` change the `frontend` value to your own frontend url.
+(This setting is only for `/listing` route to redirect the user to the frontend to list repository content)
+
+## Build and deploy frontend
+
+NOTE: Frontend is optional, without frontend backend can also work
+
+Before you build the frontend please modify the config.json at `kmvn-frontend/src/jsMain/resources/config.json`
+and change the backend url to your own backend address.
+
+```shell
+$ ./gradlew jsBrowserDistribution
+```
+
+Then you can find the static files at `kmvn-frontend/build/dist/js/productionExecutable`
+
+Deploy to vercel is recommended, See [.github/workflows/deploy-to-vercel.yml](.github/workflows/deploy-to-vercel.yml)
+
+# Licenses
+
+- This project is open source under [Apache-2.0](./LICENSE) license, that is:
+    - You can directly use the functions provided by this project without any authorization
+    - You can distribute, modify and derive the source code at will under the condition of **indicating the source
+      copyright information**
+
+# Special thanks
+
+<div>
+
+<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.png" alt="JetBrainsIcon" width="128">
+
+<a href="https://www.jetbrains.com/opensource/"><code>JetBrains Open Source</code></a> provided the powerful IDE support
+
+</div>
