@@ -30,7 +30,7 @@ jobs:
           REMOTE_PORT: ${{ secrets.SSH_PORT }}
           TARGET: /tmp/
           SCRIPT_AFTER: |
-            rm /root/reposilite/backend.kexe
-            mv /tmp/releaseExecutable/kmvn-backend.kexe /root/reposilite/backend.kexe
-            chmod +x /root/reposilite/backend.kexe
-            systemctl restart reposilite.service
+            rm /root/krepo/backend.kexe
+            mv /tmp/releaseExecutable/kmvn-backend.kexe /root/krepo/backend.kexe
+            chmod +x /root/krepo/backend.kexe
+            systemctl restart krepo.service
