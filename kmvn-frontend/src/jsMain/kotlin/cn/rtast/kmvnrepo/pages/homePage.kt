@@ -80,10 +80,6 @@ fun RenderContext.homePage() {
                                         id("dropdown-menu-${repo.name}")
                                         div("dropdown-content") {
                                             a("dropdown-item") {
-                                                img("mr-2") {
-                                                    width(14)
-                                                    alt("Gradle Kotlin DSL")
-                                                }
                                                 +"Gradle Kotlin DSL"
                                                 clicks handledBy {
                                                     window.navigator.clipboard.writeText(
