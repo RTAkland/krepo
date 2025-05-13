@@ -51,7 +51,6 @@ fun RenderContext.homePage() {
                     repositories.forEach { repo ->
                         tr {
                             td {
-                                img("mr-2") { src("/assets/img/git-repository.svg") }
                                 a("has-text-link") {
                                     href("/#/${repo.name}")
                                     +repo.name
@@ -83,7 +82,6 @@ fun RenderContext.homePage() {
                                             a("dropdown-item") {
                                                 img("mr-2") {
                                                     width(14)
-                                                    src("/assets/img/gradle_kotlin.svg")
                                                     alt("Gradle Kotlin DSL")
                                                 }
                                                 +"Gradle Kotlin DSL"
@@ -95,11 +93,6 @@ fun RenderContext.homePage() {
                                                 }
                                             }
                                             a("dropdown-item") {
-                                                img("mr-2") {
-                                                    width(14)
-                                                    src("/assets/img/gradle.svg")
-                                                    alt("Gradle Groovy DSL")
-                                                }
                                                 +"Gradle Groovy DSL"
                                                 clicks handledBy {
                                                     window.navigator.clipboard.writeText(
@@ -109,11 +102,6 @@ fun RenderContext.homePage() {
                                                 }
                                             }
                                             a("dropdown-item") {
-                                                img("mr-2") {
-                                                    width(14)
-                                                    src("/assets/img/maven.svg")
-                                                    alt("Maven")
-                                                }
                                                 +"Maven"
                                                 clicks handledBy {
                                                     window.navigator.clipboard.writeText(
@@ -123,11 +111,6 @@ fun RenderContext.homePage() {
                                                 }
                                             }
                                             a("dropdown-item") {
-                                                img("mr-2") {
-                                                    width(14)
-                                                    src("/assets/img/scala.svg")
-                                                    alt("SBT")
-                                                }
                                                 +"SBT"
                                                 clicks handledBy {
                                                     window.navigator.clipboard.writeText(

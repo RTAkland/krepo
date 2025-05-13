@@ -36,7 +36,6 @@ fun RenderContext.navbar() {
         div("navbar-brand") {
             a("navbar-item is-rounded ml-2") {
                 href("#")
-                i("fas fa-house") {}
                 +frontendConfig.pageTitle
             }
             a("navbar-burger") {
@@ -55,39 +54,29 @@ fun RenderContext.navbar() {
                 if (LocalStorage.TOKEN != null) {
                     div("navbar-item has-dropdown is-hoverable") {
                         a("navbar-link") {
-                            i("fa-solid fa-users") {}
                             +"Users"
                         }
                         div("navbar-dropdown") {
                             a("navbar-item") {
                                 href("/#/user/manage")
-                                i("fa-solid fa-users") {}
                                 +"User List"
                             }
                             a("navbar-item") {
                                 href("/#/user/create")
-                                i("fa-solid fa-user-plus") {}
                                 +"Create User"
                             }
                         }
                     }
                     div("navbar-item has-dropdown is-hoverable") {
                         a("navbar-link") {
-                            i("fa-solid fa-gear") {}
                             +"Settings"
                         }
                         div("navbar-dropdown") {
                             a("navbar-item") {
-                                i("fa-solid fa-globe") {}
                                 +"Frontend Settings"
                                 href("/#/setting")
                             }
                             a("navbar-item") {
-                                img {
-                                    width(14)
-                                    src("assets/img/garage_door_16dp_1F1F1F_FILL0_wght400_GRAD0_opsz20.svg")
-                                    alt("assets/img/garage_door_16dp_1F1F1F_FILL0_wght400_GRAD0_opsz20.svg")
-                                }
                                 +"Repository Settings"
                                 href("/#/setting/repository")
                             }
@@ -100,8 +89,7 @@ fun RenderContext.navbar() {
                     div("buttons") {
                         if (LocalStorage.TOKEN == null) {
                             a("button is-light") {
-                                i("fa-solid fa-right-to-bracket mr-2") {}
-                                +"Login"
+                                +"Sign in"
                                 clicks handledBy { showLoginDialog.update(true) }
                             }
                         } else {
@@ -123,7 +111,6 @@ fun RenderContext.navbar() {
                                 }
                             }
                             a("button is-light") {
-                                i("fa-solid fa-right-from-bracket mr-2") {}
                                 +"Logout"
                                 clicks handledBy { showLogoutDialog.update(true) }
                             }
@@ -133,7 +120,7 @@ fun RenderContext.navbar() {
             }
         }
     }
-    showDialog(showLoginDialog, "Login", null, {
+    showDialog(showLoginDialog, "Sign in", null, {
         div("field") {
             label("label") { +"Username" }
             div("control") {

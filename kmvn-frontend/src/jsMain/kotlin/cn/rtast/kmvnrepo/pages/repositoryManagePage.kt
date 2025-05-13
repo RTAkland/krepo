@@ -117,11 +117,6 @@ fun RenderContext.publicContentListingPage() {
                                         attr("role", "menu")
                                         div("dropdown-content") {
                                             a("dropdown-item") {
-                                                img("mr-2") {
-                                                    width(14)
-                                                    src("/assets/img/gradle_kotlin.svg")
-                                                    alt("Gradle Kotlin DSL")
-                                                }
                                                 +"Gradle Kotlin DSL"
                                                 clicks handledBy {
                                                     window.navigator.clipboard.writeText(
@@ -131,11 +126,6 @@ fun RenderContext.publicContentListingPage() {
                                                 }
                                             }
                                             a("dropdown-item") {
-                                                img("mr-2") {
-                                                    width(14)
-                                                    src("/assets/img/gradle.svg")
-                                                    alt("Gradle Groovy DSL")
-                                                }
                                                 +"Gradle Groovy DSL"
                                                 clicks handledBy {
                                                     window.navigator.clipboard.writeText(
@@ -145,11 +135,6 @@ fun RenderContext.publicContentListingPage() {
                                                 }
                                             }
                                             a("dropdown-item") {
-                                                img("mr-2") {
-                                                    width(14)
-                                                    src("/assets/img/maven.svg")
-                                                    alt("Maven")
-                                                }
                                                 +"Maven"
                                                 clicks handledBy {
                                                     window.navigator.clipboard.writeText(
@@ -159,11 +144,6 @@ fun RenderContext.publicContentListingPage() {
                                                 }
                                             }
                                             a("dropdown-item") {
-                                                img("mr-2") {
-                                                    width(14)
-                                                    src("/assets/img/scala.svg")
-                                                    alt("SBT")
-                                                }
                                                 +"SBT"
                                                 clicks handledBy {
                                                     window.navigator.clipboard.writeText(
@@ -213,22 +193,14 @@ fun RenderContext.publicContentListingPage() {
             }
             if (artifacts.isNotEmpty()) {
                 table("table is-fullwidth is-striped is-hoverable") {
+                    caption { +"Repository content" }
                     thead {
                         tr {
-                            th { +"Name" }
-                            th {
-                                inlineStyle("text-align: center;")
-                                +"Last modified date"
-                            }
-                            th {
-                                inlineStyle("text-align: center;")
-                                +"Size"
-                            }
+                            th {}
+                            th { inlineStyle("text-align: center;") }
+                            th { inlineStyle("text-align: center;") }
                             if (LocalStorage.TOKEN != null) {
-                                th {
-                                    inlineStyle("text-align: center;")
-                                    +"Action"
-                                }
+                                th { inlineStyle("text-align: center;") }
                             }
                         }
                     }
@@ -245,7 +217,6 @@ fun RenderContext.publicContentListingPage() {
                             tr {
                                 td {
                                     if (entry.isDirectory) {
-                                        i("fa-regular fa-folder-open mr-2") {}
                                         a {
                                             className("has-text-link")
                                             +("${entry.name}/")
@@ -254,7 +225,6 @@ fun RenderContext.publicContentListingPage() {
                                             }
                                         }
                                     } else {
-                                        i("fa-regular fa-file mr-2") {}
                                         a {
                                             className("has-text-dark")
                                             +entry.name
