@@ -13,9 +13,13 @@ import cn.rtast.kmvnrepo.routing.api.configureAPIFrontendConfigRouting
 import cn.rtast.kmvnrepo.routing.api.configureAPIUserRouting
 import cn.rtast.kmvnrepo.routing.api.configureRepositoriesRouting
 import cn.rtast.kmvnrepo.routing.configureDownloadRouting
+import cn.rtast.kmvnrepo.routing.configureHomePageRouting
 import cn.rtast.kmvnrepo.routing.configurePublicRepositoriesListing
 import cn.rtast.kmvnrepo.routing.configureUploadArtifactRouting
-import cn.rtast.kmvnrepo.util.manager.*
+import cn.rtast.kmvnrepo.util.manager.ConfigManager
+import cn.rtast.kmvnrepo.util.manager.I18NManager
+import cn.rtast.kmvnrepo.util.manager.TokenManager
+import cn.rtast.kmvnrepo.util.manager.UserManager
 import io.ktor.server.application.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
@@ -40,4 +44,5 @@ fun Application.module() {
     configureAPIArtifactsRouting()
     configureRepositoriesRouting()
     configureAPIFrontendConfigRouting()
+    configureHomePageRouting()
 }
