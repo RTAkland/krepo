@@ -14,22 +14,23 @@ import cn.rtast.kmvnrepo.components.showDialog
 import cn.rtast.kmvnrepo.components.warningToast
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.currentPath
-import cn.rtast.kmvnrepo.entity.Contents
-import cn.rtast.kmvnrepo.entity.CreateDirectoryRequest
-import cn.rtast.kmvnrepo.entity.CreateDirectoryResponse
-import cn.rtast.kmvnrepo.entity.DeleteGavRequest
+import cn.rtast.kmvnrepo.entity.*
 import cn.rtast.kmvnrepo.pages.other.notFoundPage
 import cn.rtast.kmvnrepo.util.auth
+import cn.rtast.kmvnrepo.util.byte.toByteArray
 import cn.rtast.kmvnrepo.util.file.LocalStorage
 import cn.rtast.kmvnrepo.util.file.formatSize
 import cn.rtast.kmvnrepo.util.httpRequest
 import cn.rtast.kmvnrepo.util.jsonContentType
 import cn.rtast.kmvnrepo.util.setBody
 import cn.rtast.kmvnrepo.util.string.*
+import cn.rtast.rutil.string.encodeToBase64
 import dev.fritz2.core.*
 import dev.fritz2.remote.http
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
+import org.khronos.webgl.ArrayBuffer
+import org.w3c.files.FileReader
 import kotlin.time.Duration.Companion.seconds
 
 fun RenderContext.publicContentListingPage() {
@@ -157,27 +158,44 @@ fun RenderContext.publicContentListingPage() {
                                 }
                             }
                             if (LocalStorage.TOKEN != null) {
-//                                label("button") {
-//                                    attr("for", "fileInput")
-//                                    i("fa-solid fa-upload") {}
-//                                }
-//                                input("file-input") {
-//                                    id("fileInput")
-//                                    type("file")
-//                                    className("is-hidden")
-//                                    changes.values() handledBy {
-//                                        val filename = it.split("/").last().split("\\").last()
-//                                        val reader = FileReader()
-//                                        reader.readAsArrayBuffer(File())
-//                                        reader.onload = { event: Event ->
-//                                            val fileContent = reader.result as ArrayBuffer
-//                                            val form = FormData()
-//                                            form.append("file", File(arrayOf(fileContent), filename))
-//                                            form.append("filename", filename)
-//                                            form.append("repoPath", currentPath)
-//                                        }
-//                                    }
-//                                }
+                                label("button") {
+                                    attr("for", "fileInput")
+                                    i("fa-solid fa-upload") {}
+                                }
+                                input("file-input") {
+                                    id("fileInput")
+                                    type("file")
+                                    className("is-hidden")
+                                    changes.values() handledBy {
+                                        val file = domNode.files!!.item(0)!!
+                                        val reader = FileReader()
+                                        coroutineScope.launch {
+                                            infoToast("Reading file...")
+                                            reader.readAsArrayBuffer(file)
+                                        }
+                                        reader.onload = {
+                                            coroutineScope.launch {
+                                                val fileContent = reader.result as ArrayBuffer
+                                                val body =
+                                                    UploadFilePayload(
+                                                        fileContent.toByteArray().encodeToBase64(),
+                                                        file.name,
+                                                        "./repositories$currentPath"
+                                                    )
+                                                infoToast("Uploading...")
+                                                val result = httpRequest("/@/api/repositories/upload")
+                                                    .auth().acceptJson().jsonContentType()
+                                                    .setBody(body).post().body()
+                                                    .fromJson<UploadFileResponse>()
+                                                when (result.code) {
+                                                    200 -> window.location.reload()
+                                                    409 -> errorToast("Upload failed, Conflict!")
+                                                    else -> errorToast("Upload file unknown error")
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                                 a("button") {
                                     img { src("/assets/img/create-folder.svg") }
                                     clicks handledBy { showCreateFolderDialog.update(true) }

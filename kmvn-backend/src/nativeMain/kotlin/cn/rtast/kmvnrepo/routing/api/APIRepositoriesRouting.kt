@@ -15,6 +15,7 @@ import cn.rtast.kmvnrepo.entity.*
 import cn.rtast.kmvnrepo.entity.res.CommonDataResponse
 import cn.rtast.kmvnrepo.entity.res.CommonResponse
 import cn.rtast.kmvnrepo.util.file.*
+import cn.rtast.kmvnrepo.util.string.decodeToByteArrayBase64
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
@@ -44,31 +45,12 @@ fun Application.configureRepositoriesRouting() {
 
 private fun Route.configureCreateDirectoryRouting() {
     post("/upload") {
-        var filename = ""
-        var uploadRepoPath = ""
-        var fileContent = byteArrayOf()
-        val multipart = call.receiveMultipart()
-        multipart.forEachPart { part ->
-            when (part) {
-                is PartData.FileItem -> {
-                    fileContent = part.provider().readBuffer.readByteArray()
-                }
-
-                is PartData.FormItem -> {
-                    when (part.name) {
-                        "repoPath" -> uploadRepoPath = part.value
-                        "filename" -> filename = part.value
-                    }
-                }
-
-                else -> {}
-            }
-        }
-        val path = Path(uploadRepoPath, filename)
+        val body = call.receive<UploadFilePayload>()
+        val path = Path(body.path, body.filename)
         if (path.exists()) {
             call.respond(HttpStatusCode.Conflict, CommonResponse(409, "Conflict"))
         } else {
-            path.writeByteArray(fileContent)
+            path.writeByteArray(body.file.decodeToByteArrayBase64())
             call.respond(HttpStatusCode.OK, CommonResponse(200, "Success"))
         }
     }
