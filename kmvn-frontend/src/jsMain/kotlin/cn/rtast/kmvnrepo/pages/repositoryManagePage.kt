@@ -160,7 +160,7 @@ fun RenderContext.publicContentListingPage() {
                             if (LocalStorage.TOKEN != null) {
                                 label("button") {
                                     attr("for", "fileInput")
-                                    i("fa-solid fa-upload") {}
+                                    img { src("/assets/img/upload.svg") }
                                 }
                                 input("file-input") {
                                     id("fileInput")

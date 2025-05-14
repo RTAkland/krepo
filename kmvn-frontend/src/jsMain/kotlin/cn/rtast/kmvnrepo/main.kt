@@ -47,7 +47,7 @@ lateinit var frontendConfig: FrontendConfig
 fun main() {
     toastContainer("default", "toast-container")
     coroutineScope.launch {
-        if (window.location.hostname != "localhost")
+//        if (window.location.hostname != "localhost")
         backend = http("/config.json").get().body().fromJson<Config>().backend
         try {
             val checkSessionValid = http("$backend/@/api/user/")
