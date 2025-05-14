@@ -28,6 +28,7 @@ fun RenderContext.navbar() {
     val showLoginDialog = storeOf(false)
     val username = storeOf("")
     val password = storeOf("")
+    val searchQueryStore = storeOf("")
     nav("navbar level") {
         inlineStyle("background-color: #5181B8")
         inlineStyle("color: #FFFFFF")
@@ -83,6 +84,21 @@ fun RenderContext.navbar() {
                         }
                     }
                 }
+//                div("navbar-item") {
+//                    div("control") {
+//                        input("input search-placeholder") {
+//                            type("text")
+//                            placeholder("Search here...")
+//                            changes.values() handledBy searchQueryStore.update
+//                        }
+//                    }
+//                    i("fa-solid fa-search button is-light") {
+//                        clicks handledBy {
+//                            if (searchQueryStore.current.isBlank()) warningToast("Please fill in the search keyword")
+//                            else window.location.href = "/#/search?q=${searchQueryStore.current}"
+//                        }
+//                    }
+//                }
             }
             div("navbar-end") {
                 div("navbar-item") {

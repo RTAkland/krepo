@@ -33,7 +33,6 @@ import dev.fritz2.headless.foundation.portalRoot
 import dev.fritz2.remote.http
 import dev.fritz2.routing.routerOf
 import kotlinx.browser.document
-import kotlinx.browser.window
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlin.time.ExperimentalTime
@@ -71,6 +70,7 @@ fun main() {
                 router.data.render { site ->
                     currentPath = site
                     if (site.startsWith("/user/edit")) editUserPage()
+//                    else if (site.startsWith("/search")) searchPage()
                     else {
                         when (site) {
                             "/", "contents" -> homePage()
