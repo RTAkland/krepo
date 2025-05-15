@@ -17,6 +17,7 @@ import cn.rtast.kmvnrepo.entity.FrontendConfig
 import cn.rtast.kmvnrepo.entity.GetFrontendConfigResponse
 import cn.rtast.kmvnrepo.pages.homePage
 import cn.rtast.kmvnrepo.pages.publicContentListingPage
+import cn.rtast.kmvnrepo.pages.search.searchPage
 import cn.rtast.kmvnrepo.pages.settings.mavenRepositorySettingPage
 import cn.rtast.kmvnrepo.pages.settings.settingPage
 import cn.rtast.kmvnrepo.pages.users.editUserPage
@@ -70,7 +71,7 @@ fun main() {
                 router.data.render { site ->
                     currentPath = site
                     if (site.startsWith("/user/edit")) editUserPage()
-//                    else if (site.startsWith("/search")) searchPage()
+                    else if (site.startsWith("/search")) searchPage()
                     else {
                         when (site) {
                             "/", "contents" -> homePage()
