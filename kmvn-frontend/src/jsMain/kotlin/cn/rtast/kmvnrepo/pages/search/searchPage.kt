@@ -10,6 +10,7 @@ package cn.rtast.kmvnrepo.pages.search
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.entity.SearchArtifactResponse
 import cn.rtast.kmvnrepo.util.auth
+import cn.rtast.kmvnrepo.util.file.checkSession
 import cn.rtast.kmvnrepo.util.httpRequest
 import cn.rtast.kmvnrepo.util.jsonContentType
 import cn.rtast.kmvnrepo.util.string.extractQueryParams
@@ -19,24 +20,26 @@ import kotlinx.browser.window
 import kotlinx.coroutines.launch
 
 fun RenderContext.searchPage() {
-    val queryParam = extractQueryParams(window.location.href)
-    val repo = queryParam["repo"]!!
-    val keyword = queryParam["q"]!!
-    coroutineScope.launch {
-        val response = httpRequest("/@/api/artifacts/search/$repo?name=$keyword")
-            .auth().acceptJson().jsonContentType()
-            .get().body().fromJson<SearchArtifactResponse>()
-        div("container mt-5") {
-            h2("title is-3 has-text-centered mb-4") { +"Search results" }
-            inlineStyle("max-width: 60%;")
-            div("box") {
-                if (response.count == 0) {
-                    div("has-text-centered has-text-grey") { +"Nothing found" }
-                } else {
-                    div("mb-3 has-text-weight-semibold") { +"Found ${response.count} results" }
-                    ul {
-                        response.data.forEach { artifact ->
-                            renderArtifactItem(repo, artifact)
+    checkSession {
+        val queryParam = extractQueryParams(window.location.href)
+        val repo = queryParam["repo"]!!
+        val keyword = queryParam["q"]!!
+        coroutineScope.launch {
+            val response = httpRequest("/@/api/artifacts/search/$repo?name=$keyword")
+                .auth().acceptJson().jsonContentType()
+                .get().body().fromJson<SearchArtifactResponse>()
+            div("container mt-5") {
+                h2("title is-3 has-text-centered mb-4") { +"Search results" }
+                inlineStyle("max-width: 60%;")
+                div("box") {
+                    if (response.count == 0) {
+                        div("has-text-centered has-text-grey") { +"Nothing found" }
+                    } else {
+                        div("mb-3 has-text-weight-semibold") { +"Found ${response.count} results" }
+                        ul {
+                            response.data.forEach { artifact ->
+                                renderArtifactItem(repo, artifact)
+                            }
                         }
                     }
                 }
