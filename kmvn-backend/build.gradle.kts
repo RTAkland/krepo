@@ -78,6 +78,7 @@ kotlin {
             implementation("io.ktor:ktor-server-cors:$ktorVersion")
             implementation("io.ktor:ktor-client-cio:${ktorVersion}")
             implementation("io.ktor:ktor-client-core:${ktorVersion}")
+            implementation("io.ktor:ktor-server-status-pages:${ktorVersion}")
             implementation("io.github.pdvrieze.xmlutil:core:0.90.3")
             implementation("io.github.pdvrieze.xmlutil:serialization:0.90.3")
         }

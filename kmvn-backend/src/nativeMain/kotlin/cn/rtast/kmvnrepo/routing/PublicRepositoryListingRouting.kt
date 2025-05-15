@@ -17,10 +17,12 @@ import cn.rtast.kmvnrepo.tokenManager
 import cn.rtast.kmvnrepo.userManager
 import cn.rtast.kmvnrepo.util.manager.i18n
 import cn.rtast.kmvnrepo.util.respondJson
+import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlin.uuid.ExperimentalUuidApi
@@ -44,6 +46,11 @@ fun Application.configurePublicRepositoriesListing() {
                 if (userManager.validateUser(credentials.name, credentials.password))
                     UserIdPrincipal(credentials.name) else null
             }
+        }
+    }
+    install(StatusPages) {
+        exception<Throwable> { call, cause ->
+            call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
         }
     }
 
