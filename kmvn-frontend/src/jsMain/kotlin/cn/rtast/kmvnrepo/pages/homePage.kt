@@ -11,6 +11,7 @@ import cn.rtast.kmvnrepo.components.infoToast
 import cn.rtast.kmvnrepo.components.warningToast
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.entity.GetRepositoriesResponse
+import cn.rtast.kmvnrepo.entity.RepositoryVisibility
 import cn.rtast.kmvnrepo.frontendConfig
 import cn.rtast.kmvnrepo.util.auth
 import cn.rtast.kmvnrepo.util.file.LocalStorage
@@ -46,7 +47,7 @@ fun RenderContext.homePage() {
                 caption { +"Repositories" }
                 thead {
                     tr {
-                        th { attr("style", "width: 25%") }
+                        th { attr("style", "width: 30%") }
                         th("is-narrow") { attr("style", "width: 25%") }
                         if (LocalStorage.TOKEN != null) th("has-text-centered") { attr("style", "width: 25%") }
                         th("has-text-centered") { attr("style", "width: 25%") }
@@ -61,7 +62,15 @@ fun RenderContext.homePage() {
                                     +repo.name
                                 }
                             }
-                            td("is-narrow") { span("tag") { b { +repo.visibility.desc } } }
+                            td("is-narrow") {
+                                span(
+                                    "tag is-light${
+                                        if (repo.visibility == RepositoryVisibility.Internal) " is-danger" else ""
+                                    }"
+                                ) {
+                                    b { +repo.visibility.desc }
+                                }
+                            }
                             if (LocalStorage.TOKEN != null) td("has-text-centered") {
                                 span("tag") { +formatSize(repo.size ?: 0L) }
                             }
