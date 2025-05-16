@@ -10,6 +10,7 @@ package cn.rtast.kmvnrepo.pages.search
 import cn.rtast.kmvnrepo.backend
 import cn.rtast.kmvnrepo.coroutineScope
 import cn.rtast.kmvnrepo.entity.V2ArtifactSearchResponse
+import cn.rtast.kmvnrepo.util.file.checkSession
 import cn.rtast.kmvnrepo.util.httpRequest
 import cn.rtast.kmvnrepo.util.jsonContentType
 import cn.rtast.kmvnrepo.util.string.extractQueryParams
@@ -21,34 +22,36 @@ import kotlinx.browser.window
 import kotlinx.coroutines.launch
 
 fun RenderContext.searchPage() {
-    val queryParam = extractQueryParams(window.location.href)
-    val keyword = queryParam["q"] ?: ""
-    val responseFlow = storeOf<V2ArtifactSearchResponse?>(null)
-    div("container mt-5") {
-        h2("title is-3 has-text-centered mb-4") { +"Search results" }
-        div("box") {
-            inlineStyle("max-width: 60%; margin: 0 auto;")
-            responseFlow.data.render { response ->
-                if (response == null) {
-                    div("has-text-centered has-text-grey") { +"Loading..." }
-                } else if (response.data.isEmpty()) {
-                    div("has-text-centered has-text-grey") { +"Nothing found" }
-                } else {
-                    div("mb-3 has-text-weight-semibold") { +"Found ${response.data.size} results" }
-                    ul {
-                        response.data.forEach { artifact ->
-                            renderArtifactItem(artifact)
+    checkSession {
+        val queryParam = extractQueryParams(window.location.href)
+        val keyword = queryParam["q"] ?: ""
+        val responseFlow = storeOf<V2ArtifactSearchResponse?>(null)
+        div("container mt-5") {
+            h2("title is-3 has-text-centered mb-4") { +"Search results" }
+            div("box") {
+                inlineStyle("max-width: 60%; margin: 0 auto;")
+                responseFlow.data.render { response ->
+                    if (response == null) {
+                        div("has-text-centered has-text-grey") { +"Loading..." }
+                    } else if (response.data.isEmpty()) {
+                        div("has-text-centered has-text-grey") { +"Nothing found" }
+                    } else {
+                        div("mb-3 has-text-weight-semibold") { +"Found ${response.data.size} results" }
+                        ul {
+                            response.data.forEach { artifact ->
+                                renderArtifactItem(artifact)
+                            }
                         }
                     }
                 }
             }
         }
-    }
-    coroutineScope.launch {
-        val response = httpRequest("/@/api/v2/artifacts/search?keyword=$keyword")
-            .acceptJson().jsonContentType()
-            .get().body().fromJson<V2ArtifactSearchResponse>()
-        responseFlow.update(response)
+        coroutineScope.launch {
+            val response = httpRequest("/@/api/v2/artifacts/search?keyword=$keyword")
+                .acceptJson().jsonContentType()
+                .get().body().fromJson<V2ArtifactSearchResponse>()
+            responseFlow.update(response)
+        }
     }
 }
 

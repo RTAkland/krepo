@@ -54,25 +54,6 @@ fun RenderContext.navbar() {
         div("navbar-menu") {
             id("navbarBasic")
             div("navbar-start") {
-                div("navbar-item") {
-                    div("control has-icons-left has-icons-right") {
-                        input("input is-info is-rounded") {
-                            type("text")
-                            placeholder("Fill in keyword to search...")
-                            changes.values() handledBy searchKeywordStore.update
-                            keyups.mapNotNull { it }
-                                .filter { it.key == "Enter" }
-                                .handledBy {
-                                    if (searchKeywordStore.current.isBlank()) {
-                                        warningToast("Please fill in the keyword to search!")
-                                    } else window.location.href = "/#/search?q=${searchKeywordStore.current}"
-                                }
-                        }
-                        span("icon is-small is-left") {
-                            i("fa-solid fa-magnifying-glass") {}
-                        }
-                    }
-                }
                 if (LocalStorage.TOKEN != null) {
                     div("navbar-item has-dropdown is-hoverable") {
                         a("navbar-link") {
@@ -102,6 +83,30 @@ fun RenderContext.navbar() {
                                 +"Repository Settings"
                                 href("/#/setting/repository")
                             }
+                        }
+                    }
+                }
+                div("navbar-item") {
+                    div("control has-icons-left has-icons-right") {
+                        input("input is-info is-rounded") {
+                            type("text")
+                            placeholder("Fill in keyword to search...")
+                            changes.values() handledBy searchKeywordStore.update
+                            keyups.mapNotNull { it }
+                                .filter { it.key == "Enter" }
+                                .handledBy {
+                                    if (LocalStorage.TOKEN == null) {
+                                        warningToast("Please sign in first!")
+                                        showLoginDialog.update(true)
+                                    } else {
+                                        if (searchKeywordStore.current.isBlank()) {
+                                            warningToast("Please fill in the keyword to search!")
+                                        } else window.location.href = "/#/search?q=${searchKeywordStore.current}"
+                                    }
+                                }
+                        }
+                        span("icon is-small is-left") {
+                            i("fa-solid fa-magnifying-glass") {}
                         }
                     }
                 }

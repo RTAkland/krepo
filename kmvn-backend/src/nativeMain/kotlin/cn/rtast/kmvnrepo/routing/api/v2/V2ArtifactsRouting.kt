@@ -15,13 +15,16 @@ import cn.rtast.kmvnrepo.util.file.isRegularFile
 import cn.rtast.kmvnrepo.util.file.rootPathOf
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.authenticate
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Application.configureV2ArtifactsRouting() {
     routing {
         route("/@/api/v2/artifacts") {
-            searchArtifactRouting()
+            authenticate("api") {
+                searchArtifactRouting()
+            }
         }
     }
 }
