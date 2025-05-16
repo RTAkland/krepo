@@ -10,7 +10,7 @@
 
 package cn.rtast.kmvnrepo.util.manager
 
-import cn.rtast.kmvnrepo.ROOT_PATH
+import cn.rtast.kmvnrepo.DATA_PATH
 import cn.rtast.kmvnrepo.entity.User
 import cn.rtast.kmvnrepo.util.file.exists
 import cn.rtast.kmvnrepo.util.file.readText
@@ -22,7 +22,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 class UserManager {
-    private val file = Path(ROOT_PATH, "users.json").apply {
+    private val file = Path(DATA_PATH, "users.json").apply {
         if (!exists()) writeText(listOf(User("admin", Uuid.random().toString(), "admin@rtast.cn")).toJson())
     }
 

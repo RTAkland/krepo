@@ -131,45 +131,31 @@ fun RenderContext.homePage() {
                                         }
                                     }
                                 }
-                                if (LocalStorage.TOKEN != null) {
-                                    div("dropdown is-hoverable is-centered is-inline-block ml-2") {
-                                        div("dropdown-trigger") {
-                                            button("button is-small is-light") {
-                                                i("fa-solid fa-magnifying-glass") {}
-                                                attr("aria-haspopup", "true")
-                                                attr("aria-controls", "dropdown-search-menu-${repo.name}")
-                                                clicks handledBy {
-                                                    if (searchKeyword.current.isBlank()) {
-                                                        warningToast("Please fill in the keyword to search!")
-                                                    } else {
-                                                        window.location.href =
-                                                            "/#/search?repo=${repo.name}&q=${searchKeyword.current}"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        div("dropdown-menu") {
-                                            id("dropdown-search-menu-${repo.name}")
-                                            div("dropdown-content p-2") {
-                                                input("dropdown-item input is-info") {
-                                                    type("text")
-                                                    placeholder("Type the keyword")
-                                                    changes.values() handledBy searchKeyword.update
-                                                    keyups.mapNotNull { it }
-                                                        .filter { it.key == "Enter" }
-                                                        .handledBy {
-                                                            if (searchKeyword.current.isBlank()) {
-                                                                warningToast("Please fill in the keyword to search!")
-                                                            } else {
-                                                                window.location.href =
-                                                                    "/#/search?repo=${repo.name}&q=${searchKeyword.current}"
-                                                            }
-                                                        }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+//                                if (LocalStorage.TOKEN != null) {
+//                                    div("dropdown is-hoverable is-centered is-inline-block ml-2") {
+//                                        div("dropdown-trigger") {
+//                                            button("button is-small is-light") {
+//                                                i("fa-solid fa-magnifying-glass") {}
+//                                                attr("aria-haspopup", "true")
+//                                                attr("aria-controls", "dropdown-search-menu-${repo.name}")
+//                                                clicks handledBy {
+//                                                    if (searchKeyword.current.isBlank()) {
+//                                                        warningToast("Please fill in the keyword to search!")
+//                                                    } else {
+//                                                        window.location.href =
+//                                                            "/#/search?repo=${repo.name}&q=${searchKeyword.current}"
+//                                                    }
+//                                                }
+//                                            }
+//                                        }
+//                                        div("dropdown-menu") {
+//                                            id("dropdown-search-menu-${repo.name}")
+//                                            div("dropdown-content p-2") {
+
+//                                            }
+//                                        }
+//                                    }
+//                                }
                             }
                         }
                     }

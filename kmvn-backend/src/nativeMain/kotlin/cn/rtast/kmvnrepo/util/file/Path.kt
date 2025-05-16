@@ -10,7 +10,7 @@
 
 package cn.rtast.kmvnrepo.util.file
 
-import cn.rtast.kmvnrepo.ROOT_PATH
+import cn.rtast.kmvnrepo.REPOSITORY_PATH
 import io.ktor.utils.io.core.*
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.io.buffered
@@ -44,7 +44,7 @@ fun Path.readBytes(): ByteArray {
 fun Path.rawSource() = SystemFileSystem.source(this)
 
 fun rootPathOf(path: String): Path {
-    return Path(ROOT_PATH, path)
+    return Path(REPOSITORY_PATH, path)
 }
 
 fun Path.exists(): Boolean = SystemFileSystem.exists(this)

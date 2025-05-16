@@ -21,8 +21,10 @@ import kotlinx.io.files.Path
 
 val client = HttpClient(httpClientEngine)
 
-const val ROOT_PATH_STRING = "./repositories"
-val ROOT_PATH = Path(ROOT_PATH_STRING).apply { mkdirs() }
+const val REPOSITORY_PATH_STRING = "./repositories"
+val REPOSITORY_PATH = Path(REPOSITORY_PATH_STRING).apply { mkdirs() }
+const val DATA_PATH_STRING = "./data"
+val DATA_PATH = Path(DATA_PATH_STRING).apply { mkdirs() }
 
 val repositories = mutableListOf<ConfigRepository>()
 

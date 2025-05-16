@@ -8,6 +8,7 @@
 
 package cn.rtast.kmvnrepo.util.manager
 
+import cn.rtast.kmvnrepo.DATA_PATH
 import cn.rtast.kmvnrepo.DEFAULT_CONFIG
 import cn.rtast.kmvnrepo.entity.config.Config
 import cn.rtast.kmvnrepo.enums.RepositoryStatus
@@ -19,9 +20,10 @@ import cn.rtast.kmvnrepo.util.file.rootPathOf
 import cn.rtast.kmvnrepo.util.file.writeText
 import cn.rtast.kmvnrepo.util.string.fromJson
 import cn.rtast.kmvnrepo.util.string.toJson
+import kotlinx.io.files.Path
 
 class ConfigManager {
-    private val file = rootPathOf("config.json")
+    private val file = Path(DATA_PATH,"config.json")
 
     init {
         if (!file.exists()) {

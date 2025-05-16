@@ -21,6 +21,8 @@ import cn.rtast.kmvnrepo.util.string.toBase64
 import dev.fritz2.core.*
 import dev.fritz2.remote.http
 import kotlinx.browser.window
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 
 fun RenderContext.navbar() {
@@ -28,6 +30,7 @@ fun RenderContext.navbar() {
     val showLoginDialog = storeOf(false)
     val username = storeOf("")
     val password = storeOf("")
+    val searchKeywordStore = storeOf("")
     nav("navbar level") {
         inlineStyle("background-color: #5181B8")
         inlineStyle("color: #FFFFFF")
@@ -51,6 +54,25 @@ fun RenderContext.navbar() {
         div("navbar-menu") {
             id("navbarBasic")
             div("navbar-start") {
+                div("navbar-item") {
+                    div("control has-icons-left has-icons-right") {
+                        input("input is-info is-rounded") {
+                            type("text")
+                            placeholder("Fill in keyword to search...")
+                            changes.values() handledBy searchKeywordStore.update
+                            keyups.mapNotNull { it }
+                                .filter { it.key == "Enter" }
+                                .handledBy {
+                                    if (searchKeywordStore.current.isBlank()) {
+                                        warningToast("Please fill in the keyword to search!")
+                                    } else window.location.href = "/#/search?q=${searchKeywordStore.current}"
+                                }
+                        }
+                        span("icon is-small is-left") {
+                            i("fa-solid fa-magnifying-glass") {}
+                        }
+                    }
+                }
                 if (LocalStorage.TOKEN != null) {
                     div("navbar-item has-dropdown is-hoverable") {
                         a("navbar-link") {

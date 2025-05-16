@@ -12,6 +12,7 @@ import cn.rtast.kmvnrepo.routing.api.configureAPIArtifactsRouting
 import cn.rtast.kmvnrepo.routing.api.configureAPIFrontendConfigRouting
 import cn.rtast.kmvnrepo.routing.api.configureAPIUserRouting
 import cn.rtast.kmvnrepo.routing.api.configureRepositoriesRouting
+import cn.rtast.kmvnrepo.routing.api.v2.configureV2ArtifactsRouting
 import cn.rtast.kmvnrepo.routing.configureDownloadRouting
 import cn.rtast.kmvnrepo.routing.configureHomePageRouting
 import cn.rtast.kmvnrepo.routing.configurePublicRepositoriesListing
@@ -45,4 +46,5 @@ fun Application.module() {
     configureRepositoriesRouting()
     configureAPIFrontendConfigRouting()
     configureHomePageRouting()
+    configureV2ArtifactsRouting()
 }

@@ -9,7 +9,7 @@
 
 package cn.rtast.kmvnrepo.routing.api
 
-import cn.rtast.kmvnrepo.ROOT_PATH_STRING
+import cn.rtast.kmvnrepo.REPOSITORY_PATH_STRING
 import cn.rtast.kmvnrepo.configManager
 import cn.rtast.kmvnrepo.entity.*
 import cn.rtast.kmvnrepo.entity.res.CommonDataResponse
@@ -17,7 +17,6 @@ import cn.rtast.kmvnrepo.entity.res.CommonResponse
 import cn.rtast.kmvnrepo.util.file.*
 import cn.rtast.kmvnrepo.util.string.decodeToByteArrayBase64
 import io.ktor.http.*
-import io.ktor.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
@@ -25,7 +24,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.utils.io.*
 import kotlinx.io.files.Path
-import kotlinx.io.readByteArray
 
 fun Application.configureRepositoriesRouting() {
     routing {
@@ -59,7 +57,7 @@ private fun Route.configureCreateDirectoryRouting() {
 private fun Route.configureUploadFileRouting() {
     post("/create-directory") {
         val requestPath = call.receive<CreateDirectoryRequest>().path
-        val path = "$ROOT_PATH_STRING/$requestPath".toPath()
+        val path = "$REPOSITORY_PATH_STRING/$requestPath".toPath()
         if (path.exists()) {
             call.respond(HttpStatusCode.Conflict, CommonResponse(409, "Conflict"))
         } else {
@@ -150,7 +148,7 @@ private fun Route.configureGetAllRepositoriesRouting() {
                 .map {
                     ConfigRepositoryWithSize(
                         it.name, it.visibility, it.acceptExtensions, it.allowSnapshot,
-                        it.status, Path(ROOT_PATH_STRING, it.name).diskUsageSize
+                        it.status, Path(REPOSITORY_PATH_STRING, it.name).diskUsageSize
                     )
                 }
             call.respond(HttpStatusCode.OK, CommonDataResponse(200, repositories))
