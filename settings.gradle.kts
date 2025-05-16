@@ -1,6 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
-rootProject.name = "kmvnrepo"
+rootProject.name = "krepo"
 
 listOf(
     "frontend",

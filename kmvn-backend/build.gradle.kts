@@ -38,26 +38,10 @@ kotlin {
             }
         }
     }
-    mingwX64 {
-        compilations["main"].cinterops {
-            val fileTimeMingw by creating {
-                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_time_mingwx64.def").asFile
-                compilerOpts("-Isrc/cinterop/")
-            }
-            val diskUsageMingw by creating {
-                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/disk_usage_mingwx64.def").asFile
-                compilerOpts("-Isrc/cinterop/")
-            }
-            val file by creating {
-                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_mingwx64.def").asFile
-                compilerOpts("-Isrc/cinterop/")
-            }
-        }
-    }
 
     targets.withType<KotlinNativeTarget>().configureEach {
         binaries.executable {
-            entryPoint = "cn.rtast.kmvnrepo.main"
+            entryPoint = "cn.rtast.krepo.main"
         }
         compilerOptions.freeCompilerArgs.add("-Xallocator=std")
     }
@@ -65,7 +49,11 @@ kotlin {
     val ktorVersion = "3.1.2"
 
     sourceSets {
-        commonMain.dependencies {
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
+
+        linuxMain.dependencies {
             implementation(project(":kmvn-common"))
             implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.7.0")
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
@@ -76,31 +64,19 @@ kotlin {
             implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
             implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
             implementation("io.ktor:ktor-server-cors:$ktorVersion")
-            implementation("io.ktor:ktor-client-cio:${ktorVersion}")
             implementation("io.ktor:ktor-client-core:${ktorVersion}")
             implementation("io.ktor:ktor-server-status-pages:${ktorVersion}")
             implementation("io.github.pdvrieze.xmlutil:core:0.90.3")
             implementation("io.github.pdvrieze.xmlutil:serialization:0.90.3")
-        }
-
-        commonTest.dependencies {
-            implementation(kotlin("test"))
-        }
-
-        linuxMain.dependencies {
             implementation("io.ktor:ktor-client-curl:$ktorVersion")
-        }
-
-        mingwMain.dependencies {
-            implementation("io.ktor:ktor-client-winhttp:$ktorVersion")
         }
     }
 }
 
 kembeddable {
     compression = true
-    resourcePath.add("nativeMain/resources")
-    packageName = "cn.rtast.kmvnrepo.resources"
+    resourcePath.add("linuxMain/resources")
+    packageName = "cn.rtast.krepo.resources"
 }
 
 tasks.all {

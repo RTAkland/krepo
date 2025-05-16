@@ -13,7 +13,6 @@ plugins {
 kotlin {
     js(IR) { browser() }
     linuxX64()
-    mingwX64()
 
     sourceSets {
         commonMain.dependencies {

@@ -1,4 +1,0 @@
-headers = {{PATH}}/kmvn-clib/file.h
-package = cn.rtast.kmvnrepo.file
-staticLibraries = libfile-mingwx64.a
-libraryPaths = {{PATH}}/kmvn-backend/src/cinterop/libs
