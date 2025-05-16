@@ -18,13 +18,6 @@ NOTE: If you want to use it quickly just download the executable binary file in 
 ```shell
 $ ./gradlew replaceDef generateResources linkReleaseExecutableLinuxX64
 ```
-
-## Build for windows amd64
-
-```shell
-$ .\gradlew.bat replaceDef generateResources linkReleaseExecutableMingwX64
-```
-
 This might take a long time to build the binary file
 
 ## Deploy
