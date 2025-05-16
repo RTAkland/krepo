@@ -25,8 +25,8 @@ fun Application.configureUploadArtifactRouting() {
                 route(it.name) {
                     put("{path...}") {
                         val path = call.request.uri.drop(1)
-                        val bytes = call.receive<ByteArray>()
-                        val result = deployMavenArtifact(path, bytes)
+                        val channel = call.receiveChannel()
+                        val result = deployMavenArtifact(path, channel)
                         when (result) {
                             DeployStatus.Success -> {
                                 call.respond(status = HttpStatusCode.Created, "Success!")

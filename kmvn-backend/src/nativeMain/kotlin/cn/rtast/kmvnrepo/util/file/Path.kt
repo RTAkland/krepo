@@ -11,8 +11,11 @@
 package cn.rtast.kmvnrepo.util.file
 
 import cn.rtast.kmvnrepo.REPOSITORY_PATH
+import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.core.*
+import io.ktor.utils.io.readAvailable
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.io.Buffer
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
@@ -107,3 +110,20 @@ expect fun Path.getFileModifiedTimestamp(): Long
 expect fun Path.isRegularFile(): Boolean
 
 expect fun Path.cIsDirectory(): Boolean
+
+suspend fun Path.writeStreamToFile(channel: ByteReadChannel) {
+    val sink = SystemFileSystem.sink(this).buffered()
+    try {
+        val buffer = ByteArray(8192)
+        while (!channel.isClosedForRead) {
+            val bytesRead = channel.readAvailable(buffer, 0, buffer.size)
+            if (bytesRead == -1) break
+            if (bytesRead > 0) {
+                sink.write(buffer, 0, bytesRead)
+            }
+        }
+        sink.flush()
+    } finally {
+        sink.close()
+    }
+}

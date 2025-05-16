@@ -6,6 +6,8 @@
  */
 
 
+@file:OptIn(InternalAPI::class)
+
 package cn.rtast.kmvnrepo.registry
 
 import cn.rtast.kmvnrepo.client
@@ -20,12 +22,13 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
+import io.ktor.utils.io.*
 import kotlinx.io.files.Path
 
 private val validatedArtifactExtension = listOf("klib", "jar", "aar")
 
 
-fun deployMavenArtifact(path: String, bytes: ByteArray): DeployStatus {
+suspend fun deployMavenArtifact(path: String, channel: ByteReadChannel): DeployStatus {
     val splitPath = path.split("/")
     val filename = splitPath.last()
     val dir = splitPath.dropLast(1).joinToString("/")
@@ -43,7 +46,7 @@ fun deployMavenArtifact(path: String, bytes: ByteArray): DeployStatus {
                 return DeployStatus.NotAllowSNAPSHOT
             }
         }
-        targetFile.writeByteArray(bytes)
+        targetFile.writeStreamToFile(channel)
         return DeployStatus.Success
     }
 }
@@ -54,24 +57,20 @@ suspend fun ApplicationCall.getProxiedArtifacts(
     path: String,
     originRepository: String
 ) {
-    try {
-        for (repo in repository) {
-            val response = client.get(repo.url.removeSuffix("/") + "/$path") {
-                repo.credential?.let {
-                    val auth = "${it.username}:${it.password}".encodeToBase64()
-                    header("Authorization", "Basic $auth")
-                }
-            }
-            if (response.status == HttpStatusCode.OK) {
-                val bytes = response.bodyAsBytes()
-                val localPath = "$originRepository/${path.removePrefix("/")}".toPath()
-                if (!localPath.exists()) deployMavenArtifact(localPath.toString(), bytes)
-                this.respondBytes(bytes)
-                return
+    for (repo in repository) {
+        val response = client.get(repo.url.removeSuffix("/") + "/$path") {
+            repo.credential?.let {
+                val auth = "${it.username}:${it.password}".encodeToBase64()
+                header("Authorization", "Basic $auth")
             }
         }
-        this.respond(HttpStatusCode.NotFound)
-    } catch (_: Exception) {
-        this.respond(HttpStatusCode.NotFound)
+        if (response.status == HttpStatusCode.OK) {
+            val channel = response.bodyAsChannel()
+            val localPath = "$originRepository/${path.removePrefix("/")}".toPath()
+            if (!localPath.exists()) deployMavenArtifact(localPath.toString(), channel)
+            this.respondSource(rootPathOf(localPath.toString()).rawSource())
+            return
+        }
     }
+    this.respond(HttpStatusCode.NotFound)
 }
