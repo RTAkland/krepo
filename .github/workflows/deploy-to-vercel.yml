@@ -1,7 +1,7 @@
 name: Deploy Frontend
 on:
   push:
-    branches: [main]
+    branches: [ main ]
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -17,7 +17,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Build
-        run: ./gradlew :kmvn-frontend:jsBrowserDistribution
+        run: ./gradlew :krepo-frontend:jsBrowserDistribution
       - name: Install Vercel CLI
         run: npm install -g vercel@22.0.1
       - name: Deploy to Vercel Action
@@ -27,13 +27,13 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          WORKING_DIRECTORY: kmvn-frontend/build/dist/js/productionExecutable/
+          WORKING_DIRECTORY: krepo-frontend/build/dist/js/productionExecutable/
       - name: Deploy to Staging server
         uses: easingthemes/ssh-deploy@main
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           ARGS: "-rlgoDzvc -i"
-          SOURCE: "kmvn-frontend/build/dist/js/productionExecutable"
+          SOURCE: "krepo-frontend/build/dist/js/productionExecutable"
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_PORT: ${{ secrets.SSH_PORT }}

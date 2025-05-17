@@ -18,19 +18,19 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Build
-        run: ./gradlew :kmvn-backend:replaceDef :kmvn-backend:generateResources :kmvn-backend:linkReleaseExecutableLinuxX64
+        run: ./gradlew :krepo-backend:replaceDef :krepo-backend:generateResources :krepo-backend:linkReleaseExecutableLinuxX64
       - name: Deploy to Staging server
         uses: easingthemes/ssh-deploy@main
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           ARGS: "-rlgoDzvc -i"
-          SOURCE: "kmvn-backend/build/bin/linuxX64/releaseExecutable"
+          SOURCE: "krepo-backend/build/bin/linuxX64/releaseExecutable"
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_USER: ${{ secrets.SSH_USER }}
           REMOTE_PORT: ${{ secrets.SSH_PORT }}
           TARGET: /tmp/
           SCRIPT_AFTER: |
             rm /root/krepo/backend.kexe
-            mv /tmp/releaseExecutable/kmvn-backend.kexe /root/krepo/backend.kexe
+            mv /tmp/releaseExecutable/krepo-backend.kexe /root/krepo/backend.kexe
             chmod +x /root/krepo/backend.kexe
             systemctl restart krepo.service
