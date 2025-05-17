@@ -1,6 +1,6 @@
 # krepo
 
-`krepo` is a maven repository server, built with Kotlin Native, it supports `linux amd64` and `windows amd64`,
+`krepo` is a maven repository server, built with Kotlin Native, it supports `linux amd64` only,
 15MB ~ 20MB was used after running for 12h.
 
 # Features
