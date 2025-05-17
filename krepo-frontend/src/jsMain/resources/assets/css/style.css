@@ -1,0 +1,32 @@
+/*
+ * Copyright © 2025 RTAkland
+ * Date: 2025/4/17 00:25
+ * Open Source Under Apache-2.0 License
+ * https://www.apache.org/licenses/LICENSE-2.0
+ */
+
+#regularFile, #regularFolder {
+    font-family: monospace;
+    white-space: pre;
+    font-size: 14px;
+}
+
+span {
+    white-space: pre;
+    display: block;
+}
+
+#parentFolder {
+    color: blue;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.toast-container {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    color: #222;
+}

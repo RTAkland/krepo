@@ -1,0 +1,14 @@
+/*
+ * Copyright © 2025 RTAkland
+ * Date: 2025/5/6 00:30
+ * Open Source Under Apache-2.0 License
+ * https://www.apache.org/licenses/LICENSE-2.0
+ */
+
+
+.truncate-text {
+    max-width: 280px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

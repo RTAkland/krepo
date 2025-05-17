@@ -1,0 +1,7 @@
+cmake-build-release/
+.idea/
+/.idea/copyright/
+CMakeFiles/
+*.o
+*.a
+*.exe

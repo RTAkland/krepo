@@ -8,7 +8,7 @@ listOf(
     "common",
     "test:test-publish",
     "test:test-publish2",
-).forEach { include("kmvn-$it") }
+).forEach { include("krepo-$it") }
 
 pluginManagement {
     repositories {
