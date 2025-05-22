@@ -16,7 +16,7 @@ NOTE: If you want to use it quickly just download the executable binary file in 
 ## Build for linux amd64
 
 ```shell
-$ ./gradlew replaceDef generateResources linkReleaseExecutableLinuxX64
+$ ./init.sh && ./gradlew replaceDef generateResources linkReleaseExecutableLinuxX64
 ```
 This might take a long time to build the binary file
 
