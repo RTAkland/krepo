@@ -22,6 +22,23 @@ repositories {
 }
 
 kotlin {
+    linuxArm64 {
+        compilations["main"].cinterops {
+            val fileTimeLinux by creating {
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_time_arm64.def").asFile
+                compilerOpts("-Isrc/cinterop/")
+            }
+            val diskUsageLinux by creating {
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/disk_usage_arm64.def").asFile
+                compilerOpts("-Isrc/cinterop/")
+            }
+            val file by creating {
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_arm64.def").asFile
+                compilerOpts("-Isrc/cinterop/")
+            }
+        }
+    }
+
     linuxX64 {
         compilations["main"].cinterops {
             val fileTimeLinux by creating {

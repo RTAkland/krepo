@@ -1,6 +1,6 @@
 # krepo
 
-`krepo` is a maven repository server, built with Kotlin Native, it supports `linux amd64` only,
+`krepo` is a maven repository server, built with Kotlin Native, it supports `linux amd64` and `linux arm64` only,
 15MB ~ 20MB was used after running for 12h.
 
 # Features
@@ -13,12 +13,19 @@
 
 NOTE: If you want to use it quickly just download the executable binary file in the releases.
 
-## Build for linux amd64
+## Build binary
 
 ```shell
 $ ./gradlew replaceDef generateResources linkReleaseExecutableLinuxX64
 ```
+
 This might take a long time to build the binary file
+
+> If you want to build linux arm64 executable, run the following command
+
+```shell
+$ ./gradlew replaceDef generateResources linkReleaseExecutableLinuxArm64
+```
 
 ## Deploy
 
