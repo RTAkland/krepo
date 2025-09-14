@@ -1,17 +1,15 @@
 # krepo
 
-`krepo` is a maven repository server, built with Kotlin Native, it supports `linux amd64` and `linux arm64` only,
-15MB ~ 20MB was used after running for 12h.
+`krepo` is a maven repository server, built with Kotlin Native, it supports `linux amd64` and `linux arm64`.
+Memory usage is around 15~20 MB after running continuously for 12 hours.
 
 # Features
 
 1. Low memory usage
 2. High performance
-3. Support mirror other repositories
+3. Support mirroring other repositories
 
 # Build and deploy backend
-
-NOTE: If you want to use it quickly just download the executable binary file in the releases.
 
 ## Build binary
 
@@ -27,27 +25,23 @@ This might take a long time to build the binary file
 $ ./gradlew replaceDef generateResources linkReleaseExecutableLinuxArm64
 ```
 
-## Deploy
-
-Just run the executable file.
-
 ## Configure backend
 
-Open the `config.json` change the `frontend` value to your own frontend url.
-(This setting is only for `/listing` route to redirect the user to the frontend to list repository content)
+Open `config.json` file, and change the `frontend` value to your own frontend url.
+(This setting applies only to the `/listing` route so that redirect the user to the frontend to view repository content)
 
 ## Build and deploy frontend
 
 NOTE: Frontend is optional, without frontend backend can also work
 
-Before you build the frontend please modify the config.json at `kmvn-frontend/src/jsMain/resources/config.json`
-and change the backend url to your own backend address.
+Before building the frontend please modify the config.json at `kmvn-frontend/src/jsMain/resources/config.json`
+and change the backend url to your own backend url.
 
 ```shell
 $ ./gradlew jsBrowserDistribution
 ```
 
-Then you can find the static files at `kmvn-frontend/build/dist/js/productionExecutable`
+You can find the web static files at `kmvn-frontend/build/dist/js/productionExecutable`
 
 Deploy to vercel is recommended, See [.github/workflows/deploy-to-vercel.yml](.github/workflows/deploy-to-vercel.yml)
 
