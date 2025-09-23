@@ -25,6 +25,7 @@ const val REPOSITORY_PATH_STRING = "./repositories"
 val REPOSITORY_PATH = Path(REPOSITORY_PATH_STRING).apply { mkdirs() }
 const val DATA_PATH_STRING = "./data"
 val DATA_PATH = Path(DATA_PATH_STRING).apply { mkdirs() }
+val RESOURCE_PATH = Path(DATA_PATH, "static")
 
 val repositories = mutableListOf<ConfigRepository>()
 

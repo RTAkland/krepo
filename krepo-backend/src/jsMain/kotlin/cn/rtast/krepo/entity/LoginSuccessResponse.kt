@@ -15,5 +15,6 @@ data class LoginSuccessResponse(
     val message: String,
     val token: String,
     val email: String,
-    val username: String
+    val username: String,
+    val expiredAt: Long
 )

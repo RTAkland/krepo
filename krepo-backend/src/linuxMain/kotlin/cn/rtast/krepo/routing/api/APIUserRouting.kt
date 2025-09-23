@@ -6,15 +6,12 @@
  */
 
 
-@file:OptIn(ExperimentalUuidApi::class)
-
 package cn.rtast.krepo.routing.api
 
 import cn.rtast.krepo.entity.User
 import cn.rtast.krepo.entity.res.*
 import cn.rtast.krepo.tokenManager
 import cn.rtast.krepo.userManager
-import cn.rtast.krepo.util.manager.i18n
 import cn.rtast.krepo.util.respondJson
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -23,7 +20,6 @@ import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlin.uuid.ExperimentalUuidApi
 
 fun Application.configureAPIUserRouting() {
     install(CORS) {
@@ -37,8 +33,17 @@ fun Application.configureAPIUserRouting() {
             post("/@/api/login") {
                 val username = call.principal<UserIdPrincipal>()?.name!!
                 val user = userManager.getUser(username)!!
-                val token = tokenManager.grant(username)
-                call.respondJson(AuthSuccessResponse(200, call.i18n("login"), token, user.email, user.name))
+                val (token, expiredAt) = tokenManager.grant(username, 3600)
+                call.respondJson(
+                    AuthSuccessResponse(
+                        200,
+                        "登陆成功",
+                        token,
+                        user.email,
+                        user.name,
+                        expiredAt
+                    )
+                )
             }
         }
 
@@ -53,7 +58,7 @@ fun Application.configureAPIUserRouting() {
             post("/@/api/logout") {
                 val username = call.principal<UserIdPrincipal>()!!.name
                 tokenManager.revoke(username)
-                call.respondJson(LogoutResponse(200, call.i18n("logout")))
+                call.respondJson(LogoutResponse(200, "登出成功"))
             }
 
             get("/@/api/user") {
@@ -78,9 +83,9 @@ fun Application.configureAPIUserRouting() {
             post("/@/api/user") {
                 val user = call.receive<User>()
                 if (userManager.addUser(user)) {
-                    call.respondJson(CommonResponse(200, "${call.i18n("user.add.success")} -> ${user.name}"))
+                    call.respondJson(CommonResponse(200, "用户添加成功 -> ${user.name}"))
                 } else {
-                    call.respondJson(CommonResponse(-200, call.i18n("user.add.failed")), 401)
+                    call.respondJson(CommonResponse(-200, "用户添加失败, 该用户已存在"), 401)
                 }
             }
 
@@ -88,12 +93,12 @@ fun Application.configureAPIUserRouting() {
                 try {
                     val username = call.parameters["username"]!!
                     if (userManager.removeUser(username)) {
-                        call.respondJson(CommonResponse(200, call.i18n("user.delete.success")))
+                        call.respondJson(CommonResponse(200, "用户已被删除"))
                     } else {
-                        call.respondJson(CommonResponse(-200, call.i18n("user.delete.failure.not.exists")), 404)
+                        call.respondJson(CommonResponse(-200, "用户删除失败, 该用户不存在"), 404)
                     }
                 } catch (e: Exception) {
-                    call.respondJson(CommonResponse(-2000, "${call.i18n("user.delete.failure")}, ${e.message}"), 400)
+                    call.respondJson(CommonResponse(-2000, "用户删除失败, ${e.message}"), 400)
                 }
             }
         }

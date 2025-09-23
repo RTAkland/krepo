@@ -12,6 +12,8 @@ package cn.rtast.krepo.util.manager
 import cn.rtast.krepo.entity.auth.TokenPayload
 import cn.rtast.krepo.util.generateSecureRandomString
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
@@ -19,18 +21,21 @@ import kotlin.uuid.ExperimentalUuidApi
 
 class TokenManager {
     private val validatedTokens = mutableListOf<TokenPayload>()
+    private val mutex = Mutex()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     init {
-        this.startScheduler()
+        startScheduler()
     }
 
-    private fun cleanupExpiredTokens() {
+    private suspend fun cleanupExpiredTokens() {
         val now = Clock.System.now().epochSeconds
-        validatedTokens.removeAll { it.expiredAt <= now }
+        mutex.withLock {
+            validatedTokens.removeAll { it.expiredAt <= now }
+        }
     }
 
-    fun startScheduler() =
+    private fun startScheduler() {
         coroutineScope.launch {
             while (isActive) {
                 try {
@@ -41,30 +46,43 @@ class TokenManager {
                 }
             }
         }
-
-
-    fun revoke(name: String) {
-        validatedTokens.removeAll { it.name == name }
     }
 
-    fun grant(name: String): String {
-        this.cleanupExpiredTokens()
-        return generateSecureRandomString().apply {
-            if (validatedTokens.any { it.name == name }) {
-                this@TokenManager.revoke(name)
-            }
-            validatedTokens.add(TokenPayload(name, this, Clock.System.now().epochSeconds + 7 * 24 * 60 * 60))
+    suspend fun revoke(name: String) {
+        mutex.withLock {
+            validatedTokens.removeAll { it.name == name }
         }
     }
 
-    fun getName(id: String): String? = validatedTokens.find { it.value == id }?.name
+    /**
+     * @param name token所属用户名
+     * @param tokenDurationSeconds token有效期，单位秒
+     * @return Pair(tokenValue, expiredAtEpochSeconds)
+     */
+    suspend fun grant(name: String, tokenDurationSeconds: Long): Pair<String, Long> {
+        cleanupExpiredTokens()
+        val token = generateSecureRandomString()
+        mutex.withLock {
+            validatedTokens.removeAll { it.name == name }
+            val expiredAt = Clock.System.now().epochSeconds + tokenDurationSeconds
+            validatedTokens.add(TokenPayload(name, token, expiredAt))
+            return token to expiredAt
+        }
+    }
 
-    fun validate(id: String): Boolean {
-        this.cleanupExpiredTokens()
-        val payload = validatedTokens.find { it.value == id } ?: return false
-        if (payload.expiredAt <= Clock.System.now().epochSeconds) {
-            this.revoke(payload.name)
-            return false
-        } else return true
+    suspend fun getName(id: String): String? = mutex.withLock {
+        validatedTokens.find { it.value == id }?.name
+    }
+
+    suspend fun validate(id: String): Boolean {
+        cleanupExpiredTokens()
+        val now = Clock.System.now().epochSeconds
+        return mutex.withLock {
+            val payload = validatedTokens.find { it.value == id } ?: return false
+            if (payload.expiredAt <= now) {
+                validatedTokens.remove(payload)
+                false
+            } else true
+        }
     }
 }

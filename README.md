@@ -25,25 +25,9 @@ This might take a long time to build the binary file
 $ ./gradlew replaceDef generateResources linkReleaseExecutableLinuxArm64
 ```
 
-## Configure backend
+## Run krepo
 
-Open `config.json` file, and change the `frontend` value to your own frontend url.
-(This setting applies only to the `/listing` route so that redirect the user to the frontend to view repository content)
-
-## Build and deploy frontend
-
-NOTE: Frontend is optional, without frontend backend can also work
-
-Before building the frontend please modify the config.json at `kmvn-frontend/src/jsMain/resources/config.json`
-and change the backend url to your own backend url.
-
-```shell
-$ ./gradlew jsBrowserDistribution
-```
-
-You can find the web static files at `kmvn-frontend/build/dist/js/productionExecutable`
-
-Deploy to vercel is recommended, See [.github/workflows/deploy-to-vercel.yml](.github/workflows/deploy-to-vercel.yml)
+> At the first startup krepo will generate the web static resources into disk and exit quickly.
 
 # Licenses
 

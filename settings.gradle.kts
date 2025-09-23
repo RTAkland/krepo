@@ -3,7 +3,6 @@
 rootProject.name = "krepo"
 
 listOf(
-    "frontend",
     "backend",
     "common",
     "test:test-publish",
@@ -28,6 +27,7 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
+        mavenLocal()
         google {
             mavenContent {
                 includeGroupAndSubgroups("androidx")

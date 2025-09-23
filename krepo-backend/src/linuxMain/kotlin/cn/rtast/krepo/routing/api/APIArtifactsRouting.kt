@@ -8,10 +8,10 @@
 
 package cn.rtast.krepo.routing.api
 
-import cn.rtast.krepo.entity.RepositoryVisibility
 import cn.rtast.krepo.entity.DeleteGavRequest
 import cn.rtast.krepo.entity.FileEntry
 import cn.rtast.krepo.entity.MavenMetadata
+import cn.rtast.krepo.entity.RepositoryVisibility
 import cn.rtast.krepo.entity.kmp.KotlinToolchainMetadata
 import cn.rtast.krepo.entity.res.APIListingResponse
 import cn.rtast.krepo.entity.res.ArtifactMetadata
@@ -21,7 +21,6 @@ import cn.rtast.krepo.enums.KotlinMultiplatformProjectType
 import cn.rtast.krepo.internalRepositories
 import cn.rtast.krepo.publicRepositories
 import cn.rtast.krepo.util.file.*
-import cn.rtast.krepo.util.manager.i18n
 import cn.rtast.krepo.util.respondJson
 import cn.rtast.krepo.util.string.fromJson
 import cn.rtast.krepo.util.string.fromXmlString
@@ -66,7 +65,7 @@ private suspend fun ApplicationCall.deleteArtifact(
     group: String,
     artifact: String,
     version: String,
-    klib: Boolean
+    klib: Boolean,
 ) {
     try {
         val artifactPath = rootPathOf("$repo/${group.replace(".", "/")}/$artifact/$version")
@@ -96,12 +95,12 @@ private suspend fun ApplicationCall.deleteArtifact(
         artifactPath.deleteRec()
         respondText(
             contentType = ContentType.Application.Json,
-            text = CommonResponse(200, i18n("artifact.delete.success")).toJson()
+            text = CommonResponse(200, "构件已被删除").toJson()
         )
     } catch (e: Exception) {
         respondText(
             contentType = ContentType.Application.Json,
-            text = CommonResponse(-200, "${i18n("artifact.delete.failure")} ${e.message}").toJson()
+            text = CommonResponse(-200, "构件删除失败 ${e.message}").toJson()
         )
     }
 }
@@ -126,10 +125,10 @@ private suspend fun RoutingCall.searchArtifacts(repo: String) {
                 )
             )
         }
-        val result = ArtifactSearchResponse(200, i18n("search.success"), resultList.size, resultList)
+        val result = ArtifactSearchResponse(200, "搜索成功", resultList.size, resultList)
         respondJson(result)
     } catch (e: Exception) {
-        respondJson(ArtifactSearchResponse(-200, "${i18n("search.failure")} ${e.message}", 0, emptyList()))
+        respondJson(ArtifactSearchResponse(-200, "搜索失败 ${e.message}", 0, emptyList()))
     }
 }
 

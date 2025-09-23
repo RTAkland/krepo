@@ -10,6 +10,7 @@ allprojects {
     version = appVersion
 
     repositories {
+        mavenLocal()
         google()
         mavenCentral()
     }

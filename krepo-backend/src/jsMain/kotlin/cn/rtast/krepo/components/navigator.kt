@@ -184,6 +184,7 @@ fun RenderContext.navbar() {
                 LocalStorage.EMAIL_ADDRESS = response.email
                 LocalStorage.AVATAR = avatarUrl
                 LocalStorage.HIDDEN_HASH_FILES = true
+                LocalStorage.EXPIRED_TIMESTAMP = response.expiredAt
                 infoToast("Logged in")
                 window.location.reload()
             } else warningToast("Username or password is incorrect!")

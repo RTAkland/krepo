@@ -12,7 +12,6 @@ package cn.rtast.krepo
 import cn.rtast.krepo.components.navbar
 import cn.rtast.krepo.components.pageFooter
 import cn.rtast.krepo.components.warningToast
-import cn.rtast.krepo.entity.Config
 import cn.rtast.krepo.entity.FrontendConfig
 import cn.rtast.krepo.entity.GetFrontendConfigResponse
 import cn.rtast.krepo.pages.homePage
@@ -25,6 +24,7 @@ import cn.rtast.krepo.pages.users.newUserPage
 import cn.rtast.krepo.pages.users.userManagePage
 import cn.rtast.krepo.util.auth
 import cn.rtast.krepo.util.file.LocalStorage
+import cn.rtast.krepo.util.getCurrentHttpUrl
 import cn.rtast.krepo.util.httpRequest
 import cn.rtast.krepo.util.jsonContentType
 import cn.rtast.krepo.util.string.fromJson
@@ -40,15 +40,13 @@ import kotlin.time.ExperimentalTime
 
 val router = routerOf("contents")
 var currentPath = ""
-var backend = "http://127.0.0.1:9098"
+val backend = getCurrentHttpUrl().apply { println(this) }
 val coroutineScope = MainScope()
 lateinit var frontendConfig: FrontendConfig
 
 fun main() {
     toastContainer("default", "toast-container")
     coroutineScope.launch {
-//        if (window.location.hostname != "localhost")
-            backend = http("/config.json").get().body().fromJson<Config>().backend
         try {
             val checkSessionValid = http("$backend/@/api/user/")
                 .auth().acceptJson().jsonContentType()
