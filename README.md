@@ -7,7 +7,8 @@ Memory usage is around 15~20 MB after running continuously for 12 hours.
 
 1. Low memory usage
 2. High performance
-3. Support mirroring other repositories
+3. Mirroring repositories
+4. Etag and last-modified header verification
 
 # Build and deploy backend
 
