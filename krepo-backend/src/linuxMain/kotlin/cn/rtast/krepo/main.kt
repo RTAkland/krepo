@@ -21,6 +21,8 @@ import cn.rtast.krepo.routing.configureDownloadRouting
 import cn.rtast.krepo.routing.configureHomePageRouting
 import cn.rtast.krepo.routing.configurePublicRepositoriesListing
 import cn.rtast.krepo.routing.configureUploadArtifactRouting
+import cn.rtast.krepo.util.compareResVersion
+import cn.rtast.krepo.util.file.exists
 import cn.rtast.krepo.util.initialResources
 import cn.rtast.krepo.util.manager.ConfigManager
 import cn.rtast.krepo.util.manager.TokenManager
@@ -35,14 +37,18 @@ val configManager = ConfigManager().apply { initRepositories() }
 val tokenManager = TokenManager()
 
 fun main(args: Array<String>) {
-    if (args.firstOrNull() == "generateStatic") {
+    if (args.firstOrNull() == "generateStatic" || !RESOURCE_PATH.exists()) {
         initialResources()
         exit(0)
     }
-    embeddedServer(
-        CIO, port = configManager.getConfig().port, host = "0.0.0.0",
-        module = Application::module
-    ).start(wait = true)
+    compareResVersion()
+    embeddedServer(factory = CIO, configure = {
+        connector {
+            port = configManager.getConfig().port
+            host = "0.0.0.0"
+        }
+        reuseAddress = true
+    }, module = Application::module).start(wait = true)
 }
 
 fun Application.module() {

@@ -12,6 +12,7 @@ plugins {
 }
 
 version = "0.0.2"
+group = "cn.rtast.krepo"
 
 kotlin {
     mingwX64()
@@ -36,8 +37,8 @@ publishing {
     repositories {
         maven("http://127.0.0.1:9098/releases") {
             credentials {
-                username = "RTAkland"
-                password = "123456"
+                username = "admin"
+                password = "b521452d-bae3-4f11-8d39-9496cb1e09da"
             }
         }
     }

@@ -35,10 +35,6 @@ fun Application.configureHomePageRouting() {
 }
 
 private fun Route.mapWebAssets() {
-    if (!RESOURCE_PATH.exists()) {
-        initialResources()
-        exit(0)
-    }
     resourceIndex.forEach {
         get(it.key) {
             val staticFile = Path(RESOURCE_PATH, it.key)

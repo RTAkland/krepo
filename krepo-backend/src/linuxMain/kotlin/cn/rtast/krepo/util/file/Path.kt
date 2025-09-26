@@ -18,6 +18,7 @@ import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.core.*
 import io.ktor.utils.io.readAvailable
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.io.Buffer
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
@@ -28,6 +29,11 @@ import kotlin.time.ExperimentalTime
 fun Path.mkdirs(): Path {
     SystemFileSystem.createDirectories(this)
     return this
+}
+
+fun Path.writeTextBuffered(content: String) {
+    val buffer = Buffer().apply { writeText(content) }
+    SystemFileSystem.sink(this).write(buffer, buffer.size)
 }
 
 fun Path.writeText(content: String) {

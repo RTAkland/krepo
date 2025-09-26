@@ -16,7 +16,7 @@ import cn.rtast.krepo.util.file.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.request.header
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.date.*
@@ -24,6 +24,10 @@ import io.ktor.util.date.*
 private suspend fun ApplicationCall.serveFile(repository: String) {
     val path = repository + "/" + parameters.getAll("path")!!.joinToString("/")
     val file = rootPathOf(path)
+    if (!file.exists()) {
+        this.respond(HttpStatusCode.NotFound, "")
+        return
+    }
     val fileMetadata = file.metadata()
     val fileSize = fileMetadata.size
     val fileLastModifiedTimestamp = file.getFileModifiedTimestamp()

@@ -9,13 +9,18 @@ Memory usage is around 15~20 MB after running continuously for 12 hours.
 2. High performance
 3. Mirroring repositories
 4. Etag and last-modified header verification
+5. Staged upload
 
 # Build and deploy backend
 
 ## Build binary
 
+> Copy the following commands and execute it line by line(Important!!!)
+
 ```shell
-$ ./init.sh && ./gradlew replaceDef generateResources linkReleaseExecutableLinuxX64
+$ ./init.sh
+$ ./gradlew replaceDef jsBrowserDistribution
+$ ./gradlew generateResources linkReleaseExecutableLinuxX64
 ```
 
 This might take a long time to build the binary file

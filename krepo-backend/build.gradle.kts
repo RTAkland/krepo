@@ -138,6 +138,7 @@ val isDevelopmentModeTask by tasks.registering {
 kembeddable {
     compression = false
     resourcePath.apply {
+        add(LinuxMain)
         add(project.layout.buildDirectory.dir("dist/js/productionExecutable").get().asFile)
 //        add(project.layout.buildDirectory.dir("dist/js/developmentExecutable").get().asFile)
     }

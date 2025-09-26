@@ -70,7 +70,7 @@ private suspend fun ApplicationCall.deleteArtifact(
     try {
         val artifactPath = rootPathOf("$repo/${group.replace(".", "/")}/$artifact/$version")
         if (klib) {
-            val toolchainMetadata = Path(artifactPath, "test-publish-0.0.3-kotlin-tooling-metadata.json")
+            val toolchainMetadata = Path(artifactPath, "$artifact-$version-kotlin-tooling-metadata.json")
                 .readText().fromJson<KotlinToolchainMetadata>()
             val extraModules = mutableListOf<String>()
             toolchainMetadata.projectTargets.filter { it.platformType != KotlinMultiplatformProjectType.common }
