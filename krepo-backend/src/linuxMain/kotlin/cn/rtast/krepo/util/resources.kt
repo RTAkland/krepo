@@ -30,7 +30,7 @@ fun initialResources(isUpdateRes: Boolean = false) {
         SystemFileSystem.sink(Path(RESOURCE_PATH, it.key)).buffered().use { use -> use.write(buffer, buffer.size) }
     }
     if (isUpdateRes) {
-        println("资源升级成功, 清重新启动krepo | Web static updated, please relaunch krepo.")
+        println("资源升级成功, 请重新启动krepo | Web static updated, please relaunch krepo.")
     } else {
         println("资源生成完成, 请重新启动krepo | Web static generated, please relaunch krepo.")
     }
