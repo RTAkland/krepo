@@ -74,6 +74,7 @@ kotlin {
     targets.withType<KotlinNativeTarget>().configureEach {
         binaries.executable {
             entryPoint = "cn.rtast.krepo.main"
+            baseName = "krepo-$targetName-${buildType.name.lowercase()}-$version"
         }
         compilerOptions.freeCompilerArgs.add("-Xallocator=std")
     }
