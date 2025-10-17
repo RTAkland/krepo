@@ -1,0 +1,4 @@
+headers = {{PATH}}/krepo-clib/disk_usage.h
+package = cn.rtast.krepo.disk
+staticLibraries = libdisk_usage-macosx64.a
+libraryPaths = {{PATH}}/krepo-backend/src/cinterop/libs

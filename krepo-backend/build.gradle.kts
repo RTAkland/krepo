@@ -7,14 +7,14 @@
 
 @file:Suppress("unused")
 
-import cn.rtast.kembeddable.resources.gradle.util.LinuxMain
+import cn.rtast.kembeddable.resources.gradle.util.NativeMain
 import com.google.devtools.ksp.gradle.KspTaskMetadata
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
-    id("cn.rtast.kembeddable") version "1.3.6"
+    id("cn.rtast.kembeddable") version "1.3.8"
     id("cn.rtast.kdef") version "0.1.1"
     id("com.google.devtools.ksp") version "2.1.21-2.0.1"
 }
@@ -62,6 +62,23 @@ kotlin {
         }
     }
 
+    macosX64 {
+        compilations["main"].cinterops {
+            val fileTimeLinux by creating {
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_time_macosx64.def").asFile
+                compilerOpts("-Isrc/cinterop/")
+            }
+            val diskUsageLinux by creating {
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/disk_usage_macosx64.def").asFile
+                compilerOpts("-Isrc/cinterop/")
+            }
+            val file by creating {
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_macosx64.def").asFile
+                compilerOpts("-Isrc/cinterop/")
+            }
+        }
+    }
+
     js(IR) {
         browser {
             commonWebpackConfig {
@@ -90,7 +107,7 @@ kotlin {
             implementation(project(":krepo-common"))
         }
 
-        linuxMain.dependencies {
+        nativeMain.dependencies {
             implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.7.0")
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
             implementation("io.ktor:ktor-server-auto-head-response:${ktorVersion}")
@@ -139,7 +156,7 @@ val isDevelopmentModeTask by tasks.registering {
 kembeddable {
     compression = false
     resourcePath.apply {
-        add(LinuxMain)
+        add(NativeMain)
         add(project.layout.buildDirectory.dir("dist/js/productionExecutable").get().asFile)
 //        add(project.layout.buildDirectory.dir("dist/js/developmentExecutable").get().asFile)
     }

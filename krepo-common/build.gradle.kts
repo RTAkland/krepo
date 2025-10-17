@@ -14,6 +14,7 @@ kotlin {
     js(IR) { browser() }
     linuxX64()
     linuxArm64()
+    macosX64()
 
     sourceSets {
         commonMain.dependencies {

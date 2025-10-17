@@ -24,39 +24,37 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.utils.io.*
 import kotlinx.io.files.Path
-import platform.posix.rename
-import kotlin.random.Random
 
 private val validatedArtifactExtension = listOf("klib", "jar", "aar")
 
+private val mavenMetadataFilenames = listOf(
+    "maven-metadata.xml",
+    "maven-metadata.xml.md5",
+    "maven-metadata.xml.sha1",
+    "maven-metadata.xml.sha256",
+    "maven-metadata.xml.sha512",
+)
 
 suspend fun deployMavenArtifact(path: String, channel: ByteReadChannel): DeployStatus {
-    val tmpDirId = Random.nextInt().toString()
     val splitPath = path.split("/")
     val filename = splitPath.last()
     val version = splitPath.dropLast(1).last()
     val repositoryName = splitPath.first()
     val repositoryConfig = repositories.find { it.name == repositoryName } ?: return DeployStatus.NotFound
-    val tmpDir =
-        rootPathOf(splitPath.dropLast(1).joinToString("/") + "/.uploading-$tmpDirId").apply { mkdirs() }
-    val tmpFile = Path(tmpDir, filename)
-    val fileExtension = tmpFile.toString().split(".").last()
+    val fileExtension = filename.split(".").last()
     if (fileExtension in validatedArtifactExtension) {
         if (version.endsWith("-SNAPSHOT") && !repositoryConfig.allowSnapshot) {
             return DeployStatus.NotAllowSNAPSHOT
         }
     }
-    tmpFile.writeStreamToFile(channel)
     val finalDir = rootPathOf(splitPath.dropLast(1).joinToString("/"))
     if (!finalDir.exists()) finalDir.mkdirs()
     val finalFile = Path(finalDir, filename)
-    if (!finalFile.exists()) {
-        rename(tmpFile.toString(), finalFile.toString())
+    if (!finalFile.exists() || filename in mavenMetadataFilenames) {
+        finalFile.writeStreamToFile(channel)
     } else {
         if (!configManager.getConfig().allowRedeploy) return DeployStatus.Conflict
-        rename(tmpFile.toString(), finalFile.toString())
     }
-    if (tmpDir.exists() && tmpDir.listFiles().isEmpty()) tmpDir.delete()
     return DeployStatus.Success
 }
 

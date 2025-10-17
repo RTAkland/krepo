@@ -11,11 +11,12 @@ plugins {
     id("maven-publish")
 }
 
-version = "0.0.1"
+version = "0.0.3"
 
 kotlin {
     mingwX64()
     jvm()
+    macosX64()
 }
 
 repositories {

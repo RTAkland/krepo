@@ -1,0 +1,4 @@
+headers = {{PATH}}/krepo-clib/file.h
+package = cn.rtast.krepo.file
+staticLibraries = libfile-macosx64.a
+libraryPaths = {{PATH}}/krepo-backend/src/cinterop/libs

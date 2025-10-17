@@ -25,6 +25,7 @@ fun initialResources(isUpdateRes: Boolean = false) {
     }
     RESOURCE_PATH.mkdirs()
     resourceIndex.forEach {
+        println(it)
         Path(RESOURCE_PATH, it.key).parent?.mkdirs()
         val buffer = Buffer().apply { write(getResource(it.key).asByteArray()) }
         SystemFileSystem.sink(Path(RESOURCE_PATH, it.key)).buffered().use { use -> use.write(buffer, buffer.size) }

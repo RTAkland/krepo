@@ -1,7 +1,10 @@
 CC = gcc
 CFLAGS = -O2 -Wall -c
+
 ifeq ($(OS),Windows_NT)
-    LIB_SUFFIX = -mingwx64
+    LIB_SUFFIX = -mingw64
+else ifeq ($(shell uname),Darwin)
+    LIB_SUFFIX = -macosx64
 else
     LIB_SUFFIX = -linuxx64
 endif
