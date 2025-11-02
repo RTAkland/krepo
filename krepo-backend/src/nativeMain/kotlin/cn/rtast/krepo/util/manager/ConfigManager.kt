@@ -8,7 +8,6 @@
 
 package cn.rtast.krepo.util.manager
 
-import cn.rtast.krepo.enums.RepositoryStatus
 import cn.rtast.krepo.DATA_PATH
 import cn.rtast.krepo.DEFAULT_CONFIG
 import cn.rtast.krepo.entity.config.Config
@@ -21,6 +20,7 @@ import cn.rtast.krepo.util.file.writeText
 import cn.rtast.krepo.util.string.fromJson
 import cn.rtast.krepo.util.string.toJson
 import kotlinx.io.files.Path
+import krepo.enums.RepositoryStatus
 
 class ConfigManager {
     private val file = Path(DATA_PATH, "config.json")

@@ -8,16 +8,17 @@
 
 package cn.rtast.krepo
 
-import cn.rtast.krepo.entity.ConfigRepository
-import cn.rtast.krepo.entity.FrontendConfig
-import cn.rtast.krepo.entity.MirrorRepository
-import cn.rtast.krepo.entity.RepositoryVisibility
-import cn.rtast.krepo.enums.RepositoryStatus
+import cn.rtast.krepo.entity.config.AuthConfig
 import cn.rtast.krepo.entity.config.Config
 import cn.rtast.krepo.util.file.mkdirs
 import io.ktor.client.*
 import io.ktor.client.engine.curl.Curl
 import kotlinx.io.files.Path
+import krepo.entity.ConfigRepository
+import krepo.entity.FrontendConfig
+import krepo.entity.MirrorRepository
+import krepo.entity.RepositoryVisibility
+import krepo.enums.RepositoryStatus
 
 val client = HttpClient(Curl)
 
@@ -67,8 +68,10 @@ val DEFAULT_CONFIG = Config(
         "Maven Repo of RTAST",
         "皖ICP备2024066235-1号",
         "这里是RTAST的Maven仓库!",
-        "© #YEAR#  Made by  <a href=\"https://github.com/RTAkland\" target=\"_blank\">RTAkland</a>"
-    )
+        "© #YEAR#  Made by  <a href=\"https://github.com/RTAkland\" target=\"_blank\">RTAkland</a>",
+        true
+    ),
+    AuthConfig("clientId", "clientSecret", "http://localhost:9098/api/signin/azure")
 )
 
 val publicRepositories

@@ -12,6 +12,7 @@ import cn.rtast.krepo.routing.api.configureAPIArtifactsRouting
 import cn.rtast.krepo.routing.api.configureAPIFrontendConfigRouting
 import cn.rtast.krepo.routing.api.configureAPIUserRouting
 import cn.rtast.krepo.routing.api.configureRepositoriesRouting
+import cn.rtast.krepo.routing.api.oauth.configureAzureSignInRouting
 import cn.rtast.krepo.routing.api.v2.configureV2ArtifactsRouting
 import cn.rtast.krepo.routing.cfg.installAuthenticateRouting
 import cn.rtast.krepo.routing.cfg.installAutoHeadResponseRouting
@@ -67,4 +68,5 @@ fun Application.module() {
     configureAPIFrontendConfigRouting()
     configureHomePageRouting()
     configureV2ArtifactsRouting()
+    configureAzureSignInRouting()
 }

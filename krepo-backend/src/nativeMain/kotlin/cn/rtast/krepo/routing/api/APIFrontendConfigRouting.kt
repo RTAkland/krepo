@@ -7,7 +7,6 @@
 
 package cn.rtast.krepo.routing.api
 
-import cn.rtast.krepo.entity.FrontendConfig
 import cn.rtast.krepo.DEFAULT_CONFIG
 import cn.rtast.krepo.configManager
 import cn.rtast.krepo.entity.res.CommonDataResponse
@@ -18,6 +17,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import krepo.entity.FrontendConfig
 
 fun Application.configureAPIFrontendConfigRouting() {
     routing {
@@ -39,7 +39,8 @@ private fun Route.configureResetFrontendConfigRouting() {
                     DEFAULT_CONFIG.frontendConfig.pageTitle,
                     DEFAULT_CONFIG.frontendConfig.icpLicense,
                     DEFAULT_CONFIG.frontendConfig.description,
-                    DEFAULT_CONFIG.frontendConfig.copyright
+                    DEFAULT_CONFIG.frontendConfig.copyright,
+                    DEFAULT_CONFIG.frontendConfig.enableAzureSignIn
                 ),
             )
         configManager.write(newConfig)
@@ -58,7 +59,8 @@ private fun Route.configureUpdateFrontendConfigRouting() {
                 putConfig.pageTitle,
                 icpLicense,
                 putConfig.description,
-                putConfig.copyright
+                putConfig.copyright,
+                currentConfig.frontendConfig.enableAzureSignIn
             ),
         )
         configManager.write(newConfig)
@@ -76,7 +78,8 @@ private fun Route.configureGetFrontendConfigRouting() {
                     config.pageTitle,
                     config.icpLicense,
                     config.description,
-                    config.copyright
+                    config.copyright,
+                    config.enableAzureSignIn
                 )
             )
         )

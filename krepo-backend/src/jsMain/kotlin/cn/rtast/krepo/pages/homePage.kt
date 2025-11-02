@@ -10,22 +10,20 @@ package cn.rtast.krepo.pages
 import cn.rtast.krepo.components.infoToast
 import cn.rtast.krepo.coroutineScope
 import cn.rtast.krepo.entity.GetRepositoriesResponse
-import cn.rtast.krepo.entity.RepositoryVisibility
 import cn.rtast.krepo.frontendConfig
 import cn.rtast.krepo.util.auth
 import cn.rtast.krepo.util.file.LocalStorage
 import cn.rtast.krepo.util.file.formatSize
 import cn.rtast.krepo.util.httpRequest
 import cn.rtast.krepo.util.jsonContentType
-import cn.rtast.krepo.util.string.castMarkdownToHtml
-import cn.rtast.krepo.util.string.fromJson
-import cn.rtast.krepo.util.string.getGradleGroovyDslRepositoryTemplate
-import cn.rtast.krepo.util.string.getGradleKotlinDslRepositoryTemplate
-import cn.rtast.krepo.util.string.getMavenRepositoryTemplate
-import cn.rtast.krepo.util.string.getSBTRepositoryTemplate
-import dev.fritz2.core.*
+import cn.rtast.krepo.util.string.*
+import dev.fritz2.core.RenderContext
+import dev.fritz2.core.href
+import dev.fritz2.core.id
+import dev.fritz2.core.storeOf
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
+import krepo.entity.RepositoryVisibility
 
 fun RenderContext.homePage() {
     val searchKeyword = storeOf("")

@@ -10,7 +10,6 @@ package cn.rtast.krepo.pages.settings
 import cn.rtast.krepo.components.infoToast
 import cn.rtast.krepo.components.showDialog
 import cn.rtast.krepo.coroutineScope
-import cn.rtast.krepo.entity.FrontendConfig
 import cn.rtast.krepo.frontendConfig
 import cn.rtast.krepo.util.auth
 import cn.rtast.krepo.util.file.checkSession
@@ -20,6 +19,7 @@ import cn.rtast.krepo.util.setBody
 import dev.fritz2.core.*
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
+import krepo.entity.FrontendConfig
 
 fun RenderContext.settingPage() {
     checkSession {
@@ -105,7 +105,7 @@ fun RenderContext.settingPage() {
             coroutineScope.launch {
                 httpRequest("/@/api/config/frontend")
                     .auth().acceptJson().jsonContentType()
-                    .setBody(FrontendConfig(pageTitle, icpLicense, description, copyright))
+                    .setBody(FrontendConfig(pageTitle, icpLicense, description, copyright, false))
                     .put()
                 infoToast("Saved!")
                 window.location.reload()

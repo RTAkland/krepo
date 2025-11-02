@@ -8,6 +8,7 @@
 package cn.rtast.krepo.entity
 
 import kotlinx.serialization.Serializable
+import krepo.entity.ConfigRepositoryWithSize
 
 @Serializable
 data class GetRepositoriesResponse(

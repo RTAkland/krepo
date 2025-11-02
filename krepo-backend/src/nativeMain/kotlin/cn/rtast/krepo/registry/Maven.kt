@@ -12,7 +12,6 @@ package cn.rtast.krepo.registry
 
 import cn.rtast.krepo.client
 import cn.rtast.krepo.configManager
-import cn.rtast.krepo.entity.MirrorRepository
 import cn.rtast.krepo.enums.DeployStatus
 import cn.rtast.krepo.repositories
 import cn.rtast.krepo.util.file.*
@@ -24,6 +23,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.utils.io.*
 import kotlinx.io.files.Path
+import krepo.entity.MirrorRepository
 
 private val validatedArtifactExtension = listOf("klib", "jar", "aar")
 

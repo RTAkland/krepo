@@ -1,16 +1,18 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 2025/5/6 14:34
+ * Date: 11/2/25, 8:54 AM
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-package cn.rtast.krepo.entity
+
+package cn.rtast.krepo.entity.config
 
 import kotlinx.serialization.Serializable
-import krepo.entity.FrontendConfig
 
 @Serializable
-data class GetFrontendConfigResponse(
-    val data: FrontendConfig
+data class AuthConfig(
+    val azureClientID: String,
+    val azureClientSecret: String,
+    val redirectURI: String
 )

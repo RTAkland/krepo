@@ -15,7 +15,16 @@ fun RenderContext.showDialog(
     title: String,
     message: String? = null,
     content: RenderContext.() -> Unit,
-    dialogAction: RenderContext.() -> Unit
+    dialogAction: RenderContext.() -> Unit,
+) = showDialog(showDialog, title, message, content, dialogAction, null)
+
+fun RenderContext.showDialog(
+    showDialog: Store<Boolean>,
+    title: String,
+    message: String? = null,
+    content: RenderContext.() -> Unit,
+    dialogAction: RenderContext.() -> Unit,
+    extraButtons: (RenderContext.() -> Unit)?
 ) {
     showDialog.data.render { visible ->
         if (visible) {
@@ -51,6 +60,7 @@ fun RenderContext.showDialog(
                                     dialogAction()
                                 }
                             }
+                            extraButtons?.invoke(this)
                         }
                     }
                 }

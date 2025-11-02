@@ -24,7 +24,9 @@ data class ResVersion(
     }
 
     operator fun compareTo(other: ResVersion): Int {
-        return this.get<Int>("ver") - other.get<Int>("ver")
+        val thisVer = properties["ver"]?.toIntOrNull() ?: 0
+        val otherVer = other.properties["ver"]?.toIntOrNull() ?: 0
+        return thisVer.compareTo(otherVer)
     }
 }
 

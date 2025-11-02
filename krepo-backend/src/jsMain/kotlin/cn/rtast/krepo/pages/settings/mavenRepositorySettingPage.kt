@@ -7,14 +7,13 @@
 
 package cn.rtast.krepo.pages.settings
 
-import cn.rtast.krepo.components.badge
-import cn.rtast.krepo.components.errorToast
-import cn.rtast.krepo.components.infoToast
-import cn.rtast.krepo.components.showDialog
-import cn.rtast.krepo.components.warningToast
+import cn.rtast.krepo.components.*
 import cn.rtast.krepo.coroutineScope
+import cn.rtast.krepo.entity.CreateRepositoryResponse
+import cn.rtast.krepo.entity.DeleteRepositoryResponse
+import cn.rtast.krepo.entity.GetRepositoriesResponse
+import cn.rtast.krepo.entity.ModifyRepositoryResponse
 import cn.rtast.krepo.enums.BadgeType
-import cn.rtast.krepo.enums.RepositoryStatus
 import cn.rtast.krepo.util.auth
 import cn.rtast.krepo.util.file.checkSession
 import cn.rtast.krepo.util.httpRequest
@@ -22,16 +21,13 @@ import cn.rtast.krepo.util.jsonContentType
 import cn.rtast.krepo.util.setBody
 import cn.rtast.krepo.util.string.fromJson
 import cn.rtast.krepo.util.string.toJson
-import cn.rtast.krepo.entity.ModifyRepository
-import cn.rtast.krepo.entity.RepositoryVisibility
 import dev.fritz2.core.*
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
-import cn.rtast.krepo.entity.CreateRepository
-import cn.rtast.krepo.entity.CreateRepositoryResponse
-import cn.rtast.krepo.entity.DeleteRepositoryResponse
-import cn.rtast.krepo.entity.GetRepositoriesResponse
-import cn.rtast.krepo.entity.ModifyRepositoryResponse
+import krepo.entity.CreateRepository
+import krepo.entity.ModifyRepository
+import krepo.entity.RepositoryVisibility
+import krepo.enums.RepositoryStatus
 
 fun RenderContext.prettyCheckbox(labelText: String, store: Store<Boolean>) {
     div("field mt-3") {
@@ -219,7 +215,7 @@ fun RenderContext.createModifyRepositoryDialog(
     snapshotStore: Store<Boolean>,
     title: String,
     selectedRepo: Store<String>,
-    action: RenderContext.() -> Unit
+    action: RenderContext.() -> Unit,
 ) {
     showDialog(showDialog, title, null, {
         div("box") {

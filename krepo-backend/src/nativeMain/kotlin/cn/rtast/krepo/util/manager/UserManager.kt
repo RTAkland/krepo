@@ -28,7 +28,7 @@ class UserManager {
 
     private var users = file.readText().fromJson<MutableList<User>>()
 
-    private fun readUsers() {
+    fun readUsers() {
         users = file.readText().fromJson<MutableList<User>>()
     }
 
@@ -48,8 +48,15 @@ class UserManager {
         return this.addUser(user.name, user.password!!, user.email)
     }
 
-    fun validateUser(username: String, password: String): Boolean {
-        return users.any { it.name == username && it.password == password }
+    fun validateAzureUser(email: String): Boolean {
+        return users.any { it.email.equals(email, ignoreCase = true) }
+    }
+
+    fun validateUser(identifier: String, password: String? = null): Boolean {
+        return users.any { user ->
+            (user.name == identifier || user.email == identifier) &&
+                    (user.password == null || user.password == password)
+        }
     }
 
     fun removeUser(username: String): Boolean {
@@ -57,6 +64,8 @@ class UserManager {
     }
 
     fun getUser(name: String): User? = users.find { it.name == name }
+
+    fun getUserByEmail(email: String): User? = users.find { it.email == email }
 
     fun getAllUsers(): List<User> = users
 }

@@ -5,7 +5,7 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-package cn.rtast.krepo.entity
+package krepo.entity
 
 import kotlinx.serialization.Serializable
 
@@ -14,5 +14,6 @@ data class FrontendConfig(
     val pageTitle: String,
     val icpLicense: String?,
     val description: String?,
-    val copyright: String
+    val copyright: String,
+    val enableAzureSignIn: Boolean
 )

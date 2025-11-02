@@ -8,9 +8,9 @@
 
 package cn.rtast.krepo.entity.config
 
-import cn.rtast.krepo.entity.ConfigRepository
-import cn.rtast.krepo.entity.FrontendConfig
 import kotlinx.serialization.Serializable
+import krepo.entity.ConfigRepository
+import krepo.entity.FrontendConfig
 
 @Serializable
 data class Config(
@@ -19,5 +19,6 @@ data class Config(
     val repositories: List<ConfigRepository>,
     val allowFileListing: Boolean,
     val frontend: String,
-    val frontendConfig: FrontendConfig
+    val frontendConfig: FrontendConfig,
+    val auth: AuthConfig
 )

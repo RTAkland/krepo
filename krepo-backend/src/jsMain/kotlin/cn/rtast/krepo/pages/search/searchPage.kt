@@ -9,7 +9,7 @@ package cn.rtast.krepo.pages.search
 
 import cn.rtast.krepo.backend
 import cn.rtast.krepo.coroutineScope
-import cn.rtast.krepo.entity.V2ArtifactSearchResponse
+import cn.rtast.krepo.util.auth
 import cn.rtast.krepo.util.file.checkSession
 import cn.rtast.krepo.util.httpRequest
 import cn.rtast.krepo.util.jsonContentType
@@ -20,6 +20,7 @@ import dev.fritz2.core.href
 import dev.fritz2.core.storeOf
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
+import krepo.entity.V2ArtifactSearchResponse
 
 fun RenderContext.searchPage() {
     checkSession {
@@ -48,7 +49,7 @@ fun RenderContext.searchPage() {
         }
         coroutineScope.launch {
             val response = httpRequest("/@/api/v2/artifacts/search?keyword=$keyword")
-                .acceptJson().jsonContentType()
+                .acceptJson().jsonContentType().auth()
                 .get().body().fromJson<V2ArtifactSearchResponse>()
             responseFlow.update(response)
         }

@@ -4,7 +4,6 @@ rootProject.name = "krepo"
 
 listOf(
     "backend",
-    "common",
     "test:test-publish",
     "test:test-publish2",
 ).forEach { include("krepo-$it") }

@@ -18,6 +18,7 @@ import kotlinx.io.Buffer
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
 import kotlinx.io.files.SystemFileSystem
+import kotlin.system.exitProcess
 
 fun initialResources(isUpdateRes: Boolean = false) {
     if (isUpdateRes) {
@@ -25,7 +26,7 @@ fun initialResources(isUpdateRes: Boolean = false) {
     }
     RESOURCE_PATH.mkdirs()
     resourceIndex.forEach {
-        println(it)
+        println(it.key)
         Path(RESOURCE_PATH, it.key).parent?.mkdirs()
         val buffer = Buffer().apply { write(getResource(it.key).asByteArray()) }
         SystemFileSystem.sink(Path(RESOURCE_PATH, it.key)).buffered().use { use -> use.write(buffer, buffer.size) }

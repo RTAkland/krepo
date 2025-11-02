@@ -5,10 +5,10 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-package cn.rtast.krepo.entity
+package krepo.entity
 
-import cn.rtast.krepo.enums.RepositoryStatus
 import kotlinx.serialization.Serializable
+import krepo.enums.RepositoryStatus
 
 @Serializable
 data class ConfigRepository(

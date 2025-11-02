@@ -11,7 +11,6 @@ package cn.rtast.krepo.routing.api
 import cn.rtast.krepo.entity.DeleteGavRequest
 import cn.rtast.krepo.entity.FileEntry
 import cn.rtast.krepo.entity.MavenMetadata
-import cn.rtast.krepo.entity.RepositoryVisibility
 import cn.rtast.krepo.entity.kmp.KotlinToolchainMetadata
 import cn.rtast.krepo.entity.res.APIListingResponse
 import cn.rtast.krepo.entity.res.ArtifactMetadata
@@ -34,6 +33,7 @@ import io.ktor.server.routing.*
 import kotlinx.io.files.Path
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import krepo.entity.RepositoryVisibility
 
 private suspend fun ApplicationCall.serveLatestVersion(repository: String) {
     val path = parameters.getAll("path")!!.joinToString("/")

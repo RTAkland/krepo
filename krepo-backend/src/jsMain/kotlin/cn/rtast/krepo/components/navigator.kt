@@ -24,6 +24,7 @@ import kotlinx.browser.window
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
+import krepo.entity.AzureSignInURL
 
 fun RenderContext.navbar() {
     val showLogoutDialog = storeOf(false)
@@ -62,11 +63,11 @@ fun RenderContext.navbar() {
                         div("navbar-dropdown") {
                             a("navbar-item") {
                                 href("/#/user/manage")
-                                +"User List"
+                                +"User list"
                             }
                             a("navbar-item") {
                                 href("/#/user/create")
-                                +"Create User"
+                                +"Create user"
                             }
                         }
                     }
@@ -76,11 +77,11 @@ fun RenderContext.navbar() {
                         }
                         div("navbar-dropdown") {
                             a("navbar-item") {
-                                +"Frontend Settings"
+                                +"Frontend settings"
                                 href("/#/setting")
                             }
                             a("navbar-item") {
-                                +"Repository Settings"
+                                +"Repository settings"
                                 href("/#/setting/repository")
                             }
                         }
@@ -133,7 +134,7 @@ fun RenderContext.navbar() {
                                     a {
                                         href("/#/user/edit?username=${LocalStorage.CURRENT_USERNAME!!}")
                                         +LocalStorage.CURRENT_USERNAME!!
-                                        title("Update my info")
+                                        title("Update user info")
                                     }
                                 }
                             }
@@ -147,7 +148,7 @@ fun RenderContext.navbar() {
             }
         }
     }
-    showDialog(showLoginDialog, "Sign in", null, {
+    showDialog(showLoginDialog, "Sign in", null, content = {
         div("field") {
             label("label") { +"Username" }
             div("control") {
@@ -170,26 +171,36 @@ fun RenderContext.navbar() {
                 }
             }
         }
-    }) {
+
+    }, extraButtons = {
+        if (frontendConfig.enableAzureSignIn) {
+            button("button btn-microsoft-signin") {
+                img {
+                    src("/assets/img/microsoft.svg")
+                    alt("Microsoft logo")
+                }
+                +"Sign in with Microsoft"
+
+                clicks handledBy {
+                    val loginUrl= httpRequest("/api/signin/azure/url")
+                        .get().body().fromJson<AzureSignInURL>()
+                    window.location.href = loginUrl.url
+                }
+            }
+        }
+    }, dialogAction = {
         coroutineScope.launch {
             val http = http("$backend/@/api/login")
                 .header("Authorization", "Basic ${"${username.current}:${password.current}".toBase64()}")
                 .acceptJson().jsonContentType().post()
             if (http.ok) {
                 val response = http.body().fromJson<LoginSuccessResponse>()
-                LocalStorage.TOKEN = response.token
-                LocalStorage.CURRENT_USERNAME = username.current
-                val emailMd5 = md5(response.email)
-                val avatarUrl = "https://gravatar.rtast.cn/avatar/$emailMd5?d=identicon"
-                LocalStorage.EMAIL_ADDRESS = response.email
-                LocalStorage.AVATAR = avatarUrl
-                LocalStorage.HIDDEN_HASH_FILES = true
-                LocalStorage.EXPIRED_TIMESTAMP = response.expiredAt
+                setLoginInfo(response.token, username.current, response.expiredAt, response.email)
                 infoToast("Logged in")
                 window.location.reload()
             } else warningToast("Username or password is incorrect!")
         }
-    }
+    })
 
     showDialog(showLogoutDialog, "Logout", "Do you want to logout?", {}) {
         coroutineScope.launch {
@@ -202,4 +213,21 @@ fun RenderContext.navbar() {
             window.location.reload()
         }
     }
+}
+
+
+fun setLoginInfo(
+    token: String,
+    username: String,
+    expired: Long,
+    email: String,
+) {
+    LocalStorage.TOKEN = token
+    LocalStorage.CURRENT_USERNAME = username
+    val emailMd5 = md5(email)
+    val avatarUrl = "https://gravatar.rtast.cn/avatar/$emailMd5?d=identicon"
+    LocalStorage.EMAIL_ADDRESS = email
+    LocalStorage.AVATAR = avatarUrl
+    LocalStorage.HIDDEN_HASH_FILES = true
+    LocalStorage.EXPIRED_TIMESTAMP = expired
 }

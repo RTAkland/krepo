@@ -5,7 +5,7 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-package cn.rtast.krepo.enums
+package krepo.enums
 
 import kotlinx.serialization.Serializable
 

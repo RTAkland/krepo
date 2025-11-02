@@ -7,7 +7,6 @@
 
 package cn.rtast.krepo.routing.api.v2
 
-import cn.rtast.krepo.entity.V2ArtifactSearchResponse
 import cn.rtast.krepo.entity.res.CommonDataResponse
 import cn.rtast.krepo.util.artifacts.searchMavenRepo
 import cn.rtast.krepo.util.file.isRegularFile
@@ -17,6 +16,7 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.authenticate
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import krepo.entity.V2ArtifactSearchResponse
 
 fun Application.configureV2ArtifactsRouting() {
     routing {

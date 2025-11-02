@@ -104,7 +104,8 @@ kotlin {
         }
 
         commonMain.dependencies {
-            implementation(project(":krepo-common"))
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
         }
 
         nativeMain.dependencies {
@@ -170,4 +171,19 @@ kdef {
         project.layout.projectDirectory.dir("src/cinterop/def/template")
             .asFile.listFiles()!!.toList()
     )
+}
+
+tasks.named("jsBrowserDistribution") {
+    if (System.getenv("_DEVELOPMENT_MODE") != null) {
+        val file = project.layout.projectDirectory.dir("src/nativeMain/resources/res_version.txt")
+            .asFile
+        val originContent = file.readText()
+        val version = file.readLines().first().split("=").last()
+        file.writeText(originContent.replace(version, (version.toInt() + 1).toString()))
+        println("Resources version bumped")
+    }
+}
+
+tasks.named("runDebugExecutableLinuxX64") {
+    dependsOn(tasks.named("generateResources"))
 }
