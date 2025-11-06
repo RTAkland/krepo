@@ -37,7 +37,7 @@ private val states = mutableListOf<String>()
 
 
 private val AZURE_LOGIN_URL =
-    "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${configManager.getConfig().auth.azureClientID}&scope=openid%20email%20profile%20User.Read&redirect_uri=http%3a%2f%2flocalhost%3a9098%2fapi%2fsignin%2fazure&response_type=code&state="
+    "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${configManager.getConfig().auth.azureClientID}&scope=openid%20email%20profile%20User.Read&redirect_uri=${configManager.getConfig().auth.redirectURI}&response_type=code&state="
 
 private const val REDEEM_TOKEN_URL = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
 private const val USER_INFO_URL = "https://graph.microsoft.com/v1.0/me"
