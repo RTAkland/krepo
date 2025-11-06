@@ -8,7 +8,7 @@
 
 package cn.rtast.krepo.routing.api
 
-import cn.rtast.krepo.entity.User
+import krepo.entity.User
 import cn.rtast.krepo.entity.res.*
 import cn.rtast.krepo.tokenManager
 import cn.rtast.krepo.userManager

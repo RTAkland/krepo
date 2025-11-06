@@ -71,9 +71,14 @@ fun Application.configureAzureSignInRouting() {
                         }.bodyAsText().fromJson<AzureUserInfo>()
                         if (userManager.validateAzureUser(userInfo.userPrincipalName)) {
                             val (token, expiredAt) = tokenManager.grant(userInfo.id, 3600)
+                            var localUserInfo = userManager.getUserByUID(userInfo.id)
+                            if (localUserInfo == null) {
+                                userManager.setUserUID(userInfo.userPrincipalName.lowercase(), userInfo.id)
+                                localUserInfo = userManager.getUserByUID(userInfo.id)
+                            }
                             val respBase64 = AzureLoginSuccess(
-                                token, userInfo.userPrincipalName.lowercase(),
-                                userManager.getUserByEmail(userInfo.userPrincipalName.lowercase())!!.name,
+                                token, localUserInfo!!.email,
+                                localUserInfo.name,
                                 expiredAt
                             ).toJson().encodeToBase64()
                             call.respondRedirect("/#/azure/signed?d=$respBase64")

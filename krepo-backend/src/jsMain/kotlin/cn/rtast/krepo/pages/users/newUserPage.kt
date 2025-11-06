@@ -22,6 +22,7 @@ import cn.rtast.krepo.util.string.validateEmail
 import dev.fritz2.core.*
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
+import krepo.entity.User
 
 fun RenderContext.newUserPage() {
     checkSession {
@@ -84,11 +85,7 @@ fun RenderContext.newUserPage() {
                 warningToast("Please fill in all fields")
             } else {
                 if (validateEmail(email)) {
-                    val requestBody = mapOf(
-                        "name" to username.current,
-                        "password" to password.current,
-                        "email" to email.current
-                    )
+                    val requestBody = User(username.current, email.current, password.current)
                     coroutineScope.launch {
                         val result = httpRequest("/@/api/user")
                             .auth().acceptJson().jsonContentType()

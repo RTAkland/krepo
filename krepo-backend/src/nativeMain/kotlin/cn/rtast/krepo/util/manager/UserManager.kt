@@ -11,7 +11,7 @@
 package cn.rtast.krepo.util.manager
 
 import cn.rtast.krepo.DATA_PATH
-import cn.rtast.krepo.entity.User
+import krepo.entity.User
 import cn.rtast.krepo.util.file.exists
 import cn.rtast.krepo.util.file.readText
 import cn.rtast.krepo.util.file.writeText
@@ -39,7 +39,7 @@ class UserManager {
 
     fun addUser(username: String, password: String, email: String): Boolean {
         if (users.any { it.name == username }) return false
-        users.add(User(username, password, email))
+        users.add(User(username, email, password))
         sync()
         return true
     }
@@ -63,9 +63,16 @@ class UserManager {
         return users.removeAll { it.name == username }.apply { sync() }
     }
 
+    fun setUserUID(email: String, uid: String) {
+        users.find { it.email == email }?.uid = uid
+        sync()
+    }
+
     fun getUser(name: String): User? = users.find { it.name == name }
 
     fun getUserByEmail(email: String): User? = users.find { it.email == email }
+
+    fun getUserByUID(uid: String): User? = users.find { it.uid == uid }
 
     fun getAllUsers(): List<User> = users
 }
