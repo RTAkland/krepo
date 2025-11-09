@@ -16,7 +16,7 @@ plugins {
     kotlin("plugin.serialization")
     id("cn.rtast.kembeddable") version "1.3.8"
     id("cn.rtast.kdef") version "0.1.1"
-    id("com.google.devtools.ksp") version "2.1.21-2.0.1"
+    id("com.google.devtools.ksp") version "2.2.21-2.0.4"
 }
 
 val fritz2Version = "1.0-RC20"

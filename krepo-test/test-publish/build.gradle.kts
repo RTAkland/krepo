@@ -26,7 +26,7 @@ repositories {
 publishing {
     repositories {
 //        maven("http://lan.rtast.cn:9098/snapshots") {
-        maven("http://127.0.0.1:9098/releases") {
+        maven("http://127.0.0.1:7071/releases") {
             isAllowInsecureProtocol = true
             credentials {
                 username = "admin"

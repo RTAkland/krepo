@@ -1,0 +1,58 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+/*
+ * Copyright © 2025 RTAkland
+ * Date: 11/9/25, 5:24 AM
+ * Open Source Under Apache-2.0 License
+ * https://www.apache.org/licenses/LICENSE-2.0
+ */
+
+plugins {
+    kotlin("jvm")
+    id("kazure")
+    kotlin("plugin.serialization")
+    id("com.microsoft.azure.azurefunctions")
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+    implementation("software.amazon.awssdk:s3:2.38.2")
+    implementation("software.amazon.awssdk:auth:2.38.2")
+    implementation("software.amazon.awssdk:netty-nio-client:2.38.2")
+    implementation("cn.rtast.rutil:string:0.0.1")
+}
+
+azurefunctions {
+    appName = "krepo-server"
+}
+
+tasks.compileKotlin {
+    compilerOptions { jvmTarget = JvmTarget.JVM_17 }
+}
+
+tasks.compileJava {
+    sourceCompatibility = "17"
+    targetCompatibility = "17"
+}
+
+tasks.register("killAzureProcesses") {
+    doLast {
+        println("Killing all processes containing 'azure' in their command line...")
+        val proc =
+            Runtime.getRuntime().exec(arrayOf("sh", "-c", "ps -ef | grep azure | grep -v grep | awk '{print \$2}'"))
+        val output = proc.inputStream.bufferedReader().readText().trim()
+        if (output.isNotEmpty()) {
+            output.lines().forEach { pid ->
+                println("Killing PID: $pid")
+                @Suppress("DEPRECATION")
+                Runtime.getRuntime().exec("kill -9 $pid").waitFor()
+            }
+        } else {
+            println("No azure-related processes found.")
+        }
+    }
+}
+
+tasks.named("azureFunctionsRun") {
+    finalizedBy("killAzureProcesses")
+}
