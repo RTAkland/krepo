@@ -9,14 +9,15 @@
 package cn.rtast.krepo.azure.cfg
 
 import cn.rtast.kazure.util.Resources
+import cn.rtast.kazure.util.fromArrayJson
+import cn.rtast.kazure.util.fromJson
 import cn.rtast.krepo.azure.entity.User
-import cn.rtast.rutil.string.fromJson
 
 class UserManager {
     private val users = mutableListOf<User>()
 
     init {
-        users.addAll(Resources.readText("users.json").fromJson<List<User>>())
+        users.addAll(Resources.readText("users.json").fromArrayJson<List<User>>())
     }
 
     fun validate(username: String, password: String): Boolean {

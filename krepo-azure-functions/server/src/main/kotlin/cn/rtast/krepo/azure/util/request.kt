@@ -9,9 +9,10 @@
 package cn.rtast.krepo.azure.util
 
 import cn.rtast.kazure.HttpRequest
-import cn.rtast.kazure.respondBytes
-import cn.rtast.kazure.respondText
+import cn.rtast.kazure.response.respondBytes
+import cn.rtast.kazure.response.respondText
 import cn.rtast.krepo.azure.entity.res.DeployStatus
+import cn.rtast.krepo.azure.userManager
 import com.microsoft.azure.functions.HttpStatus
 
 fun <T> HttpRequest<T>.ok() = this.respondText("Ok", status = HttpStatus.OK)
@@ -32,3 +33,18 @@ fun <T> HttpRequest<T>.auto(status: DeployStatus) = when (status) {
 }
 
 fun <T> HttpRequest<T>.bytes(bytes: ByteArray) = this.respondBytes(bytes)
+
+fun <T> HttpRequest<T>.basicAuth(): Pair<String, String>? {
+    val auth = this.headers["authorization"]
+        ?.split(" ")?.last()?.decodeToString()?.split(":")
+    return if (auth == null) null else auth.first() to auth.last()
+}
+
+fun HttpRequest<*>.basicAuthCheck(): Pair<Boolean, Pair<String, String>?> {
+    val auth = this.basicAuth() ?: return false to null
+    return if (userManager.validate(auth.first, auth.second)) {
+        true to auth
+    } else {
+        false to null
+    }
+}

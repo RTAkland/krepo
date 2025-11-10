@@ -10,16 +10,15 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     kotlin("jvm")
     id("kazure")
-    kotlin("plugin.serialization")
     id("com.microsoft.azure.azurefunctions")
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
     implementation("software.amazon.awssdk:s3:2.38.2")
     implementation("software.amazon.awssdk:auth:2.38.2")
     implementation("software.amazon.awssdk:netty-nio-client:2.38.2")
-    implementation("cn.rtast.rutil:string:0.0.1")
+    implementation("io.ktor:ktor-client-core:3.3.1")
+    implementation("io.ktor:ktor-client-okhttp:3.3.1")
 }
 
 azurefunctions {

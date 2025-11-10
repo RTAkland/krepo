@@ -8,7 +8,7 @@
 
 package cn.rtast.krepo.azure.util
 
-//import io.ktor.client.HttpClient
-//import io.ktor.client.engine.okhttp.OkHttp
-//
-//val client = HttpClient(OkHttp)
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+
+val client = HttpClient(OkHttp)

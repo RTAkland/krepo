@@ -16,4 +16,8 @@ object ConfigManger {
     val S3_SECRET_KEY = get("S3_SECRET_KEY")
     val S3_BUCKET = get("S3_BUCKET")
     val S3_REGION = get("S3_REGION")
+    val CF_ACCOUNT_ID = get("CF_ACCOUNT_ID")
+    val CF_EMAIL = get("CF_EMAIL")
+    val CF_KV_TOKEN = get("CF_KV_TOKEN")
+    val CF_KV_NAMESPACE_ID = get("CF_KV_NAMESPACE_ID")
 }
