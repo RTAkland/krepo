@@ -8,9 +8,8 @@
 
 package cn.rtast.krepo.azure.cfg
 
-import cn.rtast.kazure.util.Resources
+import cn.rtast.kazure.resources.Resources
 import cn.rtast.kazure.util.fromArrayJson
-import cn.rtast.kazure.util.fromJson
 import cn.rtast.krepo.azure.entity.User
 
 class UserManager {
@@ -24,4 +23,6 @@ class UserManager {
         val user = users.find { it.name == username } ?: return false
         return user.password == password
     }
+
+    fun getUser(username: String): User? = users.find { it.name == username }
 }

@@ -82,13 +82,34 @@ fun getFile(filename: String): ByteArray? {
 }
 
 fun listFiles(path: String): List<FileEntry> {
-    val contents = createClient().listObjects(
-        ListObjectsRequest.builder()
+    val prefix = if (path.isEmpty() || path.endsWith("/")) path else "$path/"
+    val response = createClient().listObjectsV2(
+        ListObjectsV2Request.builder()
             .bucket(ConfigManger.S3_BUCKET)
+            .prefix(prefix)
+            .delimiter("/")
             .build()
-    ).contents()
-    return contents.map { FileEntry(it.key(), it.key().endsWith("/"), it.size(), it.lastModified().epochSecond) }
+    )
+    fun relativeName(fullKey: String): String {
+        return if (fullKey.startsWith(prefix)) {
+            fullKey.substring(prefix.length)
+        } else fullKey
+    }
+    val folders = response.commonPrefixes()
+        .map { cp ->
+            val name = relativeName(cp.prefix())
+            val dirName = if (name.endsWith("/")) name else "$name/"
+            FileEntry(dirName.removeSuffix("/"), true, 0, 0)
+        }
+    val files = response.contents()
+        .filter { it.key() != prefix }
+        .map { obj ->
+            val name = relativeName(obj.key())
+            FileEntry(name.removeSuffix("/"), false, obj.size(), obj.lastModified().epochSecond)
+        }
+    return folders + files
 }
+
 
 fun deleteFile(path: String) {
     createClient().deleteObject(

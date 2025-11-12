@@ -9,23 +9,15 @@
 
 package cn.rtast.krepo.azure
 
-import cn.rtast.kazure.HttpContext
-import cn.rtast.kazure.HttpRequest
-import cn.rtast.kazure.HttpResponse
-import cn.rtast.kazure.response.respondText
-import cn.rtast.kazure.trigger.HttpRouting
+import cn.rtast.kazure.resources.StaticAssets
+import cn.rtast.kazure.resources.staticAssets
 import cn.rtast.krepo.azure.cfg.TokenManager
 import cn.rtast.krepo.azure.cfg.UserManager
-import java.util.*
 
 
 val userManager = UserManager()
 val tokenManager = TokenManager()
 
-@HttpRouting("/")
-fun httpEntrypoint(
-    request: HttpRequest<Optional<String>>,
-    context: HttpContext,
-): HttpResponse {
-    return request.respondText("Ok at ${Date().time}")
-}
+@StaticAssets("/", "frontend/index.html")
+val indexHtml: ByteArray by staticAssets
+

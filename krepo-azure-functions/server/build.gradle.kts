@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     kotlin("jvm")
     id("kazure")
+    id("com.google.devtools.ksp")
     id("com.microsoft.azure.azurefunctions")
 }
 
@@ -21,8 +22,21 @@ dependencies {
     implementation("io.ktor:ktor-client-okhttp:3.3.1")
 }
 
+kotlin {
+    jvmToolchain(17)
+    compilerOptions {
+        freeCompilerArgs.set(listOf("-Xcontext-parameters"))
+    }
+}
+
 azurefunctions {
     appName = "krepo-server"
+}
+
+kazure {
+    listingResources = true
+    excludeFiles.addAll("users.json", "users.template.json")
+    resourceRoutingPrefix = "frontend/"
 }
 
 tasks.compileKotlin {
@@ -32,6 +46,24 @@ tasks.compileKotlin {
 tasks.compileJava {
     sourceCompatibility = "17"
     targetCompatibility = "17"
+}
+
+val frontendDir = project.layout.projectDirectory.dir("src/main/resources/frontend").asFile.apply {
+    mkdirs()
+}
+
+tasks.register("compileAndCopyFrontendAssets") {
+    group = "krepo"
+    dependsOn(":krepo-backend:jsBrowserDistribution")
+    doLast {
+        val sourceDir = project(":krepo-backend").layout.buildDirectory
+            .dir("dist/js/productionExecutable").get().asFile
+        project.copy {
+            from(sourceDir)
+            into(frontendDir)
+        }
+        logger.lifecycle("Copied frontend assets.")
+    }
 }
 
 tasks.register("killAzureProcesses") {

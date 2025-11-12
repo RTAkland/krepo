@@ -16,16 +16,12 @@ import cn.rtast.kazure.response.respondJson
 import cn.rtast.krepo.azure.tokenManager
 import cn.rtast.krepo.azure.userManager
 
-object KRepoBasicAuthProvider : BasicAuthorizationProvider<Any> {
+object KRepoBasicAuthProvider : BasicAuthorizationProvider {
     override fun verify(
-        request: HttpRequest<Any>,
+        request: HttpRequest<*>,
         context: HttpContext,
-        credential: BasicCredential?,
+        credential: BasicCredential,
     ): Boolean {
-        return credential?.let {
-            val result = userManager.validate(credential.username, credential.password)
-            if (result) request.respondJson(tokenManager.issue(credential.username))
-            result
-        } ?: false
+        return userManager.validate(credential.username, credential.password)
     }
 }

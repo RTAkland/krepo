@@ -1,11 +1,10 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 11/9/25, 5:59 AM
+ * Date: 11/12/25, 10:38 AM
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-@file:Suppress("unused")
 
 package cn.rtast.krepo.azure.routing
 
@@ -20,10 +19,8 @@ import cn.rtast.krepo.azure.routing.auth.KRepoBasicAuthProvider
 import com.microsoft.azure.functions.HttpMethod
 import java.util.Optional
 
-
-@AuthConsumer(KRepoBasicAuthProvider::class)
-@HttpRouting("releases/{*path}", methods = [HttpMethod.PUT])
-fun deployArtifactRoutingReleases(
+@HttpRouting("releases/{*path}", methods = [HttpMethod.GET])
+fun serveArtifactRoutingReleases(
     request: HttpRequest<Optional<ByteArray>>,
     context: HttpContext,
     @Param("path") path: String,
@@ -31,9 +28,8 @@ fun deployArtifactRoutingReleases(
     return handleRequest(request, "releases", path, context.logger)
 }
 
-@AuthConsumer(KRepoBasicAuthProvider::class)
-@HttpRouting("snapshots/{*path}", methods = [HttpMethod.PUT])
-fun deployArtifactRoutingSnapshots(
+@HttpRouting("snapshots/{*path}", methods = [HttpMethod.GET])
+fun serveArtifactRoutingSnapshots(
     request: HttpRequest<Optional<ByteArray>>,
     context: HttpContext,
     @Param("path") path: String,
@@ -42,15 +38,12 @@ fun deployArtifactRoutingSnapshots(
 }
 
 @AuthConsumer(KRepoBasicAuthProvider::class)
-@HttpRouting("private/{*path}", methods = [HttpMethod.PUT])
-fun deployArtifactRoutingPrivate(
+@HttpRouting("private/{*path}", methods = [HttpMethod.GET])
+fun serveArtifactRoutingPrivate(
     request: HttpRequest<Optional<ByteArray>>,
     context: HttpContext,
     @Param("path") path: String,
 ): HttpResponse {
     return handleRequest(request, "private", path, context.logger)
 }
-
-
-
 

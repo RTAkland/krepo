@@ -62,7 +62,7 @@ fun RenderContext.publicContentListingPage() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        val api = httpRequest("/@/api/contents/$currentPath")
+        val api = httpRequest("/@/api/contents/${currentPath.removePrefix("/")}")
             .auth().acceptJson().jsonContentType()
         val response = api.get()
         if (response.status == 404) {

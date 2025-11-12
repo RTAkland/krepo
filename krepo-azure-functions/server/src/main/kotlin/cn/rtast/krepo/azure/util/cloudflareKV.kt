@@ -17,8 +17,8 @@ import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 
 object CFKV {
-    fun buildURL(name: String): String {
-        return CLOUDFLARE_API_URL + "/accounts/${ConfigManger.CF_ACCOUNT_ID}/storage/kv/namespaces/${ConfigManger.CF_KV_NAMESPACE_ID}/values/$name?expiration_ttl=3600"
+    fun buildURL(name: String, ttl: Int = -1): String {
+        return CLOUDFLARE_API_URL + "/${ConfigManger.CF_ACCOUNT_ID}/storage/kv/namespaces/${ConfigManger.CF_KV_NAMESPACE_ID}/values/$name" + if (ttl != -1) "?expiration_ttl=$ttl" else ""
     }
 
     fun getValue(name: String): String? = runBlocking {
@@ -32,8 +32,8 @@ object CFKV {
         } else null
     }
 
-    fun setValue(name: String, value: String) = runBlocking {
-        client.put(buildURL(name)) {
+    fun setValue(name: String, value: String, ttl: Int = -1) = runBlocking {
+        client.put(buildURL(name, ttl)) {
             headers {
                 append("Authorization", "Bearer " + ConfigManger.CF_KV_TOKEN)
             }

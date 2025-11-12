@@ -1,0 +1,47 @@
+/*
+ * Copyright © 2025 RTAkland
+ * Date: 11/9/25, 3:05 PM
+ * Open Source Under Apache-2.0 License
+ * https://www.apache.org/licenses/LICENSE-2.0
+ */
+
+@file:Suppress("unused")
+
+package cn.rtast.krepo.azure.routing.api
+
+import cn.rtast.kazure.*
+import cn.rtast.kazure.auth.AuthConsumer
+import cn.rtast.kazure.auth.credentials.BasicCredential
+import cn.rtast.kazure.auth.credentials.BearerCredential
+import cn.rtast.kazure.response.respond
+import cn.rtast.kazure.response.respondJson
+import cn.rtast.kazure.trigger.HttpRouting
+import cn.rtast.krepo.azure.entity.res.LoginSuccess
+import cn.rtast.krepo.azure.routing.auth.KRepoBasicAuthProvider
+import cn.rtast.krepo.azure.routing.auth.KRepoTokenAuthProvider
+import cn.rtast.krepo.azure.tokenManager
+import cn.rtast.krepo.azure.userManager
+
+
+context(cred: BasicCredential)
+@AuthConsumer(KRepoBasicAuthProvider::class)
+@HttpRouting("@/api/login", methods = [HttpMethod.POST])
+fun loginRouting(
+    request: HttpRequest<String?>,
+    context: HttpContext,
+): HttpResponse {
+    val token = tokenManager.issue(cred.username)
+    val user = userManager.getUser(cred.username)!!
+    val loginRes = LoginSuccess(200, "Logged in", token.value, user.email, cred.username, token.expiredAt)
+    return request.respondJson(loginRes)
+}
+
+context(cred: BearerCredential)
+@AuthConsumer(KRepoTokenAuthProvider::class)
+@HttpRouting("@/api/logout", methods = [HttpMethod.POST])
+fun logoutRouting(
+    request: HttpRequest<String?>,
+    context: HttpContext,
+): HttpResponse {
+    return request.respond("Ok", status = HttpStatus.OK)
+}
