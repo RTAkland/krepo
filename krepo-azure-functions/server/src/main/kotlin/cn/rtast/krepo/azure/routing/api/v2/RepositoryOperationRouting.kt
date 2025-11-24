@@ -20,7 +20,7 @@ import cn.rtast.krepo.azure.util.deleteDirectory
 import cn.rtast.krepo.azure.util.deleteFile
 import cn.rtast.krepo.azure.util.uploadFile
 
-@HttpRouting("api/v2/repository/operation/file", [HttpMethod.POST, HttpMethod.DELETE])
+@HttpRouting("api/azure/repository/operation/file", [HttpMethod.POST, HttpMethod.DELETE])
 fun uploadFileRouting(
     request: HttpRequest<String>,
     context: HttpContext,
@@ -47,7 +47,7 @@ fun uploadFileRouting(
     return request.respondText("Internal server error", status = HttpStatus.INTERNAL_SERVER_ERROR)
 }
 
-@HttpRouting("api/v2/repository/operation/directory", [HttpMethod.DELETE])
+@HttpRouting("api/azure/repository/operation/directory", [HttpMethod.DELETE])
 fun deleteDirectoryRouting(
     request: HttpRequest<String>,
     context: HttpContext,

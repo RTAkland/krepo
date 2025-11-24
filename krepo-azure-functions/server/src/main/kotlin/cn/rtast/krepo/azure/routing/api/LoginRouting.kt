@@ -25,7 +25,7 @@ import cn.rtast.krepo.azure.userManager
 
 context(cred: BasicCredential)
 @AuthConsumer(KRepoBasicAuthProvider::class)
-@HttpRouting("api/v2/login", methods = [HttpMethod.POST])
+@HttpRouting("api/azure/login", methods = [HttpMethod.POST])
 fun loginRouting(
     request: HttpRequest<String?>,
     context: HttpContext,

@@ -84,30 +84,30 @@ public sealed class BackendVersions(
         override val AZURE_SIGN_IN_COMPLETE: RouteEndpoint = createRouteEndpoint("/api/signin/azure/complete")
     }
 
-    public class V_25_11_25 : BackendVersions(1, createRouteEndpoint("Version at 2025-11-25")) {
+    public class Azure : BackendVersions(1, createRouteEndpoint("Running on Azure")) {
         override val CURRENT_USER: RouteEndpoint = NOT_IMPLEMENTED_API
         override val USERS: RouteEndpoint = NOT_IMPLEMENTED_API
-        override val LOGIN: RouteEndpoint = createRouteEndpoint("api/v2/login")
-        override val LOGOUT: RouteEndpoint = createRouteEndpoint("api/v2/logout")
+        override val LOGIN: RouteEndpoint = createRouteEndpoint("api/azure/login")
+        override val LOGOUT: RouteEndpoint = createRouteEndpoint("api/azure/logout")
         override val USER_INFO: RouteEndpoint = NOT_IMPLEMENTED_API
         override val CREATE_USER: RouteEndpoint = NOT_IMPLEMENTED_API
         override val DELETE_USER: RouteEndpoint = NOT_IMPLEMENTED_API
         override val MODIFY_USER: RouteEndpoint = NOT_IMPLEMENTED_API
-        override val UPLOAD_FILE: RouteEndpoint = createRouteEndpoint("api/v2/repository/operation/file")
+        override val UPLOAD_FILE: RouteEndpoint = createRouteEndpoint("api/azure/repository/operation/file")
         override val CREATE_DIRECTORY: RouteEndpoint = NOT_IMPLEMENTED_API
-        override val DELETE_DIRECTORY: RouteEndpoint = createRouteEndpoint("api/v2/repository/operation/directory")
+        override val DELETE_DIRECTORY: RouteEndpoint = createRouteEndpoint("api/azure/repository/operation/directory")
         override val CREATE_REPOSITORY: RouteEndpoint = NOT_IMPLEMENTED_API
         override val MODIFY_REPOSITORY: RouteEndpoint = NOT_IMPLEMENTED_API
-        override val LIST_PUBLIC_REPOSITORIES: RouteEndpoint = createRouteEndpoint("api/v2/repository/public")
-        override val LIST_ALL_REPOSITORIES: RouteEndpoint = createRouteEndpoint("api/v2/repository/all")
+        override val LIST_PUBLIC_REPOSITORIES: RouteEndpoint = createRouteEndpoint("api/azure/repository/public")
+        override val LIST_ALL_REPOSITORIES: RouteEndpoint = createRouteEndpoint("api/azure/repository/all")
         override val DELETE_GAV: RouteEndpoint = NOT_IMPLEMENTED_API
         override val DELETE_ARTIFACT: RouteEndpoint = NOT_IMPLEMENTED_API
         override val GET_ARTIFACT_LATEST_VERSION: RouteEndpoint = NOT_IMPLEMENTED_API  // TODO
-        override val GET_PUBLIC_REPOSITORY_CONTENTS: RouteEndpoint = createRouteEndpoint("api/v2/repository/public/contents")
-        override val GET_PRIVATE_REPOSITORY_CONTENTS: RouteEndpoint = createRouteEndpoint("api/v2/repository/private/contents")
+        override val GET_PUBLIC_REPOSITORY_CONTENTS: RouteEndpoint = createRouteEndpoint("api/azure/repository/public/contents")
+        override val GET_PRIVATE_REPOSITORY_CONTENTS: RouteEndpoint = createRouteEndpoint("api/azure/repository/private/contents")
         override val SEARCH_ARTIFACT: RouteEndpoint = NOT_IMPLEMENTED_API
         override val RESET_FRONTEND_CONFIG: RouteEndpoint = NOT_IMPLEMENTED_API
-        override val FRONTEND_CONFIG: RouteEndpoint = createRouteEndpoint("api/v2/config/frontend")
+        override val FRONTEND_CONFIG: RouteEndpoint = createRouteEndpoint("api/azure/config/frontend")
         override val MODIFY_FRONTEND_CONFIG: RouteEndpoint = NOT_IMPLEMENTED_API
         override val AZURE_SIGN_IN: RouteEndpoint = NOT_IMPLEMENTED_API
         override val AZURE_SIGN_IN_URL: RouteEndpoint = NOT_IMPLEMENTED_API
@@ -117,6 +117,6 @@ public sealed class BackendVersions(
 
 public fun Int.toBackendVersion(): BackendVersions = when (this) {
     0 -> BackendVersions.LEGACY()
-    1 -> BackendVersions.V_25_11_25()
+    1 -> BackendVersions.Azure()
     else -> throw IllegalArgumentException("Unknown backend version: $this")
 }

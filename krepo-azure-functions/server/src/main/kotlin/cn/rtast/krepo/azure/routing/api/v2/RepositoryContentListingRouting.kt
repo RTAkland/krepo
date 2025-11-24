@@ -27,7 +27,7 @@ private fun getFiles(repo: String?, path: String?): List<FileEntry> {
     return listFiles("$repo/$p")
 }
 
-@HttpRouting("api/v2/repository/public/contents")
+@HttpRouting("api/azure/repository/public/contents")
 fun listPublicRepositoryContent(
     request: HttpRequest<*>,
     context: HttpContext,
@@ -41,7 +41,7 @@ fun listPublicRepositoryContent(
 
 context(cred: BearerCredential)
 @AuthConsumer(KRepoTokenAuthProvider::class)
-@HttpRouting("api/v2/repository/private/contents")
+@HttpRouting("api/azure/repository/private/contents")
 fun listPrivateRepositoryContent(
     request: HttpRequest<*>,
     context: HttpContext,

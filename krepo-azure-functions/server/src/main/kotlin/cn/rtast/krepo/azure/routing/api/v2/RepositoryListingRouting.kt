@@ -55,7 +55,7 @@ private val repositories = listOf(
     ),
 )
 
-@HttpRouting("api/v2/repository/public")
+@HttpRouting("api/azure/repository/public")
 fun listPublicRepositories(
     request: HttpRequest<*>,
     context: HttpContext,
@@ -67,7 +67,7 @@ fun listPublicRepositories(
 
 context(cred: BearerCredential)
 @AuthConsumer(KRepoTokenAuthProvider::class)
-@HttpRouting("api/v2/repository/all")
+@HttpRouting("api/azure/repository/all")
 fun listAllRepositories(
     request: HttpRequest<*>,
     context: HttpContext,
