@@ -81,32 +81,40 @@ fun getFile(filename: String): ByteArray? {
     ).readBytes()
 }
 
-fun listFiles(path: String): List<FileEntry> {
+fun listFiles(path: String, delimiter: String? = "/"): List<FileEntry> {
     val prefix = if (path.isEmpty() || path.endsWith("/")) path else "$path/"
-    val response = createClient().listObjectsV2(
-        ListObjectsV2Request.builder()
-            .bucket(ConfigManger.S3_BUCKET)
-            .prefix(prefix)
-            .delimiter("/")
-            .build()
-    )
+    val builder = ListObjectsV2Request.builder()
+        .bucket(ConfigManger.S3_BUCKET)
+        .prefix(prefix)
+
+    if (delimiter != null) {
+        builder.delimiter(delimiter)
+    }
+
+    val response = createClient().listObjectsV2(builder.build())
+
     fun relativeName(fullKey: String): String {
         return if (fullKey.startsWith(prefix)) {
             fullKey.substring(prefix.length)
         } else fullKey
     }
-    val folders = response.commonPrefixes()
-        .map { cp ->
-            val name = relativeName(cp.prefix())
-            val dirName = if (name.endsWith("/")) name else "$name/"
-            FileEntry(dirName.removeSuffix("/"), true, 0, 0)
-        }
+
+    val folders = if (delimiter != null) {
+        response.commonPrefixes()
+            .map { cp ->
+                val name = relativeName(cp.prefix())
+                val dirName = if (name.endsWith("/")) name else "$name/"
+                FileEntry(dirName.removeSuffix("/"), true, 0, 0)
+            }
+    } else emptyList()
+
     val files = response.contents()
         .filter { it.key() != prefix }
         .map { obj ->
             val name = relativeName(obj.key())
             FileEntry(name.removeSuffix("/"), false, obj.size(), obj.lastModified().epochSecond)
         }
+
     return folders + files
 }
 
@@ -117,5 +125,20 @@ fun deleteFile(path: String) {
             .bucket(ConfigManger.S3_BUCKET)
             .key(path)
             .build()
+    )
+}
+
+fun deleteDirectory(path: String) {
+    val client = createClient()
+    val files = listFiles(path, null)
+        .map { ObjectIdentifier.builder().key("${path.removeSuffix("/")}/${it.name}").build() }
+    client.deleteObjects(
+        DeleteObjectsRequest.builder()
+            .bucket(ConfigManger.S3_BUCKET)
+            .delete(
+                Delete.builder()
+                    .objects(files)
+                    .build()
+            ).build()
     )
 }

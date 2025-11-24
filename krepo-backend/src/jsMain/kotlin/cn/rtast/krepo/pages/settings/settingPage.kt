@@ -7,6 +7,7 @@
 
 package cn.rtast.krepo.pages.settings
 
+import cn.rtast.krepo.backendVersion
 import cn.rtast.krepo.components.infoToast
 import cn.rtast.krepo.components.showDialog
 import cn.rtast.krepo.coroutineScope
@@ -103,7 +104,7 @@ fun RenderContext.settingPage() {
             val description = descriptionStore.current
             val copyright = copyrightStore.current
             coroutineScope.launch {
-                httpRequest("/@/api/config/frontend")
+                httpRequest(backendVersion.MODIFY_FRONTEND_CONFIG)
                     .auth().acceptJson().jsonContentType()
                     .setBody(FrontendConfig(pageTitle, icpLicense, description, copyright, false))
                     .put()
@@ -113,7 +114,7 @@ fun RenderContext.settingPage() {
         }
         showDialog(showResetFrontConfigDialog, "Reset", "Do you want to reset the frontend settings?", {}) {
             coroutineScope.launch {
-                httpRequest("/@/api/config/frontend/reset")
+                httpRequest(backendVersion.RESET_FRONTEND_CONFIG)
                     .auth().acceptJson().jsonContentType()
                     .put()
                 infoToast("Rested!")

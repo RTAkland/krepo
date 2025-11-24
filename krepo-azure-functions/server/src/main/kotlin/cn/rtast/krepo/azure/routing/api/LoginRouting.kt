@@ -25,7 +25,7 @@ import cn.rtast.krepo.azure.userManager
 
 context(cred: BasicCredential)
 @AuthConsumer(KRepoBasicAuthProvider::class)
-@HttpRouting("@/api/login", methods = [HttpMethod.POST])
+@HttpRouting("api/v2/login", methods = [HttpMethod.POST])
 fun loginRouting(
     request: HttpRequest<String?>,
     context: HttpContext,
@@ -38,7 +38,7 @@ fun loginRouting(
 
 context(cred: BearerCredential)
 @AuthConsumer(KRepoTokenAuthProvider::class)
-@HttpRouting("@/api/logout", methods = [HttpMethod.POST])
+@HttpRouting("api/v2/logout", methods = [HttpMethod.POST])
 fun logoutRouting(
     request: HttpRequest<String?>,
     context: HttpContext,

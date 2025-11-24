@@ -9,3 +9,5 @@
 package cn.rtast.krepo.azure
 
 const val CLOUDFLARE_API_URL = "https://api.cloudflare.com/client/v4/accounts/"
+
+const val BACKEND_VERSION = 1

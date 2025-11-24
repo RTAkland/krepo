@@ -32,12 +32,15 @@ import cn.rtast.krepo.util.string.fromJson
 import dev.fritz2.core.render
 import dev.fritz2.headless.components.toastContainer
 import dev.fritz2.headless.foundation.portalRoot
-import dev.fritz2.remote.http
 import dev.fritz2.routing.routerOf
 import kotlinx.browser.document
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import krepo.BackendVersions
+import krepo.entity.BackendVersion
 import krepo.entity.FrontendConfig
+import krepo.toBackendVersion
+import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 val router = routerOf("contents")
@@ -45,21 +48,28 @@ var currentPath = ""
 val backend = getCurrentHttpUrl()
 val coroutineScope = MainScope()
 lateinit var frontendConfig: FrontendConfig
+lateinit var backendVersion: BackendVersions  // zero is legacy version of backend
 
 fun main() {
     toastContainer("default", "toast-container")
     coroutineScope.launch {
-        try {
-            val checkSessionValid = http("$backend/@/api/user/")
-                .auth().acceptJson().jsonContentType()
-                .get()
-            if (checkSessionValid.status == 401 && LocalStorage.TOKEN != null) {
-                warningToast("Session was expired")
+        val tokenExpireTimestamp = LocalStorage.EXPIRED_TIMESTAMP
+        if (tokenExpireTimestamp != null) {
+            val now = Clock.System.now().epochSeconds
+            if (now >= tokenExpireTimestamp) {
+                warningToast("Token was expired.")
                 LocalStorage.clearAll()
             }
-        } catch (_: Exception) {
         }
-        frontendConfig = httpRequest("/@/api/config/frontend")
+
+        backendVersion = try {
+            httpRequest(backendVersion.BACKEND_VERSION).acceptJson().jsonContentType().get()
+                .body().fromJson<BackendVersion>().version.toBackendVersion()
+        } catch (_: Exception) {
+            BackendVersions.LEGACY()
+        }
+
+        frontendConfig = httpRequest(backendVersion.FRONTEND_CONFIG)
             .auth().acceptJson()
             .jsonContentType().get()
             .body().fromJson<GetFrontendConfigResponse>().data

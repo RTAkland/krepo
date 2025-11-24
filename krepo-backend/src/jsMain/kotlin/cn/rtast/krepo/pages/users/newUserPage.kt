@@ -7,6 +7,7 @@
 
 package cn.rtast.krepo.pages.users
 
+import cn.rtast.krepo.backendVersion
 import cn.rtast.krepo.components.errorToast
 import cn.rtast.krepo.components.infoToast
 import cn.rtast.krepo.components.showDialog
@@ -87,7 +88,7 @@ fun RenderContext.newUserPage() {
                 if (validateEmail(email)) {
                     val requestBody = User(username.current, email.current, password.current)
                     coroutineScope.launch {
-                        val result = httpRequest("/@/api/user")
+                        val result = httpRequest(backendVersion.CREATE_USER)
                             .auth().acceptJson().jsonContentType()
                             .setBody(requestBody).post().body().fromJson<Map<String, String>>()
                         val code = result["code"]!!.toInt()

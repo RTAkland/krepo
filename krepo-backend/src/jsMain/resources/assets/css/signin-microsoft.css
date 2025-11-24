@@ -1,26 +1,26 @@
 .btn-microsoft-signin {
-  background-color: #000000;
-  color: #ffffff;
-  border-radius: 8px;
-  padding: 0.5em 1.5em;
-  display: flex;
-  align-items: center;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 1rem;
-  user-select: none;
-  transition: background-color 0.2s ease;
+    background-color: #000000;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 0.5em 1.5em;
+    display: flex;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    user-select: none;
+    transition: background-color 0.2s ease;
 }
 
 .btn-microsoft-signin:hover {
-  background-color: #222222;
+    background-color: #222222;
 }
 
 .btn-microsoft-signin img {
-  width: 20px;
-  height: 20px;
-  margin-right: 12px;
-  display: inline-block;
-  vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    display: inline-block;
+    vertical-align: middle;
 }

@@ -24,7 +24,7 @@ fun RenderContext.showDialog(
     message: String? = null,
     content: RenderContext.() -> Unit,
     dialogAction: RenderContext.() -> Unit,
-    extraButtons: (RenderContext.() -> Unit)?
+    extraButtons: (RenderContext.() -> Unit)?,
 ) {
     showDialog.data.render { visible ->
         if (visible) {

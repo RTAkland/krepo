@@ -26,7 +26,7 @@ val DEFAULT_FRONTEND_CONFIG = FrontendConfig(
     true
 )
 
-@HttpRouting("@/api/config/frontend")
+@HttpRouting("api/v2/config/frontend")
 fun frontendConfigRouting(
     request: HttpRequest<String?>,
     context: HttpContext,

@@ -14,8 +14,11 @@ import cn.rtast.krepo.util.file.LocalStorage
 import cn.rtast.krepo.util.string.toJson
 import dev.fritz2.remote.Request
 import dev.fritz2.remote.http
+import krepo.RouteEndpoint
 
 fun httpRequest(url: String): Request = http(backend + url)
+
+fun httpRequest(url: RouteEndpoint): Request = http(backend + url.route)
 
 fun Request.auth() = LocalStorage.TOKEN?.let { header("Authorization", "Bearer $it") } ?: this
 

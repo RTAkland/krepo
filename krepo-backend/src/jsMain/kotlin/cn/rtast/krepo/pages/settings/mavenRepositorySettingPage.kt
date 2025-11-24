@@ -7,6 +7,7 @@
 
 package cn.rtast.krepo.pages.settings
 
+import cn.rtast.krepo.backendVersion
 import cn.rtast.krepo.components.*
 import cn.rtast.krepo.coroutineScope
 import cn.rtast.krepo.entity.CreateRepositoryResponse
@@ -55,7 +56,7 @@ fun RenderContext.mavenRepositorySettingPage() {
         val selectedRepositoryName = storeOf("")
         val showModifyRepositoryStore = storeOf(false)
         coroutineScope.launch {
-            val repositories = httpRequest("/@/api/repositories/all")
+            val repositories = httpRequest(backendVersion.LIST_ALL_REPOSITORIES)
                 .auth().acceptJson().jsonContentType()
                 .get().body().fromJson<GetRepositoriesResponse>().data
             section("container") {
@@ -126,7 +127,7 @@ fun RenderContext.mavenRepositorySettingPage() {
             "Do you want to delete the repository? Deleting a repository is only a logical deletion, the folder will not be deleted",
             {}) {
             coroutineScope.launch {
-                val result = httpRequest("/@/api/repositories/delete")
+                val result = httpRequest(backendVersion.DELETE_DIRECTORY)
                     .auth().acceptJson().jsonContentType()
                     .setBody(mapOf("name" to selectedRepositoryName.current))
                     .delete().body().fromJson<DeleteRepositoryResponse>()
@@ -152,7 +153,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                 val visibility = visibilityStore.current
                 val allowedExtensions = allowedExtensionsStore.current
                 val allowSnapshot = snapshotStore.current
-                val result = httpRequest("/@/api/repositories/new")
+                val result = httpRequest(backendVersion.CREATE_REPOSITORY)
                     .auth().acceptJson().jsonContentType()
                     .setBody(
                         CreateRepository(
@@ -184,7 +185,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                 val visibility = visibilityStore.current
                 val allowedExtensions = allowedExtensionsStore.current
                 val allowSnapshot = snapshotStore.current
-                val result = httpRequest("/@/api/repositories/modify")
+                val result = httpRequest(backendVersion.MODIFY_REPOSITORY)
                     .auth().acceptJson().jsonContentType()
                     .setBody(
                         ModifyRepository(

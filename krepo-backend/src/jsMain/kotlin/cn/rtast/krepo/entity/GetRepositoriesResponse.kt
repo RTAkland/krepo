@@ -12,5 +12,5 @@ import krepo.entity.ConfigRepositoryWithSize
 
 @Serializable
 data class GetRepositoriesResponse(
-    val data: List<ConfigRepositoryWithSize>
+    val data: List<ConfigRepositoryWithSize>,
 )

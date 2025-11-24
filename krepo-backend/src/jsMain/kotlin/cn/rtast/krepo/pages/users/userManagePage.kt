@@ -7,6 +7,7 @@
 
 package cn.rtast.krepo.pages.users
 
+import cn.rtast.krepo.backendVersion
 import cn.rtast.krepo.components.infoToast
 import cn.rtast.krepo.components.showDialog
 import cn.rtast.krepo.coroutineScope
@@ -26,7 +27,7 @@ fun RenderContext.userManagePage() {
         val showDeleteUserDialog = storeOf(false)
         val selectedUser = storeOf<GetUsersResponse.User?>(null)
         coroutineScope.launch {
-            val users = httpRequest("/@/api/user/")
+            val users = httpRequest(backendVersion.USERS)
                 .auth().acceptJson().jsonContentType()
                 .get().body().fromJson<GetUsersResponse>().data
             div("container") {
@@ -64,7 +65,7 @@ fun RenderContext.userManagePage() {
         }
         showDialog(showDeleteUserDialog, "Delete User", "Do you want to delete the user?", {}) {
             coroutineScope.launch {
-                httpRequest("/@/api/user/${selectedUser.current!!.name}")
+                httpRequest("${backendVersion.DELETE_USER}${selectedUser.current!!.name}")
                     .auth().acceptJson().jsonContentType()
                     .delete()
                 infoToast("Deleted")

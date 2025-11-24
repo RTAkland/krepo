@@ -7,6 +7,7 @@
 
 package cn.rtast.krepo.pages.users
 
+import cn.rtast.krepo.backendVersion
 import cn.rtast.krepo.components.infoToast
 import cn.rtast.krepo.components.showDialog
 import cn.rtast.krepo.components.warningToast
@@ -111,7 +112,7 @@ fun RenderContext.editUserPage() {
                         "email" to email.current
                     )
                     coroutineScope.launch {
-                        httpRequest("/@/api/user/$user")
+                        httpRequest(backendVersion.MODIFY_USER)
                             .auth().acceptJson().jsonContentType()
                             .setBody(requestBody).put().body()
                         infoToast("User info updated")

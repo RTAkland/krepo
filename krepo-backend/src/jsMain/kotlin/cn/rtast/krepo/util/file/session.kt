@@ -11,5 +11,5 @@ import cn.rtast.krepo.pages.other.noPermission
 import dev.fritz2.core.RenderContext
 
 fun RenderContext.checkSession(
-    content: RenderContext.() -> Unit
+    content: RenderContext.() -> Unit,
 ) = if (LocalStorage.TOKEN != null) content() else noPermission()

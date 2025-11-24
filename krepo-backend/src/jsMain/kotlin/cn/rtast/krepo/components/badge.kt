@@ -12,7 +12,7 @@ import dev.fritz2.core.RenderContext
 
 fun RenderContext.badge(
     type: BadgeType,
-    extraContent: RenderContext.() -> Unit
+    extraContent: RenderContext.() -> Unit,
 ): RenderContext {
     span("mr-2 tag ${type.classes} is-light") {
         extraContent()

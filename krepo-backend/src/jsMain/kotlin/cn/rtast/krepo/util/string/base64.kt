@@ -9,7 +9,7 @@
 
 package cn.rtast.krepo.util.string
 
-import io.ktor.utils.io.core.toByteArray
+import io.ktor.utils.io.core.*
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 

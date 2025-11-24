@@ -39,7 +39,7 @@ fun getGradleGroovyDslDependenciesTemplate(group: String, name: String, version:
     |implementation "$group:$name:$version"
 """.trimMargin()
 
-fun getMavenDependenciesTemplate(group: String, name: String, version: String) ="""
+fun getMavenDependenciesTemplate(group: String, name: String, version: String) = """
     |<dependency>
     |  <groupId>$group</groupId>
     |  <artifactId>$name</artifactId>
@@ -47,6 +47,6 @@ fun getMavenDependenciesTemplate(group: String, name: String, version: String) =
     |</dependency>
 """.trimMargin()
 
-fun getSBTDependenciesTemplate(group: String, name: String, version: String) ="""
+fun getSBTDependenciesTemplate(group: String, name: String, version: String) = """
     |"$group" %% "$name" %% "$version"
 """.trimMargin()

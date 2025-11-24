@@ -11,13 +11,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Contents(
-    val data: List<Content>
+    val data: List<Content>,
 ) {
     @Serializable
     data class Content(
         val name: String,
         val isDirectory: Boolean,
         val size: Long,
-        val timestamp: Long
+        val timestamp: Long,
     )
 }

@@ -7,11 +7,7 @@
 
 package cn.rtast.krepo.components
 
-import dev.fritz2.core.RenderContext
-import dev.fritz2.core.Store
-import dev.fritz2.core.checked
-import dev.fritz2.core.type
-import dev.fritz2.core.values
+import dev.fritz2.core.*
 
 fun RenderContext.prettyCheckbox(labelText: String, store: Store<Boolean>) {
     div("field mt-3") {

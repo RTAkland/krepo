@@ -8,6 +8,7 @@
 package cn.rtast.krepo.pages.search
 
 import cn.rtast.krepo.backend
+import cn.rtast.krepo.backendVersion
 import cn.rtast.krepo.coroutineScope
 import cn.rtast.krepo.util.auth
 import cn.rtast.krepo.util.file.checkSession
@@ -48,7 +49,7 @@ fun RenderContext.searchPage() {
             }
         }
         coroutineScope.launch {
-            val response = httpRequest("/@/api/v2/artifacts/search?keyword=$keyword")
+            val response = httpRequest("${backendVersion.V2_SEARCH_ARTIFACT}?keyword=$keyword")
                 .acceptJson().jsonContentType().auth()
                 .get().body().fromJson<V2ArtifactSearchResponse>()
             responseFlow.update(response)

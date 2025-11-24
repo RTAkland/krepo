@@ -8,6 +8,7 @@
 package cn.rtast.krepo.components
 
 import cn.rtast.krepo.backend
+import cn.rtast.krepo.backendVersion
 import cn.rtast.krepo.coroutineScope
 import cn.rtast.krepo.entity.LoginSuccessResponse
 import cn.rtast.krepo.frontendConfig
@@ -182,7 +183,7 @@ fun RenderContext.navbar() {
                 +"Sign in with Microsoft"
 
                 clicks handledBy {
-                    val loginUrl= httpRequest("/api/signin/azure/url")
+                    val loginUrl = httpRequest(backendVersion.AZURE_SIGN_IN_URL)
                         .get().body().fromJson<AzureSignInURL>()
                     window.location.href = loginUrl.url
                 }
@@ -190,7 +191,7 @@ fun RenderContext.navbar() {
         }
     }, dialogAction = {
         coroutineScope.launch {
-            val http = http("$backend/@/api/login")
+            val http = http("${backend}${backendVersion.LOGIN}")
                 .header("Authorization", "Basic ${"${username.current}:${password.current}".toBase64()}")
                 .acceptJson().jsonContentType().post()
             if (http.ok) {
@@ -204,7 +205,7 @@ fun RenderContext.navbar() {
 
     showDialog(showLogoutDialog, "Logout", "Do you want to logout?", {}) {
         coroutineScope.launch {
-            httpRequest("/@/api/logout").auth().acceptJson().jsonContentType().post()
+            httpRequest(backendVersion.LOGOUT).auth().acceptJson().jsonContentType().post()
             LocalStorage.TOKEN = null
             LocalStorage.CURRENT_USERNAME = null
             LocalStorage.AVATAR = null

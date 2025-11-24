@@ -7,7 +7,7 @@
 
 package cn.rtast.krepo.util.byte
 
-import io.ktor.util.toByteArray
+import io.ktor.util.*
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Int8Array
 

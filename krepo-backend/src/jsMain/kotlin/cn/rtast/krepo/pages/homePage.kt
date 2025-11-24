@@ -7,6 +7,7 @@
 
 package cn.rtast.krepo.pages
 
+import cn.rtast.krepo.backendVersion
 import cn.rtast.krepo.components.infoToast
 import cn.rtast.krepo.coroutineScope
 import cn.rtast.krepo.entity.GetRepositoriesResponse
@@ -29,7 +30,7 @@ fun RenderContext.homePage() {
     val searchKeyword = storeOf("")
     coroutineScope.launch {
         val repositoriesAPIEndpoint =
-            if (LocalStorage.TOKEN == null) "/@/api/repositories/public" else "/@/api/repositories/all"
+            if (LocalStorage.TOKEN == null) backendVersion.LIST_PUBLIC_REPOSITORIES else backendVersion.LIST_ALL_REPOSITORIES
         val repositories = httpRequest(repositoriesAPIEndpoint)
             .auth().acceptJson().jsonContentType()
             .get().body().fromJson<GetRepositoriesResponse>().data.sortedBy { it.visibility }

@@ -36,7 +36,7 @@ object LocalStorage {
         get() = getLocalStorage("mvn_hidden_hash_files")?.toBoolean() ?: true
         set(value) = setLocalStorage("mvn_hidden_hash_files", value.toString())
     var EXPIRED_TIMESTAMP
-        get(): Long? =getLocalStorage("token_expired_timestamp")?.toLong()
+        get(): Long? = getLocalStorage("token_expired_timestamp")?.toLong()
         set(value) = setLocalStorage("token_expired_timestamp", value.toString())
 
     fun clearAll() {

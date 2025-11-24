@@ -20,6 +20,7 @@ dependencies {
     implementation("software.amazon.awssdk:netty-nio-client:2.38.2")
     implementation("io.ktor:ktor-client-core:3.3.1")
     implementation("io.ktor:ktor-client-okhttp:3.3.1")
+    implementation(project(":krepo-common"))
 }
 
 kotlin {
@@ -34,7 +35,7 @@ azurefunctions {
 }
 
 kazure {
-    listingResources = true
+    listingResources = false
     excludeFiles.addAll("users.json", "users.template.json")
     resourceRoutingPrefix = "frontend/"
 }

@@ -12,5 +12,5 @@ import krepo.entity.FrontendConfig
 
 @Serializable
 data class GetFrontendConfigResponse(
-    val data: FrontendConfig
+    val data: FrontendConfig,
 )

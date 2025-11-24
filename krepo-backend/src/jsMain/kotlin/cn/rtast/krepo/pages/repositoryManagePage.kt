@@ -8,6 +8,7 @@
 package cn.rtast.krepo.pages
 
 import cn.rtast.krepo.backend
+import cn.rtast.krepo.backendVersion
 import cn.rtast.krepo.components.errorToast
 import cn.rtast.krepo.components.infoToast
 import cn.rtast.krepo.components.showDialog
@@ -15,6 +16,8 @@ import cn.rtast.krepo.components.warningToast
 import cn.rtast.krepo.coroutineScope
 import cn.rtast.krepo.currentPath
 import cn.rtast.krepo.entity.Contents
+import cn.rtast.krepo.entity.DeleteGavRequest
+import cn.rtast.krepo.entity.UploadFileResponse
 import cn.rtast.krepo.pages.other.notFoundPage
 import cn.rtast.krepo.util.auth
 import cn.rtast.krepo.util.byte.toByteArray
@@ -23,15 +26,7 @@ import cn.rtast.krepo.util.file.formatSize
 import cn.rtast.krepo.util.httpRequest
 import cn.rtast.krepo.util.jsonContentType
 import cn.rtast.krepo.util.setBody
-import cn.rtast.krepo.entity.DeleteGavRequest
-import cn.rtast.krepo.entity.UploadFileResponse
-import cn.rtast.krepo.util.string.fromJson
-import cn.rtast.krepo.util.string.getDate
-import cn.rtast.krepo.util.string.getGradleGroovyDslDependenciesTemplate
-import cn.rtast.krepo.util.string.getGradleKotlinDslDependenciesTemplate
-import cn.rtast.krepo.util.string.getMavenDependenciesTemplate
-import cn.rtast.krepo.util.string.getSBTDependenciesTemplate
-import cn.rtast.krepo.util.string.parseGAV
+import cn.rtast.krepo.util.string.*
 import cn.rtast.rutil.string.encodeToBase64
 import dev.fritz2.core.*
 import dev.fritz2.remote.http
@@ -62,7 +57,7 @@ fun RenderContext.publicContentListingPage() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        val api = httpRequest("/@/api/contents/${currentPath.removePrefix("/")}")
+        val api = httpRequest("${backendVersion.GET_PUBLIC_REPOSITORY_CONTENTS}${currentPath.removePrefix("/")}")
             .auth().acceptJson().jsonContentType()
         val response = api.get()
         if (response.status == 404) {
@@ -194,7 +189,7 @@ fun RenderContext.publicContentListingPage() {
                                                         "./repositories$currentPath"
                                                     )
                                                 infoToast("Uploading...")
-                                                val result = httpRequest("/@/api/repositories/upload")
+                                                val result = httpRequest(backendVersion.UPLOAD_FILE)
                                                     .auth().acceptJson().jsonContentType()
                                                     .setBody(body).post().body()
                                                     .fromJson<UploadFileResponse>()
@@ -313,7 +308,7 @@ fun RenderContext.publicContentListingPage() {
             warningToast("Folder must not be null or empty!")
         } else {
             coroutineScope.launch {
-                val result = httpRequest("/@/api/repositories/create-directory")
+                val result = httpRequest(backendVersion.CREATE_DIRECTORY)
                     .auth().acceptJson().jsonContentType()
                     .setBody(
                         CreateDirectoryRequest(
@@ -335,7 +330,7 @@ fun RenderContext.publicContentListingPage() {
         i { +selectedFileEntry.current }
     }) {
         coroutineScope.launch {
-            httpRequest("/@/api/gav")
+            httpRequest(backendVersion.DELETE_GAV)
                 .acceptJson().jsonContentType().auth()
                 .setBody(DeleteGavRequest(selectedFileEntry.current))
                 .delete()

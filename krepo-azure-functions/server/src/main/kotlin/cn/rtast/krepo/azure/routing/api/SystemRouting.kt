@@ -21,7 +21,7 @@ import cn.rtast.krepo.azure.tokenManager
 import com.microsoft.azure.functions.HttpMethod
 
 context(cred: BearerCredential)
-@HttpRouting("api/session", methods = [HttpMethod.OPTIONS])
+@HttpRouting("api/v2/session", methods = [HttpMethod.OPTIONS])
 @AuthConsumer(KRepoTokenAuthProvider::class)
 fun isTokenValidRouting(
     request: HttpRequest<String?>,

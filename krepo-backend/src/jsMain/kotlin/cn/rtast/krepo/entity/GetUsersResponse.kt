@@ -12,17 +12,17 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GetUsersResponse(
     val code: Int,
-    val data: List<User>
+    val data: List<User>,
 ) {
     @Serializable
     data class User(
         val name: String,
-        val email: String
+        val email: String,
     )
 }
 
 @Serializable
 data class GetUserResponse(
     val code: Int,
-    val data: GetUsersResponse.User
+    val data: GetUsersResponse.User,
 )
