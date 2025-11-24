@@ -26,7 +26,7 @@ class TokenManager {
             .drop(Random.nextInt(1, 5))
         CFKV.setValue(name.encodeUtf8().hex(), value)
         CFKV.setValue(value.encodeUtf8().hex(), name)
-        return TokenPayload(name, value, Clock.System.now().epochSeconds + 1)
+        return TokenPayload(name, value, Clock.System.now().epochSeconds + 3600)
     }
 
     fun getToken(key: String): String? = CFKV.getValue(key.encodeUtf8().hex())
