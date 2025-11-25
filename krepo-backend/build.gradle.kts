@@ -5,7 +5,7 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-@file:Suppress("unused")
+//@file:Suppress("unused")
 
 import cn.rtast.kembeddable.resources.gradle.util.NativeMain
 import com.google.devtools.ksp.gradle.KspTaskMetadata
@@ -184,17 +184,21 @@ tasks.named("jsBrowserDistribution") {
         file.writeText(originContent.replace(version, (version.toInt() + 1).toString()))
         println("Resources version bumped")
     }
-    finalizedBy("copyDistForWorker")
+    finalizedBy("copyDistForWorker", "copyDistForVercel")
 }
 
 tasks.named("runDebugExecutableLinuxX64") {
     dependsOn(tasks.named("generateResources"))
 }
 
-tasks.register("copyDistForWorker") {
+fun Task.copyDistToPlatformDir(
+    platform: String,
+    target: String? = null,
+    files: Task.(dist: File, target: File) -> Unit,
+) {
     val distDir = project.layout.buildDirectory.dir("dist/js/productionExecutable")
         .get().asFile
-    val targetDir = project.layout.buildDirectory.dir("worker-dist")
+    val targetDir = project.layout.buildDirectory.dir("$platform-dist")
         .get().asFile.apply {
             deleteRecursively()
             mkdirs()
@@ -202,22 +206,30 @@ tasks.register("copyDistForWorker") {
     inputs.dir(distDir)
     outputs.dir(targetDir)
     doLast {
-        val targetDistDir = File(targetDir, "dist").apply { mkdirs() }
         copy {
             from(distDir) {
                 exclude("*.LICENSE.txt")
-                exclude("worker.js")
-                exclude("wrangler.jsonc")
+                exclude("serverless/**")
             }
-            into(targetDistDir)
+            if (target != null) {
+                into(File(targetDir, target))
+            } else {
+                into(targetDir)
+            }
         }
+        this@copyDistToPlatformDir.files(distDir, targetDir)
+    }
+}
 
-        copy {
-            from(distDir) {
-                include("worker.js")
-                include("wrangler.jsonc")
-            }
-            into(targetDir)
-        }
+tasks.register("copyDistForVercel") {
+    copyDistToPlatformDir("vercel") { dist, target ->
+        File(dist, "serverless/vercel/vercel.json").copyTo(File(target, "vercel.json"))
+    }
+}
+
+tasks.register("copyDistForWorker") {
+    copyDistToPlatformDir("worker", "dist") { dist, target ->
+        File(dist, "serverless/workers/worker.js").copyTo(File(target, "worker.js"))
+        File(dist, "serverless/workers/wrangler.jsonc").copyTo(File(target, "wrangler.jsonc"))
     }
 }
