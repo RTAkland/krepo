@@ -12,12 +12,13 @@ import cn.rtast.kazure.*
 import cn.rtast.kazure.response.respondText
 import cn.rtast.kazure.trigger.HttpRouting
 import cn.rtast.kazure.util.fromJson
-import cn.rtast.krepo.azure.entity.req.DeleteGAVReq
 import cn.rtast.krepo.azure.entity.req.DeleteFileReq
+import cn.rtast.krepo.azure.entity.req.DeleteGAVReq
 import cn.rtast.krepo.azure.entity.req.UploadFileReq
 import cn.rtast.krepo.azure.util.decodeToByteArray
 import cn.rtast.krepo.azure.util.deleteDirectory
 import cn.rtast.krepo.azure.util.deleteFile
+import cn.rtast.krepo.azure.util.strip
 import cn.rtast.krepo.azure.util.uploadFile
 
 @HttpRouting("api/azure/repository/operation/file", [HttpMethod.POST, HttpMethod.DELETE])
@@ -29,7 +30,11 @@ fun uploadFileRouting(
         HttpMethod.POST -> {
             val payload = request.body.fromJson<UploadFileReq>()
             val fileContent = payload.file.decodeToByteArray()
-            val result = uploadFile(payload.path.replace("./repositories/", "") + payload.filename, fileContent, false)
+            val result = uploadFile(
+                "${payload.path.removePrefix("./repositories/").removeSuffix("/")}/${payload.filename}",
+                fileContent,
+                false
+            )
             return if (result) request.respondText("OK") else request.respondText(
                 "Conflict",
                 status = HttpStatus.CONFLICT
@@ -47,12 +52,16 @@ fun uploadFileRouting(
     return request.respondText("Internal server error", status = HttpStatus.INTERNAL_SERVER_ERROR)
 }
 
-@HttpRouting("api/azure/repository/operation/directory", [HttpMethod.DELETE])
-fun deleteDirectoryRouting(
+@HttpRouting("api/azure/repository/operation/gav", [HttpMethod.DELETE])
+fun deleteGAVRouting(
     request: HttpRequest<String>,
     context: HttpContext,
 ): HttpResponse {
-    val path = request.body.fromJson<DeleteGAVReq>().path
-    deleteDirectory(path)
+    val payload = request.body.fromJson<DeleteGAVReq>()
+    if (payload.isDirectory) {
+        deleteDirectory(payload.path.strip())
+    } else {
+        deleteFile(payload.path.strip())
+    }
     return request.respondText("OK")
 }

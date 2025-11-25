@@ -9,15 +9,10 @@
 
 package cn.rtast.krepo.azure
 
-import cn.rtast.kazure.resources.StaticAssets
-import cn.rtast.kazure.resources.staticAssets
 import cn.rtast.krepo.azure.cfg.TokenManager
 import cn.rtast.krepo.azure.cfg.UserManager
 
 
 val userManager = UserManager()
 val tokenManager = TokenManager()
-
-@StaticAssets("/", "frontend/index.html")
-val indexHtml: ByteArray by staticAssets
 

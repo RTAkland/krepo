@@ -83,6 +83,7 @@ kotlin {
         browser {
             commonWebpackConfig {
                 outputFileName = "krepo-backend.js"
+                sourceMaps = false
             }
         }
         binaries.executable()
@@ -148,10 +149,10 @@ kotlin.sourceSets.commonMain { tasks.withType<KspTaskMetadata> { kotlin.srcDir(d
 val isDevelopmentModeTask by tasks.registering {
     if (System.getenv("_DEVELOPMENT_MODE") != null) {
         project.layout.projectDirectory.dir("src/jsMain/kotlin/cn/rtast/krepo/development.kt")
-            .asFile.writeText("package cn.rtast.krepo\npublic const val developmentMode = true")
+            .asFile.writeText("package cn.rtast.krepo\npublic val developmentMode = true")
     } else {
         project.layout.projectDirectory.dir("src/jsMain/kotlin/cn/rtast/krepo/development.kt")
-            .asFile.writeText("package cn.rtast.krepo\npublic const val developmentMode = false")
+            .asFile.writeText("package cn.rtast.krepo\npublic val developmentMode = false")
     }
 }
 
@@ -183,8 +184,40 @@ tasks.named("jsBrowserDistribution") {
         file.writeText(originContent.replace(version, (version.toInt() + 1).toString()))
         println("Resources version bumped")
     }
+    finalizedBy("copyDistForWorker")
 }
 
 tasks.named("runDebugExecutableLinuxX64") {
     dependsOn(tasks.named("generateResources"))
+}
+
+tasks.register("copyDistForWorker") {
+    val distDir = project.layout.buildDirectory.dir("dist/js/productionExecutable")
+        .get().asFile
+    val targetDir = project.layout.buildDirectory.dir("worker-dist")
+        .get().asFile.apply {
+            deleteRecursively()
+            mkdirs()
+        }
+    inputs.dir(distDir)
+    outputs.dir(targetDir)
+    doLast {
+        val targetDistDir = File(targetDir, "dist").apply { mkdirs() }
+        copy {
+            from(distDir) {
+                exclude("*.LICENSE.txt")
+                exclude("worker.js")
+                exclude("wrangler.jsonc")
+            }
+            into(targetDistDir)
+        }
+
+        copy {
+            from(distDir) {
+                include("worker.js")
+                include("wrangler.jsonc")
+            }
+            into(targetDir)
+        }
+    }
 }

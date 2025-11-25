@@ -13,4 +13,5 @@ import com.google.gson.annotations.SerializedName
 data class DeleteGAVReq(
     @SerializedName("gav")
     val path: String,
+    val isDirectory: Boolean
 )

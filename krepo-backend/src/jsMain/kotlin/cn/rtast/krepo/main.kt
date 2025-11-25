@@ -24,8 +24,8 @@ import cn.rtast.krepo.pages.users.editUserPage
 import cn.rtast.krepo.pages.users.newUserPage
 import cn.rtast.krepo.pages.users.userManagePage
 import cn.rtast.krepo.util.auth
+import cn.rtast.krepo.util.customBacked
 import cn.rtast.krepo.util.file.LocalStorage
-import cn.rtast.krepo.util.getCurrentHttpUrl
 import cn.rtast.krepo.util.httpRequest
 import cn.rtast.krepo.util.jsonContentType
 import cn.rtast.krepo.util.string.fromJson
@@ -36,6 +36,7 @@ import dev.fritz2.routing.routerOf
 import kotlinx.browser.document
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import krepo.BACKEND_VERSION_ROUTE
 import krepo.BackendVersions
 import krepo.entity.BackendVersion
 import krepo.entity.FrontendConfig
@@ -45,7 +46,8 @@ import kotlin.time.ExperimentalTime
 
 val router = routerOf("contents")
 var currentPath = ""
-val backend = getCurrentHttpUrl()
+
+val backend get() = customBacked
 val coroutineScope = MainScope()
 lateinit var frontendConfig: FrontendConfig
 lateinit var backendVersion: BackendVersions  // zero is legacy version of backend
@@ -57,16 +59,17 @@ fun main() {
         if (tokenExpireTimestamp != null) {
             val now = Clock.System.now().epochSeconds
             if (now >= tokenExpireTimestamp) {
-                warningToast("Token was expired.")
+                warningToast("The Session has expired.")
                 LocalStorage.clearAll()
             }
         }
 
         backendVersion = try {
-            httpRequest(backendVersion.BACKEND_VERSION).acceptJson().jsonContentType().get()
+            httpRequest(BACKEND_VERSION_ROUTE).acceptJson().jsonContentType().get()
                 .body().fromJson<BackendVersion>().version.toBackendVersion()
-        } catch (_: Exception) {
-            BackendVersions.LEGACY()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            BackendVersions.STABLE()
         }
 
         frontendConfig = httpRequest(backendVersion.FRONTEND_CONFIG)

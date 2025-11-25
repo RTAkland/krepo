@@ -1,2 +1,2 @@
 package cn.rtast.krepo
-public const val developmentMode = false
+public val developmentMode = false

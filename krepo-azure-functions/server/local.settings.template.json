@@ -1,5 +1,8 @@
 {
   "IsEncrypted": false,
+  "Host": {
+    "CORS": "*"
+  },
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "java",
     "S3API": "",

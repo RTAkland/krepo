@@ -23,7 +23,7 @@ import cn.rtast.krepo.azure.util.listFiles
 import cn.rtast.krepo.azure.util.unAuth
 
 private fun getFiles(repo: String?, path: String?): List<FileEntry> {
-    val p= if (path == "/" || path == ".") "" else path
+    val p= if (path == "/" || path == "." || path == null) "" else path
     return listFiles("$repo/$p")
 }
 

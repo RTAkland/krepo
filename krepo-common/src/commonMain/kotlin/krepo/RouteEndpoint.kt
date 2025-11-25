@@ -17,6 +17,19 @@ public data class RouteEndpoint(val route: String) {
     }
 
     override fun toString(): String = _route
+
+    public operator fun invoke(): String = toString()
+
+    public override fun equals(other: Any?): Boolean {
+        other as RouteEndpoint
+        return this._route == other._route
+    }
+
+    public override fun hashCode(): Int {
+        var result = route.hashCode()
+        result = 31 * result + _route.hashCode()
+        return result
+    }
 }
 
 

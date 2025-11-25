@@ -8,10 +8,18 @@
 
 package cn.rtast.krepo.util
 
+import cn.rtast.krepo.backendVersion
+import cn.rtast.krepo.developmentMode
 import kotlinx.browser.window
+import krepo.BackendVersions
 
 fun getCurrentHttpUrl(): String {
     val protocol = window.location.protocol
     val host = window.location.host
     return "$protocol//$host"
 }
+
+//
+val customBacked
+    get() = if (!developmentMode) "https://pkg.rtast.cn" else if (developmentMode) "http://127.0.0.1:7071"
+    else if (backendVersion is BackendVersions.STABLE) getCurrentHttpUrl() else getCurrentHttpUrl()

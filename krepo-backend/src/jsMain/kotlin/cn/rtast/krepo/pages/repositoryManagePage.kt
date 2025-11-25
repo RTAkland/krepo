@@ -29,9 +29,9 @@ import cn.rtast.krepo.util.setBody
 import cn.rtast.krepo.util.string.*
 import cn.rtast.rutil.string.encodeToBase64
 import dev.fritz2.core.*
-import dev.fritz2.remote.http
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
+import krepo.BackendVersions
 import krepo.entity.CreateDirectoryRequest
 import krepo.entity.CreateDirectoryResponse
 import krepo.entity.UploadFilePayload
@@ -42,22 +42,23 @@ import kotlin.time.Duration.Companion.seconds
 fun RenderContext.publicContentListingPage() {
     val showDeleteFileEntryDialog = storeOf(false)
     val selectedFileEntry = storeOf("")
+    val selectedFileEntryIsDirectory = storeOf(true)
     val showLocalConfigDialog = storeOf(false)
     val hiddenHashFilesToggle = storeOf(LocalStorage.HIDDEN_HASH_FILES)
     val showCreateFolderDialog = storeOf(false)
     val folderNameStore = storeOf<String?>(null)
     coroutineScope.launch {
-        try {
-            if (LocalStorage.TOKEN != null) {
-                if (!http("$backend/@/api/user").auth().get().ok) {
-                    LocalStorage.clearAll()
-                    infoToast("Session was expired~")
-                }
+        val url = when (backendVersion) {
+            is BackendVersions.Azure -> {
+                val repo = currentPath.split("/")[1]
+                val path = currentPath.split("/").drop(2).joinToString("/")
+                if (repo != "private") "${backendVersion.GET_PUBLIC_REPOSITORY_CONTENTS}?repo=$repo&path=$path" else
+                    "${backendVersion.GET_PRIVATE_REPOSITORY_CONTENTS}?repo=$repo&path=$path"
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+
+            is BackendVersions.STABLE -> "${backendVersion.GET_PUBLIC_REPOSITORY_CONTENTS}${currentPath.removePrefix("/")}"
         }
-        val api = httpRequest("${backendVersion.GET_PUBLIC_REPOSITORY_CONTENTS}${currentPath.removePrefix("/")}")
+        val api = httpRequest(url)
             .auth().acceptJson().jsonContentType()
         val response = api.get()
         if (response.status == 404) {
@@ -278,6 +279,7 @@ fun RenderContext.publicContentListingPage() {
                                             clicks handledBy {
                                                 showDeleteFileEntryDialog.update(true)
                                                 selectedFileEntry.update("$currentPath/${entry.name}".removePrefix("/"))
+                                                selectedFileEntryIsDirectory.update(entry.isDirectory)
                                             }
                                         }
                                     }
@@ -288,9 +290,8 @@ fun RenderContext.publicContentListingPage() {
                 }
             } else {
                 h3("title is-3 has-text-centered") {
-                    img { src("assets/img/thinking.svg") }
                     h4("title is-4 has-text-centered") {
-                        +"It seems like nothing here."
+                        +"There's nothing here"
                     }
                 }
             }
@@ -332,7 +333,12 @@ fun RenderContext.publicContentListingPage() {
         coroutineScope.launch {
             httpRequest(backendVersion.DELETE_GAV)
                 .acceptJson().jsonContentType().auth()
-                .setBody(DeleteGavRequest(selectedFileEntry.current))
+                .setBody(
+                    DeleteGavRequest(
+                        selectedFileEntry.current,
+                        selectedFileEntryIsDirectory.current
+                    )
+                )
                 .delete()
             window.location.reload()
         }
