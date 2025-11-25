@@ -24,35 +24,14 @@ jobs:
         with:
           node-version: 20
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-
-
-      - name: Cache Node modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Run Gradle replaceDef task
-        run: ./gradlew replaceDef
-
-      - name: Run Gradle jsBrowserDistribution task
-        run: ./gradlew :krepo-backend:jsBrowserDistribution
+      - name: Build frontend
+        run: ./gradlew replaceDef :krepo-backend:jsBrowserDistribution
 
       - name: Install Wrangler CLI
         run: npm install -g wrangler
 
-      - name: Publish to Cloudflare Worker
-        run: |
-          cd krepo-backend/build/worker-dist
-          wrangler publish --name krepo
-        env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+      - name: Deploy Worker with Wrangler Action
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: ./krepo-backend/build/worker-dist

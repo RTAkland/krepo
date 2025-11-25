@@ -1,5 +1,5 @@
 {
-  "name": "my-worker",
+  "name": "krepo",
   "compatibility_date": "2025-04-01",
   "main": "./worker.js",
   "placement": {
@@ -10,5 +10,6 @@
     "binding": "ASSETS",
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash"
-  }
+  },
+  "account_id": "a90f0a4d81552027bafa613f681af031"
 }
