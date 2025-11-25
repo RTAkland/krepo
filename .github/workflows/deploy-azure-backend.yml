@@ -1,4 +1,0 @@
-name: deploy-azure-backend.yml
-on:
-
-jobs:

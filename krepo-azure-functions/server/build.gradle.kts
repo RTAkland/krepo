@@ -32,6 +32,7 @@ kotlin {
 
 azurefunctions {
     appName = "krepo-server"
+    resourceGroup = "krepo-server_group"
 }
 
 kazure {
