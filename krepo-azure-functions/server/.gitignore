@@ -1,3 +1,4 @@
 local.settings.json
 /src/main/resources/users.json
 /src/main/resources/frontend/
+/local.settings.backup.json

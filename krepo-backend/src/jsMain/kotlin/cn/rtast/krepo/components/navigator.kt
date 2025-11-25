@@ -42,6 +42,7 @@ fun RenderContext.navbar() {
             a("navbar-item is-rounded ml-2") {
                 href("#")
                 +frontendConfig.pageTitle
+                title("Back to home page")
             }
             a("navbar-burger") {
                 attr("role", "button")

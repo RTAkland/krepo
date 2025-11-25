@@ -147,6 +147,7 @@ dependencies.kspCommonMainMetadata("dev.fritz2:lenses-annotation-processor:$frit
 kotlin.sourceSets.commonMain { tasks.withType<KspTaskMetadata> { kotlin.srcDir(destinationDirectory) } }
 
 val isDevelopmentModeTask by tasks.registering {
+    group = "kotlin browser"
     if (System.getenv("_DEVELOPMENT_MODE") != null) {
         project.layout.projectDirectory.dir("src/jsMain/kotlin/cn/rtast/krepo/development.kt")
             .asFile.writeText("package cn.rtast.krepo\npublic val developmentMode = true")
@@ -154,6 +155,7 @@ val isDevelopmentModeTask by tasks.registering {
         project.layout.projectDirectory.dir("src/jsMain/kotlin/cn/rtast/krepo/development.kt")
             .asFile.writeText("package cn.rtast.krepo\npublic val developmentMode = false")
     }
+    dependsOn(tasks.named("jsBrowserDevelopmentRun"))
 }
 
 kembeddable {

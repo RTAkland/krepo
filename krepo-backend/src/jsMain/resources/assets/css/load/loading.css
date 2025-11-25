@@ -1,0 +1,37 @@
+/*
+ * Copyright © 2025 RTAkland
+ * Date: 11/25/25, 10:25 PM
+ * Open Source Under Apache-2.0 License
+ * https://www.apache.org/licenses/LICENSE-2.0
+ */
+
+
+.loading {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    text-align: center;
+    color: cornflowerblue;
+    font-weight: bold;
+    font-size: 1.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 3px solid cornflowerblue;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

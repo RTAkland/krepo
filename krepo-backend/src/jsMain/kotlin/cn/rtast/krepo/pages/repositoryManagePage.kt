@@ -81,6 +81,7 @@ fun RenderContext.publicContentListingPage() {
                         a("path-hover") {
                             href(basePath.toString())
                             +segment
+                            title("Back to $basePath")
                         }
                         if (index != segments.lastIndex) +"/"
                     }
@@ -221,8 +222,8 @@ fun RenderContext.publicContentListingPage() {
                     caption { +"Repository content" }
                     thead {
                         tr {
-                            th {}
-                            th { inlineStyle("text-align: center;") }
+                            th { inlineStyle("max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;") }
+                            th { inlineStyle("text-align: left; width: 180px; white-space: nowrap;") }
                             th { inlineStyle("text-align: center;") }
                             if (LocalStorage.TOKEN != null) {
                                 th { inlineStyle("text-align: center;") }
@@ -241,6 +242,7 @@ fun RenderContext.publicContentListingPage() {
                         artifacts.sortedWith(compareBy({ !it.isDirectory }, { it.name })).forEach { entry ->
                             tr {
                                 td {
+                                    inlineStyle("max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;")
                                     if (entry.isDirectory) {
                                         a {
                                             className("has-text-link")

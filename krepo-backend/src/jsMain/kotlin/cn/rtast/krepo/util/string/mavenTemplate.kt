@@ -7,28 +7,28 @@
 
 package cn.rtast.krepo.util.string
 
-import cn.rtast.krepo.backend
+import cn.rtast.krepo.util.getCurrentHttpUrl
 
 fun getGradleKotlinDslRepositoryTemplate(repo: String): String = """
-    |maven("${backend}/$repo")
+    |maven("${getCurrentHttpUrl()}/$repo")
 """.trimMargin()
 
 fun getGradleGroovyDslRepositoryTemplate(repo: String): String = """
     |maven {
-    |   url "$backend/$repo"
+    |   url "${getCurrentHttpUrl()}/$repo"
     |}
 """.trimMargin()
 
 fun getMavenRepositoryTemplate(repo: String): String = """
     |<repository>
-    |  <url>$backend/$repo<repository></url>
+    |  <url>${getCurrentHttpUrl()}/$repo<repository></url>
     |</repository>
 """.trimMargin()
 
 fun getSBTRepositoryTemplate(repo: String): String = """
     |resolvers +=
     |  "repository-$repo"
-    |    at "$backend/$repo"
+    |    at "${getCurrentHttpUrl()}/$repo"
 """.trimMargin()
 
 fun getGradleKotlinDslDependenciesTemplate(group: String, name: String, version: String) = """
