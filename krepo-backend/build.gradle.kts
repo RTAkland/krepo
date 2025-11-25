@@ -148,14 +148,15 @@ kotlin.sourceSets.commonMain { tasks.withType<KspTaskMetadata> { kotlin.srcDir(d
 
 val isDevelopmentModeTask by tasks.registering {
     group = "kotlin browser"
-    if (System.getenv("GITHUB_ACTIONS") == null) {
+    if (System.getenv("CLOUDFLARE_API_TOKEN") == null) {
+        println("Development mode is off")
         project.layout.projectDirectory.dir("src/jsMain/kotlin/cn/rtast/krepo/development.kt")
             .asFile.writeText("package cn.rtast.krepo\npublic val developmentMode = false")
     } else {
+        println("Development mode is on")
         project.layout.projectDirectory.dir("src/jsMain/kotlin/cn/rtast/krepo/development.kt")
             .asFile.writeText("package cn.rtast.krepo\npublic val developmentMode = true")
     }
-    dependsOn(tasks.named("jsBrowserDevelopmentRun"))
 }
 
 kembeddable {
@@ -178,7 +179,8 @@ kdef {
 }
 
 tasks.named("jsBrowserDistribution") {
-    if (System.getenv("GITHUB_ACTIONS") == null) {
+    dependsOn(isDevelopmentModeTask)
+    if (System.getenv("CLOUDFLARE_API_TOKEN") == null) {
         val file = project.layout.projectDirectory.dir("src/nativeMain/resources/res_version.txt")
             .asFile
         val originContent = file.readText()
