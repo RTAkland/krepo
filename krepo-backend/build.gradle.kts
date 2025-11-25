@@ -5,7 +5,7 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-//@file:Suppress("unused")
+@file:Suppress("unused")
 
 import cn.rtast.kembeddable.resources.gradle.util.NativeMain
 import com.google.devtools.ksp.gradle.KspTaskMetadata
@@ -148,12 +148,12 @@ kotlin.sourceSets.commonMain { tasks.withType<KspTaskMetadata> { kotlin.srcDir(d
 
 val isDevelopmentModeTask by tasks.registering {
     group = "kotlin browser"
-    if (System.getenv("_DEVELOPMENT_MODE") != null) {
-        project.layout.projectDirectory.dir("src/jsMain/kotlin/cn/rtast/krepo/development.kt")
-            .asFile.writeText("package cn.rtast.krepo\npublic val developmentMode = true")
-    } else {
+    if (System.getenv("GITHUB_ACTIONS") == null) {
         project.layout.projectDirectory.dir("src/jsMain/kotlin/cn/rtast/krepo/development.kt")
             .asFile.writeText("package cn.rtast.krepo\npublic val developmentMode = false")
+    } else {
+        project.layout.projectDirectory.dir("src/jsMain/kotlin/cn/rtast/krepo/development.kt")
+            .asFile.writeText("package cn.rtast.krepo\npublic val developmentMode = true")
     }
     dependsOn(tasks.named("jsBrowserDevelopmentRun"))
 }
@@ -178,7 +178,7 @@ kdef {
 }
 
 tasks.named("jsBrowserDistribution") {
-    if (System.getenv("_DEVELOPMENT_MODE") != null) {
+    if (System.getenv("GITHUB_ACTIONS") == null) {
         val file = project.layout.projectDirectory.dir("src/nativeMain/resources/res_version.txt")
             .asFile
         val originContent = file.readText()

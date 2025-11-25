@@ -8,9 +8,6 @@
 setTimeout(function () {
     const box = document.getElementById("loading-box");
     if (box) {
-        box.innerHTML = `
-                <span>Loading timeout.</span><br>
-                <span>The backend may be offline.</span>
-            `;
+        box.innerHTML = `<span>Loading timeout.<br>The backend may be offline.</span><br>`;
     }
 }, 15000);
