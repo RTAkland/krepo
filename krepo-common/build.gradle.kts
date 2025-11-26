@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -21,4 +22,11 @@ kotlin {
     jvm { compilerOptions.jvmTarget = JvmTarget.JVM_17 }
 
     explicitApi()
+
+    sourceSets {
+        commonMain.dependencies {
+            api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
+            api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+        }
+    }
 }

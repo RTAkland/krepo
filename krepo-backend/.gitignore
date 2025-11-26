@@ -1,3 +1,2 @@
 src/cinterop/def/*.def
 data/
-src/jsMain/kotlin/cn/rtast/krepo/development.kt

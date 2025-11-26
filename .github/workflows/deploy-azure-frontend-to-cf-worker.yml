@@ -7,6 +7,8 @@ on:
 
 jobs:
   deploy:
+    env:
+      ACTIONS: true
     runs-on: ubuntu-latest
 
     steps:
@@ -25,7 +27,7 @@ jobs:
           node-version: 20
 
       - name: Build frontend
-        run: ./gradlew replaceDef :krepo-backend:jsBrowserDistribution
+        run: ./gradlew replaceDef :krepo-frontend:jsBrowserDistribution
 
       - name: Install Wrangler CLI
         run: npm install -g wrangler
@@ -34,4 +36,4 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: ./krepo-backend/build/worker-dist
+          workingDirectory: ./krepo-frontend/build/worker-dist

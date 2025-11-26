@@ -4,6 +4,7 @@ rootProject.name = "krepo"
 
 listOf(
     "backend",
+    "frontend",
     "test:test-publish",
     "test:test-publish2",
     "azure-functions:server",
