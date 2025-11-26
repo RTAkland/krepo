@@ -14,5 +14,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class BackendVersion(
     @SerialName("v")
-    val version: Int
+    val version: Int,
+    @SerialName("p")
+    val patch: Int
 )
