@@ -41,13 +41,3 @@ $ ./gradlew replaceDef generateResources linkReleaseExecutableLinuxArm64
     - You can directly use the functions provided by this project without any authorization
     - You can distribute, modify and derive the source code at will under the condition of **indicating the source
       copyright information**
-
-# Special thanks
-
-<div>
-
-<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.png" alt="JetBrainsIcon" width="128">
-
-<a href="https://www.jetbrains.com/opensource/"><code>JetBrains Open Source</code></a> provided the powerful IDE support
-
-</div>
