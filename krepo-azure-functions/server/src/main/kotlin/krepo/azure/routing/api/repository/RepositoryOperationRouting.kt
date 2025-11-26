@@ -1,23 +1,23 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 11/26/25, 1:50 PM
+ * Date: 11/26/25, 7:57 PM
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
 
-package krepo.azure.routing.api.v2
+package krepo.azure.routing.api.repository
 
 import cn.rtast.kazure.*
 import cn.rtast.kazure.response.respondJson
 import cn.rtast.kazure.response.respondText
 import cn.rtast.kazure.trigger.HttpRouting
-import cn.rtast.kazure.util.fromJson
 import krepo.azure.entity.req.DeleteFileReq
 import krepo.azure.entity.req.DeleteGAVReq
 import krepo.azure.entity.req.UploadFileReq
 import krepo.azure.entity.res.CommonResponse
 import krepo.azure.util.*
+import krepo.util.fromJson
 
 @HttpRouting("api/azure/repository/operation/file", [HttpMethod.POST, HttpMethod.DELETE])
 fun uploadFileRouting(
@@ -62,4 +62,36 @@ fun deleteGAVRouting(
         deleteFile(payload.path.strip())
     }
     return request.respondText("OK")
+}
+
+@HttpRouting("api/azure/repository/operation/directory/create")
+fun createRepositoryDirectory(
+    request: HttpRequest<Any>,
+    context: HttpContext,
+): HttpResponse {
+    return request.notImplemented()
+}
+
+@HttpRouting("api/azure/repository/create", methods = [HttpMethod.POST])
+fun createRepository(
+    request: HttpRequest<Any>,
+    context: HttpContext,
+): HttpResponse {
+    return request.notImplemented()
+}
+
+@HttpRouting("api/azure/repository/modify", methods = [HttpMethod.PUT])
+fun modifyRepository(
+    request: HttpRequest<Any>,
+    context: HttpContext,
+): HttpResponse {
+    return request.notImplemented()
+}
+
+@HttpRouting("api/azure/repository/delete", methods = [HttpMethod.DELETE])
+fun deleteRepository(
+    request: HttpRequest<Any>,
+    context: HttpContext,
+): HttpResponse {
+    return request.notImplemented()
 }

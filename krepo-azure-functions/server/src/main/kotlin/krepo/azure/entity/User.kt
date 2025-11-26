@@ -1,6 +1,6 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 11/9/25, 6:00 AM
+ * Date: 11/26/25, 6:56 PM
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
@@ -8,9 +8,12 @@
 
 package krepo.azure.entity
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class User(
     val name: String,
     val email: String,
     val password: String? = null,
-    var uid: String = ""
+    var uid: String = "",
 )

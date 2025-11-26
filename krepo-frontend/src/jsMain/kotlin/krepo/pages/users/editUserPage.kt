@@ -16,11 +16,9 @@ import krepo.components.showDialog
 import krepo.components.warningToast
 import krepo.coroutineScope
 import krepo.currentPath
-import krepo.util.auth
+import krepo.enums.CheckImplType
+import krepo.util.*
 import krepo.util.file.checkSession
-import krepo.util.httpRequest
-import krepo.util.jsonContentType
-import krepo.util.setBody
 import krepo.util.string.validateEmail
 
 fun RenderContext.editUserPage() {
@@ -114,9 +112,10 @@ fun RenderContext.editUserPage() {
                     coroutineScope.launch {
                         httpRequest(backendVersion.MODIFY_USER)
                             .auth().acceptJson().jsonContentType()
-                            .setBody(requestBody).put().body()
-                        infoToast("User info updated")
-                        window.location.href = "/#/user/manage"
+                            .setBody(requestBody).put().checkImpl(CheckImplType.Toast) {
+                                infoToast("User info updated")
+                                window.location.href = "/#/user/manage"
+                            }
                     }
                 }
             }

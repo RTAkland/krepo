@@ -15,12 +15,10 @@ import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.coroutineScope
 import krepo.entity.FrontendConfig
+import krepo.enums.CheckImplType
 import krepo.frontendConfig
-import krepo.util.auth
+import krepo.util.*
 import krepo.util.file.checkSession
-import krepo.util.httpRequest
-import krepo.util.jsonContentType
-import krepo.util.setBody
 
 fun RenderContext.settingPage() {
     checkSession {
@@ -107,18 +105,20 @@ fun RenderContext.settingPage() {
                 httpRequest(backendVersion.MODIFY_FRONTEND_CONFIG)
                     .auth().acceptJson().jsonContentType()
                     .setBody(FrontendConfig(pageTitle, icpLicense, description, copyright, false))
-                    .put()
-                infoToast("Saved!")
-                window.location.reload()
+                    .put().checkImpl(CheckImplType.Toast) {
+                        infoToast("Saved!")
+                        window.location.reload()
+                    }
             }
         }
         showDialog(showResetFrontConfigDialog, "Reset", "Do you want to reset the frontend settings?", {}) {
             coroutineScope.launch {
                 httpRequest(backendVersion.RESET_FRONTEND_CONFIG)
                     .auth().acceptJson().jsonContentType()
-                    .put()
-                infoToast("Rested!")
-                window.location.reload()
+                    .put().checkImpl(CheckImplType.Toast) {
+                        infoToast("Rested!")
+                        window.location.reload()
+                    }
             }
         }
     }

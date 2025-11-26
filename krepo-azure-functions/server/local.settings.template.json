@@ -15,6 +15,9 @@
     "CF_KV_TOKEN": "",
     "CF_KV_NAMESPACE_ID": "",
     "AzureFunctionsJobHost__logging__console__isEnabled": "true",
-    "AzureFunctionsJobHost__logging__console__logLevel__default": "Debug"
+    "AzureFunctionsJobHost__logging__console__logLevel__default": "Debug",
+    "AZURE_CLIENT_ID": "",
+    "AZURE_CLIENT_SECRET": "",
+    "AZURE_REDIRECT_URL": ""
   }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 11/12/25, 9:16 AM
+ * Date: 11/26/25, 6:55 PM
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
@@ -8,6 +8,10 @@
 
 package krepo.azure.entity.res
 
+import kotlinx.serialization.Serializable
+import krepo.enums.RepositoryStatus
+
+@Serializable
 data class ConfigRepository(
     val name: String,
     val visibility: RepositoryVisibility,

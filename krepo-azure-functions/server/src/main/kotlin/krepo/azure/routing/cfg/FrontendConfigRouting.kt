@@ -9,13 +9,13 @@
 package krepo.azure.routing.cfg
 
 import cn.rtast.kazure.HttpContext
+import cn.rtast.kazure.HttpMethod
 import cn.rtast.kazure.HttpRequest
 import cn.rtast.kazure.HttpResponse
 import cn.rtast.kazure.response.respondJson
 import cn.rtast.kazure.trigger.HttpRouting
-import cn.rtast.kazure.util.toJson
 import krepo.azure.entity.res.CommonResponse
-import krepo.azure.util.CFKV
+import krepo.azure.util.notImplemented
 import krepo.entity.FrontendConfig
 
 val DEFAULT_FRONTEND_CONFIG = FrontendConfig(
@@ -31,9 +31,21 @@ fun frontendConfigRouting(
     request: HttpRequest<String?>,
     context: HttpContext,
 ): HttpResponse {
-    val fc = CFKV.getValue("__krepo_fc")
-    if (fc == null) {
-        CFKV.setValue("__krepo_fc", DEFAULT_FRONTEND_CONFIG.toJson(), -1)
-    }
     return request.respondJson(CommonResponse(200, DEFAULT_FRONTEND_CONFIG))
+}
+
+@HttpRouting("api/azure/config/reset", [HttpMethod.PUT])
+fun resetFrontendConfigRouting(
+    request: HttpRequest<String?>,
+    context: HttpContext,
+): HttpResponse {
+    return request.notImplemented()
+}
+
+@HttpRouting("api/azure/config/modify", [HttpMethod.PUT])
+fun modifyFrontendConfigRouting(
+    request: HttpRequest<String?>,
+    context: HttpContext,
+): HttpResponse {
+    return request.notImplemented()
 }

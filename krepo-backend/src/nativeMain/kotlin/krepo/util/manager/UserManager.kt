@@ -11,7 +11,7 @@
 package krepo.util.manager
 
 import krepo.DATA_PATH
-import krepo.entity.User
+import krepo.entity.login.User
 import krepo.util.file.exists
 import krepo.util.file.readText
 import krepo.util.file.writeText

@@ -7,7 +7,7 @@
 
 @file:Suppress("unused")
 
-package krepo.azure.routing.api
+package krepo.azure.routing.api.auth
 
 import cn.rtast.kazure.*
 import cn.rtast.kazure.auth.AuthConsumer

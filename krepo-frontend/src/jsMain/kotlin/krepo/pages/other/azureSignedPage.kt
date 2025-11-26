@@ -14,15 +14,17 @@ import kotlinx.browser.window
 import krepo.components.infoToast
 import krepo.components.setLoginInfo
 import krepo.currentPath
-import krepo.entity.AzureLoginSuccess
+import krepo.entity.login.oauth.AzureLoginSuccess
 import krepo.util.fromJson
+import krepo.util.string.extractQueryParams
 
 fun RenderContext.azureSignedPage() {
     h1("has-text-centered") {
         +"Setting up user info..."
     }
     try {
-        val data = currentPath.split("?").last().split("&").first().split("=").last()
+        val data = extractQueryParams(currentPath)["d"]!!
+            .apply { println(this) }
             .decodeToBase64().fromJson<AzureLoginSuccess>()
         setLoginInfo(data.t, data.n, data.ex, data.e)
         infoToast("Logged in")

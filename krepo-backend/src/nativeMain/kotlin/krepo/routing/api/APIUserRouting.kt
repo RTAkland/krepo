@@ -8,7 +8,7 @@
 
 package krepo.routing.api
 
-import krepo.entity.User
+import krepo.entity.login.User
 import krepo.entity.res.*
 import krepo.tokenManager
 import krepo.userManager

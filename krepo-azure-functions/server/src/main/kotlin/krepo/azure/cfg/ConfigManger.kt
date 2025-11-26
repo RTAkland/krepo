@@ -1,6 +1,6 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 11/9/25, 5:50 AM
+ * Date: 11/26/25, 5:42 PM
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
@@ -20,4 +20,8 @@ object ConfigManger {
     val CF_EMAIL = get("CF_EMAIL")
     val CF_KV_TOKEN = get("CF_KV_TOKEN")
     val CF_KV_NAMESPACE_ID = get("CF_KV_NAMESPACE_ID")
+
+    val AZURE_CLIENT_ID = get("AZURE_CLIENT_ID")
+    val AZURE_CLIENT_SECRET = get("AZURE_CLIENT_SECRET")
+    val AZURE_REDIRECT_URL = get("AZURE_REDIRECT_URL")
 }

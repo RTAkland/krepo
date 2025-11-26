@@ -11,28 +11,14 @@ import dev.fritz2.core.*
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
 import krepo.backendVersion
-import krepo.components.badge
-import krepo.components.errorToast
-import krepo.components.infoToast
-import krepo.components.showDialog
-import krepo.components.warningToast
+import krepo.components.*
 import krepo.coroutineScope
-import krepo.entity.CreateRepository
-import krepo.entity.CreateRepositoryResponse
-import krepo.entity.DeleteRepositoryResponse
-import krepo.entity.GetRepositoriesResponse
-import krepo.entity.ModifyRepository
-import krepo.entity.ModifyRepositoryResponse
-import krepo.entity.RepositoryVisibility
+import krepo.entity.*
 import krepo.enums.BadgeType
+import krepo.enums.CheckImplType
 import krepo.enums.RepositoryStatus
-import krepo.util.auth
+import krepo.util.*
 import krepo.util.file.checkSession
-import krepo.util.fromJson
-import krepo.util.httpRequest
-import krepo.util.jsonContentType
-import krepo.util.setBody
-import krepo.util.toJson
 
 fun RenderContext.prettyCheckbox(labelText: String, store: Store<Boolean>) {
     div("field mt-3") {
@@ -131,10 +117,10 @@ fun RenderContext.mavenRepositorySettingPage() {
             "Do you want to delete the repository? Deleting a repository is only a logical deletion, the folder will not be deleted",
             {}) {
             coroutineScope.launch {
-                val result = httpRequest(backendVersion.DELETE_DIRECTORY)
+                val result = httpRequest(backendVersion.DELETE_REPOSITORY)
                     .auth().acceptJson().jsonContentType()
                     .setBody(mapOf("name" to selectedRepositoryName.current))
-                    .delete().body().fromJson<DeleteRepositoryResponse>()
+                    .delete().checkImpl(CheckImplType.Toast).body().fromJson<DeleteRepositoryResponse>()
                 when (result.code) {
                     200 -> infoToast(result.message)
                     409 -> warningToast(result.message)
@@ -165,8 +151,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                             RepositoryStatus.Created,
                             listOf()
                         )
-                    )
-                    .post().body().fromJson<CreateRepositoryResponse>()
+                    ).post().checkImpl(CheckImplType.Toast).body().fromJson<CreateRepositoryResponse>()
                 when (result.code) {
                     200 -> infoToast(result.message)
                     409 -> warningToast(result.message)
@@ -199,8 +184,8 @@ fun RenderContext.mavenRepositorySettingPage() {
                             allowedExtensions.split("\n"),
                             allowSnapshot,
                             RepositoryStatus.Modified
-                        ).apply { println(this.toJson()) }
-                    ).put().body().fromJson<ModifyRepositoryResponse>()
+                        )
+                    ).put().checkImpl(CheckImplType.Toast).body().fromJson<ModifyRepositoryResponse>()
                 when (result.code) {
                     200 -> infoToast(result.message)
                     409 -> warningToast(result.message)

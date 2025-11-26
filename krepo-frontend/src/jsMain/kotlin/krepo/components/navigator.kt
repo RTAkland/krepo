@@ -7,6 +7,7 @@
 
 package krepo.components
 
+import cn.rtast.rutil.string.encodeToBase64
 import dev.fritz2.core.*
 import dev.fritz2.remote.http
 import kotlinx.browser.window
@@ -16,15 +17,12 @@ import kotlinx.coroutines.launch
 import krepo.backend
 import krepo.backendVersion
 import krepo.coroutineScope
-import krepo.entity.AzureSignInURL
 import krepo.entity.LoginSuccessResponse
+import krepo.entity.login.oauth.AzureSignInURL
 import krepo.frontendConfig
-import krepo.util.auth
+import krepo.util.*
 import krepo.util.file.LocalStorage
 import krepo.util.file.md5
-import krepo.util.fromJson
-import krepo.util.httpRequest
-import krepo.util.jsonContentType
 import krepo.util.string.toBase64
 
 fun RenderContext.navbar() {
@@ -184,7 +182,9 @@ fun RenderContext.navbar() {
                 +"Sign in with Microsoft"
 
                 clicks handledBy {
+                    infoToast("Logging...", z = 9999)
                     val loginUrl = httpRequest(backendVersion.AZURE_SIGN_IN_URL)
+                        .queryParameters(mapOf("host" to getCurrentHttpUrl().encodeToBase64(), "v" to "azure"))
                         .get().body().fromJson<AzureSignInURL>()
                     window.location.href = loginUrl.url
                 }

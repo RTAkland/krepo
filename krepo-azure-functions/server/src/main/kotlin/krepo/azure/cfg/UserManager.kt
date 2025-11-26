@@ -24,5 +24,11 @@ class UserManager {
         return user.password == password
     }
 
+    fun validateAzureUser(email: String): Boolean {
+        return users.any { it.email.equals(email, ignoreCase = true) }
+    }
+
     fun getUser(username: String): User? = users.find { it.name == username }
+
+    fun getUserByUID(id: String): User? = users.find { it.uid == id }
 }

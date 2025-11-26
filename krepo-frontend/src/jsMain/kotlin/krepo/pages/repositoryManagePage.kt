@@ -26,9 +26,11 @@ import krepo.entity.CreateDirectoryResponse
 import krepo.entity.DeleteGavRequest
 import krepo.entity.UploadFilePayload
 import krepo.entity.UploadFileResponse
+import krepo.enums.CheckImplType
 import krepo.pages.other.notFoundPage
 import krepo.util.auth
 import krepo.util.byte.toByteArray
+import krepo.util.checkImpl
 import krepo.util.file.LocalStorage
 import krepo.util.file.formatSize
 import krepo.util.fromJson
@@ -325,7 +327,7 @@ fun RenderContext.publicContentListingPage() {
                                 currentPath.removeSuffix("/").removePrefix("/")
                             }/${folderNameStore.current}"
                         )
-                    ).post().body().fromJson<CreateDirectoryResponse>()
+                    ).post().checkImpl(CheckImplType.Toast).body().fromJson<CreateDirectoryResponse>()
                 if (result.code == 200) {
                     infoToast("New folder successfully created")
                     window.location.reload()

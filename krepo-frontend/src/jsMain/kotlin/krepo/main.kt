@@ -9,6 +9,7 @@
 
 package krepo
 
+import dev.fritz2.core.RenderContext
 import dev.fritz2.core.render
 import dev.fritz2.headless.components.toastContainer
 import dev.fritz2.headless.foundation.portalRoot
@@ -18,7 +19,6 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import krepo.components.navbar
 import krepo.components.pageFooter
-import krepo.components.warningToast
 import krepo.entity.BackendVersion
 import krepo.entity.FrontendConfig
 import krepo.entity.GetFrontendConfigResponse
@@ -32,13 +32,7 @@ import krepo.pages.settings.settingPage
 import krepo.pages.users.editUserPage
 import krepo.pages.users.newUserPage
 import krepo.pages.users.userManagePage
-import krepo.util.auth
-import krepo.util.customBacked
-import krepo.util.file.LocalStorage
-import krepo.util.fromJson
-import krepo.util.httpRequest
-import krepo.util.jsonContentType
-import kotlin.time.Clock
+import krepo.util.*
 import kotlin.time.ExperimentalTime
 
 val router = routerOf("contents")
@@ -48,19 +42,11 @@ val backend get() = customBacked
 val coroutineScope = MainScope()
 lateinit var frontendConfig: FrontendConfig
 lateinit var backendVersion: BackendVersions  // zero is legacy version of backend
+lateinit var renderContext: RenderContext
 
 fun main() {
     toastContainer("default", "toast-container")
     coroutineScope.launch {
-        val tokenExpireTimestamp = LocalStorage.EXPIRED_TIMESTAMP
-        if (tokenExpireTimestamp != null) {
-            val now = Clock.System.now().epochSeconds
-            if (now >= tokenExpireTimestamp) {
-                warningToast("The Session has expired.")
-                LocalStorage.clearAll()
-            }
-        }
-
         backendVersion = try {
             httpRequest(BACKEND_VERSION_ROUTE).acceptJson().jsonContentType().get()
                 .body().fromJson<BackendVersion>().version.toBackendVersion()
@@ -79,7 +65,9 @@ fun main() {
             main {
                 inlineStyle("flex-grow: 1;")
                 router.data.render { site ->
+                    renderContext = this
                     currentPath = site
+                    if (!site.startsWith("/azure/signed")) checkToken()  // check token if site is not azure signed page
                     if (site.startsWith("/user/edit")) editUserPage()
                     else if (site.startsWith("/search")) searchPage()
                     else if (site.startsWith("/azure/signed")) azureSignedPage()

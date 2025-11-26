@@ -17,6 +17,7 @@ import krepo.components.showDialog
 import krepo.coroutineScope
 import krepo.entity.GetUsersResponse
 import krepo.util.auth
+import krepo.util.checkImpl
 import krepo.util.file.checkSession
 import krepo.util.fromJson
 import krepo.util.httpRequest
@@ -29,7 +30,7 @@ fun RenderContext.userManagePage() {
         coroutineScope.launch {
             val users = httpRequest(backendVersion.USERS)
                 .auth().acceptJson().jsonContentType()
-                .get().body().fromJson<GetUsersResponse>().data
+                .get().checkImpl().body().fromJson<GetUsersResponse>().data
             div("container") {
                 h2("title is-3 mt-4 mb-4") { +"Users" }
                 div("columns is-multiline") {

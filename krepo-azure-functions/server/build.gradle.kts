@@ -12,6 +12,7 @@ plugins {
     id("kazure")
     id("com.google.devtools.ksp")
     id("com.microsoft.azure.azurefunctions")
+    kotlin("plugin.serialization")
 }
 
 dependencies {

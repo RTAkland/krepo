@@ -20,13 +20,16 @@ import kotlin.random.Random
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
+private const val TOKEN_TTL = 3600  // 1 hour
+
 class TokenManager {
+
     fun issue(name: String): TokenPayload {
         val value = UUID.randomUUID().toString().replace("-", "")
             .drop(Random.nextInt(1, 5))
-        CFKV.setValue(name.encodeUtf8().hex(), value)
-        CFKV.setValue(value.encodeUtf8().hex(), name)
-        return TokenPayload(name, value, Clock.System.now().epochSeconds + 3600)
+        CFKV.setValue(name.encodeUtf8().hex(), value, TOKEN_TTL)
+        CFKV.setValue(value.encodeUtf8().hex(), name, TOKEN_TTL)
+        return TokenPayload(name, value, Clock.System.now().epochSeconds + TOKEN_TTL)
     }
 
     fun getToken(key: String): String? = CFKV.getValue(key.encodeUtf8().hex())
