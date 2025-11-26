@@ -66,6 +66,8 @@ $ ./gradlew :krepo-frontend:jsBrowserDistribution generateResources :krepo-backe
 
 See [Rust README](krepo-rs/README.md)
 
+# LICENSE
+
 - This project is open source under [Apache-2.0](./LICENSE) license, that is:
     - You can directly use the functions provided by this project without any authorization
     - You can distribute, modify and derive the source code at will under the condition of **indicating the source
