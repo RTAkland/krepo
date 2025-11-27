@@ -42,7 +42,12 @@ fun searchArtifactsRouting(
     request: HttpRequest<String>,
     context: HttpContext,
 ): HttpResponse {
-    val keyword = request.queryParameters["k"] ?: return request.respond(null, HttpStatus.BAD_REQUEST)
+    val keyword = request.queryParameters["k"]
+        ?: return request.respond("Keyword is required", HttpStatus.BAD_REQUEST)
+    if (keyword.length < 3) return request.respondBytes(
+        ProtoBuf.encodeToByteArray(IndexSearchResponse(499, emptyList(), 0)),
+        HttpStatus.BAD_REQUEST
+    )
     val repo = request.queryParameters["r"]
     if (repo == "private") {
         val cred = __getBearerTokenCredential(request) ?: return request.respondBytes(

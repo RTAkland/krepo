@@ -109,9 +109,13 @@ fun RenderContext.searchPage() {
                             if (!isButtonDisabled.current) {
                                 isButtonDisabled.update(true)
                                 coroutineScope.launch {
-                                    infoToast("Searching...")
-                                    search(keywordStore.current, selectedRepoStore.current, resultStore, isLoading)
-                                    delay(5000)
+                                    if (keywordStore.current.length < 3) {
+                                        errorToast("Keyword must more than 3 characters.")
+                                    } else {
+                                        infoToast("Searching...")
+                                        search(keywordStore.current, selectedRepoStore.current, resultStore, isLoading)
+                                        delay(5000)
+                                    }
                                     isButtonDisabled.update(false)
                                 }
                             } else warningToast("Please wait 5 seconds before trying again")
@@ -190,6 +194,7 @@ private suspend fun search(
         .acceptJson().jsonContentType().auth().get().arrayBuffer()
         .toByteArray().fromProtobuf<IndexSearchResponse>()
     if (response.code == 401) errorToast("You have no permission to search $repo")
+    if (response.code == 499) errorToast("Keyword must more than 3 characters.")
     resultStore.update(response)
     loadingStore.update(false)
 }
