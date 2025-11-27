@@ -22,6 +22,7 @@ dependencies {
     implementation("io.ktor:ktor-client-core:3.3.1")
     implementation("io.ktor:ktor-client-okhttp:3.3.1")
     implementation(project(":krepo-common"))
+    implementation("redis.clients:jedis:7.1.0")
 }
 
 kotlin {

@@ -9,15 +9,17 @@
     "S3_ACCESS_KEY": "",
     "S3_SECRET_KEY": "",
     "S3_BUCKET": "",
-    "S3_REGION": "auto",
-    "CF_ACCOUNT_ID": "",
-    "CF_EMAIL": "",
-    "CF_KV_TOKEN": "",
-    "CF_KV_NAMESPACE_ID": "",
+    "S3_REGION": "",
     "AzureFunctionsJobHost__logging__console__isEnabled": "true",
     "AzureFunctionsJobHost__logging__console__logLevel__default": "Debug",
     "AZURE_CLIENT_ID": "",
     "AZURE_CLIENT_SECRET": "",
-    "AZURE_REDIRECT_URL": ""
+    "AZURE_REDIRECT_URL": "",
+    "CF_ACCOUNT_ID": "",
+    "CF_EMAIL": "",
+    "CF_KV_TOKEN": "",
+    "CF_KV_NAMESPACE_ID": "",
+    "AUTH_STORAGE_TYPE": "REDIS or CF_KV",
+    "REDIS_URI": ""
   }
 }

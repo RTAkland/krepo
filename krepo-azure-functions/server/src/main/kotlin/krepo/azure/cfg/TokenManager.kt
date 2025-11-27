@@ -13,7 +13,7 @@ package krepo.azure.cfg
 import cn.rtast.kazure.util.fromJson
 import krepo.azure.entity.internal.CloudflareValue
 import krepo.azure.entity.res.TokenPayload
-import krepo.azure.util.CFKV
+import krepo.azure.storageManager
 import okio.ByteString.Companion.encodeUtf8
 import java.util.*
 import kotlin.random.Random
@@ -27,12 +27,12 @@ class TokenManager {
     fun issue(name: String): TokenPayload {
         val value = UUID.randomUUID().toString().replace("-", "")
             .drop(Random.nextInt(1, 5))
-        CFKV.setValue(name.encodeUtf8().hex(), value, TOKEN_TTL)
-        CFKV.setValue(value.encodeUtf8().hex(), name, TOKEN_TTL)
+        storageManager.setKV(name.encodeUtf8().hex(), value, TOKEN_TTL)
+        storageManager.setKV(value.encodeUtf8().hex(), name, TOKEN_TTL)
         return TokenPayload(name, value, Clock.System.now().epochSeconds + TOKEN_TTL)
     }
 
-    fun getToken(key: String): String? = CFKV.getValue(key.encodeUtf8().hex())
+    fun getToken(key: String): String? = storageManager.getKV(key.encodeUtf8().hex())
     fun getUser(key: String): String? = getToken(key)?.fromJson<CloudflareValue>()?.value
 
     fun validateToken(token: String): Boolean = getToken(token) != null

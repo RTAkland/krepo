@@ -10,18 +10,24 @@ package krepo.azure.cfg
 
 object ConfigManger {
     private fun get(name: String): String = System.getenv(name)
-//        .apply { println("Get env $name to $this") }
+    private fun getOptional(name: String): String? = System.getenv(name)
+
     val S3API = get("S3API")
     val S3_ACCESS_KEY = get("S3_ACCESS_KEY")
     val S3_SECRET_KEY = get("S3_SECRET_KEY")
     val S3_BUCKET = get("S3_BUCKET")
     val S3_REGION = get("S3_REGION")
-    val CF_ACCOUNT_ID = get("CF_ACCOUNT_ID")
-    val CF_EMAIL = get("CF_EMAIL")
-    val CF_KV_TOKEN = get("CF_KV_TOKEN")
-    val CF_KV_NAMESPACE_ID = get("CF_KV_NAMESPACE_ID")
 
     val AZURE_CLIENT_ID = get("AZURE_CLIENT_ID")
     val AZURE_CLIENT_SECRET = get("AZURE_CLIENT_SECRET")
     val AZURE_REDIRECT_URL = get("AZURE_REDIRECT_URL")
+
+    val AUTH_STORAGE_TYPE = get("AUTH_STORAGE_TYPE")  // CF_KV or REDIS
+
+    val CF_ACCOUNT_ID = getOptional("CF_ACCOUNT_ID")
+    val CF_EMAIL = getOptional("CF_EMAIL")
+    val CF_KV_TOKEN = getOptional("CF_KV_TOKEN")
+    val CF_KV_NAMESPACE_ID = getOptional("CF_KV_NAMESPACE_ID")
+
+    val REDIS_URI = getOptional("REDIS_URI")
 }

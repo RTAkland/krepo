@@ -23,9 +23,9 @@ import kotlinx.coroutines.runBlocking
 import krepo.azure.cfg.ConfigManger
 import krepo.azure.entity.internal.AzureAccessToken
 import krepo.azure.entity.internal.CloudflareValue
+import krepo.azure.storageManager
 import krepo.azure.tokenManager
 import krepo.azure.userManager
-import krepo.azure.util.CFKV
 import krepo.azure.util.client
 import krepo.azure.util.decodeToString
 import krepo.azure.util.encodeToBase64
@@ -44,11 +44,11 @@ private const val REDEEM_TOKEN_URL = "https://login.microsoftonline.com/common/o
 private const val USER_INFO_URL = "https://graph.microsoft.com/v1.0/me"
 
 private fun getState(state: String): String? {
-    return CFKV.getValue("krepo_state_$state")?.fromJson<CloudflareValue>()?.value
+    return storageManager.getKV("krepo_state_$state")?.fromJson<CloudflareValue>()?.value
 }
 
 private fun addState(state: String, extraData: String) {
-    CFKV.setValue("krepo_state_$state", extraData, 120)
+    storageManager.setKV("krepo_state_$state", extraData, 120)
 }
 
 @HttpRouting("api/azure/signin/azure/url")

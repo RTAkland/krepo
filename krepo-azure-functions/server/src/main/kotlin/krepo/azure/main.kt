@@ -9,10 +9,12 @@
 
 package krepo.azure
 
+import krepo.azure.cfg.StorageManager
 import krepo.azure.cfg.TokenManager
 import krepo.azure.cfg.UserManager
 
 
 val userManager = UserManager()
 val tokenManager = TokenManager()
+val storageManager = StorageManager()
 
