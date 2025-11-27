@@ -89,13 +89,13 @@ tasks.register("killAzureProcesses") {
 }
 
 tasks.named("azureFunctionsRun") {
-    dependsOn(updatePatchVersion)
+//    dependsOn(updatePatchVersion)
     finalizedBy("killAzureProcesses")
 }
 
-val updatePatchVersion by tasks.registering {
-    val versionFile = project.layout.projectDirectory.dir("src/main/resources/patch_version.txt")
-        .asFile
-    var current = versionFile.readText().toInt()
-    versionFile.writeText((++current).toString())
-}
+//val updatePatchVersion by tasks.registering {
+//    val versionFile = project.layout.projectDirectory.dir("src/main/resources/patch_version.txt")
+//        .asFile
+//    var current = versionFile.readText().toInt()
+//    versionFile.writeText((++current).toString())
+//}

@@ -23,6 +23,6 @@ fun backendVersionRouting(
     request: HttpRequest<*>,
     context: HttpContext,
 ): HttpResponse {
-    val patch: String by resources("patch_version.txt")
-    return request.respondJson(BackendVersion(BackendVersions.Azure().v, patch.toInt()))
+//    val patch: String by resources("patch_version.txt")
+    return request.respondJson(BackendVersion(BackendVersions.Azure().v, -1))
 }

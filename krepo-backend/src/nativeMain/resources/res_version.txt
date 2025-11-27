@@ -1,2 +1,2 @@
-ver=69
+ver=71
 pre_release=false
