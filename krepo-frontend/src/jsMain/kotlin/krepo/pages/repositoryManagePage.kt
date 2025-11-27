@@ -11,38 +11,19 @@ import cn.rtast.rutil.string.encodeToBase64
 import dev.fritz2.core.*
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
-import krepo.BackendVersions
-import krepo.backend
-import krepo.backendVersion
+import krepo.*
 import krepo.components.errorToast
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.components.warningToast
-import krepo.coroutineScope
-import krepo.currentPath
-import krepo.entity.Contents
-import krepo.entity.CreateDirectoryRequest
-import krepo.entity.CreateDirectoryResponse
-import krepo.entity.DeleteGavRequest
-import krepo.entity.UploadFilePayload
-import krepo.entity.UploadFileResponse
+import krepo.entity.*
 import krepo.enums.CheckImplType
 import krepo.pages.other.notFoundPage
-import krepo.util.auth
+import krepo.util.*
 import krepo.util.byte.toByteArray
-import krepo.util.checkImpl
 import krepo.util.file.LocalStorage
 import krepo.util.file.formatSize
-import krepo.util.fromJson
-import krepo.util.httpRequest
-import krepo.util.jsonContentType
-import krepo.util.setBody
-import krepo.util.string.getDate
-import krepo.util.string.getGradleGroovyDslDependenciesTemplate
-import krepo.util.string.getGradleKotlinDslDependenciesTemplate
-import krepo.util.string.getMavenDependenciesTemplate
-import krepo.util.string.getSBTDependenciesTemplate
-import krepo.util.string.parseGAV
+import krepo.util.string.*
 import org.khronos.webgl.ArrayBuffer
 import org.w3c.files.FileReader
 import kotlin.time.Duration.Companion.seconds
@@ -104,6 +85,7 @@ fun RenderContext.publicContentListingPage() {
                                 val parentPath = currentPath.trimEnd('/').substringBeforeLast('/', "")
                                 href("/#$parentPath")
                                 img { src("/assets/img/back.svg") }
+                                title("Back")
                             }
                         }
                         div("level-right") {
@@ -122,6 +104,7 @@ fun RenderContext.publicContentListingPage() {
                                 div("dropdown has-dropdown is-hoverable has-background is-centered") {
                                     button("button") {
                                         i("fa-solid fa-copy") {}
+                                        title("Copy dependency URL")
                                         clicks handledBy {
                                             window.navigator.clipboard.writeText(
                                                 getGradleKotlinDslDependenciesTemplate(group, name, version)
@@ -175,6 +158,7 @@ fun RenderContext.publicContentListingPage() {
                             }
                             if (LocalStorage.TOKEN != null) {
                                 label("button") {
+                                    title("Upload file")
                                     attr("for", "fileInput")
                                     img { src("/assets/img/upload.svg") }
                                 }
@@ -213,12 +197,14 @@ fun RenderContext.publicContentListingPage() {
                                     }
                                 }
                                 a("button") {
+                                    title("Create folder")
                                     img { src("/assets/img/create-folder.svg") }
                                     clicks handledBy { showCreateFolderDialog.update(true) }
                                 }
                             }
                             a("button mr-2") {
                                 img { src("assets/img/settings.svg") }
+                                title("Preferences")
                                 clicks handledBy { showLocalConfigDialog.update(true) }
                             }
                         }
@@ -254,17 +240,19 @@ fun RenderContext.publicContentListingPage() {
                                     if (entry.isDirectory) {
                                         a {
                                             className("has-text-link")
-                                            +("${entry.name}/")
-                                            clicks handledBy {
-                                                window.location.href = "/#$currentPath/${entry.name}"
-                                            }
+                                            +"${entry.name}/"
+                                            title("$currentPath/${entry.name}")
+                                            clicks handledBy { window.location.href = "/#$currentPath/${entry.name}" }
                                         }
                                     } else {
                                         a {
                                             className("has-text-dark")
                                             +entry.name
+                                            title("$currentPath/${entry.name}")
                                             clicks handledBy {
-                                                window.location.href = "$backend$currentPath/${entry.name}"
+                                                val fileHref = if (developmentMode) "$backend$currentPath/${entry.name}"
+                                                else "$currentPath/${entry.name}"
+                                                window.location.href = fileHref
                                             }
                                         }
                                     }
@@ -272,6 +260,7 @@ fun RenderContext.publicContentListingPage() {
                                 td {
                                     inlineStyle("text-align: center;")
                                     +getDate(entry.timestamp)
+                                    title(entry.timestamp.toString())
                                 }
                                 td {
                                     inlineStyle("text-align: center;")
@@ -281,6 +270,8 @@ fun RenderContext.publicContentListingPage() {
                                     td {
                                         inlineStyle("text-align: center;")
                                         button("button is-danger is-small") {
+                                            val name = if (entry.isDirectory) "directory" else "file"
+                                            title("Delete $name")
                                             img {
                                                 src("assets/trash.svg")
                                                 attr("alt", "Delete icon")

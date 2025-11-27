@@ -11,6 +11,7 @@ import dev.fritz2.core.RenderContext
 import dev.fritz2.core.href
 import dev.fritz2.core.id
 import dev.fritz2.core.storeOf
+import dev.fritz2.core.title
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
 import krepo.backendVersion
@@ -66,6 +67,7 @@ fun RenderContext.homePage() {
                                 a("has-text-link") {
                                     href("/#/${repo.name}")
                                     +repo.name
+                                    title("Repo: ${repo.name} | Status: ${repo.status.name}")
                                 }
                             }
                             td("is-narrow") {

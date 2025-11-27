@@ -37,12 +37,14 @@ object LocalStorage {
         set(value) = setLocalStorage("mvn_hidden_hash_files", value.toString())
     var EXPIRED_TIMESTAMP
         get(): Long? = getLocalStorage("token_expired_timestamp")?.toLong()
-        set(value) = setLocalStorage("token_expired_timestamp", value.toString())
+        set(value) = if (value == null) removeLocalStorage("token_expired_timestamp")
+        else setLocalStorage("token_expired_timestamp", value.toString())
 
     fun clearAll() {
         TOKEN = null
         CURRENT_USERNAME = null
         EMAIL_ADDRESS = null
         AVATAR = null
+        EXPIRED_TIMESTAMP = null
     }
 }
