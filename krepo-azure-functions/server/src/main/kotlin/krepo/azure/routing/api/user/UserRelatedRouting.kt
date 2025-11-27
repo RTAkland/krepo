@@ -13,15 +13,25 @@ import cn.rtast.kazure.HttpContext
 import cn.rtast.kazure.HttpMethod
 import cn.rtast.kazure.HttpRequest
 import cn.rtast.kazure.HttpResponse
+import cn.rtast.kazure.auth.AuthConsumer
+import cn.rtast.kazure.auth.credentials.BearerCredential
+import cn.rtast.kazure.response.respondJson
 import cn.rtast.kazure.trigger.HttpRouting
+import krepo.azure.entity.res.CommonResponse
+import krepo.azure.routing.auth.KRepoTokenAuthProvider
+import krepo.azure.userManager
 import krepo.azure.util.notImplemented
+import krepo.entity.login.NoSensitiveUser
 
+context(cred: BearerCredential)
+@AuthConsumer(KRepoTokenAuthProvider::class)
 @HttpRouting("api/azure/users")
 fun usersRouting(
     request: HttpRequest<*>,
     context: HttpContext,
 ): HttpResponse {
-    return request.notImplemented()
+    val users = userManager.allUsers().map { NoSensitiveUser(it.name, it.email) }
+    return request.respondJson(CommonResponse(200, users))
 }
 
 @HttpRouting("api/azure/user", methods = [HttpMethod.POST])

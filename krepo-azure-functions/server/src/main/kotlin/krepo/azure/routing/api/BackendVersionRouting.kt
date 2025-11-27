@@ -12,7 +12,7 @@ package krepo.azure.routing.api
 import cn.rtast.kazure.HttpContext
 import cn.rtast.kazure.HttpRequest
 import cn.rtast.kazure.HttpResponse
-import cn.rtast.kazure.resources.Resources
+import cn.rtast.kazure.resources.resources
 import cn.rtast.kazure.response.respondJson
 import cn.rtast.kazure.trigger.HttpRouting
 import krepo.BackendVersions
@@ -23,6 +23,6 @@ fun backendVersionRouting(
     request: HttpRequest<*>,
     context: HttpContext,
 ): HttpResponse {
-    val patch = Resources.readText("patch_version.txt").toInt()
-    return request.respondJson(BackendVersion(BackendVersions.Azure().v, patch))
+    val patch: String by resources("patch_version.txt")
+    return request.respondJson(BackendVersion(BackendVersions.Azure().v, patch.toInt()))
 }

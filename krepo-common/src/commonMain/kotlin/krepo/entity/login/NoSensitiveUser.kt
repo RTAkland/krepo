@@ -1,16 +1,16 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 2025/5/17 05:25
+ * Date: 11/27/25, 1:49 PM
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-package krepo.entity.res
+package krepo.entity.login
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NoSensitiveUser(
+public data class NoSensitiveUser(
     val name: String,
     val email: String
 )
