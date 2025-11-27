@@ -18,13 +18,13 @@ import krepo.coroutineScope
 import krepo.entity.GetUsersResponse
 import krepo.util.auth
 import krepo.util.checkImpl
-import krepo.util.file.checkSession
+import krepo.util.file.checkPermission
 import krepo.util.fromJson
 import krepo.util.httpRequest
 import krepo.util.jsonContentType
 
 fun RenderContext.userManagePage() {
-    checkSession {
+    checkPermission {
         val showDeleteUserDialog = storeOf(false)
         val selectedUser = storeOf<GetUsersResponse.User?>(null)
         coroutineScope.launch {

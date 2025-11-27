@@ -16,9 +16,7 @@ kotlin {
     linuxArm64()
     linuxX64()
     macosX64()
-    js(IR) {
-        browser()
-    }
+    js(IR) { browser() }
     jvm { compilerOptions.jvmTarget = JvmTarget.JVM_17 }
 
     explicitApi()
@@ -27,6 +25,7 @@ kotlin {
         commonMain.dependencies {
             api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
             api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+            api("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.8.1")
         }
     }
 }

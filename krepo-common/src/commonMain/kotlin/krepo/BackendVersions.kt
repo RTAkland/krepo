@@ -49,6 +49,10 @@ public sealed class BackendVersions(public val v: Int, public val desc: String) 
     public abstract val AZURE_SIGN_IN_URL: RouteEndpoint
     public abstract val AZURE_SIGN_IN_COMPLETE: RouteEndpoint
 
+    // dangerous
+    public abstract val CREATE_REPOSITORY_INDEX: RouteEndpoint
+    public abstract val DELETE_REPOSITORY_INDEX: RouteEndpoint
+
 
     public class STABLE : BackendVersions(0, "Stable version") {
         override val CURRENT_USER: RouteEndpoint = createRouteEndpoint("/@/api/user")
@@ -80,6 +84,8 @@ public sealed class BackendVersions(public val v: Int, public val desc: String) 
         override val AZURE_SIGN_IN: RouteEndpoint = createRouteEndpoint("/api/signin/azure")
         override val AZURE_SIGN_IN_URL: RouteEndpoint = createRouteEndpoint("/api/signin/azure/url")
         override val AZURE_SIGN_IN_COMPLETE: RouteEndpoint = createRouteEndpoint("/api/signin/azure/complete")
+        override val CREATE_REPOSITORY_INDEX: RouteEndpoint = NOT_IMPLEMENTED_API
+        override val DELETE_REPOSITORY_INDEX: RouteEndpoint = NOT_IMPLEMENTED_API
     }
 
     public class Azure : BackendVersions(1, "Running on Azure") {
@@ -106,13 +112,15 @@ public sealed class BackendVersions(public val v: Int, public val desc: String) 
             createRouteEndpoint("/api/azure/repository/public/contents")
         override val GET_PRIVATE_REPOSITORY_CONTENTS: RouteEndpoint =
             createRouteEndpoint("/api/azure/repository/private/contents")
-        override val SEARCH_ARTIFACT: RouteEndpoint = NOT_IMPLEMENTED_API
+        override val SEARCH_ARTIFACT: RouteEndpoint = createRouteEndpoint("/api/azure/search")
         override val RESET_FRONTEND_CONFIG: RouteEndpoint = createRouteEndpoint("/api/azure/config/reset")
         override val FRONTEND_CONFIG: RouteEndpoint = createRouteEndpoint("/api/azure/config/frontend")
         override val MODIFY_FRONTEND_CONFIG: RouteEndpoint = createRouteEndpoint("/api/azure/config/modify")
         override val AZURE_SIGN_IN: RouteEndpoint = createRouteEndpoint("/api/azure/signin/azure")
         override val AZURE_SIGN_IN_URL: RouteEndpoint = createRouteEndpoint("/api/azure/signin/azure/url")
         override val AZURE_SIGN_IN_COMPLETE: RouteEndpoint = createRouteEndpoint("/api/azure/signin/azure/complete")
+        override val CREATE_REPOSITORY_INDEX: RouteEndpoint = createRouteEndpoint("/api/azure/repository/index")
+        override val DELETE_REPOSITORY_INDEX: RouteEndpoint = createRouteEndpoint("/api/azure/repository/index")
     }
 }
 

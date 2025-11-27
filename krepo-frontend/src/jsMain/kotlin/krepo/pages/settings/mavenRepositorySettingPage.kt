@@ -18,7 +18,7 @@ import krepo.enums.BadgeType
 import krepo.enums.CheckImplType
 import krepo.enums.RepositoryStatus
 import krepo.util.*
-import krepo.util.file.checkSession
+import krepo.util.file.checkPermission
 
 fun RenderContext.prettyCheckbox(labelText: String, store: Store<Boolean>) {
     div("field mt-3") {
@@ -36,7 +36,7 @@ fun RenderContext.prettyCheckbox(labelText: String, store: Store<Boolean>) {
 }
 
 fun RenderContext.mavenRepositorySettingPage() {
-    checkSession {
+    checkPermission {
         val showCreateRepositoryFormDialog = storeOf(false)
         val showDeleteRepositoryDialog = storeOf(false)
         val nameStore = storeOf("")

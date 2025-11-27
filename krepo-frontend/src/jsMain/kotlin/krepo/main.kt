@@ -27,6 +27,7 @@ import krepo.pages.other.azureSignedPage
 import krepo.pages.other.noPermission
 import krepo.pages.publicContentListingPage
 import krepo.pages.search.searchPage
+import krepo.pages.settings.indexSettingsPage
 import krepo.pages.settings.mavenRepositorySettingPage
 import krepo.pages.settings.settingPage
 import krepo.pages.users.editUserPage
@@ -78,6 +79,7 @@ fun main() {
                             "/user/create" -> newUserPage()
                             "/setting" -> settingPage()
                             "/setting/repository" -> mavenRepositorySettingPage()
+                            "/setting/index" -> indexSettingsPage()
                             "/accessDenied" -> noPermission()
                             else -> publicContentListingPage()
                         }

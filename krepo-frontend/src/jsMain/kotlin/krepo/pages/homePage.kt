@@ -7,40 +7,22 @@
 
 package krepo.pages
 
-import dev.fritz2.core.RenderContext
-import dev.fritz2.core.href
-import dev.fritz2.core.id
-import dev.fritz2.core.storeOf
-import dev.fritz2.core.title
+import dev.fritz2.core.*
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
-import krepo.backendVersion
 import krepo.components.infoToast
 import krepo.coroutineScope
-import krepo.entity.GetRepositoriesResponse
 import krepo.entity.RepositoryVisibility
 import krepo.frontendConfig
-import krepo.util.auth
 import krepo.util.file.LocalStorage
 import krepo.util.file.formatSize
-import krepo.util.fromJson
-import krepo.util.httpRequest
-import krepo.util.jsonContentType
-import krepo.util.string.castMarkdownToHtml
-import krepo.util.string.getGradleGroovyDslRepositoryTemplate
-import krepo.util.string.getGradleKotlinDslRepositoryTemplate
-import krepo.util.string.getMavenRepositoryTemplate
-import krepo.util.string.getSBTRepositoryTemplate
+import krepo.util.repo.getRepositories
+import krepo.util.string.*
 
 fun RenderContext.homePage() {
     val searchKeyword = storeOf("")
     coroutineScope.launch {
-        val repositoriesAPIEndpoint =
-            if (LocalStorage.TOKEN == null) backendVersion.LIST_PUBLIC_REPOSITORIES else backendVersion.LIST_ALL_REPOSITORIES
-        val repositories = httpRequest(repositoriesAPIEndpoint)
-            .auth().acceptJson().jsonContentType()
-            .get().body().fromJson<GetRepositoriesResponse>().data.sortedBy { it.visibility }
-
+        val repositories = getRepositories()
         div("container") {
             inlineStyle("max-width: 50%")
             h1("title is-3 has-text-left mt-4 mb-2") { +"Repositories" }

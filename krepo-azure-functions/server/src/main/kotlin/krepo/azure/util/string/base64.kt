@@ -1,12 +1,13 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 11/10/25, 5:21 PM
+ * Date: 11/27/25, 6:02 PM
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("unused")
 
-package krepo.azure.util
+package krepo.azure.util.string
 
 import java.util.Base64
 

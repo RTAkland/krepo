@@ -27,8 +27,8 @@ import krepo.azure.storageManager
 import krepo.azure.tokenManager
 import krepo.azure.userManager
 import krepo.azure.util.client
-import krepo.azure.util.decodeToString
-import krepo.azure.util.encodeToBase64
+import krepo.azure.util.string.decodeToString
+import krepo.azure.util.string.encodeToBase64
 import krepo.entity.login.oauth.*
 import krepo.util.fromJson
 import krepo.util.toJson

@@ -5,6 +5,7 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("unused")
 
 package krepo.azure.routing
 
@@ -17,11 +18,10 @@ import cn.rtast.kazure.trigger.HttpRouting
 import com.microsoft.azure.functions.HttpMethod
 import krepo.azure.registry.handleRequest
 import krepo.azure.routing.auth.KRepoBasicAuthProvider
-import java.util.Optional
 
 @HttpRouting("releases/{*path}", methods = [HttpMethod.GET])
 fun serveArtifactRoutingReleases(
-    request: HttpRequest<Optional<ByteArray>>,
+    request: HttpRequest<ByteArray?>,
     context: HttpContext,
     @Param("path") path: String,
 ): HttpResponse {
@@ -30,7 +30,7 @@ fun serveArtifactRoutingReleases(
 
 @HttpRouting("snapshots/{*path}", methods = [HttpMethod.GET])
 fun serveArtifactRoutingSnapshots(
-    request: HttpRequest<Optional<ByteArray>>,
+    request: HttpRequest<ByteArray?>,
     context: HttpContext,
     @Param("path") path: String,
 ): HttpResponse {
@@ -40,7 +40,7 @@ fun serveArtifactRoutingSnapshots(
 @AuthConsumer(KRepoBasicAuthProvider::class)
 @HttpRouting("private/{*path}", methods = [HttpMethod.GET])
 fun serveArtifactRoutingPrivate(
-    request: HttpRequest<Optional<ByteArray>>,
+    request: HttpRequest<ByteArray?>,
     context: HttpContext,
     @Param("path") path: String,
 ): HttpResponse {

@@ -18,11 +18,11 @@ import krepo.coroutineScope
 import krepo.currentPath
 import krepo.enums.CheckImplType
 import krepo.util.*
-import krepo.util.file.checkSession
+import krepo.util.file.checkPermission
 import krepo.util.string.validateEmail
 
 fun RenderContext.editUserPage() {
-    checkSession {
+    checkPermission {
         val user = currentPath.split("?").last().split("&").first().split("=").last()
         val email = storeOf("")
         val password = storeOf("")

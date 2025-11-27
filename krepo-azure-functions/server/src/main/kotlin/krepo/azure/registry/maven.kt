@@ -13,18 +13,13 @@ import cn.rtast.kazure.HttpRequest
 import cn.rtast.kazure.HttpResponse
 import cn.rtast.kazure.response.respondText
 import com.microsoft.azure.functions.HttpMethod
-import krepo.azure.util.basicAuthCheck
-import krepo.azure.util.bytes
-import krepo.azure.util.getFile
-import krepo.azure.util.notFound
-import krepo.azure.util.unAuth
-import krepo.azure.util.uploadFile
-import java.util.*
+import krepo.azure.util.*
+import krepo.azure.util.repo.index.Indexer
 import java.util.logging.Logger
 
 
 fun handleRequest(
-    request: HttpRequest<Optional<ByteArray>>,
+    request: HttpRequest<ByteArray?>,
     repository: String,
     path: String,
     logger: Logger,
@@ -34,17 +29,19 @@ fun handleRequest(
 }
 
 fun deployArtifact(
-    request: HttpRequest<Optional<ByteArray>>,
+    request: HttpRequest<ByteArray?>,
     repository: String,
     path: String,
     logger: Logger,
 ): HttpResponse {
-    uploadFile("$repository/$path", request.body.get(), true)
+    val content = request.body!!
+    if (path.endsWith("maven-metadata.xml")) Indexer.indexOnce(repository, path, content)
+    uploadFile("$repository/$path", content, true)
     return request.respondText("Ok")
 }
 
 fun serveArtifact(
-    request: HttpRequest<Optional<ByteArray>>,
+    request: HttpRequest<ByteArray?>,
     repository: String,
     path: String,
     logger: Logger,

@@ -14,6 +14,7 @@ import cn.rtast.kazure.response.respondText
 import com.microsoft.azure.functions.HttpStatus
 import krepo.azure.entity.res.DeployStatus
 import krepo.azure.userManager
+import krepo.azure.util.string.decodeToString
 
 fun <T> HttpRequest<T>.ok() = this.respondText("Ok", status = HttpStatus.OK)
 

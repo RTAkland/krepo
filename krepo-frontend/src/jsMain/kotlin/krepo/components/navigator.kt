@@ -84,6 +84,10 @@ fun RenderContext.navbar() {
                                 +"Repository settings"
                                 href("/#/setting/repository")
                             }
+                            a("navbar-item") {
+                                +"Index settings"
+                                href("/#/setting/index")
+                            }
                         }
                     }
                 }
@@ -96,14 +100,9 @@ fun RenderContext.navbar() {
                             keyups.mapNotNull { it }
                                 .filter { it.key == "Enter" }
                                 .handledBy {
-                                    if (LocalStorage.TOKEN == null) {
-                                        warningToast("Please sign in first!")
-                                        showLoginDialog.update(true)
-                                    } else {
-                                        if (searchKeywordStore.current.isBlank()) {
-                                            warningToast("Please fill in the keyword to search!")
-                                        } else window.location.href = "/#/search?q=${searchKeywordStore.current}"
-                                    }
+                                    if (searchKeywordStore.current.isBlank()) {
+                                        warningToast("Please fill in the keyword to search!")
+                                    } else window.location.href = "/#/search?k=${searchKeywordStore.current}"
                                 }
                         }
                         span("icon is-small is-left") {

@@ -18,10 +18,10 @@ import krepo.entity.FrontendConfig
 import krepo.enums.CheckImplType
 import krepo.frontendConfig
 import krepo.util.*
-import krepo.util.file.checkSession
+import krepo.util.file.checkPermission
 
 fun RenderContext.settingPage() {
-    checkSession {
+    checkPermission {
         val pageTitleStore = storeOf(frontendConfig.pageTitle)
         val icpLicenseStore = storeOf(frontendConfig.icpLicense)
         val descriptionStore = storeOf(frontendConfig.description)

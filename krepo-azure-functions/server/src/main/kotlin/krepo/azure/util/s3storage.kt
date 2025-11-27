@@ -81,6 +81,36 @@ fun getFile(filename: String): ByteArray? {
     ).readBytes()
 }
 
+fun listAllFiles(
+    path: String,
+    delimiter: String? = "/",
+): List<String> {
+    val client = createClient()
+    val results = mutableListOf<String>()
+    var continuationToken: String? = null
+    do {
+        val builder = ListObjectsV2Request.builder()
+            .bucket(ConfigManger.S3_BUCKET)
+            .prefix(path)
+        if (delimiter != null) builder.delimiter(delimiter)
+        if (continuationToken != null) builder.continuationToken(continuationToken)
+        val response = client.listObjectsV2(builder.build())
+        fun relativeName(fullKey: String): String {
+            return if (fullKey.startsWith(path)) {
+                fullKey.substring(path.length)
+            } else fullKey
+        }
+
+        val files = response.contents()
+            .filter { it.key() != path }
+            .map { obj -> relativeName(obj.key()) }
+        results.addAll(files)
+        continuationToken = if (response.isTruncated) response.nextContinuationToken() else null
+    } while (continuationToken != null)
+    return results
+}
+
+
 fun listFiles(path: String, delimiter: String? = "/"): List<FileEntry> {
     val prefix = if (path.isEmpty() || path.endsWith("/")) path else "$path/"
     val builder = ListObjectsV2Request.builder()
@@ -130,15 +160,40 @@ fun deleteFile(path: String) {
 
 fun deleteDirectory(path: String) {
     val client = createClient()
-    val files = listFiles(path, null)
-        .map { ObjectIdentifier.builder().key("${path.removeSuffix("/")}/${it.name}").build() }
-    client.deleteObjects(
-        DeleteObjectsRequest.builder()
+    try {
+        val normalizedPath = path.trimEnd('/')
+        val files = listFiles(path, null)
+            .map { file ->
+                val key = if (normalizedPath.isEmpty()) file.name else "$normalizedPath/${file.name}"
+                ObjectIdentifier.builder().key(key).build()
+            }
+            .toList()
+        if (files.isEmpty()) {
+            println("No files found in $path to delete.")
+            return
+        }
+        val deleteRequest = DeleteObjectsRequest.builder()
             .bucket(ConfigManger.S3_BUCKET)
-            .delete(
-                Delete.builder()
-                    .objects(files)
-                    .build()
-            ).build()
-    )
+            .delete(Delete.builder().objects(files).build())
+            .build()
+
+        client.deleteObjects(deleteRequest)
+    } finally {
+        client.close()
+    }
+}
+
+fun deleteDirectoryIndividually(path: String) {
+    val client = createClient()
+    val normalizedPath = path.trimEnd('/')
+    val files = listFiles(path, null)
+    files.forEach { file ->
+        val key = if (normalizedPath.isEmpty()) file.name else "$normalizedPath/${file.name}"
+        try {
+            client.deleteObject { it.bucket(ConfigManger.S3_BUCKET).key(key) }
+        } catch (e: Exception) {
+            println("Failed to delete $key: ${e.message}")
+        }
+    }
+    client.close()
 }

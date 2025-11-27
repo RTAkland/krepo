@@ -10,6 +10,6 @@ package krepo.util.file
 import dev.fritz2.core.RenderContext
 import krepo.pages.other.noPermission
 
-fun RenderContext.checkSession(
+fun RenderContext.checkPermission(
     content: RenderContext.() -> Unit,
 ) = if (LocalStorage.TOKEN != null) content() else noPermission()

@@ -6,6 +6,6 @@
  */
 
 
-package krepo.azure.util
+package krepo.azure.util.string
 
 fun String.strip(): String = this.replace("//", "/")

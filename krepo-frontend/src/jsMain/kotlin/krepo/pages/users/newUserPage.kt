@@ -18,7 +18,7 @@ import krepo.components.warningToast
 import krepo.coroutineScope
 import krepo.entity.login.User
 import krepo.util.auth
-import krepo.util.file.checkSession
+import krepo.util.file.checkPermission
 import krepo.util.fromJson
 import krepo.util.httpRequest
 import krepo.util.jsonContentType
@@ -26,7 +26,7 @@ import krepo.util.setBody
 import krepo.util.string.validateEmail
 
 fun RenderContext.newUserPage() {
-    checkSession {
+    checkPermission {
         val username = storeOf("")
         val email = storeOf("")
         val password = storeOf("")

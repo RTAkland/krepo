@@ -18,13 +18,12 @@ import cn.rtast.kazure.trigger.HttpRouting
 import com.microsoft.azure.functions.HttpMethod
 import krepo.azure.registry.handleRequest
 import krepo.azure.routing.auth.KRepoBasicAuthProvider
-import java.util.Optional
 
 
 @AuthConsumer(KRepoBasicAuthProvider::class)
 @HttpRouting("releases/{*path}", methods = [HttpMethod.PUT])
 fun deployArtifactRoutingReleases(
-    request: HttpRequest<Optional<ByteArray>>,
+    request: HttpRequest<ByteArray?>,
     context: HttpContext,
     @Param("path") path: String,
 ): HttpResponse {
@@ -34,7 +33,7 @@ fun deployArtifactRoutingReleases(
 @AuthConsumer(KRepoBasicAuthProvider::class)
 @HttpRouting("snapshots/{*path}", methods = [HttpMethod.PUT])
 fun deployArtifactRoutingSnapshots(
-    request: HttpRequest<Optional<ByteArray>>,
+    request: HttpRequest<ByteArray?>,
     context: HttpContext,
     @Param("path") path: String,
 ): HttpResponse {
@@ -44,7 +43,7 @@ fun deployArtifactRoutingSnapshots(
 @AuthConsumer(KRepoBasicAuthProvider::class)
 @HttpRouting("private/{*path}", methods = [HttpMethod.PUT])
 fun deployArtifactRoutingPrivate(
-    request: HttpRequest<Optional<ByteArray>>,
+    request: HttpRequest<ByteArray?>,
     context: HttpContext,
     @Param("path") path: String,
 ): HttpResponse {

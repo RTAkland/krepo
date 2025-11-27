@@ -17,6 +17,8 @@ import krepo.azure.entity.req.DeleteGAVReq
 import krepo.azure.entity.req.UploadFileReq
 import krepo.azure.entity.res.CommonResponse
 import krepo.azure.util.*
+import krepo.azure.util.string.decodeToByteArray
+import krepo.azure.util.string.strip
 import krepo.util.fromJson
 
 @HttpRouting("api/azure/repository/operation/file", [HttpMethod.POST, HttpMethod.DELETE])
@@ -57,7 +59,7 @@ fun deleteGAVRouting(
 ): HttpResponse {
     val payload = request.body.fromJson<DeleteGAVReq>()
     if (payload.isDirectory) {
-        deleteDirectory(payload.path.strip())
+        deleteDirectoryIndividually(payload.path.strip())
     } else {
         deleteFile(payload.path.strip())
     }
