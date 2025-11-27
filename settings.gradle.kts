@@ -9,7 +9,8 @@ listOf(
     "test:test-publish2",
     "azure-functions:server",
     "azure-functions:auth",
-    "common"
+    "common",
+    "rs"
 ).forEach { include("krepo-$it") }
 
 pluginManagement {
