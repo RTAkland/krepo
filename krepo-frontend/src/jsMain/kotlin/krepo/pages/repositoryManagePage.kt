@@ -7,7 +7,6 @@
 
 package krepo.pages
 
-import cn.rtast.rutil.string.encodeToBase64
 import dev.fritz2.core.*
 import kotlinx.browser.window
 import kotlinx.coroutines.launch

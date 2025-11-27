@@ -11,7 +11,6 @@ import dev.fritz2.core.RenderContext
 import dev.fritz2.core.href
 import dev.fritz2.core.target
 import krepo.frontendConfig
-import krepo.util.string.castMarkdownToHtml
 import krepo.util.string.getCurrentYear
 
 fun RenderContext.pageFooter() {
@@ -26,7 +25,7 @@ fun RenderContext.pageFooter() {
                     }
                 }
             }
-            val copyrightInfo = frontendConfig.copyright.castMarkdownToHtml()
+            val copyrightInfo = frontendConfig.copyright
                 .replace("#YEAR#", getCurrentYear().toString())
                 .removePrefix("<body>").removeSuffix("</body>")
             div("column is-narrow has-text-right") { span("is-size-8") { domNode.innerHTML = copyrightInfo } }

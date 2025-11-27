@@ -28,7 +28,7 @@ fun RenderContext.homePage() {
             h1("title is-3 has-text-left mt-4 mb-2") { +"Repositories" }
             if (frontendConfig.description != null) {
                 p("has-text-grey-dark mb-4") {
-                    domNode.innerHTML = frontendConfig.description!!.castMarkdownToHtml()
+                    domNode.innerHTML = frontendConfig.description!!
                         .removePrefix("<body>").removeSuffix("</body>")
                 }
             }

@@ -15,5 +15,6 @@ public data class AzureLoginSuccess(
     val t: String,
     val e: String,
     val n: String,
-    val ex: Long
+    val ex: Long,
+    val m: String
 )

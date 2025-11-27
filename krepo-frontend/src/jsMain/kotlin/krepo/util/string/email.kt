@@ -7,13 +7,12 @@
 
 package krepo.util.string
 
-import dev.fritz2.core.RenderContext
 import dev.fritz2.core.Store
 import krepo.components.warningToast
 
 private val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
 
-fun RenderContext.validateEmail(store: Store<String>): Boolean {
+fun validateEmail(store: Store<String>): Boolean {
     return if (store.current.isBlank()) {
         warningToast("Email must not be empty!")
         false
@@ -22,7 +21,3 @@ fun RenderContext.validateEmail(store: Store<String>): Boolean {
         false
     } else true
 }
-
-fun String.isEmailValidate(): Boolean =
-    if (this.isBlank()) false
-    else if (!emailRegex.matches(this)) false else true

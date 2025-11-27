@@ -7,8 +7,7 @@
 
 package krepo.util.byte
 
-import io.ktor.util.*
 import org.khronos.webgl.ArrayBuffer
 import org.khronos.webgl.Int8Array
 
-fun ArrayBuffer.toByteArray() = Int8Array(this).toByteArray()
+fun ArrayBuffer.toByteArray() = Int8Array(this).unsafeCast<ByteArray>()

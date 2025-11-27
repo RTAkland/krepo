@@ -7,7 +7,6 @@
 
 package krepo.components
 
-import cn.rtast.rutil.string.encodeToBase64
 import dev.fritz2.core.*
 import dev.fritz2.remote.http
 import kotlinx.browser.window
@@ -17,13 +16,12 @@ import kotlinx.coroutines.launch
 import krepo.backend
 import krepo.backendVersion
 import krepo.coroutineScope
-import krepo.entity.LoginSuccessResponse
+import krepo.entity.login.LoginSuccessResponse
 import krepo.entity.login.oauth.AzureSignInURL
 import krepo.frontendConfig
 import krepo.util.*
 import krepo.util.file.LocalStorage
-import krepo.util.file.md5
-import krepo.util.string.toBase64
+import krepo.util.string.encodeToBase64
 
 fun RenderContext.navbar() {
     val showLogoutDialog = storeOf(false)
@@ -192,11 +190,15 @@ fun RenderContext.navbar() {
     }, dialogAction = {
         coroutineScope.launch {
             val http = http("${backend}${backendVersion.LOGIN}")
-                .header("Authorization", "Basic ${"${username.current}:${password.current}".toBase64()}")
+                .header("Authorization", "Basic ${"${username.current}:${password.current}".encodeToBase64()}")
                 .acceptJson().jsonContentType().post()
             if (http.ok) {
                 val response = http.body().fromJson<LoginSuccessResponse>()
-                setLoginInfo(response.token, username.current, response.expiredAt, response.email)
+                setLoginInfo(
+                    response.token, username.current,
+                    response.expiredAt, response.email,
+                    response.avatarMd5 ?: ""
+                )
                 infoToast("Logged in")
                 window.location.reload()
             } else if (http.status == 500) errorToast("Internal server error.") else warningToast("Username or password is incorrect.")
@@ -222,13 +224,12 @@ fun setLoginInfo(
     username: String,
     expired: Long,
     email: String,
+    md5: String,
 ) {
     LocalStorage.TOKEN = token
     LocalStorage.CURRENT_USERNAME = username
-    val emailMd5 = md5(email)
-    val avatarUrl = "https://gravatar.rtast.cn/avatar/$emailMd5?d=identicon"
     LocalStorage.EMAIL_ADDRESS = email
-    LocalStorage.AVATAR = avatarUrl
+    LocalStorage.AVATAR = "https://gravatar.rtast.cn/avatar/${md5}?d=identicon"
     LocalStorage.HIDDEN_HASH_FILES = true
     LocalStorage.EXPIRED_TIMESTAMP = expired
 }

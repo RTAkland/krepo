@@ -22,7 +22,7 @@ val DEFAULT_FRONTEND_CONFIG = FrontendConfig(
     "Maven Repo of RTAST",
     "皖ICP备2024066235-1号",
     "这里是RTAST的Maven仓库!",
-    "© #YEAR#  Made by  <a href=\"https://github.com/RTAkland\" target=\"_blank\" title=\"Go to GitHub\">RTAkland</a>",
+    "© #YEAR# Made by <a href=\"https://github.com/RTAkland\" target=\"_blank\" title=\"Go to GitHub\">RTAkland</a>",
     true
 )
 

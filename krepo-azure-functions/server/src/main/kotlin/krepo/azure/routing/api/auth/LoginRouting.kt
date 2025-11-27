@@ -16,11 +16,13 @@ import cn.rtast.kazure.auth.credentials.BearerCredential
 import cn.rtast.kazure.response.respond
 import cn.rtast.kazure.response.respondJson
 import cn.rtast.kazure.trigger.HttpRouting
-import krepo.azure.entity.res.LoginSuccess
 import krepo.azure.routing.auth.KRepoBasicAuthProvider
 import krepo.azure.routing.auth.KRepoTokenAuthProvider
 import krepo.azure.tokenManager
 import krepo.azure.userManager
+import krepo.azure.util.hex.md5
+import krepo.entity.login.LoginSuccessResponse
+import java.security.MessageDigest
 
 
 context(cred: BasicCredential)
@@ -32,7 +34,11 @@ fun loginRouting(
 ): HttpResponse {
     val token = tokenManager.issue(cred.username)
     val user = userManager.getUser(cred.username)!!
-    val loginRes = LoginSuccess(200, "Logged in", token.value, user.email, cred.username, token.expiredAt)
+    val loginRes =
+        LoginSuccessResponse(
+            200, "Logged in", token.value, user.email,
+            cred.username, token.expiredAt, user.email.md5
+        )
     return request.respondJson(loginRes)
 }
 

@@ -1,21 +1,21 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 11/26/25, 6:55 PM
+ * Date: 11/27/25, 11:07 PM
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-
-package krepo.azure.entity.res
+package krepo.entity.login
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoginSuccess(
+public data class LoginSuccessResponse(
     val code: Int,
     val message: String,
     val token: String,
     val email: String,
     val username: String,
-    val expiredAt: Long
+    val expiredAt: Long,
+    val avatarMd5: String?
 )

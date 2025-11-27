@@ -27,14 +27,16 @@ import krepo.azure.storageManager
 import krepo.azure.tokenManager
 import krepo.azure.userManager
 import krepo.azure.util.client
+import krepo.azure.util.hex.md5
 import krepo.azure.util.string.decodeToString
 import krepo.azure.util.string.encodeToBase64
-import krepo.entity.login.oauth.*
+import krepo.entity.login.oauth.AzureLoginSuccess
+import krepo.entity.login.oauth.AzureSignInURL
+import krepo.entity.login.oauth.AzureSignResponse
+import krepo.entity.login.oauth.AzureUserInfo
 import krepo.util.fromJson
 import krepo.util.toJson
 import java.util.*
-import kotlin.text.replace
-import kotlin.text.substring
 
 private val AZURE_LOGIN_URL = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize" +
         "?client_id=${ConfigManger.AZURE_CLIENT_ID}&scope=openid%20email%20profile%20User.Read" +
@@ -104,8 +106,9 @@ fun azureSignInRouting(
             val localUserInfo = userManager.getUserByUID(userInfo.id)!!
             val respBase64 = AzureLoginSuccess(
                 token, localUserInfo.email,
-                localUserInfo.name, expireAt
-            ).toJson().apply { println(this) }.encodeToBase64()
+                localUserInfo.name, expireAt,
+                localUserInfo.email.md5
+            ).toJson().encodeToBase64()
             return@res request.respondRedirect(
                 "$frontend/#/azure/signed?d=$respBase64",
                 redirectType = RedirectType.TEMPORARY_REDIRECT

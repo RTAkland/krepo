@@ -22,6 +22,7 @@ import krepo.index.IndexMetadata
 import krepo.index.IndexSearchResponse
 import krepo.util.auth
 import krepo.util.byte.toByteArray
+import krepo.util.fromJson
 import krepo.util.fromProtobuf
 import krepo.util.httpRequest
 import krepo.util.jsonContentType
@@ -152,14 +153,23 @@ fun RenderContext.searchPage() {
                             span("has-text-danger mx-1") { +result.count.toString() }
                             +" results"
                         }
-                        ul {
-                            result.data.forEach { artifact ->
-                                renderArtifactItem(artifact)
+                        table("table is-striped is-hoverable is-fullwidth") {
+                            thead {
+                                tr {
+                                    th("has-text-centered") { +"Repository" }
+                                    th("has-text-centered") { +"Path" }
+                                }
+                            }
+                            tbody {
+                                result.data.forEach { artifact ->
+                                    renderArtifactRow(artifact)
+                                }
                             }
                         }
                     }
                 }
             }
+
         }
     }
     coroutineScope.launch {
@@ -199,16 +209,18 @@ private suspend fun search(
     loadingStore.update(false)
 }
 
-private fun RenderContext.renderArtifactItem(artifact: IndexMetadata) {
-    li("box mb-4") {
-        div("is-flex is-justify-content-center is-align-items-center") {
+private fun RenderContext.renderArtifactRow(artifact: IndexMetadata) {
+    tr {
+        td("has-text-centered") { +artifact.repo }
+        td("has-text-centered") {
             val gav = "${artifact.repo}/" +
                     "${artifact.group.replace(".", "/").removePrefix("/")}/" +
                     "${artifact.artifact}/${artifact.version}"
-            a("is-size-5 has-text-weight-medium has-text-link") {
+            a("has-text-link") {
                 href("/#/$gav")
                 +gav
             }
         }
     }
 }
+

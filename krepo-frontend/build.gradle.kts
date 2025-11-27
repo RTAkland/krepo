@@ -1,4 +1,5 @@
 import com.google.devtools.ksp.gradle.KspTaskMetadata
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 /*
  * Copyright © 2025 RTAkland
@@ -22,7 +23,7 @@ kotlin {
             commonWebpackConfig {
                 outputFileName = "krepo-frontend.js"
                 sourceMaps = false
-            }
+             }
         }
         binaries.executable()
     }
@@ -32,16 +33,9 @@ kotlin {
             implementation(project(":krepo-common"))
         }
         jsMain {
-            kotlin.setSrcDirs(kotlin.srcDirs - file(project.layout.buildDirectory.dir("generated")))
             dependencies {
                 implementation("dev.fritz2:core:$fritz2Version")
                 implementation("dev.fritz2:headless:$fritz2Version")
-                implementation("io.ktor:ktor-client-cio:$ktorVersion")
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("cn.rtast.rutil:string:0.0.1")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
-                implementation("org.kotlincrypto.hash:md:0.6.1")
-                implementation("org.jetbrains:markdown:0.7.3")
             }
         }
     }

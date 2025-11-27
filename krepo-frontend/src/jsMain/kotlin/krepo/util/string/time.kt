@@ -7,24 +7,20 @@
 
 package krepo.util.string
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-
 fun getDate(timestamp: Long): String {
-    val dateTime = Instant.fromEpochSeconds(timestamp)
-        .toLocalDateTime(TimeZone.currentSystemDefault())
-    val formattedTime = "${dateTime.date} ${
-        dateTime.time.hour.toString().padStart(2, '0')
-    }:${dateTime.time.minute.toString().padStart(2, '0')}:${
-        dateTime.time.second.toString().padStart(2, '0')
-    }"
+    val date = js("new Date(timestamp * 1000)")
+    fun pad(n: Int) = if (n < 10) "0$n" else "$n"
+    val year = date.getFullYear() as Int
+    val month = (date.getMonth() as Int) + 1
+    val day = date.getDate() as Int
+    val hour = date.getHours() as Int
+    val minute = date.getMinutes() as Int
+    val second = date.getSeconds() as Int
 
-    return formattedTime
+    return "$year-${pad(month)}-${pad(day)} ${pad(hour)}:${pad(minute)}:${pad(second)}"
 }
 
-val currentDatetime
-    get() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-
-fun getCurrentYear() = currentDatetime.year
+fun getCurrentYear(): Int {
+    val date = js("new Date()")
+    return date.getFullYear() as Int
+}

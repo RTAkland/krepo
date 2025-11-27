@@ -11,9 +11,7 @@
 package krepo.util
 
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.protobuf.ProtoBuf
 
 public val json: Json = Json {
     prettyPrint = true
@@ -32,8 +30,4 @@ public inline fun <reified T> T.toJson(): String {
 
 public inline fun <reified T> String.fromJson(): T {
     return json.decodeFromString<T>(this)
-}
-
-public inline fun <reified T> ByteArray.fromProtobuf(): T {
-    return ProtoBuf.decodeFromByteArray<T>(this)
 }
