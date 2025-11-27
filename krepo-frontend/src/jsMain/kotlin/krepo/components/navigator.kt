@@ -207,7 +207,8 @@ fun RenderContext.navbar() {
 
     showDialog(showLogoutDialog, "Logout", "Do you want to logout?", {}) {
         coroutineScope.launch {
-            httpRequest(backendVersion.LOGOUT).auth().acceptJson().jsonContentType().post()
+            httpRequest(backendVersion.LOGOUT).auth()
+                .acceptJson().jsonContentType().post()
             LocalStorage.TOKEN = null
             LocalStorage.CURRENT_USERNAME = null
             LocalStorage.AVATAR = null

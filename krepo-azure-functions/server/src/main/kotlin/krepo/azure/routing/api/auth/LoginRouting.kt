@@ -22,7 +22,6 @@ import krepo.azure.tokenManager
 import krepo.azure.userManager
 import krepo.azure.util.hex.md5
 import krepo.entity.login.LoginSuccessResponse
-import java.security.MessageDigest
 
 
 context(cred: BasicCredential)
@@ -44,10 +43,11 @@ fun loginRouting(
 
 context(cred: BearerCredential)
 @AuthConsumer(KRepoTokenAuthProvider::class)
-@HttpRouting("api/v2/logout", methods = [HttpMethod.POST])
+@HttpRouting("api/azure/logout", methods = [HttpMethod.POST])
 fun logoutRouting(
-    request: HttpRequest<String?>,
+    request: HttpRequest<String>,
     context: HttpContext,
 ): HttpResponse {
+    tokenManager.revoke(cred.token)
     return request.respond("Ok", status = HttpStatus.OK)
 }

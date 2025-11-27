@@ -22,7 +22,6 @@ import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import krepo.azure.cfg.ConfigManger
 import krepo.azure.entity.internal.AzureAccessToken
-import krepo.azure.entity.internal.CloudflareValue
 import krepo.azure.storageManager
 import krepo.azure.tokenManager
 import krepo.azure.userManager
@@ -31,6 +30,7 @@ import krepo.azure.util.hex.md5
 import krepo.azure.util.string.decodeToString
 import krepo.azure.util.string.encodeToBase64
 import krepo.entity.login.oauth.AzureLoginSuccess
+import krepo.entity.login.oauth.AzurePostComplete
 import krepo.entity.login.oauth.AzureSignInURL
 import krepo.entity.login.oauth.AzureSignResponse
 import krepo.entity.login.oauth.AzureUserInfo
@@ -46,7 +46,7 @@ private const val REDEEM_TOKEN_URL = "https://login.microsoftonline.com/common/o
 private const val USER_INFO_URL = "https://graph.microsoft.com/v1.0/me"
 
 private fun getState(state: String): String? {
-    return storageManager.getKV("krepo_state_$state")?.fromJson<CloudflareValue>()?.value
+    return storageManager.getKV("krepo_state_$state")
 }
 
 private fun addState(state: String, extraData: String) {
@@ -65,15 +65,20 @@ fun azureSignInURLRouting(
     return request.respondJson(AzureSignInURL(AZURE_LOGIN_URL + uuid))
 }
 
+/**
+ * remove state from kv or redis ~optional
+ * kv has ttl
+ */
 @HttpRouting("api/azure/signin/azure/complete", methods = [HttpMethod.POST])
 fun azureSignInCompleteRouting(
-    request: HttpRequest<*>,
+    request: HttpRequest<String>,
     context: HttpContext,
 ): HttpResponse {
-    val state = request.queryParameters["state"]
-        ?: return request.respondText("Forbidden", status = HttpStatus.FORBIDDEN)
-    return if (getState(state) != null) request.respondText("OK")
-    else request.respondText("Forbidden", status = HttpStatus.FORBIDDEN)
+    val state = request.body.fromJson<AzurePostComplete>().state
+    return if (getState(state) != null) {
+        storageManager.removeKV("krepo_state_$state")
+        request.respondText("OK")
+    } else request.respondText("Forbidden", status = HttpStatus.FORBIDDEN)
 }
 
 

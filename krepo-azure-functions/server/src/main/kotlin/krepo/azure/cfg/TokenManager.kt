@@ -10,31 +10,31 @@
 
 package krepo.azure.cfg
 
-import cn.rtast.kazure.util.fromJson
-import krepo.azure.entity.internal.CloudflareValue
 import krepo.azure.entity.res.TokenPayload
 import krepo.azure.storageManager
-import okio.ByteString.Companion.encodeUtf8
-import java.util.*
-import kotlin.random.Random
+import java.security.SecureRandom
+import java.util.Base64
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 private const val TOKEN_TTL = 3600  // 1 hour
 
 class TokenManager {
-
-    fun issue(name: String): TokenPayload {
-        val value = UUID.randomUUID().toString().replace("-", "")
-            .drop(Random.nextInt(1, 5))
-        storageManager.setKV(name.encodeUtf8().hex(), value, TOKEN_TTL)
-        storageManager.setKV(value.encodeUtf8().hex(), name, TOKEN_TTL)
-        return TokenPayload(name, value, Clock.System.now().epochSeconds + TOKEN_TTL)
+    private fun generateSecureToken(): String {
+        val bytes = ByteArray(32)
+        SecureRandom().nextBytes(bytes)
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes)
     }
 
-    fun getToken(key: String): String? = storageManager.getKV(key.encodeUtf8().hex())
-    fun getUser(key: String): String? = getToken(key)?.fromJson<CloudflareValue>()?.value
+    fun issue(name: String): TokenPayload {
+        val token = this.generateSecureToken()
+        storageManager.setKV(token, name, TOKEN_TTL)
+        return TokenPayload(name, token, Clock.System.now().epochSeconds + TOKEN_TTL)
+    }
 
-    fun validateToken(token: String): Boolean = getToken(token) != null
-    fun validateUser(user: String): Boolean = getToken(user) != null
+    fun revoke(token: String) {
+        storageManager.removeKV(token)
+    }
+
+    fun validate(token: String): Boolean = storageManager.getKV(token) != null
 }

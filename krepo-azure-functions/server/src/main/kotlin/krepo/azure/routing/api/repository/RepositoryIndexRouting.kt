@@ -55,7 +55,7 @@ fun searchArtifactsRouting(
                 IndexSearchResponse(401, emptyList(), 0)
             ), HttpStatus.UNAUTHORIZED
         )
-        if (!tokenManager.validateToken(cred.token)) return request.respondBytes(
+        if (!tokenManager.validate(cred.token)) return request.respondBytes(
             ProtoBuf.encodeToByteArray(IndexSearchResponse(401, emptyList(), 0)),
             HttpStatus.UNAUTHORIZED
         )

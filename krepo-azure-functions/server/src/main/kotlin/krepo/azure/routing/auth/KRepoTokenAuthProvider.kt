@@ -20,6 +20,6 @@ object KRepoTokenAuthProvider : BearerAuthorizationProvider {
         context: HttpContext,
         credential: BearerCredential,
     ): Boolean {
-        return tokenManager.validateToken(credential.token)
+        return tokenManager.validate(credential.token)
     }
 }
