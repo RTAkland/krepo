@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Locale
 
 /*
  * Copyright © 2025 RTAkland
@@ -72,32 +73,55 @@ tasks.register("compileAndCopyFrontendAssets") {
     }
 }
 
+@Suppress("DEPRECATION")
 tasks.register("killAzureProcesses") {
     doLast {
+        val os = System.getProperty("os.name").lowercase()
         println("Killing all processes containing 'azure' in their command line...")
-        val proc =
-            Runtime.getRuntime().exec(arrayOf("sh", "-c", "ps -ef | grep azure | grep -v grep | awk '{print \$2}'"))
-        val output = proc.inputStream.bufferedReader().readText().trim()
-        if (output.isNotEmpty()) {
-            output.lines().forEach { pid ->
-                println("Killing PID: $pid")
-                @Suppress("DEPRECATION")
-                Runtime.getRuntime().exec("kill -9 $pid").waitFor()
+        if (os.contains("win")) {
+            try {
+                val proc = Runtime.getRuntime().exec("tasklist /FI \"IMAGENAME eq java.exe\"")
+                val output = proc.inputStream.bufferedReader().readText().trim()
+                val processLines = output.lines().filter { it.contains("azure") }
+                if (processLines.isNotEmpty()) {
+                    processLines.forEach { line ->
+                        val pid = line.split("\\s+".toRegex())[1]
+                        println("Killing PID: $pid")
+                        Runtime.getRuntime().exec("taskkill /PID $pid /F")
+                    }
+                } else {
+                    println("No azure-related processes found.")
+                }
+            } catch (e: Exception) {
+                println("Error killing processes: ${e.message}")
             }
         } else {
-            println("No azure-related processes found.")
+            try {
+                val proc = Runtime.getRuntime()
+                    .exec(arrayOf("sh", "-c", "ps -ef | grep azure | grep -v grep | awk '{print \$2}'"))
+                val output = proc.inputStream.bufferedReader().readText().trim()
+                if (output.isNotEmpty()) {
+                    output.lines().forEach { pid ->
+                        println("Killing PID: $pid")
+                        Runtime.getRuntime().exec("kill -9 $pid").waitFor()
+                    }
+                } else {
+                    println("No azure-related processes found.")
+                }
+            } catch (e: Exception) {
+                println("Error killing processes: ${e.message}")
+            }
         }
     }
 }
 
-tasks.named("azureFunctionsRun") {
-//    dependsOn(updatePatchVersion)
-    finalizedBy("killAzureProcesses")
-}
 
-//val updatePatchVersion by tasks.registering {
-//    val versionFile = project.layout.projectDirectory.dir("src/main/resources/patch_version.txt")
-//        .asFile
-//    var current = versionFile.readText().toInt()
-//    versionFile.writeText((++current).toString())
-//}
+/**
+ * on linux azure functions process affects incorrectly,
+ * so must kill the process to run the functions.
+ * macOS is not tested.
+ */
+tasks.named("azureFunctionsRun") {
+    val enableKillAzureProcess = System.getenv("ENABLE_KILL_AZURE_PROCESS") != null
+    if (enableKillAzureProcess) finalizedBy("killAzureProcesses") else println("Killing azure core tools is disabled")
+}

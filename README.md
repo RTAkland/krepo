@@ -7,7 +7,7 @@ languages and on different platforms.
 [krepo(Kotlin native)](krepo-native) runs on `Linux amd64`, `Linux Arm64` and `Macos64`.
 ***Low memory usage, 25MiB+-***
 
-[krepo(Kotlin JVM)](krepo-azure-functions/server) runs on `Azure Functions` only. ***It's serverless***
+[krepo(Kotlin JVM)](krepo-azure-functions/server) runs on `Azure Functions` only. ***It's serverless*** and ***mainly supported***
 
 [krepo(Rust)](krepo-rs) runs on any platform that Rust can compile for. ***Publish and Download only***
 
