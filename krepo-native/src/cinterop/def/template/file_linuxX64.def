@@ -1,4 +1,4 @@
 headers = {{PATH}}/krepo-clib/file.h
 package = cn.rtast.krepo.file
 staticLibraries = libfile-linuxx64.a
-libraryPaths = {{PATH}}/krepo-backend/src/cinterop/libs
+libraryPaths = {{PATH}}/krepo-native/src/cinterop/libs

@@ -1,0 +1,4 @@
+headers = {{PATH}}/krepo-clib/file.h
+package = cn.rtast.krepo.file
+staticLibraries = libfile-mingwx64.a
+libraryPaths = {{PATH}}/krepo-native/src/cinterop/libs

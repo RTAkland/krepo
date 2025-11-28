@@ -16,6 +16,7 @@ kotlin {
     linuxArm64()
     linuxX64()
     macosX64()
+    mingwX64()
     js(IR) { browser() }
     jvm { compilerOptions.jvmTarget = JvmTarget.JVM_17 }
 

@@ -4,7 +4,7 @@ krepo is a maven repository server software, it has many parts, include `fronten
 different
 languages and on different platforms.
 
-[krepo(Kotlin native)](krepo-backend) runs on `Linux amd64`, `Linux Arm64` and `Macos64`.
+[krepo(Kotlin native)](krepo-native) runs on `Linux amd64`, `Linux Arm64` and `Macos64`.
 ***Low memory usage, 25MiB+-***
 
 [krepo(Kotlin JVM)](krepo-azure-functions/server) runs on `Azure Functions` only. ***It's serverless***
@@ -53,13 +53,13 @@ Function zip file at `krepo-azure-functions/server/build/azure-functions/krepo-s
 
 ```shell
 # For Linux amd64
-$ ./gradlew :krepo-frontend:jsBrowserDistribution generateResources :krepo-backend:linkReleaseExecutableLinuxX64
+$ ./gradlew :krepo-frontend:jsBrowserDistribution generateResources :krepo-native:linkReleaseExecutableLinuxX64
 
 # For Linux arm64
-$ ./gradlew :krepo-frontend:jsBrowserDistribution generateResources :krepo-backend:linkReleaseExecutableLinuxArm64
+$ ./gradlew :krepo-frontend:jsBrowserDistribution generateResources :krepo-native:linkReleaseExecutableLinuxArm64
 
 # For Macos64
-$ ./gradlew :krepo-frontend:jsBrowserDistribution generateResources :krepo-backend:linkReleaseExecutablMacosX64
+$ ./gradlew :krepo-frontend:jsBrowserDistribution generateResources :krepo-native:linkReleaseExecutablMacosX64
 ```
 
 ## Rust platforms

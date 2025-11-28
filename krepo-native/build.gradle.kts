@@ -21,52 +21,29 @@ val fritz2Version = "1.0-RC20"
 val ktorVersion = "3.1.2"
 
 kotlin {
-    linuxArm64 {
-        compilations["main"].cinterops {
-            val fileTimeLinux by creating {
-                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_time_arm64.def").asFile
-                compilerOpts("-Isrc/cinterop/")
-            }
-            val diskUsageLinux by creating {
-                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/disk_usage_arm64.def").asFile
-                compilerOpts("-Isrc/cinterop/")
-            }
-            val file by creating {
-                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_arm64.def").asFile
-                compilerOpts("-Isrc/cinterop/")
-            }
+    listOf(
+        mingwX64(),
+        linuxX64(),
+        linuxArm64(),
+        macosX64()
+    ).forEach {
+        it.binaries.executable {
+            entryPoint = "krepo.main"
+            baseName = "krepo-backend-${it.targetName}-${buildType.name.lowercase()}-$version"
         }
-    }
+        it.compilerOptions.freeCompilerArgs.add("-Xallocator=std")
 
-    linuxX64 {
-        compilations["main"].cinterops {
-            val fileTimeLinux by creating {
-                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_time_linuxx64.def").asFile
+        it.compilations["main"].cinterops {
+            val fileTime by creating {
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_time_${it.name}.def").asFile
                 compilerOpts("-Isrc/cinterop/")
             }
-            val diskUsageLinux by creating {
-                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/disk_usage_linuxx64.def").asFile
+            val diskUsage by creating {
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/disk_usage_${it.name}.def").asFile
                 compilerOpts("-Isrc/cinterop/")
             }
             val file by creating {
-                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_linuxx64.def").asFile
-                compilerOpts("-Isrc/cinterop/")
-            }
-        }
-    }
-
-    macosX64 {
-        compilations["main"].cinterops {
-            val fileTimeLinux by creating {
-                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_time_macosx64.def").asFile
-                compilerOpts("-Isrc/cinterop/")
-            }
-            val diskUsageLinux by creating {
-                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/disk_usage_macosx64.def").asFile
-                compilerOpts("-Isrc/cinterop/")
-            }
-            val file by creating {
-                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_macosx64.def").asFile
+                definitionFile = project.layout.projectDirectory.dir("src/cinterop/def/file_${it.name}.def").asFile
                 compilerOpts("-Isrc/cinterop/")
             }
         }
@@ -80,14 +57,6 @@ kotlin {
             }
         }
         binaries.executable()
-    }
-
-    targets.withType<KotlinNativeTarget>().configureEach {
-        binaries.executable {
-            entryPoint = "krepo.main"
-            baseName = "krepo-backend-$targetName-${buildType.name.lowercase()}-$version"
-        }
-        compilerOptions.freeCompilerArgs.add("-Xallocator=std")
     }
 
     sourceSets {

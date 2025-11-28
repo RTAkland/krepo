@@ -1,4 +1,4 @@
 headers = {{PATH}}/krepo-clib/file_time.h
 package = cn.rtast.krepo.time
 staticLibraries = libfiletime-linuxx64.a
-libraryPaths = {{PATH}}/krepo-backend/src/cinterop/libs
+libraryPaths = {{PATH}}/krepo-native/src/cinterop/libs

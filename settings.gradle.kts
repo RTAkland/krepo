@@ -3,7 +3,7 @@
 rootProject.name = "krepo"
 
 listOf(
-    "backend",
+    "native",
     "frontend",
     "test:test-publish",
     "test:test-publish2",
