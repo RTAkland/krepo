@@ -63,7 +63,7 @@ tasks.named("jsBrowserDevelopmentRun") {
 tasks.named("jsBrowserDistribution") {
     dependsOn(isDevelopmentModeTask)
     if (System.getenv("CLOUDFLARE_API_TOKEN") == null) {
-        val file = project(":krepo-backend").layout
+        val file = project(":krepo-native").layout
             .projectDirectory.dir("src/nativeMain/resources/res_version.txt").asFile
         val originContent = file.readText()
         val version = file.readLines().first().split("=").last()
