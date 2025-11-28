@@ -1,5 +1,4 @@
 import com.google.devtools.ksp.gradle.KspTaskMetadata
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 /*
  * Copyright © 2025 RTAkland
@@ -23,7 +22,7 @@ kotlin {
             commonWebpackConfig {
                 outputFileName = "krepo-frontend.js"
                 sourceMaps = false
-             }
+            }
         }
         binaries.executable()
     }
