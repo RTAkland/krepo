@@ -21,7 +21,7 @@ import krepo.azure.routing.auth.KRepoBasicAuthProvider
 
 
 @AuthConsumer(KRepoBasicAuthProvider::class)
-@HttpRouting("releases/{*path}", methods = [HttpMethod.PUT])
+@HttpRouting("/releases/{*path}", methods = [HttpMethod.PUT])
 fun deployArtifactRoutingReleases(
     request: HttpRequest<ByteArray?>,
     context: HttpContext,
@@ -31,7 +31,7 @@ fun deployArtifactRoutingReleases(
 }
 
 @AuthConsumer(KRepoBasicAuthProvider::class)
-@HttpRouting("snapshots/{*path}", methods = [HttpMethod.PUT])
+@HttpRouting("/snapshots/{*path}", methods = [HttpMethod.PUT])
 fun deployArtifactRoutingSnapshots(
     request: HttpRequest<ByteArray?>,
     context: HttpContext,
@@ -41,7 +41,7 @@ fun deployArtifactRoutingSnapshots(
 }
 
 @AuthConsumer(KRepoBasicAuthProvider::class)
-@HttpRouting("private/{*path}", methods = [HttpMethod.PUT])
+@HttpRouting("/private/{*path}", methods = [HttpMethod.PUT])
 fun deployArtifactRoutingPrivate(
     request: HttpRequest<ByteArray?>,
     context: HttpContext,

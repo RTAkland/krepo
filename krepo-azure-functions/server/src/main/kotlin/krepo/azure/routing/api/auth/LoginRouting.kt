@@ -26,7 +26,7 @@ import krepo.entity.login.LoginSuccessResponse
 
 context(cred: BasicCredential)
 @AuthConsumer(KRepoBasicAuthProvider::class)
-@HttpRouting("api/azure/login", methods = [HttpMethod.POST])
+@HttpRouting("/api/azure/login", methods = [HttpMethod.POST])
 fun loginRouting(
     request: HttpRequest<String?>,
     context: HttpContext,
@@ -43,7 +43,7 @@ fun loginRouting(
 
 context(cred: BearerCredential)
 @AuthConsumer(KRepoTokenAuthProvider::class)
-@HttpRouting("api/azure/logout", methods = [HttpMethod.POST])
+@HttpRouting("/api/azure/logout", methods = [HttpMethod.POST])
 fun logoutRouting(
     request: HttpRequest<String>,
     context: HttpContext,

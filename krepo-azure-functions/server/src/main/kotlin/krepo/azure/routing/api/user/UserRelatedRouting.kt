@@ -25,7 +25,7 @@ import krepo.entity.login.NoSensitiveUser
 
 context(cred: BearerCredential)
 @AuthConsumer(KRepoTokenAuthProvider::class)
-@HttpRouting("api/azure/users")
+@HttpRouting("/api/azure/users")
 fun usersRouting(
     request: HttpRequest<*>,
     context: HttpContext,
@@ -34,7 +34,7 @@ fun usersRouting(
     return request.respondJson(CommonResponse(200, users))
 }
 
-@HttpRouting("api/azure/user", methods = [HttpMethod.POST])
+@HttpRouting("/api/azure/user", methods = [HttpMethod.POST])
 fun createUserRouting(
     request: HttpRequest<String>,
     context: HttpContext,
@@ -42,7 +42,7 @@ fun createUserRouting(
     return request.notImplemented()
 }
 
-@HttpRouting("api/azure/user/modify", methods = [HttpMethod.PUT])
+@HttpRouting("/api/azure/user/modify", methods = [HttpMethod.PUT])
 fun modifyUserRouting(
     request: HttpRequest<String>,
     context: HttpContext,

@@ -37,7 +37,7 @@ import kotlin.time.ExperimentalTime
 /**
  * protobuf response
  */
-@HttpRouting("api/azure/search")
+@HttpRouting("/api/azure/search")
 fun searchArtifactsRouting(
     request: HttpRequest<String>,
     context: HttpContext,
@@ -68,7 +68,7 @@ fun searchArtifactsRouting(
 
 context(cred: BearerCredential)
 @AuthConsumer(KRepoTokenAuthProvider::class)
-@HttpRouting("api/azure/repository/index", methods = [HttpMethod.POST])
+@HttpRouting("/api/azure/repository/index", methods = [HttpMethod.POST])
 fun indexRepositoryRouting(
     request: HttpRequest<String>,
     context: HttpContext,
@@ -92,7 +92,7 @@ fun indexRepositoryRouting(
 
 context(cred: BearerCredential)
 @AuthConsumer(KRepoTokenAuthProvider::class)
-@HttpRouting("api/azure/repository/index", methods = [HttpMethod.DELETE])
+@HttpRouting("/api/azure/repository/index", methods = [HttpMethod.DELETE])
 fun deleteRepositoryIndexRouting(
     request: HttpRequest<String>,
     context: HttpContext,

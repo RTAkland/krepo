@@ -14,12 +14,13 @@ import cn.rtast.kazure.HttpRequest
 import cn.rtast.kazure.HttpResponse
 import cn.rtast.kazure.Param
 import cn.rtast.kazure.auth.AuthConsumer
+import cn.rtast.kazure.response.respondRedirect
 import cn.rtast.kazure.trigger.HttpRouting
 import com.microsoft.azure.functions.HttpMethod
 import krepo.azure.registry.handleRequest
 import krepo.azure.routing.auth.KRepoBasicAuthProvider
 
-@HttpRouting("releases/{*path}", methods = [HttpMethod.GET])
+@HttpRouting("/releases/{*path}", methods = [HttpMethod.GET])
 fun serveArtifactRoutingReleases(
     request: HttpRequest<ByteArray?>,
     context: HttpContext,
@@ -28,7 +29,7 @@ fun serveArtifactRoutingReleases(
     return handleRequest(request, "releases", path, context.logger)
 }
 
-@HttpRouting("snapshots/{*path}", methods = [HttpMethod.GET])
+@HttpRouting("/snapshots/{*path}", methods = [HttpMethod.GET])
 fun serveArtifactRoutingSnapshots(
     request: HttpRequest<ByteArray?>,
     context: HttpContext,
@@ -38,7 +39,7 @@ fun serveArtifactRoutingSnapshots(
 }
 
 @AuthConsumer(KRepoBasicAuthProvider::class)
-@HttpRouting("private/{*path}", methods = [HttpMethod.GET])
+@HttpRouting("/private/{*path}", methods = [HttpMethod.GET])
 fun serveArtifactRoutingPrivate(
     request: HttpRequest<ByteArray?>,
     context: HttpContext,
@@ -46,4 +47,3 @@ fun serveArtifactRoutingPrivate(
 ): HttpResponse {
     return handleRequest(request, "private", path, context.logger)
 }
-

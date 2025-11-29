@@ -46,6 +46,11 @@ kazure {
     resourceRoutingPrefix = "frontend/"
 }
 
+kembeddable {
+    resourcePath.add(File("src/main/resources"))
+    packageName = "krepo.azure.resources"
+}
+
 tasks.compileKotlin {
     compilerOptions { jvmTarget = JvmTarget.JVM_17 }
 }
@@ -122,6 +127,9 @@ tasks.register("killAzureProcesses") {
  * macOS is not tested.
  */
 tasks.named("azureFunctionsRun") {
-    val enableKillAzureProcess = System.getenv("ENABLE_KILL_AZURE_PROCESS") != null
-    if (enableKillAzureProcess) finalizedBy("killAzureProcesses") else println("Killing azure core tools is disabled")
+    finalizedBy("killAzureProcesses")
+}
+
+tasks.named("azureFunctionsPackage") {
+    dependsOn(tasks.named("generateResources"))
 }

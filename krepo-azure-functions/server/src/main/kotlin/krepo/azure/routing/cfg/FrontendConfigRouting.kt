@@ -5,6 +5,7 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("unused")
 
 package krepo.azure.routing.cfg
 
@@ -26,7 +27,7 @@ val DEFAULT_FRONTEND_CONFIG = FrontendConfig(
     true
 )
 
-@HttpRouting("api/azure/config/frontend")
+@HttpRouting("/api/azure/config/frontend")
 fun frontendConfigRouting(
     request: HttpRequest<String?>,
     context: HttpContext,
@@ -34,7 +35,7 @@ fun frontendConfigRouting(
     return request.respondJson(CommonResponse(200, DEFAULT_FRONTEND_CONFIG))
 }
 
-@HttpRouting("api/azure/config/reset", [HttpMethod.PUT])
+@HttpRouting("/api/azure/config/reset", [HttpMethod.PUT])
 fun resetFrontendConfigRouting(
     request: HttpRequest<String?>,
     context: HttpContext,
@@ -42,7 +43,7 @@ fun resetFrontendConfigRouting(
     return request.notImplemented()
 }
 
-@HttpRouting("api/azure/config/modify", [HttpMethod.PUT])
+@HttpRouting("/api/azure/config/modify", [HttpMethod.PUT])
 fun modifyFrontendConfigRouting(
     request: HttpRequest<String?>,
     context: HttpContext,

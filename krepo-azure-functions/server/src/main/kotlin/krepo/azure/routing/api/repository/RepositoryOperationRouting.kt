@@ -5,6 +5,7 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("unused")
 
 package krepo.azure.routing.api.repository
 
@@ -21,7 +22,7 @@ import krepo.azure.util.string.decodeToByteArray
 import krepo.azure.util.string.strip
 import krepo.util.fromJson
 
-@HttpRouting("api/azure/repository/operation/file", [HttpMethod.POST, HttpMethod.DELETE])
+@HttpRouting("/api/azure/repository/operation/file", [HttpMethod.POST, HttpMethod.DELETE])
 fun uploadFileRouting(
     request: HttpRequest<String>,
     context: HttpContext,
@@ -52,7 +53,7 @@ fun uploadFileRouting(
     return request.respondText("Internal server error", status = HttpStatus.INTERNAL_SERVER_ERROR)
 }
 
-@HttpRouting("api/azure/repository/operation/gav", [HttpMethod.DELETE])
+@HttpRouting("/api/azure/repository/operation/gav", [HttpMethod.DELETE])
 fun deleteGAVRouting(
     request: HttpRequest<String>,
     context: HttpContext,
@@ -66,7 +67,7 @@ fun deleteGAVRouting(
     return request.respondText("OK")
 }
 
-@HttpRouting("api/azure/repository/operation/directory/create")
+@HttpRouting("/api/azure/repository/operation/directory/create")
 fun createRepositoryDirectory(
     request: HttpRequest<Any>,
     context: HttpContext,
@@ -74,7 +75,7 @@ fun createRepositoryDirectory(
     return request.notImplemented()
 }
 
-@HttpRouting("api/azure/repository/create", methods = [HttpMethod.POST])
+@HttpRouting("/api/azure/repository/create", methods = [HttpMethod.POST])
 fun createRepository(
     request: HttpRequest<Any>,
     context: HttpContext,
@@ -82,7 +83,7 @@ fun createRepository(
     return request.notImplemented()
 }
 
-@HttpRouting("api/azure/repository/modify", methods = [HttpMethod.PUT])
+@HttpRouting("/api/azure/repository/modify", methods = [HttpMethod.PUT])
 fun modifyRepository(
     request: HttpRequest<Any>,
     context: HttpContext,
@@ -90,7 +91,7 @@ fun modifyRepository(
     return request.notImplemented()
 }
 
-@HttpRouting("api/azure/repository/delete", methods = [HttpMethod.DELETE])
+@HttpRouting("/api/azure/repository/delete", methods = [HttpMethod.DELETE])
 fun deleteRepository(
     request: HttpRequest<Any>,
     context: HttpContext,

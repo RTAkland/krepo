@@ -53,7 +53,7 @@ private fun addState(state: String, extraData: String) {
     storageManager.setKV("krepo_state_$state", extraData, 120)
 }
 
-@HttpRouting("api/azure/signin/azure/url")
+@HttpRouting("/api/azure/signin/azure/url")
 fun azureSignInURLRouting(
     request: HttpRequest<*>,
     context: HttpContext,
@@ -69,7 +69,7 @@ fun azureSignInURLRouting(
  * remove state from kv or redis ~optional
  * kv has ttl
  */
-@HttpRouting("api/azure/signin/azure/complete", methods = [HttpMethod.POST])
+@HttpRouting("/api/azure/signin/azure/complete", methods = [HttpMethod.POST])
 fun azureSignInCompleteRouting(
     request: HttpRequest<String>,
     context: HttpContext,
@@ -82,7 +82,7 @@ fun azureSignInCompleteRouting(
 }
 
 
-@HttpRouting("api/azure/signin/azure")
+@HttpRouting("/api/azure/signin/azure")
 fun azureSignInRouting(
     request: HttpRequest<*>,
     context: HttpContext,

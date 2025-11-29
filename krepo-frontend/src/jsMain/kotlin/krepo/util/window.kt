@@ -19,7 +19,6 @@ fun getCurrentHttpUrl(): String {
     return "$protocol//$host"
 }
 
-//
 val customBacked
-    get() = if (!developmentMode) "https://pkg.rtast.cn" else if (developmentMode) "http://127.0.0.1:7071"
+    get() = if (!developmentMode) "https://repo.maven.rtast.cn" else if (developmentMode) "http://127.0.0.1:7071"
     else if (backendVersion is BackendVersions.STABLE) getCurrentHttpUrl() else getCurrentHttpUrl()

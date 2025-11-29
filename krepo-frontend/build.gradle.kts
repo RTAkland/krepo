@@ -14,7 +14,6 @@ plugins {
 }
 
 val fritz2Version = "1.0-RC20"
-val ktorVersion = "3.1.2"
 
 kotlin {
     js(IR) {
@@ -69,49 +68,5 @@ tasks.named("jsBrowserDistribution") {
         val version = file.readLines().first().split("=").last()
         file.writeText(originContent.replace(version, (version.toInt() + 1).toString()))
         println("Resources version bumped")
-    }
-    finalizedBy("copyDistForWorker", "copyDistForVercel")
-}
-
-fun Task.copyDistToPlatformDir(
-    platform: String,
-    target: String? = null,
-    files: Task.(dist: File, target: File) -> Unit,
-) {
-    val distDir = project.layout.buildDirectory.dir("dist/js/productionExecutable")
-        .get().asFile
-    val targetDir = project.layout.buildDirectory.dir("$platform-dist")
-        .get().asFile.apply {
-            deleteRecursively()
-            mkdirs()
-        }
-    inputs.dir(distDir)
-    outputs.dir(targetDir)
-    doLast {
-        copy {
-            from(distDir) {
-                exclude("*.LICENSE.txt")
-                exclude("serverless/**")
-            }
-            if (target != null) {
-                into(File(targetDir, target))
-            } else {
-                into(targetDir)
-            }
-        }
-        this@copyDistToPlatformDir.files(distDir, targetDir)
-    }
-}
-
-tasks.register("copyDistForVercel") {
-    copyDistToPlatformDir("vercel") { dist, target ->
-        File(dist, "serverless/vercel/vercel.json").copyTo(File(target, "vercel.json"))
-    }
-}
-
-tasks.register("copyDistForWorker") {
-    copyDistToPlatformDir("worker", "dist") { dist, target ->
-        File(dist, "serverless/workers/worker.js").copyTo(File(target, "worker.js"))
-        File(dist, "serverless/workers/wrangler.jsonc").copyTo(File(target, "wrangler.jsonc"))
     }
 }

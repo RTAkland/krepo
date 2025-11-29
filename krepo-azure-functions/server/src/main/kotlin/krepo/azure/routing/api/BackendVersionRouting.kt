@@ -12,13 +12,12 @@ package krepo.azure.routing.api
 import cn.rtast.kazure.HttpContext
 import cn.rtast.kazure.HttpRequest
 import cn.rtast.kazure.HttpResponse
-import cn.rtast.kazure.resources.resources
 import cn.rtast.kazure.response.respondJson
 import cn.rtast.kazure.trigger.HttpRouting
 import krepo.BackendVersions
 import krepo.entity.BackendVersion
 
-@HttpRouting("api/version")
+@HttpRouting("/api/version")
 fun backendVersionRouting(
     request: HttpRequest<*>,
     context: HttpContext,
