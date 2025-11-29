@@ -41,14 +41,14 @@ fun RenderContext.userManagePage() {
                                     p("title is-5") { +user.name }
                                     p("subtitle is-6 has-text-grey") { +user.email }
                                     div("buttons") {
-                                        button("button is-small is-link") {
+                                        button("button is-small is-link is-light") {
                                             i("fa-solid fa-user-pen mr-2") {}
                                             +"Edit"
                                             clicks handledBy {
                                                 window.location.href = "/#/user/edit?username=${user.name}"
                                             }
                                         }
-                                        button("button is-small is-danger") {
+                                        button("button is-small is-danger is-light") {
                                             i("fa-solid fa-trash mr-2") {}
                                             +"Delete"
                                             clicks handledBy {

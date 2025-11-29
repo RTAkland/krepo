@@ -7,36 +7,20 @@
 
 package krepo.util.string
 
-import krepo.util.getCurrentHttpUrl
+import krepo.util.customBacked
 
 fun getGradleKotlinDslRepositoryTemplate(repo: String): String = """
-    |maven("${getCurrentHttpUrl()}/$repo")
-""".trimMargin()
-
-fun getGradleGroovyDslRepositoryTemplate(repo: String): String = """
-    |maven {
-    |   url "${getCurrentHttpUrl()}/$repo"
-    |}
+    |maven("${customBacked}/$repo")
 """.trimMargin()
 
 fun getMavenRepositoryTemplate(repo: String): String = """
     |<repository>
-    |  <url>${getCurrentHttpUrl()}/$repo<repository></url>
+    |  <url>${customBacked}/$repo<repository></url>
     |</repository>
-""".trimMargin()
-
-fun getSBTRepositoryTemplate(repo: String): String = """
-    |resolvers +=
-    |  "repository-$repo"
-    |    at "${getCurrentHttpUrl()}/$repo"
 """.trimMargin()
 
 fun getGradleKotlinDslDependenciesTemplate(group: String, name: String, version: String) = """
     |implementation("$group:$name:$version")
-""".trimMargin()
-
-fun getGradleGroovyDslDependenciesTemplate(group: String, name: String, version: String) = """
-    |implementation "$group:$name:$version"
 """.trimMargin()
 
 fun getMavenDependenciesTemplate(group: String, name: String, version: String) = """
@@ -45,8 +29,4 @@ fun getMavenDependenciesTemplate(group: String, name: String, version: String) =
     |  <artifactId>$name</artifactId>
     |  <version>$version</version>
     |</dependency>
-""".trimMargin()
-
-fun getSBTDependenciesTemplate(group: String, name: String, version: String) = """
-    |"$group" %% "$name" %% "$version"
 """.trimMargin()

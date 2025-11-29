@@ -6,10 +6,9 @@
  */
 
 .path-hover {
-    color: black;
     text-decoration: none;
 }
 
 .path-hover:hover {
-    color: cornflowerblue;
+    /*color: cornflowerblue;*/
 }

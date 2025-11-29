@@ -8,21 +8,12 @@
 package krepo.pages.other
 
 import dev.fritz2.core.RenderContext
-import dev.fritz2.core.alt
 import dev.fritz2.core.href
-import dev.fritz2.core.src
 
 fun RenderContext.notFoundPage() {
     div("has-text-centered") {
-        span("icon is-large has-text-info") {
-            img {
-                src("/assets/img/not-found.svg")
-                alt("Not Found")
-            }
-        }
-        h1("title is-3") {
-            +"There's nothing here."
-        }
+        i("fa-solid fa-ban") {}
+        h1("title is-3") { +"There's nothing here." }
         a("button is-danger") {
             +"Back to home page"
             href("/#/")

@@ -17,12 +17,8 @@ import krepo.components.showDialog
 import krepo.components.warningToast
 import krepo.coroutineScope
 import krepo.entity.user.User
-import krepo.util.auth
+import krepo.util.*
 import krepo.util.file.checkPermission
-import krepo.util.fromJson
-import krepo.util.httpRequest
-import krepo.util.jsonContentType
-import krepo.util.setBody
 import krepo.util.string.validateEmail
 
 fun RenderContext.newUserPage() {
@@ -73,7 +69,8 @@ fun RenderContext.newUserPage() {
                 }
                 div("is-grouped is-right buttons") {
                     div("control") {
-                        button("button is-info") {
+                        button("button is-info is-light") {
+                            i("fa-solid fa-check") { inlineStyle("padding-right: 5px;") }
                             +"Confirm"
                             clicks handledBy { showCreateUserDialog.update(true) }
                         }

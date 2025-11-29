@@ -22,7 +22,6 @@ import krepo.index.IndexMetadata
 import krepo.index.IndexSearchResponse
 import krepo.util.auth
 import krepo.util.byte.toByteArray
-import krepo.util.fromJson
 import krepo.util.fromProtobuf
 import krepo.util.httpRequest
 import krepo.util.jsonContentType
@@ -46,7 +45,7 @@ fun RenderContext.searchPage() {
             inlineStyle("max-width: 900px;")
             div("columns is-vcentered") {
                 div("column is-7 pr-1") {
-                    input("input is-info is-medium") {
+                    input("input is-medium") {
                         placeholder("Artifact id")
                         value(keywordStore.data)
                         changes.values() handledBy keywordStore.update
@@ -102,7 +101,7 @@ fun RenderContext.searchPage() {
                     }
                 }
                 div("column is-3") {
-                    button("button has-background-info-light is-fullwidth is-medium") {
+                    button("button is-fullwidth is-medium") {
                         disabled(isButtonDisabled.data)
                         isButtonDisabled.data.render {
                             if (it) title("Please wait 5 seconds before trying again")

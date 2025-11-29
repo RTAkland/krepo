@@ -15,15 +15,13 @@ import kotlin.time.Duration.Companion.seconds
 fun RenderContext.noPermission() {
     window.setTimeout({ window.location.href = "/#/" }, 5.seconds.inWholeMilliseconds.toInt())
     div("container has-text-centered mt-6") {
-        div("box") {
-            span("icon is-large has-text-danger") { i("fas fa-ban fa-3x") {} }
-            h1("title is-3 mt-4") { +"Access Denied" }
-            p("subtitle is-5") { +"You Do Not have permission to view this page" }
-            p("subtitle is-5") { +"You will be redirect to home page in 5 seconds" }
-            a("button is-danger mt-4") {
-                +"Back to home page"
-                href("/#/")
-            }
+        span("icon is-large has-text-danger") { i("fas fa-ban fa-3x") {} }
+        h1("title is-3 mt-4") { +"Access Denied" }
+        p("subtitle is-5") { +"You Do Not have permission to view this page" }
+        p("subtitle is-5") { +"You will be redirect to home page in 5 seconds" }
+        a("button is-danger mt-4") {
+            +"Back to home page"
+            href("/#/")
         }
     }
 }

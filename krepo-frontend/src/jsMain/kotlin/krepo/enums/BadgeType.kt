@@ -12,5 +12,4 @@ enum class BadgeType(val classes: String, val chinese: String) {
     Deleted("is-danger", "Deleted"),
     Modified("is-warning", "Modified"),
     Available("is-success", "Available")
-
 }

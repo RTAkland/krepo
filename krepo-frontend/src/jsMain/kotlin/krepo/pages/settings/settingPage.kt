@@ -79,15 +79,15 @@ fun RenderContext.settingPage() {
                     }
                     div("is-grouped is-right buttons") {
                         div("control") {
-                            button("button is-danger") {
-                                img("mr-2") { src("/assets/img/reset.svg") }
+                            button("button is-danger is-light") {
+                                i("fa-solid fa-rotate-left") { inlineStyle("padding-right: 5px;") }
                                 +"Reset"
                                 clicks handledBy { showResetFrontConfigDialog.update(true) }
                             }
                         }
                         div("control") {
-                            button("button is-info") {
-                                img("mr-2") { src("/assets/img/save.svg") }
+                            button("button is-info is-light") {
+                                i("fa-solid fa-floppy-disk") { inlineStyle("padding-right: 5px;") }
                                 +"Save"
                                 clicks handledBy { showSubmitSettingDialog.update(true) }
                             }

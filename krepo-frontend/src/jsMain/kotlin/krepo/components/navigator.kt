@@ -13,12 +13,9 @@ import kotlinx.browser.window
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
-import krepo.backend
-import krepo.backendVersion
-import krepo.coroutineScope
+import krepo.*
 import krepo.entity.user.LoginSuccessResponse
 import krepo.entity.user.oauth.AzureSignInURL
-import krepo.frontendConfig
 import krepo.util.*
 import krepo.util.file.LocalStorage
 import krepo.util.string.encodeToBase64
@@ -92,7 +89,7 @@ fun RenderContext.navbar() {
                 }
                 div("navbar-item") {
                     div("control has-icons-left has-icons-right") {
-                        input("input is-info is-rounded") {
+                        input("input is-rounded") {
                             type("text")
                             placeholder("Fill in keyword to search...")
                             changes.values() handledBy searchKeywordStore.update
@@ -107,6 +104,7 @@ fun RenderContext.navbar() {
                         span("icon is-small is-left") {
                             i("fa-solid fa-magnifying-glass") {}
                         }
+                        title("Search artifacts")
                     }
                 }
             }
@@ -114,7 +112,8 @@ fun RenderContext.navbar() {
                 div("navbar-item") {
                     div("buttons") {
                         if (LocalStorage.TOKEN == null) {
-                            a("button is-light") {
+                            a("button") {
+                                isDarkTheme.data.render { if (!it) this@a.className("is-light") }
                                 +"Sign in"
                                 clicks handledBy { showLoginDialog.update(true) }
                             }
@@ -136,7 +135,8 @@ fun RenderContext.navbar() {
                                     }
                                 }
                             }
-                            a("button is-light") {
+                            a("button") logoutButton@{
+                                isDarkTheme.data.render { if (!it) this@logoutButton.className("is-light") }
                                 +"Logout"
                                 clicks handledBy { showLogoutDialog.update(true) }
                             }

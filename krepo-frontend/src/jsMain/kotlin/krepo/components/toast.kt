@@ -33,7 +33,7 @@ fun errorToast(message: String, duration: Duration = 2.5.seconds, z: Int = -1) =
 
 fun infoToast(message: String, duration: Duration = 2.5.seconds, z: Int = -1) =
     toast("default", duration.inWholeMilliseconds) {
-        div("notification is-info is-light p-4 toast-message mb-2") {
+        div("notification is-light is-success p-4 toast-message mb-2") {
             if (z > 0) inlineStyle("z-index: $z;")
             i("fas fa-info-circle mr-2") {}
             +message

@@ -9,6 +9,7 @@ package krepo.components
 
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.Store
+import krepo.isDarkTheme
 
 fun RenderContext.showDialog(
     showDialog: Store<Boolean>,
@@ -52,7 +53,7 @@ fun RenderContext.showDialog(
                                 +"Cancel"
                                 clicks handledBy { showDialog.update(false) }
                             }
-                            button("button is-info is-right") {
+                            button("button is-right") confirm@{
                                 i("fa-solid fa-check mr-2") {}
                                 +"Confirm"
                                 clicks handledBy {

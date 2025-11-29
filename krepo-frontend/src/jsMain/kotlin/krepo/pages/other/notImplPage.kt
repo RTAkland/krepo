@@ -20,9 +20,7 @@ fun RenderContext.notImplPage() {
                 p("text-lg text-gray-500 mb-6") { +"This page/API is not implemented yet" }
                 button("button px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow transition") {
                     +"Back to home page"
-                    clicks handledBy {
-                        window.location.href = "/"
-                    }
+                    clicks handledBy { window.location.href = "/" }
                 }
             }
         }

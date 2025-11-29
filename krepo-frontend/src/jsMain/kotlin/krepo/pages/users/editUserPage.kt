@@ -17,6 +17,7 @@ import krepo.components.warningToast
 import krepo.coroutineScope
 import krepo.currentPath
 import krepo.enums.CheckImplType
+import krepo.isDarkTheme
 import krepo.util.*
 import krepo.util.file.checkPermission
 import krepo.util.string.validateEmail
@@ -83,14 +84,17 @@ fun RenderContext.editUserPage() {
                                     }
                                 }
                             }
-                            div("column is-full") {
-                                div("field is-grouped is-grouped-right mt-5") {
-                                    div("control") {
-                                        button("button is-link") {
-                                            i("fa-solid fa-pen-to-square mr-2") {}
-                                            +"Update user info"
-                                            clicks handledBy { showUpdateUserDialog.update(true) }
+                        }
+                        div("column is-full") {
+                            div("field is-grouped is-grouped-right mt-5") {
+                                div("control") {
+                                    button("button") updateInfoButton@{
+                                        isDarkTheme.data.render {
+                                            if (!it) this@updateInfoButton.className("is-light")
                                         }
+                                        i("fa-solid fa-pen-to-square mr-2") {}
+                                        +"Update user info"
+                                        clicks handledBy { showUpdateUserDialog.update(true) }
                                     }
                                 }
                             }

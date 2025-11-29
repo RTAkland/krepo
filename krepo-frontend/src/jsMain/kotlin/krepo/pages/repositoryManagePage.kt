@@ -66,7 +66,11 @@ fun RenderContext.publicContentListingPage() {
                     val basePath = StringBuilder("/#")
                     segments.forEachIndexed { index, segment ->
                         basePath.append("/").append(segment)
-                        a("path-hover") {
+                        a("path-hover") pathSegment@{
+                            isDarkTheme.data.render {
+                                if (!it) this@pathSegment.className("has-text-black")
+                                else this@pathSegment.className("has-text-light")
+                            }
                             href(basePath.toString())
                             +segment
                             title("Back to $basePath")
@@ -83,7 +87,7 @@ fun RenderContext.publicContentListingPage() {
                             a("button") {
                                 val parentPath = currentPath.trimEnd('/').substringBeforeLast('/', "")
                                 href("/#$parentPath")
-                                img { src("/assets/img/back.svg") }
+                                i("fa-solid fa-arrow-left") {}
                                 title("Back")
                             }
                         }
@@ -116,6 +120,7 @@ fun RenderContext.publicContentListingPage() {
                                         attr("role", "menu")
                                         div("dropdown-content") {
                                             a("dropdown-item") {
+                                                img { src("assets/img/Kotlin Multiplatform icon.svg");width(12) }
                                                 +"Gradle Kotlin DSL"
                                                 clicks handledBy {
                                                     window.navigator.clipboard.writeText(
@@ -125,30 +130,13 @@ fun RenderContext.publicContentListingPage() {
                                                 }
                                             }
                                             a("dropdown-item") {
-                                                +"Gradle Groovy DSL"
-                                                clicks handledBy {
-                                                    window.navigator.clipboard.writeText(
-                                                        getGradleGroovyDslDependenciesTemplate(group, name, version)
-                                                    )
-                                                    infoToast("Gradle Groovy DSL Dependencies Coordinate Copied")
-                                                }
-                                            }
-                                            a("dropdown-item") {
+                                                img { src("assets/img/maven.svg");width(12) }
                                                 +"Maven"
                                                 clicks handledBy {
                                                     window.navigator.clipboard.writeText(
                                                         getMavenDependenciesTemplate(group, name, version)
                                                     )
                                                     infoToast("Maven Dependencies Coordinate Copied")
-                                                }
-                                            }
-                                            a("dropdown-item") {
-                                                +"SBT"
-                                                clicks handledBy {
-                                                    window.navigator.clipboard.writeText(
-                                                        getSBTDependenciesTemplate(group, name, version)
-                                                    )
-                                                    infoToast("SBT Dependencies Coordinate Copied")
                                                 }
                                             }
                                         }
@@ -159,7 +147,7 @@ fun RenderContext.publicContentListingPage() {
                                 label("button") {
                                     title("Upload file")
                                     attr("for", "fileInput")
-                                    img { src("/assets/img/upload.svg") }
+                                    i("fa-solid fa-upload") {}
                                 }
                                 input("file-input") {
                                     id("fileInput")
@@ -197,13 +185,13 @@ fun RenderContext.publicContentListingPage() {
                                 }
                                 a("button") {
                                     title("Create folder")
-                                    img { src("/assets/img/create-folder.svg") }
+                                    i("fa-solid fa-folder-plus") {}
                                     clicks handledBy { showCreateFolderDialog.update(true) }
                                 }
                             }
                             a("button mr-2") {
-                                img { src("assets/img/settings.svg") }
                                 title("Preferences")
+                                i("fa-solid fa-sliders") {}
                                 clicks handledBy { showLocalConfigDialog.update(true) }
                             }
                         }
@@ -237,15 +225,14 @@ fun RenderContext.publicContentListingPage() {
                                 td {
                                     inlineStyle("max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;")
                                     if (entry.isDirectory) {
-                                        a {
-                                            className("has-text-link")
+                                        a("folder-entry") {
+                                            className("")
                                             +"${entry.name}/"
                                             title("$currentPath/${entry.name}")
                                             clicks handledBy { window.location.href = "/#$currentPath/${entry.name}" }
                                         }
                                     } else {
-                                        a {
-                                            className("has-text-dark")
+                                        a("file-entry") {
                                             +entry.name
                                             title("$currentPath/${entry.name}")
                                             clicks handledBy {
@@ -271,10 +258,13 @@ fun RenderContext.publicContentListingPage() {
                                         button("button is-danger is-small") {
                                             val name = if (entry.isDirectory) "directory" else "file"
                                             title("Delete $name")
-                                            img {
-                                                src("assets/trash.svg")
+                                            img trashImg@{
+                                                isDarkTheme.data.render {
+                                                    if (it) this@trashImg.src("assets/img/trash-light.svg")
+                                                    else this@trashImg.src("assets/img/trash.svg")
+                                                }
                                                 attr("alt", "Delete icon")
-                                                inlineStyle("width: 1.2rem; height: 1.2rem;")
+                                                inlineStyle("width: 1.1rem; height: 1.1rem;")
                                             }
                                             clicks handledBy {
                                                 showDeleteFileEntryDialog.update(true)

@@ -11,10 +11,13 @@ package krepo
 
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.render
+import dev.fritz2.core.storeOf
 import dev.fritz2.headless.components.toastContainer
 import dev.fritz2.headless.foundation.portalRoot
 import dev.fritz2.routing.routerOf
 import kotlinx.browser.document
+import kotlinx.browser.window
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import krepo.components.navbar
@@ -46,8 +49,12 @@ val coroutineScope = MainScope()
 lateinit var frontendConfig: FrontendConfig
 lateinit var backendVersion: BackendVersions  // zero is legacy version of backend
 lateinit var renderContext: RenderContext
+val job = Job(coroutineScope.coroutineContext[Job])
+val isDarkTheme = storeOf(false, job)
 
 fun main() {
+    val mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
+    if (mediaQuery.matches) isDarkTheme.update(true) else isDarkTheme.update(false)
     toastContainer("default", "toast-container")
     coroutineScope.launch {
         backendVersion = try {

@@ -1,0 +1,38 @@
+/*
+ * Copyright © 2025 RTAkland
+ * Date: 2025/11/29 23:13
+ * Open Source Under Apache-2.0 License
+ * https://www.apache.org/licenses/LICENSE-2.0
+ */
+
+@media (prefers-color-scheme: dark) {
+    a {
+        color: rgb(173, 216, 230);
+    }
+
+    .folder-entry {
+        color: rgb(173, 216, 230);
+    }
+
+    .file-entry {
+        color: rgb(176, 176, 176);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    a {
+        color: #4A90E2;
+    }
+
+    a:hover {
+        color: #357ABD;
+    }
+
+    .folder-entry {
+        color: rgb(30, 144, 255);
+    }
+
+    .file-entry {
+        color: rgb(47, 79, 79);
+    }
+}

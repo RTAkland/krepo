@@ -54,7 +54,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                 div("level") {
                     div("level-left") { h3("title is-4") { +"Repository List" } }
                     div("level-right") {
-                        button("button is-primary") {
+                        button("button is-light") {
                             i("fa-solid fa-plus mr-2") {}
                             +"Add Repository"
                             clicks handledBy { showCreateRepositoryFormDialog.update(true) }
@@ -76,7 +76,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                             i {
                                 p {
                                     when (repo.visibility) {
-                                        RepositoryVisibility.Internal -> inlineStyle("color: purple;")
+                                        RepositoryVisibility.Internal -> inlineStyle("color: red;")
                                         RepositoryVisibility.Public -> inlineStyle("color: green;")
                                     }
                                     when (repo.status) {
@@ -90,7 +90,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                             }
                         }
                         div {
-                            button("button is-small is-info mr-2") {
+                            button("button is-small is-light is-info mr-2") {
                                 i("fa-solid fa-user-pen mr-2") {}
                                 +"Edit"
                                 clicks handledBy {
@@ -98,7 +98,7 @@ fun RenderContext.mavenRepositorySettingPage() {
                                     showModifyRepositoryStore.update(true)
                                 }
                             }
-                            button("button is-small is-danger") {
+                            button("button is-small is-light is-danger") {
                                 i("fa-solid fa-trash mr-2") {}
                                 +"Delete"
                                 clicks handledBy {

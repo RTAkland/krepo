@@ -10,6 +10,7 @@ package krepo.components
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.href
 import dev.fritz2.core.target
+import dev.fritz2.core.title
 import krepo.frontendConfig
 import krepo.util.string.getCurrentYear
 
@@ -23,6 +24,7 @@ fun RenderContext.pageFooter() {
                     href("/#/terms?l=en-us")
                     +"Terms"
                 }
+                title("View terms of service")
             }
             +" · "
             div("column is-narrow has-text-left") {
@@ -31,6 +33,7 @@ fun RenderContext.pageFooter() {
                     href("/#/privacy?l=en-us")
                     +"Privacy"
                 }
+                title("View privacy policy")
             }
 
             div("column is-flex-grow-1 has-text-right") {
