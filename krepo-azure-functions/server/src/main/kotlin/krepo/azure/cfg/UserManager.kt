@@ -8,8 +8,8 @@
 
 package krepo.azure.cfg
 
-import krepo.azure.entity.User
 import krepo.azure.resources.resources
+import krepo.entity.user.User
 import krepo.util.fromJson
 
 class UserManager {

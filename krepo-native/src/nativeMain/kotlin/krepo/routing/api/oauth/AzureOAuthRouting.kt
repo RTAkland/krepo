@@ -24,10 +24,10 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.encodeBase64
-import krepo.entity.login.oauth.AzureLoginSuccess
-import krepo.entity.login.oauth.AzureSignInURL
-import krepo.entity.login.oauth.AzureSignResponse
-import krepo.entity.login.oauth.AzureUserInfo
+import krepo.entity.user.oauth.AzureLoginSuccess
+import krepo.entity.user.oauth.AzureSignInURL
+import krepo.entity.user.oauth.AzureSignResponse
+import krepo.entity.user.oauth.AzureUserInfo
 import krepo.util.fromJson
 import krepo.util.toJson
 import kotlin.uuid.ExperimentalUuidApi

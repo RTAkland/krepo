@@ -6,11 +6,13 @@
  */
 
 
-package krepo.entity.login.oauth
+package krepo.entity.user.oauth
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-public data class AzureSignInURL(
-    val url: String,
+public data class AzureSignResponse(
+    val state: Int,
+    val username: String?,
+    val email: String?
 )

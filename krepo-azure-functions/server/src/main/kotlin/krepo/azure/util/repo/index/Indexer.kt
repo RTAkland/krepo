@@ -8,8 +8,6 @@
 
 package krepo.azure.util.repo.index
 
-import krepo.azure.entity.res.FileEntry
-import krepo.azure.util.deleteDirectory
 import krepo.azure.util.deleteFile
 import krepo.azure.util.getFile
 import krepo.azure.util.listAllFiles

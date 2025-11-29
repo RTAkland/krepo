@@ -8,7 +8,7 @@
 
 package krepo.routing.api
 
-import krepo.entity.login.User
+import krepo.entity.user.User
 import krepo.entity.res.*
 import krepo.tokenManager
 import krepo.userManager
@@ -20,7 +20,7 @@ import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import krepo.entity.login.NoSensitiveUser
+import krepo.entity.user.NoSensitiveUser
 
 fun Application.configureAPIUserRouting() {
     install(CORS) {

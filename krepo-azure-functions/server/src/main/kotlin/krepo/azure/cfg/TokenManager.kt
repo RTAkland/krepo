@@ -11,30 +11,29 @@
 package krepo.azure.cfg
 
 import krepo.azure.entity.res.TokenPayload
-import krepo.azure.storageManager
-import java.security.SecureRandom
-import java.util.Base64
+import krepo.azure.userManager
+import krepo.azure.util.Jwt
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 private const val TOKEN_TTL = 3600  // 1 hour
 
 class TokenManager {
-    private fun generateSecureToken(): String {
-        val bytes = ByteArray(32)
-        SecureRandom().nextBytes(bytes)
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes)
-    }
-
     fun issue(name: String): TokenPayload {
-        val token = this.generateSecureToken()
-        storageManager.setKV(token, name, TOKEN_TTL)
+        val user = userManager.getUser(name)!!
+        val token = Jwt.create(user, TOKEN_TTL)
         return TokenPayload(name, token, Clock.System.now().epochSeconds + TOKEN_TTL)
     }
 
-    fun revoke(token: String) {
-        storageManager.removeKV(token)
+    fun oauthIssue(uid: String): TokenPayload {
+        val user = userManager.getUserByUID(uid)!!
+        val token = Jwt.create(user, TOKEN_TTL)
+        return TokenPayload(user.name, token, Clock.System.now().epochSeconds + TOKEN_TTL)
     }
 
-    fun validate(token: String): Boolean = storageManager.getKV(token) != null
+//    fun revoke(token: String) {
+//        storageManager.removeKV(token)
+//    }
+
+    fun validate(token: String): Boolean = Jwt.verify(token) != null
 }

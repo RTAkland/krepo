@@ -30,4 +30,8 @@ object ConfigManger {
     val CF_KV_NAMESPACE_ID = getOptional("CF_KV_NAMESPACE_ID")
 
     val REDIS_URI = getOptional("REDIS_URI")
+
+    val FRONTEND_URL = get("FRONTEND_URL")
+
+    val JWT_SECRET = get("JWT_SECRET")
 }

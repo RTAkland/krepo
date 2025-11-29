@@ -71,5 +71,7 @@ context(cred: BearerCredential)
 fun listAllRepositories(
     request: HttpRequest<*>,
     context: HttpContext,
-): HttpResponse = request.respondJson(CommonResponse(200, repositories))
+): HttpResponse {
+    return request.respondJson(CommonResponse(200, repositories))
+}
 

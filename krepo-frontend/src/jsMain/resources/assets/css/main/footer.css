@@ -11,8 +11,11 @@ body {
     display: grid;
     padding-right: 10px;
     grid-template-rows: auto 1fr auto;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .page-footer-icp {
     min-height: 30px;
+    grid-row: 3;
 }

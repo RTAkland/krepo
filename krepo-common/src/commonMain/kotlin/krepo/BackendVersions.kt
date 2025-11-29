@@ -53,6 +53,9 @@ public sealed class BackendVersions(public val v: Int, public val desc: String) 
     public abstract val CREATE_REPOSITORY_INDEX: RouteEndpoint
     public abstract val DELETE_REPOSITORY_INDEX: RouteEndpoint
 
+    public abstract val PRIVACY: RouteEndpoint
+    public abstract val TERMS: RouteEndpoint
+
 
     public class STABLE : BackendVersions(0, "Stable version") {
         override val CURRENT_USER: RouteEndpoint = createRouteEndpoint("/@/api/user")
@@ -86,6 +89,8 @@ public sealed class BackendVersions(public val v: Int, public val desc: String) 
         override val AZURE_SIGN_IN_COMPLETE: RouteEndpoint = createRouteEndpoint("/api/signin/azure/complete")
         override val CREATE_REPOSITORY_INDEX: RouteEndpoint = NOT_IMPLEMENTED_API
         override val DELETE_REPOSITORY_INDEX: RouteEndpoint = NOT_IMPLEMENTED_API
+        override val PRIVACY: RouteEndpoint = NOT_IMPLEMENTED_API
+        override val TERMS: RouteEndpoint = NOT_IMPLEMENTED_API
     }
 
     public class Azure : BackendVersions(1, "Running on Azure") {
@@ -121,6 +126,8 @@ public sealed class BackendVersions(public val v: Int, public val desc: String) 
         override val AZURE_SIGN_IN_COMPLETE: RouteEndpoint = createRouteEndpoint("/api/azure/signin/azure/complete")
         override val CREATE_REPOSITORY_INDEX: RouteEndpoint = createRouteEndpoint("/api/azure/repository/index")
         override val DELETE_REPOSITORY_INDEX: RouteEndpoint = createRouteEndpoint("/api/azure/repository/index")
+        override val PRIVACY: RouteEndpoint = createRouteEndpoint("/api/azure/system/privacy")
+        override val TERMS: RouteEndpoint = createRouteEndpoint("/api/azure/system/terms")
     }
 }
 

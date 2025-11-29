@@ -12,5 +12,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DeleteGavRequest(
     val gav: String,
-    val isDirectory: Boolean
+    val isDirectory: Boolean,
 )

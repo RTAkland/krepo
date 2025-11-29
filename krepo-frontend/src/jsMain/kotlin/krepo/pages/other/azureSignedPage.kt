@@ -13,7 +13,7 @@ import kotlinx.browser.window
 import krepo.components.infoToast
 import krepo.components.setLoginInfo
 import krepo.currentPath
-import krepo.entity.login.oauth.AzureLoginSuccess
+import krepo.entity.user.oauth.AzureLoginSuccess
 import krepo.util.fromJson
 import krepo.util.string.decodeToString
 import krepo.util.string.extractQueryParams

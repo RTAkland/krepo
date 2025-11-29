@@ -5,13 +5,16 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-package krepo.entity.login.oauth
+
+package krepo.entity.user.oauth
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-public data class AzureUserInfo(
-    val displayName: String,
-    val id: String,
-    val userPrincipalName: String
+public data class AzureLoginSuccess(
+    val t: String,
+    val e: String,
+    val n: String,
+    val ex: Long,
+    val m: String
 )

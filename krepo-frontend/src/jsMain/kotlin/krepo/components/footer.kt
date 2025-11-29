@@ -16,6 +16,23 @@ import krepo.util.string.getCurrentYear
 fun RenderContext.pageFooter() {
     div("page-footer-icp") {
         div("footer-inner columns is-mobile is-vcentered is-multiline") {
+            div("column is-narrow has-text-left") {
+                inlineStyle("margin-left: 15px;")
+                a {
+                    inlineStyle("text-decoration: underline;")
+                    href("/#/terms?l=en-us")
+                    +"Terms"
+                }
+            }
+            +" · "
+            div("column is-narrow has-text-left") {
+                a {
+                    inlineStyle("text-decoration: underline;")
+                    href("/#/privacy?l=en-us")
+                    +"Privacy"
+                }
+            }
+
             div("column is-flex-grow-1 has-text-right") {
                 if (frontendConfig.icpLicense != null) {
                     a {
@@ -27,7 +44,6 @@ fun RenderContext.pageFooter() {
             }
             val copyrightInfo = frontendConfig.copyright
                 .replace("#YEAR#", getCurrentYear().toString())
-                .removePrefix("<body>").removeSuffix("</body>")
             div("column is-narrow has-text-right") { span("is-size-8") { domNode.innerHTML = copyrightInfo } }
         }
     }

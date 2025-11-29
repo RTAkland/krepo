@@ -20,6 +20,7 @@
     "CF_KV_TOKEN": "",
     "CF_KV_NAMESPACE_ID": "",
     "AUTH_STORAGE_TYPE": "REDIS or CF_KV",
-    "REDIS_URI": ""
+    "REDIS_URI": "",
+    "JWT_SECRET": ""
   }
 }

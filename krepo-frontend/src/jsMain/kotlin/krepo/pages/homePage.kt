@@ -36,8 +36,8 @@ fun RenderContext.homePage() {
                 caption { +"Repositories" }
                 thead {
                     tr {
-                        th { attr("style", "width: 30%") }
-                        th("is-narrow") { attr("style", "width: 25%") }
+                        th("has-text-centered") { attr("style", "width: 30%") }
+                        th("is-narrow has-text-centered") { attr("style", "width: 25%") }
                         if (LocalStorage.TOKEN != null) th("has-text-centered") { attr("style", "width: 25%") }
                         th("has-text-centered") { attr("style", "width: 25%") }
                     }
@@ -45,14 +45,14 @@ fun RenderContext.homePage() {
                 tbody {
                     repositories.forEach { repo ->
                         tr {
-                            td {
+                            td("has-text-centered") {
                                 a("has-text-link") {
                                     href("/#/${repo.name}")
                                     +repo.name
                                     title("Repo: ${repo.name} | Status: ${repo.status.name}")
                                 }
                             }
-                            td("is-narrow") {
+                            td("is-narrow has-text-centered") {
                                 span(
                                     "tag is-light${
                                         if (repo.visibility == RepositoryVisibility.Internal) " is-danger" else ""

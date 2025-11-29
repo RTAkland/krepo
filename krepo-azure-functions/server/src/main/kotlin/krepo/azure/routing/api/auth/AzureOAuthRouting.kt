@@ -29,11 +29,7 @@ import krepo.azure.util.client
 import krepo.azure.util.hex.md5
 import krepo.azure.util.string.decodeToString
 import krepo.azure.util.string.encodeToBase64
-import krepo.entity.login.oauth.AzureLoginSuccess
-import krepo.entity.login.oauth.AzurePostComplete
-import krepo.entity.login.oauth.AzureSignInURL
-import krepo.entity.login.oauth.AzureSignResponse
-import krepo.entity.login.oauth.AzureUserInfo
+import krepo.entity.user.oauth.*
 import krepo.util.fromJson
 import krepo.util.toJson
 import java.util.*
@@ -107,7 +103,7 @@ fun azureSignInRouting(
             headers { append("Authorization", "Bearer ${msAccessToken.accessToken}") }
         }.bodyAsText().fromJson<AzureUserInfo>()
         if (userManager.validateAzureUser(userInfo.userPrincipalName)) {
-            val (_, token, expireAt) = tokenManager.issue(userInfo.id)
+            val (_, token, expireAt) = tokenManager.oauthIssue(userInfo.id)
             val localUserInfo = userManager.getUserByUID(userInfo.id)!!
             val respBase64 = AzureLoginSuccess(
                 token, localUserInfo.email,

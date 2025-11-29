@@ -12,7 +12,6 @@ import cn.rtast.kazure.HttpContext
 import cn.rtast.kazure.HttpRequest
 import cn.rtast.kazure.auth.credentials.BasicCredential
 import cn.rtast.kazure.auth.provider.BasicAuthorizationProvider
-import krepo.azure.tokenManager
 import krepo.azure.userManager
 
 object KRepoBasicAuthProvider : BasicAuthorizationProvider {

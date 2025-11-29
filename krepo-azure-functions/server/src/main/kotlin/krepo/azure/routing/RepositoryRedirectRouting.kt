@@ -14,23 +14,24 @@ import cn.rtast.kazure.HttpRequest
 import cn.rtast.kazure.HttpResponse
 import cn.rtast.kazure.response.respondRedirect
 import cn.rtast.kazure.trigger.HttpRouting
+import krepo.azure.cfg.ConfigManger
 
 @HttpRouting("/releases")
 fun redirectReleasesRouting(
     request: HttpRequest<*>,
     context: HttpContext
-): HttpResponse = request.respondRedirect("https://pkg.rtast.cn/#/releases")
+): HttpResponse = request.respondRedirect("${ConfigManger.FRONTEND_URL}/#/releases")
 
 
 @HttpRouting("/snapshots")
 fun redirectSnapshotsRouting(
     request: HttpRequest<*>,
     context: HttpContext
-): HttpResponse = request.respondRedirect("https://pkg.rtast.cn/#/snpshots")
+): HttpResponse = request.respondRedirect("${ConfigManger.FRONTEND_URL}/#/snpshots")
 
 
 @HttpRouting("/private")
 fun redirectPrivateRouting(
     request: HttpRequest<*>,
     context: HttpContext
-): HttpResponse = request.respondRedirect("https://pkg.rtast.cn/#/private")
+): HttpResponse = request.respondRedirect("${ConfigManger.FRONTEND_URL}/#/private")

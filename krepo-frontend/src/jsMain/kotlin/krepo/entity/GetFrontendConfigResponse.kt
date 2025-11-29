@@ -8,7 +8,6 @@
 package krepo.entity
 
 import kotlinx.serialization.Serializable
-import krepo.entity.FrontendConfig
 
 @Serializable
 data class GetFrontendConfigResponse(

@@ -16,7 +16,7 @@ import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.components.warningToast
 import krepo.coroutineScope
-import krepo.entity.login.User
+import krepo.entity.user.User
 import krepo.util.auth
 import krepo.util.file.checkPermission
 import krepo.util.fromJson

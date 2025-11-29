@@ -34,15 +34,12 @@ import krepo.util.fromJson
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
-/**
- * protobuf response
- */
 @HttpRouting("/api/azure/search")
 fun searchArtifactsRouting(
     request: HttpRequest<String>,
     context: HttpContext,
 ): HttpResponse {
-    val keyword = request.queryParameters["k"]
+    val keyword = request.queryParameters["k"]?.lowercase()
         ?: return request.respond("Keyword is required", HttpStatus.BAD_REQUEST)
     if (keyword.length < 3) return request.respondBytes(
         ProtoBuf.encodeToByteArray(IndexSearchResponse(499, emptyList(), 0)),

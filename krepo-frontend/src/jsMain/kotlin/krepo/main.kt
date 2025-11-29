@@ -23,6 +23,8 @@ import krepo.entity.BackendVersion
 import krepo.entity.FrontendConfig
 import krepo.entity.GetFrontendConfigResponse
 import krepo.pages.homePage
+import krepo.pages.info.privacyPage
+import krepo.pages.info.termsPage
 import krepo.pages.other.azureSignedPage
 import krepo.pages.other.noPermission
 import krepo.pages.publicContentListingPage
@@ -72,6 +74,8 @@ fun main() {
                     if (site.startsWith("/user/edit")) editUserPage()
                     else if (site.startsWith("/search")) searchPage()
                     else if (site.startsWith("/azure/signed")) azureSignedPage()
+                    else if (site.startsWith("/privacy")) privacyPage()
+                    else if (site.startsWith("/terms")) termsPage()
                     else {
                         when (site) {
                             "/", "contents" -> homePage()

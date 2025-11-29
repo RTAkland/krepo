@@ -37,6 +37,9 @@ fun RenderContext.searchPage() {
     val resultStore = storeOf<IndexSearchResponse?>(null)
     val isButtonDisabled = storeOf(false)
     val isLoading = storeOf(false)
+    val isLoadingClassName = storeOf("")
+    val searchButtonTextStore = storeOf("Search")
+
     div("container mt-5") {
         h2("title is-3 has-text-centered mb-5") { +"Search Artifacts" }
         div("box p-5 mx-auto") {
@@ -105,19 +108,27 @@ fun RenderContext.searchPage() {
                             if (it) title("Please wait 5 seconds before trying again")
                             else title("Click to search")
                         }
-                        +"Search"
+                        className(isLoadingClassName.data)
+                        searchButtonTextStore.data.render { +it }
                         clicks handledBy {
                             if (!isButtonDisabled.current) {
                                 isButtonDisabled.update(true)
+                                isLoading.update(true)
+                                isLoadingClassName.update("is-loading")
+                                searchButtonTextStore.update("Waiting 5 seconds...")
                                 coroutineScope.launch {
                                     if (keywordStore.current.length < 3) {
-                                        errorToast("Keyword must more than 3 characters.")
+                                        errorToast("Keyword must be more than 3 characters.")
+                                        isLoadingClassName.update("")
                                     } else {
                                         infoToast("Searching...")
                                         search(keywordStore.current, selectedRepoStore.current, resultStore, isLoading)
-                                        delay(5000)
+                                        isLoadingClassName.update("")
+                                        delay(5000) // Wait for 5 seconds
                                     }
+                                    searchButtonTextStore.update("Search")
                                     isButtonDisabled.update(false)
+                                    isLoading.update(false)
                                 }
                             } else warningToast("Please wait 5 seconds before trying again")
                         }
@@ -179,7 +190,6 @@ fun RenderContext.searchPage() {
             selectedRepoStore.update(repoList.first().name)
         }
         updateURI(keywordStore.current, repoList.first().name)
-//        search(keywordStore.current, selectedRepoStore.current, resultStore, isLoading)
     }
 }
 
@@ -204,7 +214,7 @@ private suspend fun search(
         .acceptJson().jsonContentType().auth().get().arrayBuffer()
         .toByteArray().fromProtobuf<IndexSearchResponse>()
     if (response.code == 401) errorToast("You have no permission to search $repo")
-    if (response.code == 499) errorToast("Keyword must more than 3 characters.")
+    if (response.code == 499) errorToast("Keyword must be more than 3 characters.")
     resultStore.update(response)
     loadingStore.update(false)
 }
@@ -223,4 +233,3 @@ private fun RenderContext.renderArtifactRow(artifact: IndexMetadata) {
         }
     }
 }
-

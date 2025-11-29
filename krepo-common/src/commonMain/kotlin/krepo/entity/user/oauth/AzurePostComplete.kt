@@ -1,19 +1,16 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 11/26/25, 6:56 PM
+ * Date: 11/28/25, 12:15 AM
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
 
-package krepo.azure.entity
+package krepo.entity.user.oauth
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class User(
-    val name: String,
-    val email: String,
-    val password: String? = null,
-    var uid: String = "",
+public data class AzurePostComplete(
+    val state: String
 )

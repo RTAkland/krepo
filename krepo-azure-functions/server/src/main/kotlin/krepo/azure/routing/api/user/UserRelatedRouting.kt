@@ -21,7 +21,7 @@ import krepo.azure.entity.res.CommonResponse
 import krepo.azure.routing.auth.KRepoTokenAuthProvider
 import krepo.azure.userManager
 import krepo.azure.util.notImplemented
-import krepo.entity.login.NoSensitiveUser
+import krepo.entity.user.NoSensitiveUser
 
 context(cred: BearerCredential)
 @AuthConsumer(KRepoTokenAuthProvider::class)

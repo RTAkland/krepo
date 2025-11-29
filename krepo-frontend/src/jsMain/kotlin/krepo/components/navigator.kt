@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 import krepo.backend
 import krepo.backendVersion
 import krepo.coroutineScope
-import krepo.entity.login.LoginSuccessResponse
-import krepo.entity.login.oauth.AzureSignInURL
+import krepo.entity.user.LoginSuccessResponse
+import krepo.entity.user.oauth.AzureSignInURL
 import krepo.frontendConfig
 import krepo.util.*
 import krepo.util.file.LocalStorage
@@ -29,6 +29,7 @@ fun RenderContext.navbar() {
     val username = storeOf("")
     val password = storeOf("")
     val searchKeywordStore = storeOf("")
+    val oauthButtonDisabled = storeOf(false)
     nav("navbar level") {
         inlineStyle("background-color: #5181B8")
         inlineStyle("color: #FFFFFF")
@@ -171,7 +172,8 @@ fun RenderContext.navbar() {
 
     }, extraButtons = {
         if (frontendConfig.enableAzureSignIn) {
-            button("button btn-microsoft-signin") {
+            button("button btn-microsoft-signin has-background-black") {
+                oauthButtonDisabled.data.render { disabled(it) }
                 img {
                     src("/assets/img/microsoft.svg")
                     alt("Microsoft logo")
@@ -179,10 +181,11 @@ fun RenderContext.navbar() {
                 +"Sign in with Microsoft"
 
                 clicks handledBy {
-                    infoToast("Logging...", z = 9999)
+                    oauthButtonDisabled.update(true)
                     val loginUrl = httpRequest(backendVersion.AZURE_SIGN_IN_URL)
                         .queryParameters(mapOf("host" to getCurrentHttpUrl().encodeToBase64(), "v" to "azure"))
                         .get().body().fromJson<AzureSignInURL>()
+                    oauthButtonDisabled.update(false)
                     window.location.href = loginUrl.url
                 }
             }

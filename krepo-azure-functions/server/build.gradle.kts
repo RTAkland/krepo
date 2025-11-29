@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import java.util.Locale
 
 /*
  * Copyright © 2025 RTAkland
@@ -26,6 +25,8 @@ dependencies {
     implementation("redis.clients:jedis:7.1.0")
     implementation("io.github.pdvrieze.xmlutil:core:0.90.3")
     implementation("io.github.pdvrieze.xmlutil:serialization:0.90.3")
+    implementation("org.jetbrains:markdown:0.7.3")
+    implementation("com.auth0:java-jwt:4.5.0")
 }
 
 kotlin {
@@ -42,8 +43,6 @@ azurefunctions {
 
 kazure {
     listingResources = false
-    excludeFiles.addAll("users.json", "users.template.json")
-    resourceRoutingPrefix = "frontend/"
 }
 
 kembeddable {
@@ -58,24 +57,6 @@ tasks.compileKotlin {
 tasks.compileJava {
     sourceCompatibility = "17"
     targetCompatibility = "17"
-}
-
-val frontendDir = project.layout.projectDirectory.dir("src/main/resources/frontend").asFile.apply {
-    mkdirs()
-}
-
-tasks.register("compileAndCopyFrontendAssets") {
-    group = "krepo"
-    dependsOn(":krepo-backend:jsBrowserDistribution")
-    doLast {
-        val sourceDir = project(":krepo-backend").layout.buildDirectory
-            .dir("dist/js/productionExecutable").get().asFile
-        project.copy {
-            from(sourceDir)
-            into(frontendDir)
-        }
-        logger.lifecycle("Copied frontend assets.")
-    }
 }
 
 @Suppress("DEPRECATION")
@@ -103,7 +84,7 @@ tasks.register("killAzureProcesses") {
         } else {
             try {
                 val proc = Runtime.getRuntime()
-                    .exec(arrayOf("sh", "-c", "ps -ef | grep azure | grep -v grep | awk '{print \$2}'"))
+                    .exec(arrayOf("sh", "-c", "ps -ef | grep azure | grep -v grep | awk '{print $2}'"))
                 val output = proc.inputStream.bufferedReader().readText().trim()
                 if (output.isNotEmpty()) {
                     output.lines().forEach { pid ->

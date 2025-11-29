@@ -1,18 +1,16 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 11/26/25, 7:21 PM
+ * Date: 11/27/25, 1:49 PM
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-
-package krepo.entity.login.oauth
+package krepo.entity.user
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-public data class AzureSignResponse(
-    val state: Int,
-    val username: String?,
-    val email: String?
+public data class NoSensitiveUser(
+    val name: String,
+    val email: String
 )
