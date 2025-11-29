@@ -34,7 +34,7 @@ import krepo.util.fromJson
 import krepo.util.toJson
 import java.util.*
 
-private val AZURE_LOGIN_URL = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize" +
+private val AZURE_LOGIN_URL = "https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize" +
         "?client_id=${ConfigManger.AZURE_CLIENT_ID}&scope=openid%20email%20profile%20User.Read" +
         "&redirect_uri=${ConfigManger.AZURE_REDIRECT_URL}&response_type=code&state="
 
