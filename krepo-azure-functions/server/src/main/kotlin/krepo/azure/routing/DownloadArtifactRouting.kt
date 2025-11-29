@@ -14,7 +14,6 @@ import cn.rtast.kazure.HttpRequest
 import cn.rtast.kazure.HttpResponse
 import cn.rtast.kazure.Param
 import cn.rtast.kazure.auth.AuthConsumer
-import cn.rtast.kazure.response.respondRedirect
 import cn.rtast.kazure.trigger.HttpRouting
 import com.microsoft.azure.functions.HttpMethod
 import krepo.azure.registry.handleRequest
