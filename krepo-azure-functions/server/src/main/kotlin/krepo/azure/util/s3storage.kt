@@ -9,7 +9,7 @@
 package krepo.azure.util
 
 import krepo.azure.cfg.ConfigManger
-import krepo.azure.entity.internal.ETagFile
+import krepo.azure.entity.internal.MetadataFile
 import krepo.entity.FileEntry
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
@@ -18,6 +18,7 @@ import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.*
 import java.net.URI
+import java.time.Instant
 
 
 fun createClient(): S3Client {
@@ -82,23 +83,26 @@ fun getFile(filename: String): ByteArray? {
     ).readBytes()
 }
 
-fun getFileWithEtag(filename: String, etag: String?): ETagFile? {
+fun getFileWithMetadata(
+    filename: String,
+    etag: String?,
+    ifModifiedSince: Instant? = null,
+): MetadataFile? {
     val client = createClient()
-    fun retrieveFile(key: String): ETagFile? {
+    fun retrieveFile(key: String): MetadataFile? {
         if (!exists(key)) return null
         val resp = client.getObject(
             GetObjectRequest.builder()
                 .bucket(ConfigManger.S3_BUCKET)
-                .key(filename)
+                .key(key)
                 .build()
         )
         val bytes = resp.readBytes()
         val etag = resp.response().eTag()
-        return ETagFile(etag, bytes, false)
+        val lastModified = resp.response().lastModified()
+        return MetadataFile(etag, bytes, lastModified, false)
     }
-    if (etag == null) {
-        return retrieveFile(filename)
-    } else {
+    if (etag == null && ifModifiedSince == null) return retrieveFile(filename) else {
         val resp = client.headObject(
             HeadObjectRequest.builder()
                 .bucket(ConfigManger.S3_BUCKET)
@@ -106,7 +110,11 @@ fun getFileWithEtag(filename: String, etag: String?): ETagFile? {
                 .build()
         )
         val remoteEtag = resp.eTag()
-        return if (remoteEtag != etag) retrieveFile(filename) else ETagFile(remoteEtag, null, true)
+        val remoteLastModified = resp.lastModified()
+        val matched = (etag != null && etag == remoteEtag) ||
+                (ifModifiedSince != null && !remoteLastModified.isAfter(ifModifiedSince))
+        return if (!matched) retrieveFile(filename)
+        else MetadataFile(remoteEtag, null, remoteLastModified, true)
     }
 }
 

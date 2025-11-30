@@ -235,6 +235,5 @@ fun setLoginInfo(
     LocalStorage.CURRENT_USERNAME = username
     LocalStorage.EMAIL_ADDRESS = email
     LocalStorage.AVATAR = "https://gravatar.rtast.cn/avatar/${md5}?d=identicon"
-    LocalStorage.HIDDEN_HASH_FILES = true
     LocalStorage.EXPIRED_TIMESTAMP = expired
 }

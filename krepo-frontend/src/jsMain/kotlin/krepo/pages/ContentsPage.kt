@@ -11,7 +11,6 @@ package krepo.pages
 
 import dev.fritz2.core.*
 import kotlinx.browser.window
-import kotlinx.coroutines.launch
 import krepo.*
 import krepo.components.errorToast
 import krepo.components.fa.svg
@@ -28,17 +27,14 @@ import krepo.util.file.formatSize
 import krepo.util.string.*
 import org.khronos.webgl.ArrayBuffer
 import org.w3c.files.FileReader
-import kotlin.time.Duration.Companion.seconds
 
 fun RenderContext.ContentListingPage() {
     val showDeleteFileEntryDialog = storeOf(false)
     val selectedFileEntry = storeOf("")
     val selectedFileEntryIsDirectory = storeOf(true)
-    val showLocalConfigDialog = storeOf(false)
-    val hiddenHashFilesToggle = storeOf(LocalStorage.HIDDEN_HASH_FILES)
     val showCreateFolderDialog = storeOf(false)
     val folderNameStore = storeOf<String?>(null)
-    val repositoryContents = storeOf<MutableList<FileEntry>>(mutableListOf())
+    val repositoryContents = storeOf<List<FileEntry>>(emptyList())
     coroutineScope.launchJob {
         val url = when (backendVersion) {
             is BackendVersions.Azure -> {
@@ -58,7 +54,7 @@ fun RenderContext.ContentListingPage() {
             return@launchJob
         }
         require(response.ok) { errorToast("Failed to fetch repository contents!") }
-        repositoryContents.update(response.body().fromJson<RepositoryContents>().data.toMutableList())
+        repositoryContents.update(response.body().fromJson<RepositoryContents>().data)
     }
     repositoryContents.data.render { artifacts ->
         div("container") {
@@ -121,7 +117,6 @@ fun RenderContext.ContentListingPage() {
                                         attr("role", "menu")
                                         div("dropdown-content") {
                                             a("dropdown-item") {
-                                                img { src("assets/img/Kotlin Multiplatform icon.svg");width(12) }
                                                 +"Gradle Kotlin DSL"
                                                 clicks handledBy {
                                                     window.navigator.clipboard.writeText(
@@ -131,7 +126,6 @@ fun RenderContext.ContentListingPage() {
                                                 }
                                             }
                                             a("dropdown-item") {
-                                                img { src("assets/img/maven.svg");width(12) }
                                                 +"Maven"
                                                 clicks handledBy {
                                                     window.navigator.clipboard.writeText(
@@ -193,7 +187,7 @@ fun RenderContext.ContentListingPage() {
                             a("button mr-2") {
                                 title("Preferences")
                                 svg("fa-sliders", "")
-                                clicks handledBy { showLocalConfigDialog.update(true) }
+                                clicks handledBy { infoToast("Nothing to set.") }
                             }
                         }
                     }
@@ -214,14 +208,6 @@ fun RenderContext.ContentListingPage() {
                         }
                     }
                     tbody {
-                        if (LocalStorage.HIDDEN_HASH_FILES) artifacts.removeAll {
-                            !it.isDirectory &&
-                                    (it.name.endsWith("md5")
-                                            || it.name.endsWith("sha256")
-                                            || it.name.endsWith("sha512")
-                                            || it.name.endsWith("sha1")
-                                            || it.name.endsWith("asc"))
-                        }
                         artifacts.sortedWith(compareBy({ !it.isDirectory }, { it.name })).forEach { entry ->
                             tr {
                                 td {
@@ -238,9 +224,7 @@ fun RenderContext.ContentListingPage() {
                                             +entry.name
                                             title("$currentPath/${entry.name}")
                                             clicks handledBy {
-                                                val fileHref = if (developmentMode) "$backend$currentPath/${entry.name}"
-                                                else "$currentPath/${entry.name}"
-                                                window.location.href = fileHref
+                                                window.location.href = "$backend$currentPath/${entry.name}"
                                             }
                                         }
                                     }
@@ -285,13 +269,7 @@ fun RenderContext.ContentListingPage() {
                         }
                     }
                 }
-            } else {
-                h3("title is-3 has-text-centered") {
-                    h4("title is-4 has-text-centered") {
-                        +"There's nothing here"
-                    }
-                }
-            }
+            } else h3("has-text-centered") { span("loader") {};span { +"Loading" } }
             hr { className("mt-6") }
         }
     }
@@ -340,25 +318,5 @@ fun RenderContext.ContentListingPage() {
             window.location.reload()
         }
         infoToast("Deleting...")
-    }
-    showDialog(showLocalConfigDialog, "Change Settings", null, {
-        div("mb-4") {
-            label("switch") {
-                input {
-                    type("checkbox")
-                    id("hiddenHashFiles")
-                    inlineStyle("display: none;")
-                    className("switch-checkbox")
-                    checked(hiddenHashFilesToggle.current)
-                    changes.values() handledBy { hiddenHashFilesToggle.update(it.toBoolean()) }
-                }
-                span("slider round") {}
-            }
-            span("ml-2") { +"Hidden hash files" }
-        }
-    }) {
-        LocalStorage.HIDDEN_HASH_FILES = hiddenHashFilesToggle.current.toString().toBoolean()
-        infoToast("Saved")
-        window.setTimeout({ window.location.reload() }, 0.5.seconds.inWholeMilliseconds.toInt())
     }
 }

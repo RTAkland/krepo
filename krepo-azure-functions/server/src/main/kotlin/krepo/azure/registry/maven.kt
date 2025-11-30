@@ -9,15 +9,18 @@
 
 package krepo.azure.registry
 
+import cn.rtast.kazure.HttpMethod
 import cn.rtast.kazure.HttpRequest
 import cn.rtast.kazure.HttpResponse
 import cn.rtast.kazure.HttpStatus
 import cn.rtast.kazure.response.respond
 import cn.rtast.kazure.response.respondBytes
 import cn.rtast.kazure.response.respondText
-import com.microsoft.azure.functions.HttpMethod
 import krepo.azure.util.*
 import krepo.azure.util.repo.index.Indexer
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.util.*
 import java.util.logging.Logger
 
 
@@ -28,7 +31,7 @@ fun handleRequest(
     logger: Logger,
 ): HttpResponse {
     return if (request.httpMethod == HttpMethod.PUT) deployArtifact(request, repository, path, logger)
-    else serveArtifact(request, repository, path, logger)
+    else serveArtifact(request, repository, path, logger, request.httpMethod)
 }
 
 fun deployArtifact(
@@ -48,12 +51,30 @@ fun serveArtifact(
     repository: String,
     path: String,
     logger: Logger,
+    httpMethod: HttpMethod,
 ): HttpResponse {
     if (repository == "private" && !request.basicAuthCheck().first) return request.unAuth()
-    val clientEtag = request.headers["if-none-match"]  // headers lowercase in azure functions........
-    val content = getFileWithEtag("$repository/$path", clientEtag)
-    return if (content == null) request.notFound() else {
-        if (content.matched) request.respond(null, HttpStatus.NOT_MODIFIED)
-        else request.respondBytes(content.bytes!!, headers = mapOf("ETag" to content.etag))
+    val clientEtag = request.headers["if-none-match"]
+    val ifModifiedSince = request.headers["if-modified-since"]?.let { parseHttpDate(it).toInstant() }
+    val content = getFileWithMetadata("$repository/$path", clientEtag, ifModifiedSince)
+        ?: return request.notFound()
+    val headers = mutableMapOf(
+        "ETag" to content.etag,
+        "Content-Length" to (content.bytes?.size ?: 0L).toString(),
+        "Content-Type" to "application/octet-stream"
+    )
+    content.lastModified?.let { headers["Last-Modified"] = formatHttpDate(it) }
+    return when {
+        content.matched -> request.respond(null, HttpStatus.NOT_MODIFIED, headers = headers)
+        httpMethod == HttpMethod.HEAD -> request.respond(null, HttpStatus.OK, headers = headers)
+        else -> request.respondBytes(content.bytes!!, headers = headers)
     }
 }
+
+private fun parseHttpDate(value: String): Date =
+    SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US).parse(value)
+
+private fun formatHttpDate(instant: Instant): String =
+    SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US).apply {
+        timeZone = TimeZone.getTimeZone("GMT")
+    }.format(Date.from(instant))

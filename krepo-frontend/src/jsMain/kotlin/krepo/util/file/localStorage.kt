@@ -32,9 +32,6 @@ object LocalStorage {
     var AVATAR
         get() = getLocalStorage("mvn_avatar")
         set(value) = if (value == null) removeLocalStorage("mvn_avatar") else setLocalStorage("mvn_avatar", value)
-    var HIDDEN_HASH_FILES
-        get() = getLocalStorage("mvn_hidden_hash_files")?.toBoolean() ?: true
-        set(value) = setLocalStorage("mvn_hidden_hash_files", value.toString())
     var EXPIRED_TIMESTAMP
         get(): Long? = getLocalStorage("token_expired_timestamp")?.toLong()
         set(value) = if (value == null) removeLocalStorage("token_expired_timestamp")

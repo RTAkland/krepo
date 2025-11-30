@@ -8,16 +8,19 @@
 
 package krepo.azure.entity.internal
 
-data class ETagFile(
+import java.time.Instant
+
+data class MetadataFile(
     val etag: String,
     val bytes: ByteArray?,
+    val lastModified: Instant?,
     val matched: Boolean,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ETagFile
+        other as MetadataFile
 
         if (etag != other.etag) return false
         if (!bytes.contentEquals(other.bytes)) return false

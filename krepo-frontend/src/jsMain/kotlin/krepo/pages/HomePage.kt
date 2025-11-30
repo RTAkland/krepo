@@ -94,7 +94,6 @@ fun RenderContext.HomePage() {
                                         id("dropdown-menu-${repo.name}")
                                         div("dropdown-content") {
                                             a("dropdown-item") {
-                                                img { src("assets/img/Kotlin Multiplatform icon.svg");width(12) }
                                                 +"Gradle Kotlin DSL"
                                                 clicks handledBy {
                                                     window.navigator.clipboard.writeText(
@@ -105,7 +104,6 @@ fun RenderContext.HomePage() {
                                                 title("Copy Gradle Kotlin DSL repository config")
                                             }
                                             a("dropdown-item") {
-                                                img { src("assets/img/maven.svg");width(12) }
                                                 +"Maven"
                                                 clicks handledBy {
                                                     window.navigator.clipboard.writeText(
