@@ -6,6 +6,8 @@
  */
 
 
+@file:Suppress("FunctionName")
+
 package krepo.pages.settings
 
 import dev.fritz2.core.RenderContext
@@ -30,7 +32,7 @@ import krepo.util.httpRequest
 import krepo.util.repo.getRepositories
 import krepo.util.setBody
 
-fun RenderContext.indexSettingsPage() = checkPermission {
+fun RenderContext.IndexSettingsPage() = checkPermission {
     val repositories = storeOf<List<ConfigRepositoryWithSize>>(emptyList())
     val showRebuildIndexDialog = storeOf(false)
     val showDeleteIndexDialog = storeOf(false)

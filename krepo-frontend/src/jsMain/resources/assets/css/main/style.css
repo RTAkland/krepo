@@ -30,3 +30,10 @@ span {
     z-index: 50;
     color: #222;
 }
+
+.navbar-app-name-text {
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

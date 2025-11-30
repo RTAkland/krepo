@@ -5,12 +5,14 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("FunctionName")
+
 package krepo.pages.other
 
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.href
 
-fun RenderContext.notFoundPage() {
+fun RenderContext.NotFoundPage() {
     div("has-text-centered") {
         i("fa-solid fa-ban") {}
         h1("title is-3") { +"There's nothing here." }

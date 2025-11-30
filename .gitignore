@@ -10,3 +10,4 @@ kmvn-backend/repositories
 .vercel
 /krepo-backend/repositories/
 /krepo-frontend/src/jsMain/kotlin/krepo/development.kt
+/krepo-frontend/node_modules/

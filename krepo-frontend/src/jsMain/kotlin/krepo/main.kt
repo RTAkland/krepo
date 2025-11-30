@@ -24,20 +24,21 @@ import krepo.components.navbar
 import krepo.components.pageFooter
 import krepo.entity.BackendVersion
 import krepo.entity.FrontendConfig
-import krepo.entity.GetFrontendConfigResponse
-import krepo.pages.homePage
-import krepo.pages.info.privacyPage
-import krepo.pages.info.termsPage
-import krepo.pages.other.azureSignedPage
-import krepo.pages.other.noPermission
-import krepo.pages.publicContentListingPage
-import krepo.pages.search.searchPage
-import krepo.pages.settings.indexSettingsPage
-import krepo.pages.settings.mavenRepositorySettingPage
-import krepo.pages.settings.settingPage
-import krepo.pages.users.editUserPage
-import krepo.pages.users.newUserPage
-import krepo.pages.users.userManagePage
+import krepo.entity.FrontendConfigResponse
+import krepo.pages.ContentListingPage
+import krepo.pages.HomePage
+import krepo.pages.info.LicensePage
+import krepo.pages.info.PrivacyPage
+import krepo.pages.info.TermsPage
+import krepo.pages.other.AzureSignedPage
+import krepo.pages.other.NoPermission
+import krepo.pages.search.SearchPage
+import krepo.pages.settings.CommonSettingPage
+import krepo.pages.settings.IndexSettingsPage
+import krepo.pages.settings.MavenRepositorySettingPage
+import krepo.pages.users.EditUserPage
+import krepo.pages.users.NewUserPage
+import krepo.pages.users.UserManagePage
 import krepo.util.*
 import kotlin.time.ExperimentalTime
 
@@ -68,7 +69,7 @@ fun main() {
         frontendConfig = httpRequest(backendVersion.FRONTEND_CONFIG)
             .auth().acceptJson()
             .jsonContentType().get()
-            .body().fromJson<GetFrontendConfigResponse>().data
+            .body().fromJson<FrontendConfigResponse>().data
         document.title = frontendConfig.pageTitle
         render("#target") {
             navbar()
@@ -78,22 +79,21 @@ fun main() {
                     renderContext = this
                     currentPath = site
                     if (!site.startsWith("/azure/signed")) checkToken()  // check token if site is not azure signed page
-                    if (site.startsWith("/user/edit")) editUserPage()
-                    else if (site.startsWith("/search")) searchPage()
-                    else if (site.startsWith("/azure/signed")) azureSignedPage()
-                    else if (site.startsWith("/privacy")) privacyPage()
-                    else if (site.startsWith("/terms")) termsPage()
-                    else {
-                        when (site) {
-                            "/", "contents" -> homePage()
-                            "/user/manage" -> userManagePage()
-                            "/user/create" -> newUserPage()
-                            "/setting" -> settingPage()
-                            "/setting/repository" -> mavenRepositorySettingPage()
-                            "/setting/index" -> indexSettingsPage()
-                            "/accessDenied" -> noPermission()
-                            else -> publicContentListingPage()
-                        }
+                    if (site.startsWith("/user/edit")) EditUserPage()
+                    else if (site.startsWith("/search")) SearchPage()
+                    else if (site.startsWith("/azure/signed")) AzureSignedPage()
+                    else if (site.startsWith("/privacy")) PrivacyPage()
+                    else if (site.startsWith("/terms")) TermsPage()
+                    else when (site) {
+                        "/", "contents" -> HomePage()
+                        "/user/manage" -> UserManagePage()
+                        "/user/create" -> NewUserPage()
+                        "/setting" -> CommonSettingPage()
+                        "/setting/repository" -> MavenRepositorySettingPage()
+                        "/setting/index" -> IndexSettingsPage()
+                        "/accessDenied" -> NoPermission()
+                        "/licenses" -> LicensePage()
+                        else -> ContentListingPage()
                     }
                 }
             }

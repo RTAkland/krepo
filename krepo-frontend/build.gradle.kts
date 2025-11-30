@@ -8,12 +8,10 @@ import com.google.devtools.ksp.gradle.KspTaskMetadata
  */
 
 plugins {
-    kotlin("multiplatform")
-    kotlin("plugin.serialization")
-    id("com.google.devtools.ksp") version "2.2.21-2.0.4"
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.ksp)
 }
-
-val fritz2Version = "1.0-RC20"
 
 kotlin {
     js(IR) {
@@ -32,14 +30,14 @@ kotlin {
         }
         jsMain {
             dependencies {
-                implementation("dev.fritz2:core:$fritz2Version")
-                implementation("dev.fritz2:headless:$fritz2Version")
+                implementation(libs.fritz2.core)
+                implementation(libs.fritz2.headless)
             }
         }
     }
 }
 
-dependencies.kspCommonMainMetadata("dev.fritz2:lenses-annotation-processor:$fritz2Version")
+dependencies.kspCommonMainMetadata("dev.fritz2:lenses-annotation-processor:${libs.versions.fritz2.get()}")
 kotlin.sourceSets.commonMain { tasks.withType<KspTaskMetadata> { kotlin.srcDir(destinationDirectory) } }
 
 val isDevelopmentModeTask by tasks.registering {
@@ -57,16 +55,4 @@ val isDevelopmentModeTask by tasks.registering {
 
 tasks.named("jsBrowserDevelopmentRun") {
     dependsOn(isDevelopmentModeTask)
-}
-
-tasks.named("jsBrowserDistribution") {
-    dependsOn(isDevelopmentModeTask)
-    if (System.getenv("CLOUDFLARE_API_TOKEN") == null) {
-        val file = project(":krepo-native").layout
-            .projectDirectory.dir("src/nativeMain/resources/res_version.txt").asFile
-        val originContent = file.readText()
-        val version = file.readLines().first().split("=").last()
-        file.writeText(originContent.replace(version, (version.toInt() + 1).toString()))
-        println("Resources version bumped")
-    }
 }

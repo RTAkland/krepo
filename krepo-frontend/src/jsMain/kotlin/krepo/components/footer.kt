@@ -10,32 +10,47 @@ package krepo.components
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.href
 import dev.fritz2.core.target
-import dev.fritz2.core.title
 import krepo.frontendConfig
 import krepo.util.string.getCurrentYear
 
 fun RenderContext.pageFooter() {
     div("page-footer-icp") {
         div("footer-inner columns is-mobile is-vcentered is-multiline") {
-            div("column is-narrow has-text-left") {
-                inlineStyle("margin-left: 15px;")
-                a {
-                    inlineStyle("text-decoration: underline;")
-                    href("/#/terms?l=en-us")
-                    +"Terms"
-                }
-                title("View terms of service")
-            }
-            +" · "
-            div("column is-narrow has-text-left") {
-                a {
-                    inlineStyle("text-decoration: underline;")
-                    href("/#/privacy?l=en-us")
-                    +"Privacy"
-                }
-                title("View privacy policy")
-            }
+            a { href("/#/terms?l=en-us"); inlineStyle("margin-left: 30px; text-decoration: underline;"); +"Terms" }
+            span("mx-1") { +"·" }
+            a { href("/#/privacy?l=en-us"); inlineStyle("text-decoration: underline;"); +"Privacy" }
+            span("mx-1") { +"·" }
+            a { href("/#/licenses"); inlineStyle("text-decoration: underline;"); +"Licenses" }
+//            // left
+//            div("column is-narrow has-text-left") {
+//                inlineStyle("margin-left: 15px;")
+//                a {
+//                    inlineStyle("text-decoration: underline;")
+//                    href("/#/terms?l=en-us")
+//                    +"Terms"
+//                }
+//                title("View terms of service")
+//            }
+//            +"·"
+//            div("column is-narrow has-text-left") {
+//                a {
+//                    inlineStyle("text-decoration: underline;")
+//                    href("/#/privacy?l=en-us")
+//                    +"Privacy"
+//                }
+//                title("View privacy policy")
+//            }
+//            +"·"
+//            div("column is-narrow has-text-left") {
+//                a {
+//                    inlineStyle("text-decoration: underline;")
+//                    href("/#/licenses")
+//                    +"Licenses"
+//                }
+//                title("View components licenses")
+//            }
 
+            // right
             div("column is-flex-grow-1 has-text-right") {
                 if (frontendConfig.icpLicense != null) {
                     a {

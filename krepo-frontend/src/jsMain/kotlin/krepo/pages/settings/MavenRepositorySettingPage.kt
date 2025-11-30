@@ -5,6 +5,8 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("FunctionName")
+
 package krepo.pages.settings
 
 import dev.fritz2.core.*
@@ -35,7 +37,7 @@ fun RenderContext.prettyCheckbox(labelText: String, store: Store<Boolean>) {
     }
 }
 
-fun RenderContext.mavenRepositorySettingPage() {
+fun RenderContext.MavenRepositorySettingPage() {
     checkPermission {
         val showCreateRepositoryFormDialog = storeOf(false)
         val showDeleteRepositoryDialog = storeOf(false)

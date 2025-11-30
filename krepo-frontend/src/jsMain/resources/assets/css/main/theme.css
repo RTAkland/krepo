@@ -7,7 +7,15 @@
 
 @media (prefers-color-scheme: dark) {
     a {
+        color: white;
+    }
+
+    .path-hover a {
         color: rgb(173, 216, 230);
+    }
+
+    .path-hover.a:hover {
+        color: #357ABD;
     }
 
     .folder-entry {
@@ -18,14 +26,17 @@
         color: rgb(176, 176, 176);
     }
 }
-
 @media (prefers-color-scheme: light) {
-    a {
-        color: #4A90E2;
-    }
-
     a:hover {
         color: #357ABD;
+    }
+
+    .path-hover {
+        color: black;
+    }
+
+    .path-hover:hover {
+        color: cornflowerblue;
     }
 
     .folder-entry {

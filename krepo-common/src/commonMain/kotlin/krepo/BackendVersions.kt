@@ -55,6 +55,7 @@ public sealed class BackendVersions(public val v: Int, public val desc: String) 
 
     public abstract val PRIVACY: RouteEndpoint
     public abstract val TERMS: RouteEndpoint
+    public abstract val LICENSES: RouteEndpoint
 
 
     public class STABLE : BackendVersions(0, "Stable version") {
@@ -91,6 +92,7 @@ public sealed class BackendVersions(public val v: Int, public val desc: String) 
         override val DELETE_REPOSITORY_INDEX: RouteEndpoint = NOT_IMPLEMENTED_API
         override val PRIVACY: RouteEndpoint = NOT_IMPLEMENTED_API
         override val TERMS: RouteEndpoint = NOT_IMPLEMENTED_API
+        override val LICENSES: RouteEndpoint = NOT_IMPLEMENTED_API
     }
 
     public class Azure : BackendVersions(1, "Running on Azure") {
@@ -128,6 +130,7 @@ public sealed class BackendVersions(public val v: Int, public val desc: String) 
         override val DELETE_REPOSITORY_INDEX: RouteEndpoint = createRouteEndpoint("/api/azure/repository/index")
         override val PRIVACY: RouteEndpoint = createRouteEndpoint("/api/azure/system/privacy")
         override val TERMS: RouteEndpoint = createRouteEndpoint("/api/azure/system/terms")
+        override val LICENSES: RouteEndpoint = createRouteEndpoint("/api/azure/system/licenses")
     }
 }
 

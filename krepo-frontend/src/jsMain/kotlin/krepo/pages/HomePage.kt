@@ -5,6 +5,8 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("FunctionName")
+
 package krepo.pages
 
 import dev.fritz2.core.*
@@ -21,16 +23,17 @@ import krepo.util.repo.getRepositories
 import krepo.util.string.getGradleKotlinDslRepositoryTemplate
 import krepo.util.string.getMavenRepositoryTemplate
 
-fun RenderContext.homePage() {
+fun RenderContext.HomePage() {
     coroutineScope.launch {
         val repositories = getRepositories()
         div("container") {
             inlineStyle("max-width: 50%")
-            h1("title is-3 has-text-left mt-4 mb-2") { +"Repositories" }
-            if (frontendConfig.description != null) {
-                p("mb-4") {
-                    domNode.innerHTML = frontendConfig.description!!
-                        .removePrefix("<body>").removeSuffix("</body>")
+            div("mt-5 is-flex is-align-items-start") {
+                i("fa-solid fa-lightbulb mr-2 mt-1") {}
+                if (frontendConfig.description != null) {
+                    span { domNode.innerHTML = frontendConfig.description!! }
+                } else {
+                    span { +"Maven repository" }
                 }
             }
             table("table is-striped is-hoverable is-fullwidth") {

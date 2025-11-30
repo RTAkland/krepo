@@ -8,8 +8,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
  */
 
 plugins {
-    kotlin("multiplatform")
-    kotlin("plugin.serialization")
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.kotlin.multiplatform)
 }
 
 kotlin {
@@ -24,9 +24,9 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1")
-            api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
-            api("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.8.1")
+            api(libs.kotlinx.serialization.core)
+            api(libs.kotlinx.serialization.json)
+            api(libs.kotlinx.serialization.protobuf)
         }
     }
 }

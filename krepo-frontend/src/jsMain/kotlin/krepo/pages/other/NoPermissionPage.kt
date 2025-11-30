@@ -5,6 +5,8 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("FunctionName")
+
 package krepo.pages.other
 
 import dev.fritz2.core.RenderContext
@@ -12,7 +14,7 @@ import dev.fritz2.core.href
 import kotlinx.browser.window
 import kotlin.time.Duration.Companion.seconds
 
-fun RenderContext.noPermission() {
+fun RenderContext.NoPermission() {
     window.setTimeout({ window.location.href = "/#/" }, 5.seconds.inWholeMilliseconds.toInt())
     div("container has-text-centered mt-6") {
         span("icon is-large has-text-danger") { i("fas fa-ban fa-3x") {} }

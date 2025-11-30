@@ -5,6 +5,7 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("FunctionName")
 
 package krepo.pages.info
 
@@ -17,7 +18,7 @@ import krepo.entity.system.info.AppInfoContent
 import krepo.util.fromJson
 import krepo.util.httpRequest
 
-fun RenderContext.termsPage() {
+fun RenderContext.TermsPage() {
     val termContents = storeOf<AppInfoContent?>(null)
     renderContentPage(
         title = "Terms of service",

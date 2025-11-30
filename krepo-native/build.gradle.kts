@@ -8,16 +8,14 @@
 @file:Suppress("unused")
 
 import cn.rtast.kembeddable.resources.gradle.util.NativeMain
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
-    kotlin("multiplatform")
-    kotlin("plugin.serialization")
-    id("cn.rtast.kembeddable") version "1.3.8"
-    id("cn.rtast.kdef") version "0.1.1"
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.kembeddable)
+    alias(libs.plugins.kdef)
 }
 
-val fritz2Version = "1.0-RC20"
 val ktorVersion = "3.1.2"
 
 kotlin {
@@ -69,20 +67,22 @@ kotlin {
         }
 
         nativeMain.dependencies {
-            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.7.0")
-            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-            implementation("io.ktor:ktor-server-auto-head-response:${ktorVersion}")
-            implementation("io.ktor:ktor-server-core:$ktorVersion")
-            implementation("io.ktor:ktor-server-cio:$ktorVersion")
-            implementation("io.ktor:ktor-server-auth:$ktorVersion")
-            implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
-            implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-            implementation("io.ktor:ktor-server-cors:$ktorVersion")
-            implementation("io.ktor:ktor-client-core:${ktorVersion}")
-            implementation("io.ktor:ktor-server-status-pages:${ktorVersion}")
-            implementation("io.github.pdvrieze.xmlutil:core:0.90.3")
-            implementation("io.github.pdvrieze.xmlutil:serialization:0.90.3")
-            implementation("io.ktor:ktor-client-curl:$ktorVersion")
+            implementation(libs.kotlinx.io.core)
+            implementation(libs.kotlinx.coroutines.core)
+
+            implementation(libs.ktor.server.core)
+            implementation(libs.ktor.server.cio)
+            implementation(libs.ktor.server.auth)
+            implementation(libs.ktor.server.auto.head.response)
+            implementation(libs.ktor.server.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.server.cors)
+            implementation(libs.ktor.server.status.pages)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.curl)
+
+            implementation(libs.xmlutil.core)
+            implementation(libs.xmlutil.serialization)
         }
     }
 }

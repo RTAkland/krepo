@@ -5,6 +5,7 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("FunctionName")
 
 package krepo.pages.other
 
@@ -18,7 +19,7 @@ import krepo.util.fromJson
 import krepo.util.string.decodeToString
 import krepo.util.string.extractQueryParams
 
-fun RenderContext.azureSignedPage() {
+fun RenderContext.AzureSignedPage() {
     h1("has-text-centered") {
         +"Setting up user info..."
     }

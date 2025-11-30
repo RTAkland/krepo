@@ -1,0 +1,7 @@
+{
+  "pageTitle": "KRepo",
+  "icpLicense": "皖ICP备2024066235-1号",
+  "description": "A maven repo owned by [RTAkland](https://github.com/RTAkland)<br>Powered by [krepo](https://github.com/RTAkland/krepo)",
+  "copyright": "© #YEAR# Made by <a href=\"https://github.com/RTAkland\" target=\"_blank\" title=\"Go to GitHub\">RTAkland</a>",
+  "enableAzureSignIn": true
+}

@@ -9,6 +9,7 @@
 package krepo.azure.entity.res
 
 import kotlinx.serialization.Serializable
+import krepo.entity.RepositoryVisibility
 import krepo.enums.RepositoryStatus
 
 @Serializable

@@ -5,6 +5,8 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("FunctionName")
+
 package krepo.pages
 
 import dev.fritz2.core.*
@@ -17,7 +19,7 @@ import krepo.components.showDialog
 import krepo.components.warningToast
 import krepo.entity.*
 import krepo.enums.CheckImplType
-import krepo.pages.other.notFoundPage
+import krepo.pages.other.NotFoundPage
 import krepo.util.*
 import krepo.util.byte.toByteArray
 import krepo.util.file.LocalStorage
@@ -27,7 +29,7 @@ import org.khronos.webgl.ArrayBuffer
 import org.w3c.files.FileReader
 import kotlin.time.Duration.Companion.seconds
 
-fun RenderContext.publicContentListingPage() {
+fun RenderContext.ContentListingPage() {
     val showDeleteFileEntryDialog = storeOf(false)
     val selectedFileEntry = storeOf("")
     val selectedFileEntryIsDirectory = storeOf(true)
@@ -50,7 +52,7 @@ fun RenderContext.publicContentListingPage() {
             .auth().acceptJson().jsonContentType()
         val response = api.get()
         if (response.status == 404) {
-            div("has-text-centered") { notFoundPage() }
+            div("has-text-centered") { NotFoundPage() }
             return@launch
         }
         require(response.ok) { errorToast("Failed to fetch repository contents!") }
@@ -67,10 +69,10 @@ fun RenderContext.publicContentListingPage() {
                     segments.forEachIndexed { index, segment ->
                         basePath.append("/").append(segment)
                         a("path-hover") pathSegment@{
-                            isDarkTheme.data.render {
-                                if (!it) this@pathSegment.className("has-text-black")
-                                else this@pathSegment.className("has-text-light")
-                            }
+//                            isDarkTheme.data.render {
+//                                if (!it) this@pathSegment.className("has-text-black")
+//                                else this@pathSegment.className("has-text-light")
+//                            }
                             href(basePath.toString())
                             +segment
                             title("Back to $basePath")

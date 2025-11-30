@@ -15,14 +15,6 @@ listOf(
 
 pluginManagement {
     repositories {
-        mavenLocal()
-        google {
-            mavenContent {
-                includeGroupAndSubgroups("androidx")
-                includeGroupAndSubgroups("com.android")
-                includeGroupAndSubgroups("com.google")
-            }
-        }
         mavenCentral()
         gradlePluginPortal()
         maven("https://repo.maven.rtast.cn/releases/")
@@ -31,14 +23,7 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-        mavenLocal()
-        google {
-            mavenContent {
-                includeGroupAndSubgroups("androidx")
-                includeGroupAndSubgroups("com.android")
-                includeGroupAndSubgroups("com.google")
-            }
-        }
         mavenCentral()
+        maven("https://repo.maven.rtast.cn/releases/")
     }
 }

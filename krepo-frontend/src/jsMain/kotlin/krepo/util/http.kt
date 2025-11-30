@@ -17,7 +17,7 @@ import krepo.RouteEndpoint
 import krepo.backend
 import krepo.components.errorToast
 import krepo.enums.CheckImplType
-import krepo.pages.other.notImplPage
+import krepo.pages.other.NotImplPage
 import krepo.renderContext
 import krepo.util.file.LocalStorage
 
@@ -36,7 +36,7 @@ inline fun <reified T> Request.setBody(body: T) = body(body)
 fun Response.checkImpl(type: CheckImplType = CheckImplType.Page, block: RenderContext.() -> Unit = {}): Response {
     if (this.status == 501) {
         when (type) {
-            CheckImplType.Page -> renderContext.notImplPage()
+            CheckImplType.Page -> renderContext.NotImplPage()
             CheckImplType.Toast -> errorToast("This API/page is not implemented yet.")
         }
     } else renderContext.block()

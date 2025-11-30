@@ -8,25 +8,25 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
  */
 
 plugins {
-    kotlin("jvm")
-    id("kazure")
-    id("com.google.devtools.ksp")
-    id("com.microsoft.azure.azurefunctions")
-    kotlin("plugin.serialization")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kazure)
+    alias(libs.plugins.azurefunctions)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 dependencies {
-    implementation("software.amazon.awssdk:s3:2.38.2")
-    implementation("software.amazon.awssdk:auth:2.38.2")
-    implementation("software.amazon.awssdk:netty-nio-client:2.38.2")
-    implementation("io.ktor:ktor-client-core:3.3.1")
-    implementation("io.ktor:ktor-client-okhttp:3.3.1")
     implementation(project(":krepo-common"))
-    implementation("redis.clients:jedis:7.1.0")
-    implementation("io.github.pdvrieze.xmlutil:core:0.90.3")
-    implementation("io.github.pdvrieze.xmlutil:serialization:0.90.3")
-    implementation("org.jetbrains:markdown:0.7.3")
-    implementation("com.auth0:java-jwt:4.5.0")
+    implementation(libs.aws.s3)
+    implementation(libs.aws.auth)
+    implementation(libs.aws.netty.nio.client)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.jedis)
+    implementation(libs.xmlutil.core)
+    implementation(libs.xmlutil.serialization)
+    implementation(libs.markdown)
+    implementation(libs.java.jwt)
 }
 
 kotlin {

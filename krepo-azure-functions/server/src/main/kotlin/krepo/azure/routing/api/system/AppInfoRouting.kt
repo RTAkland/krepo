@@ -35,3 +35,12 @@ fun termsOfServiceRouting(
     val content: String by resources("info/terms-of-service-en-us.md")
     return request.respondJson(AppInfoContent(content.castMarkdownToHtml()))
 }
+
+@HttpRouting("/api/azure/system/licenses")
+fun licensesRouting(
+    request: HttpRequest<*>,
+    context: HttpContext,
+): HttpResponse {
+    val content: String by resources("info/license-en-us.md")
+    return request.respondJson(AppInfoContent(content.castMarkdownToHtml()))
+}

@@ -5,13 +5,14 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("FunctionName")
 
 package krepo.pages.other
 
 import dev.fritz2.core.RenderContext
 import kotlinx.browser.window
 
-fun RenderContext.notImplPage() {
+fun RenderContext.NotImplPage() {
     div("container not-impl-container") {
         div("w-full h-full flex flex-col justify-center items-center text-gray-600 p-8") {
             div("text-center max-w-md") {

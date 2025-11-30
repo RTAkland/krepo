@@ -1,10 +1,8 @@
 plugins {
-    kotlin("multiplatform") version "2.2.21" apply false
-    kotlin("jvm") version "2.1.21" apply false
-    kotlin("plugin.serialization") version "2.2.21" apply false
-    id("kazure") version "1.3.1-2.2.21" apply false
-    id("com.google.devtools.ksp") version "2.2.21-2.0.4" apply false
-    id("com.microsoft.azure.azurefunctions") version "1.16.1" apply false
+    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.kotlinx.serialization) apply false
+    alias(libs.plugins.ksp) apply false
 }
 
 val appVersion: String by extra

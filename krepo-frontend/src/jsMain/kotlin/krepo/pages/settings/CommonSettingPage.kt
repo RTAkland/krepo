@@ -5,6 +5,8 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("FunctionName")
+
 package krepo.pages.settings
 
 import dev.fritz2.core.*
@@ -20,7 +22,7 @@ import krepo.frontendConfig
 import krepo.util.*
 import krepo.util.file.checkPermission
 
-fun RenderContext.settingPage() {
+fun RenderContext.CommonSettingPage() {
     checkPermission {
         val pageTitleStore = storeOf(frontendConfig.pageTitle)
         val icpLicenseStore = storeOf(frontendConfig.icpLicense)

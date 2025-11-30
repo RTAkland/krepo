@@ -5,6 +5,8 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("FunctionName")
+
 package krepo.pages.users
 
 import dev.fritz2.core.*
@@ -22,7 +24,7 @@ import krepo.util.*
 import krepo.util.file.checkPermission
 import krepo.util.string.validateEmail
 
-fun RenderContext.editUserPage() {
+fun RenderContext.EditUserPage() {
     checkPermission {
         val user = currentPath.split("?").last().split("&").first().split("=").last()
         val email = storeOf("")

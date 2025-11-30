@@ -33,7 +33,7 @@ fun RenderContext.navbar() {
         attr("role", "navigation")
         attr("aria-label", "main navigation")
         div("navbar-brand") {
-            a("navbar-item is-rounded ml-2") {
+            a("navbar-item is-rounded ml-2 navbar-app-name-text") {
                 href("#")
                 +frontendConfig.pageTitle
                 title("Back to home page")

@@ -18,8 +18,8 @@ import cn.rtast.kazure.response.respondJson
 import cn.rtast.kazure.trigger.HttpRouting
 import krepo.azure.entity.res.CommonResponse
 import krepo.azure.entity.res.ConfigRepository
-import krepo.azure.entity.res.RepositoryVisibility
 import krepo.azure.routing.auth.KRepoTokenAuthProvider
+import krepo.entity.RepositoryVisibility
 import krepo.enums.RepositoryStatus
 
 private val defaultAcceptExtensions = listOf(
@@ -28,7 +28,7 @@ private val defaultAcceptExtensions = listOf(
     "dylib", "framework"
 )
 
-private val repositories = listOf(
+internal val repositories = listOf(
     ConfigRepository(
         "releases",
         RepositoryVisibility.Public,

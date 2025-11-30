@@ -5,6 +5,8 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("FunctionName")
+
 package krepo.pages.search
 
 import dev.fritz2.core.*
@@ -28,7 +30,7 @@ import krepo.util.jsonContentType
 import krepo.util.repo.getRepositories
 import krepo.util.string.extractQueryParams
 
-fun RenderContext.searchPage() {
+fun RenderContext.SearchPage() {
     val queryParam = extractQueryParams(window.location.href)
     val keywordStore = storeOf(queryParam["k"] ?: "")
     val repoListStore = storeOf<List<ConfigRepositoryWithSize>>(emptyList())

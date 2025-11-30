@@ -5,6 +5,8 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("FunctionName")
+
 package krepo.pages.users
 
 import dev.fritz2.core.RenderContext
@@ -23,7 +25,7 @@ import krepo.util.fromJson
 import krepo.util.httpRequest
 import krepo.util.jsonContentType
 
-fun RenderContext.userManagePage() {
+fun RenderContext.UserManagePage() {
     checkPermission {
         val showDeleteUserDialog = storeOf(false)
         val selectedUser = storeOf<GetUsersResponse.User?>(null)

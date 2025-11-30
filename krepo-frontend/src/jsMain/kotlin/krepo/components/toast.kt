@@ -13,29 +13,17 @@ import dev.fritz2.headless.components.toast
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-fun warningToast(message: String, duration: Duration = 2.5.seconds, z: Int = -1) =
+fun warningToast(message: String, duration: Duration = 2.5.seconds) =
     toast("default", duration.inWholeMilliseconds) {
-        div("notification is-warning is-light p-4 toast-message mb-2") {
-            if (z > 0) inlineStyle("z-index: $z;")
-            i("fas fa-exclamation-triangle mr-2") {}
-            +message
-        }
+        div("notification is-light p-4 toast-message mb-2") { i("fas fa-triangle-exclamation mr-2") {};+message }
     }
 
-fun errorToast(message: String, duration: Duration = 2.5.seconds, z: Int = -1) =
+fun errorToast(message: String, duration: Duration = 2.5.seconds) =
     toast("default", duration.inWholeMilliseconds) {
-        div("notification is-danger is-light p-4 toast-message mb-2") {
-            if (z > 0) inlineStyle("z-index: $z;")
-            i("fas fa-ban mr-2") {}
-            +message
-        }
+        div("notification is-light p-4 toast-message mb-2") { i("fas fa-xmark mr-2") {};+message }
     }
 
-fun infoToast(message: String, duration: Duration = 2.5.seconds, z: Int = -1) =
+fun infoToast(message: String, duration: Duration = 2.5.seconds) =
     toast("default", duration.inWholeMilliseconds) {
-        div("notification is-light is-success p-4 toast-message mb-2") {
-            if (z > 0) inlineStyle("z-index: $z;")
-            i("fas fa-info-circle mr-2") {}
-            +message
-        }
+        div("notification is-light p-4 toast-message mb-2") { i("fas fa-info-circle mr-2") {};+message }
     }
