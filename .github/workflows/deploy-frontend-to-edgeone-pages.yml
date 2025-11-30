@@ -23,7 +23,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Build
-        run: ./gradlew replaceDef :krepo-frontend:jsBrowserDistribution
+        run: ./gradlew replaceDef isDevelopmentModeTask :krepo-frontend:jsBrowserDistribution
 
       - name: Deploy to EdgeOne Pages
         run: npx edgeone pages deploy ./krepo-frontend/build/dist/js/productionExecutable/ -n krepo -t ${{ secrets.EDGEONE_API_TOKEN }} #  [-e <env>]

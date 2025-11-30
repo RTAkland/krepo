@@ -27,7 +27,7 @@ jobs:
           node-version: 20
 
       - name: Build frontend
-        run: ./gradlew replaceDef :krepo-frontend:jsBrowserDistribution
+        run: ./gradlew replaceDef isDevelopmentModeTask :krepo-frontend:jsBrowserDistribution
 
       - name: Install Wrangler CLI
         run: npm install -g wrangler
