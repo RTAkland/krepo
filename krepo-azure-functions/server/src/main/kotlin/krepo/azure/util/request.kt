@@ -9,7 +9,6 @@
 package krepo.azure.util
 
 import cn.rtast.kazure.HttpRequest
-import cn.rtast.kazure.response.respondBytes
 import cn.rtast.kazure.response.respondText
 import com.microsoft.azure.functions.HttpStatus
 import krepo.azure.entity.res.DeployStatus
@@ -32,8 +31,6 @@ fun <T> HttpRequest<T>.auto(status: DeployStatus) = when (status) {
     DeployStatus.Error -> error()
     DeployStatus.UnAuth -> unAuth()
 }
-
-fun <T> HttpRequest<T>.bytes(bytes: ByteArray) = this.respondBytes(bytes)
 
 fun <T> HttpRequest<T>.basicAuth(): Pair<String, String>? {
     val auth = this.headers["authorization"]

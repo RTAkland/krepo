@@ -9,6 +9,7 @@
 package krepo.azure.util
 
 import krepo.azure.cfg.ConfigManger
+import krepo.azure.entity.internal.ETagFile
 import krepo.entity.FileEntry
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
@@ -80,6 +81,35 @@ fun getFile(filename: String): ByteArray? {
             .build()
     ).readBytes()
 }
+
+fun getFileWithEtag(filename: String, etag: String?): ETagFile? {
+    val client = createClient()
+    fun retrieveFile(key: String): ETagFile? {
+        if (!exists(key)) return null
+        val resp = client.getObject(
+            GetObjectRequest.builder()
+                .bucket(ConfigManger.S3_BUCKET)
+                .key(filename)
+                .build()
+        )
+        val bytes = resp.readBytes()
+        val etag = resp.response().eTag()
+        return ETagFile(etag, bytes, false)
+    }
+    if (etag == null) {
+        return retrieveFile(filename)
+    } else {
+        val resp = client.headObject(
+            HeadObjectRequest.builder()
+                .bucket(ConfigManger.S3_BUCKET)
+                .key(filename)
+                .build()
+        )
+        val remoteEtag = resp.eTag()
+        return if (remoteEtag != etag) retrieveFile(filename) else ETagFile(remoteEtag, null, true)
+    }
+}
+
 
 fun listAllFiles(
     path: String,

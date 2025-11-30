@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.2.21"
 fritz2 = "1.0-RC20"
-kazure = "1.3.1-2.2.21"
+kazure = "1.3.2-2.2.21"
 ksp = "2.2.21-2.0.4"
 azurefunctions = "1.16.1"
 kembeddable = "1.3.8"

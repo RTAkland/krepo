@@ -11,6 +11,9 @@ package krepo.azure.registry
 
 import cn.rtast.kazure.HttpRequest
 import cn.rtast.kazure.HttpResponse
+import cn.rtast.kazure.HttpStatus
+import cn.rtast.kazure.response.respond
+import cn.rtast.kazure.response.respondBytes
 import cn.rtast.kazure.response.respondText
 import com.microsoft.azure.functions.HttpMethod
 import krepo.azure.util.*
@@ -46,12 +49,11 @@ fun serveArtifact(
     path: String,
     logger: Logger,
 ): HttpResponse {
-    if (repository == "private") {
-        val (ok, _) = request.basicAuthCheck()
-        if (!ok) {
-            return request.unAuth()
-        }
+    if (repository == "private" && !request.basicAuthCheck().first) return request.unAuth()
+    val clientEtag = request.headers["if-none-match"]  // headers lowercase in azure functions........
+    val content = getFileWithEtag("$repository/$path", clientEtag)
+    return if (content == null) request.notFound() else {
+        if (content.matched) request.respond(null, HttpStatus.NOT_MODIFIED)
+        else request.respondBytes(content.bytes!!, headers = mapOf("ETag" to content.etag))
     }
-    val content = getFile("$repository/$path")
-    return if (content == null) request.notFound() else request.bytes(content)
 }
