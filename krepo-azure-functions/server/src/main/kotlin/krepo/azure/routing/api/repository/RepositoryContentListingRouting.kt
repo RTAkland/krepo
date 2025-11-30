@@ -16,15 +16,19 @@ import cn.rtast.kazure.auth.AuthConsumer
 import cn.rtast.kazure.auth.credentials.BearerCredential
 import cn.rtast.kazure.response.respondJson
 import cn.rtast.kazure.trigger.HttpRouting
-import krepo.azure.entity.res.FileEntry
-import krepo.azure.entity.res.RepositoryListing
 import krepo.azure.routing.auth.KRepoTokenAuthProvider
+import krepo.azure.userManager
 import krepo.azure.util.listFiles
 import krepo.azure.util.unAuth
+import krepo.entity.FileEntry
+import krepo.entity.RepositoryContents
 
 private fun getFiles(repo: String?, path: String?): List<FileEntry> {
     val p = if (path == "/" || path == "." || path == null) "" else path
-    return listFiles("$repo/$p", "/")
+    return listFiles("$repo/$p", "/").map {
+        val ns = if (p == "") it.name else p
+        it.copy(owner = userManager.getNamespaceOwner(ns)?.name)
+    }
 }
 
 @HttpRouting("/api/azure/repository/public/contents")
@@ -36,7 +40,7 @@ fun listPublicRepositoryContent(
     if (repository == "private") return request.unAuth()
     val path = request.queryParameters["path"]
     val files = getFiles(repository, path)
-    return request.respondJson(RepositoryListing(200, files.size, files))
+    return request.respondJson(RepositoryContents(200, files.size, files))
 }
 
 context(cred: BearerCredential)
@@ -49,5 +53,5 @@ fun listPrivateRepositoryContent(
     val repository = request.queryParameters["repo"]
     val path = request.queryParameters["path"]
     val files = getFiles(repository, path)
-    return request.respondJson(RepositoryListing(200, files.size, files))
+    return request.respondJson(RepositoryContents(200, files.size, files))
 }

@@ -5,6 +5,8 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("FunctionName")
+
 package krepo.components
 
 import dev.fritz2.core.RenderContext
@@ -13,7 +15,7 @@ import dev.fritz2.core.target
 import krepo.frontendConfig
 import krepo.util.string.getCurrentYear
 
-fun RenderContext.pageFooter() {
+fun RenderContext.PageFooter() {
     div("page-footer-icp") {
         div("footer-inner columns is-mobile is-vcentered is-multiline") {
             a { href("/#/terms?l=en-us"); inlineStyle("margin-left: 30px; text-decoration: underline;"); +"Terms" }
@@ -21,35 +23,6 @@ fun RenderContext.pageFooter() {
             a { href("/#/privacy?l=en-us"); inlineStyle("text-decoration: underline;"); +"Privacy" }
             span("mx-1") { +"·" }
             a { href("/#/licenses"); inlineStyle("text-decoration: underline;"); +"Licenses" }
-//            // left
-//            div("column is-narrow has-text-left") {
-//                inlineStyle("margin-left: 15px;")
-//                a {
-//                    inlineStyle("text-decoration: underline;")
-//                    href("/#/terms?l=en-us")
-//                    +"Terms"
-//                }
-//                title("View terms of service")
-//            }
-//            +"·"
-//            div("column is-narrow has-text-left") {
-//                a {
-//                    inlineStyle("text-decoration: underline;")
-//                    href("/#/privacy?l=en-us")
-//                    +"Privacy"
-//                }
-//                title("View privacy policy")
-//            }
-//            +"·"
-//            div("column is-narrow has-text-left") {
-//                a {
-//                    inlineStyle("text-decoration: underline;")
-//                    href("/#/licenses")
-//                    +"Licenses"
-//                }
-//                title("View components licenses")
-//            }
-
             // right
             div("column is-flex-grow-1 has-text-right") {
                 if (frontendConfig.icpLicense != null) {

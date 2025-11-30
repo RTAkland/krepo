@@ -14,6 +14,7 @@ import kotlinx.browser.window
 import kotlinx.coroutines.launch
 import krepo.backendVersion
 import krepo.components.*
+import krepo.components.fa.svg
 import krepo.coroutineScope
 import krepo.entity.*
 import krepo.enums.BadgeType
@@ -57,7 +58,7 @@ fun RenderContext.MavenRepositorySettingPage() {
                     div("level-left") { h3("title is-4") { +"Repository List" } }
                     div("level-right") {
                         button("button is-light") {
-                            i("fa-solid fa-plus mr-2") {}
+                            svg("fa-plus")
                             +"Add Repository"
                             clicks handledBy { showCreateRepositoryFormDialog.update(true) }
                         }
@@ -67,8 +68,8 @@ fun RenderContext.MavenRepositorySettingPage() {
                     div("box is-flex is-justify-content-space-between is-align-items-center") {
                         span {
                             when (repo.visibility) {
-                                RepositoryVisibility.Internal -> i("fa-solid fa-eye-slash mr-2") {}
-                                RepositoryVisibility.Public -> i("fa-solid fa-eye mr-2") {}
+                                RepositoryVisibility.Internal -> svg("fa-eye-slash")
+                                RepositoryVisibility.Public -> svg("fa-eye")
                             }
                             a("is-size-5") {
                                 +repo.name
@@ -82,10 +83,10 @@ fun RenderContext.MavenRepositorySettingPage() {
                                         RepositoryVisibility.Public -> inlineStyle("color: green;")
                                     }
                                     when (repo.status) {
-                                        RepositoryStatus.Deleted -> badge(BadgeType.Deleted) { i("fa-solid fa-xmark mr-2") {} }
-                                        RepositoryStatus.Created -> badge(BadgeType.Created) { i("fa-solid fa-hourglass mr-2") {} }
-                                        RepositoryStatus.Available -> badge(BadgeType.Available) { i("fa-solid fa-check mr-2") {} }
-                                        RepositoryStatus.Modified -> badge(BadgeType.Modified) { i("fa-solid fa-hourglass mr-2") {} }
+                                        RepositoryStatus.Deleted -> badge(BadgeType.Deleted) { svg("fa-xmark") }
+                                        RepositoryStatus.Created -> badge(BadgeType.Created) { svg("fa-hourglass") }
+                                        RepositoryStatus.Available -> badge(BadgeType.Available) { svg("fa-check") }
+                                        RepositoryStatus.Modified -> badge(BadgeType.Modified) { svg("fa-hourglass") }
                                     }
                                     +repo.visibility.desc
                                 }
@@ -93,7 +94,7 @@ fun RenderContext.MavenRepositorySettingPage() {
                         }
                         div {
                             button("button is-small is-light is-info mr-2") {
-                                i("fa-solid fa-user-pen mr-2") {}
+                                svg("fa-user-pen")
                                 +"Edit"
                                 clicks handledBy {
                                     selectedRepositoryName.update(repo.name)
@@ -101,7 +102,7 @@ fun RenderContext.MavenRepositorySettingPage() {
                                 }
                             }
                             button("button is-small is-light is-danger") {
-                                i("fa-solid fa-trash mr-2") {}
+                                svg("fa-trash-alt")
                                 +"Delete"
                                 clicks handledBy {
                                     selectedRepositoryName.update(repo.name)

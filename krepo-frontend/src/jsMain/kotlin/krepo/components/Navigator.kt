@@ -5,6 +5,8 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("FunctionName")
+
 package krepo.components
 
 import dev.fritz2.core.*
@@ -14,13 +16,14 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import krepo.*
+import krepo.components.fa.svg
 import krepo.entity.user.LoginSuccessResponse
 import krepo.entity.user.oauth.AzureSignInURL
 import krepo.util.*
 import krepo.util.file.LocalStorage
 import krepo.util.string.encodeToBase64
 
-fun RenderContext.navbar() {
+fun RenderContext.NavigatorBar() {
     val showLogoutDialog = storeOf(false)
     val showLoginDialog = storeOf(false)
     val username = storeOf("")
@@ -101,9 +104,7 @@ fun RenderContext.navbar() {
                                     } else window.location.href = "/#/search?k=${searchKeywordStore.current}"
                                 }
                         }
-                        span("icon is-small is-left") {
-                            i("fa-solid fa-magnifying-glass") {}
-                        }
+                        span("icon is-small is-left") { svg("fa-magnifying-glass", "") }
                         title("Search artifacts")
                     }
                 }

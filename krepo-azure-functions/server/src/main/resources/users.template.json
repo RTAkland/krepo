@@ -3,6 +3,12 @@
     "name": "admin",
     "email": "admin@example.com",
     "password": "10000",
-    "uid": ""
+    "uid": "",
+    "ex": {
+      "namespaces": [
+        "cn.rtast",
+        "kazure"
+      ]
+    }
   }
 ]

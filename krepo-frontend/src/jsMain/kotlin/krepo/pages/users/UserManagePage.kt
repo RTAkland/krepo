@@ -14,6 +14,7 @@ import dev.fritz2.core.storeOf
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
 import krepo.backendVersion
+import krepo.components.fa.svg
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.coroutineScope
@@ -44,14 +45,14 @@ fun RenderContext.UserManagePage() {
                                     p("subtitle is-6 has-text-grey") { +user.email }
                                     div("buttons") {
                                         button("button is-small is-link is-light") {
-                                            i("fa-solid fa-user-pen mr-2") {}
+                                            svg("fa-user-pen")
                                             +"Edit"
                                             clicks handledBy {
                                                 window.location.href = "/#/user/edit?username=${user.name}"
                                             }
                                         }
                                         button("button is-small is-danger is-light") {
-                                            i("fa-solid fa-trash mr-2") {}
+                                            svg("fa-trash-alt")
                                             +"Delete"
                                             clicks handledBy {
                                                 selectedUser.update(user)

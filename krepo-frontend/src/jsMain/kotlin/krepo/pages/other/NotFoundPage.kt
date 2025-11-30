@@ -11,10 +11,11 @@ package krepo.pages.other
 
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.href
+import krepo.components.fa.svg
 
 fun RenderContext.NotFoundPage() {
     div("has-text-centered") {
-        i("fa-solid fa-ban") {}
+        svg("fa-ban", "", 128)
         h1("title is-3") { +"There's nothing here." }
         a("button is-danger") {
             +"Back to home page"

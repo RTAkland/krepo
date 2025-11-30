@@ -30,7 +30,7 @@ fun usersRouting(
     request: HttpRequest<*>,
     context: HttpContext,
 ): HttpResponse {
-    val users = userManager.allUsers().map { NoSensitiveUser(it.name, it.email) }
+    val users = userManager.allUsers().map { NoSensitiveUser(it.name, it.email, it.ex) }
     return request.respondJson(CommonResponse(200, users))
 }
 

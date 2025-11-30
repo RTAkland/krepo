@@ -12,5 +12,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class NoSensitiveUser(
     val name: String,
-    val email: String
+    val email: String,
+    val ex: User.UserExtraInfo? = null
 )

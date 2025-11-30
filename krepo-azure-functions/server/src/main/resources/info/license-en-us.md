@@ -16,5 +16,7 @@ https://www.iconfont.cn/
 
 ## Project Copyright
 
+[krepo](https://github.com/RTAkland/krepo)
+
 - © 2025 RTAkland
 - This project is licensed under the Apache-2.0 License.

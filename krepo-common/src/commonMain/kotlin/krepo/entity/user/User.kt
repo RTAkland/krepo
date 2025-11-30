@@ -15,4 +15,10 @@ public data class User(
     val email: String,
     val password: String? = null,
     var uid: String = "",
-)
+    val ex: UserExtraInfo? = null
+) {
+    @Serializable
+    public data class UserExtraInfo(
+        val namespaces: Set<String>
+    )
+}

@@ -34,4 +34,12 @@ class UserManager {
     fun getUserByUID(id: String): User? = users.find { it.uid == id }
 
     fun allUsers(): List<User> = users
+
+    fun getNamespaceOwner(path: String): User? {
+        val dotNamespace = path.replace("/", ".")
+        return users.firstOrNull { user ->
+            val namespaces = user.ex?.namespaces ?: emptySet()
+            namespaces.any { ns -> dotNamespace.startsWith(ns) }
+        }
+    }
 }

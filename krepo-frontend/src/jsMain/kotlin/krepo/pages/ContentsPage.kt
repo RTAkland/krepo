@@ -14,6 +14,7 @@ import kotlinx.browser.window
 import kotlinx.coroutines.launch
 import krepo.*
 import krepo.components.errorToast
+import krepo.components.fa.svg
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.components.warningToast
@@ -37,6 +38,7 @@ fun RenderContext.ContentListingPage() {
     val hiddenHashFilesToggle = storeOf(LocalStorage.HIDDEN_HASH_FILES)
     val showCreateFolderDialog = storeOf(false)
     val folderNameStore = storeOf<String?>(null)
+    val repositoryContents = storeOf<MutableList<FileEntry>>(mutableListOf())
     coroutineScope.launch {
         val url = when (backendVersion) {
             is BackendVersions.Azure -> {
@@ -56,8 +58,9 @@ fun RenderContext.ContentListingPage() {
             return@launch
         }
         require(response.ok) { errorToast("Failed to fetch repository contents!") }
-        val responseJson = response.body().fromJson<Contents>()
-        val artifacts = responseJson.data.toMutableList()
+        repositoryContents.update(response.body().fromJson<RepositoryContents>().data.toMutableList())
+    }
+    repositoryContents.data.render { artifacts ->
         div("container") {
             br {}
             inlineStyle("max-width: 65%")
@@ -69,10 +72,6 @@ fun RenderContext.ContentListingPage() {
                     segments.forEachIndexed { index, segment ->
                         basePath.append("/").append(segment)
                         a("path-hover") pathSegment@{
-//                            isDarkTheme.data.render {
-//                                if (!it) this@pathSegment.className("has-text-black")
-//                                else this@pathSegment.className("has-text-light")
-//                            }
                             href(basePath.toString())
                             +segment
                             title("Back to $basePath")
@@ -89,7 +88,7 @@ fun RenderContext.ContentListingPage() {
                             a("button") {
                                 val parentPath = currentPath.trimEnd('/').substringBeforeLast('/', "")
                                 href("/#$parentPath")
-                                i("fa-solid fa-arrow-left") {}
+                                svg("fa-arrow-left")
                                 title("Back")
                             }
                         }
@@ -108,7 +107,7 @@ fun RenderContext.ContentListingPage() {
                                 val (group, name, version) = parseGAV(simplePath, repo)
                                 div("dropdown has-dropdown is-hoverable has-background is-centered") {
                                     button("button") {
-                                        i("fa-solid fa-copy") {}
+                                        svg("fa-copy", "")
                                         title("Copy dependency URL")
                                         clicks handledBy {
                                             window.navigator.clipboard.writeText(
@@ -149,7 +148,7 @@ fun RenderContext.ContentListingPage() {
                                 label("button") {
                                     title("Upload file")
                                     attr("for", "fileInput")
-                                    i("fa-solid fa-upload") {}
+                                    svg("fa-upload", "")
                                 }
                                 input("file-input") {
                                     id("fileInput")
@@ -187,13 +186,13 @@ fun RenderContext.ContentListingPage() {
                                 }
                                 a("button") {
                                     title("Create folder")
-                                    i("fa-solid fa-folder-plus") {}
+                                    svg("fa-folder-plus", "")
                                     clicks handledBy { showCreateFolderDialog.update(true) }
                                 }
                             }
                             a("button mr-2") {
                                 title("Preferences")
-                                i("fa-solid fa-sliders") {}
+                                svg("fa-sliders", "")
                                 clicks handledBy { showLocalConfigDialog.update(true) }
                             }
                         }
@@ -206,8 +205,9 @@ fun RenderContext.ContentListingPage() {
                     thead {
                         tr {
                             th { inlineStyle("max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;") }
-                            th { inlineStyle("text-align: left; width: 180px; white-space: nowrap;") }
-                            th { inlineStyle("text-align: center;") }
+                            th {}
+                            th {}
+                            th {}
                             if (LocalStorage.TOKEN != null) {
                                 th { inlineStyle("text-align: center;") }
                             }
@@ -245,14 +245,19 @@ fun RenderContext.ContentListingPage() {
                                         }
                                     }
                                 }
-                                td {
-                                    inlineStyle("text-align: center;")
-                                    +getDate(entry.timestamp)
+                                td("has-text-centered") {
+                                    span("ml-5") { +getDate(entry.timestamp) }
                                     title(entry.timestamp.toString())
                                 }
-                                td {
-                                    inlineStyle("text-align: center;")
-                                    if (!entry.isDirectory) +formatSize(entry.size) else +"-"
+                                td("has-text-centered") { if (!entry.isDirectory) +formatSize(entry.size) else +"-" }
+                                td("has-text-left") {
+                                    if (entry.owner != null) {
+                                        svg("fa-circle-check")
+                                        +"by ${entry.owner}"
+                                    } else {
+                                        svg("fa-circle-question")
+                                        +"by Unknown"
+                                    }
                                 }
                                 if (LocalStorage.TOKEN != null) {
                                     td {

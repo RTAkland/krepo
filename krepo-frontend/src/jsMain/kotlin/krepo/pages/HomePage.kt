@@ -12,6 +12,7 @@ package krepo.pages
 import dev.fritz2.core.*
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
+import krepo.components.fa.svg
 import krepo.components.infoToast
 import krepo.coroutineScope
 import krepo.entity.RepositoryVisibility
@@ -29,7 +30,7 @@ fun RenderContext.HomePage() {
         div("container") {
             inlineStyle("max-width: 50%")
             div("mt-5 is-flex is-align-items-start") {
-                i("fa-solid fa-lightbulb mr-2 mt-1") {}
+                svg("fa-lightbulb", "mr-2 mt-1")
                 if (frontendConfig.description != null) {
                     span { domNode.innerHTML = frontendConfig.description!! }
                 } else {
@@ -76,7 +77,7 @@ fun RenderContext.HomePage() {
                                     div("dropdown-trigger") {
                                         button("button is-small") {
                                             isDarkTheme.data.render { if (!it) className("is-light") }
-                                            i("fa-solid fa-copy") {}
+                                            svg("fa-copy", "")
                                             attr("aria-haspopup", "true")
                                             attr("aria-controls", "dropdown-menu-${repo.name}")
                                             clicks handledBy {

@@ -16,6 +16,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import krepo.backendVersion
 import krepo.components.errorToast
+import krepo.components.fa.svg
+import krepo.components.fa.svgBlock
 import krepo.components.infoToast
 import krepo.components.warningToast
 import krepo.coroutineScope
@@ -67,11 +69,7 @@ fun RenderContext.SearchPage() {
                                         +selected.ifEmpty { "Repository" }
                                     }
                                 }
-                                span("icon is-small") {
-                                    i("fas fa-angle-down") {
-                                        attr("aria-hidden", "true")
-                                    }
-                                }
+                                span("icon is-small") { svgBlock("fa-angle-down", "") { attr("aria-hidden", "true") } }
                                 title("Select repository to search")
                             }
                         }
@@ -110,13 +108,16 @@ fun RenderContext.SearchPage() {
                             else title("Click to search")
                         }
                         className(isLoadingClassName.data)
-                        searchButtonTextStore.data.render { +it }
+                        searchButtonTextStore.data.render {
+                            svg("fa-search")
+                            +it
+                        }
                         clicks handledBy {
                             if (!isButtonDisabled.current) {
                                 isButtonDisabled.update(true)
                                 isLoading.update(true)
                                 isLoadingClassName.update("is-loading")
-                                searchButtonTextStore.update("Waiting 5 seconds...")
+                                searchButtonTextStore.update("Waiting 5 secs")
                                 coroutineScope.launch {
                                     if (keywordStore.current.length < 3) {
                                         errorToast("Keyword must be more than 3 characters.")

@@ -13,6 +13,7 @@ import dev.fritz2.core.*
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
 import krepo.backendVersion
+import krepo.components.fa.svg
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.components.warningToast
@@ -94,7 +95,7 @@ fun RenderContext.EditUserPage() {
                                         isDarkTheme.data.render {
                                             if (!it) this@updateInfoButton.className("is-light")
                                         }
-                                        i("fa-solid fa-pen-to-square mr-2") {}
+                                        svg("fa-pen-to-square")
                                         +"Update user info"
                                         clicks handledBy { showUpdateUserDialog.update(true) }
                                     }

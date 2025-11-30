@@ -13,6 +13,8 @@ import dev.fritz2.core.*
 import kotlinx.browser.window
 import kotlinx.coroutines.launch
 import krepo.backendVersion
+import krepo.components.fa.svg
+import krepo.components.fa.svgBlock
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.coroutineScope
@@ -82,14 +84,14 @@ fun RenderContext.CommonSettingPage() {
                     div("is-grouped is-right buttons") {
                         div("control") {
                             button("button is-danger is-light") {
-                                i("fa-solid fa-rotate-left") { inlineStyle("padding-right: 5px;") }
+                                svg("fa-rotate-left")
                                 +"Reset"
                                 clicks handledBy { showResetFrontConfigDialog.update(true) }
                             }
                         }
                         div("control") {
                             button("button is-info is-light") {
-                                i("fa-solid fa-floppy-disk") { inlineStyle("padding-right: 5px;") }
+                                svg("fa-floppy-disk")
                                 +"Save"
                                 clicks handledBy { showSubmitSettingDialog.update(true) }
                             }

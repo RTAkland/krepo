@@ -9,7 +9,7 @@
 package krepo.azure.util
 
 import krepo.azure.cfg.ConfigManger
-import krepo.azure.entity.res.FileEntry
+import krepo.entity.FileEntry
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
 import software.amazon.awssdk.core.sync.RequestBody

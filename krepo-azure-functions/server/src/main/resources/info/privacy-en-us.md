@@ -29,7 +29,7 @@ As there is no personal data stored or processed, the right to access, modify, o
 Since no personal data is collected, there is no retention period for personal information. Any data you upload or
 interact with is handled exclusively within the context of the application.
 
-### Contact Us
+### Contact
 
 If you have any questions about this Privacy Policy, feel free to contact us at:
 
@@ -37,6 +37,5 @@ If you have any questions about this Privacy Policy, feel free to contact us at:
 
 > All rights reserved
 
----
 
 ### Update date: 2025-11-29

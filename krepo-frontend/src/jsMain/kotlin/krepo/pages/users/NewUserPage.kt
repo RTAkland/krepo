@@ -14,6 +14,8 @@ import kotlinx.browser.window
 import kotlinx.coroutines.launch
 import krepo.backendVersion
 import krepo.components.errorToast
+import krepo.components.fa.svg
+import krepo.components.fa.svgBlock
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.components.warningToast
@@ -36,7 +38,7 @@ fun RenderContext.NewUserPage() {
                 div("field") {
                     label("label") { +"Username" }
                     div("control has-icons-left") {
-                        span("icon is-small is-left mr-2") { i("fa-solid fa-user") {} }
+                        span("icon is-small is-left mr-2") { svg("fa-user", "") }
                         input("input") {
                             type("text")
                             placeholder("Fill in the username here")
@@ -48,7 +50,7 @@ fun RenderContext.NewUserPage() {
                 div("field") {
                     label("label") { +"Email" }
                     div("control has-icons-left") {
-                        span("icon is-small is-left mr-2") { i("fa-solid fa-envelope") {} }
+                        span("icon is-small is-left mr-2") { svg("fa-envelope", "") }
                         input("input") {
                             type("email")
                             placeholder("Fill in the email here")
@@ -60,7 +62,7 @@ fun RenderContext.NewUserPage() {
                 div("field") {
                     label("label") { +"Password" }
                     div("control has-icons-left") {
-                        span("icon is-small is-key mr-2") { i("fa-solid fa-user") {} }
+                        span("icon is-small is-key mr-2") { svg("fa-user", "") }
                         input("input") {
                             type("password")
                             placeholder("Fill in the password here")
@@ -72,7 +74,7 @@ fun RenderContext.NewUserPage() {
                 div("is-grouped is-right buttons") {
                     div("control") {
                         button("button is-info is-light") {
-                            i("fa-solid fa-check") { inlineStyle("padding-right: 5px;") }
+                            svg("fa-check")
                             +"Confirm"
                             clicks handledBy { showCreateUserDialog.update(true) }
                         }

@@ -20,8 +20,8 @@ import kotlinx.browser.window
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import krepo.components.navbar
-import krepo.components.pageFooter
+import krepo.components.NavigatorBar
+import krepo.components.PageFooter
 import krepo.entity.BackendVersion
 import krepo.entity.FrontendConfig
 import krepo.entity.FrontendConfigResponse
@@ -72,7 +72,7 @@ fun main() {
             .body().fromJson<FrontendConfigResponse>().data
         document.title = frontendConfig.pageTitle
         render("#target") {
-            navbar()
+            NavigatorBar()
             main {
                 inlineStyle("flex-grow: 1;")
                 router.data.render { site ->
@@ -97,7 +97,7 @@ fun main() {
                     }
                 }
             }
-            pageFooter()
+            PageFooter()
             portalRoot()
         }
     }
