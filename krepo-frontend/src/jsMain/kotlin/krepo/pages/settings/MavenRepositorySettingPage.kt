@@ -48,7 +48,7 @@ fun RenderContext.MavenRepositorySettingPage() {
         val snapshotStore = storeOf(false)
         val selectedRepositoryName = storeOf("")
         val showModifyRepositoryStore = storeOf(false)
-        coroutineScope.launch {
+        coroutineScope.launchJob {
             val repositories = httpRequest(backendVersion.LIST_ALL_REPOSITORIES)
                 .auth().acceptJson().jsonContentType()
                 .get().body().fromJson<GetRepositoriesResponse>().data
@@ -119,7 +119,7 @@ fun RenderContext.MavenRepositorySettingPage() {
             "Delete the repository",
             "Do you want to delete the repository? Deleting a repository is only a logical deletion, the folder will not be deleted",
             {}) {
-            coroutineScope.launch {
+            coroutineScope.launchJob {
                 val result = httpRequest(backendVersion.DELETE_REPOSITORY)
                     .auth().acceptJson().jsonContentType()
                     .setBody(mapOf("name" to selectedRepositoryName.current))
@@ -141,7 +141,7 @@ fun RenderContext.MavenRepositorySettingPage() {
             "Create Repository",
             selectedRepositoryName
         ) {
-            coroutineScope.launch {
+            coroutineScope.launchJob {
                 val name = nameStore.current
                 val visibility = visibilityStore.current
                 val allowedExtensions = allowedExtensionsStore.current
@@ -172,7 +172,7 @@ fun RenderContext.MavenRepositorySettingPage() {
             "Update repository settings",
             selectedRepositoryName
         ) {
-            coroutineScope.launch {
+            coroutineScope.launchJob {
                 val name = nameStore.current
                 val visibility = visibilityStore.current
                 val allowedExtensions = allowedExtensionsStore.current

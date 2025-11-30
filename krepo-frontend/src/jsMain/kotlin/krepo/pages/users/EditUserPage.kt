@@ -116,7 +116,7 @@ fun RenderContext.EditUserPage() {
                         "password" to password.current,
                         "email" to email.current
                     )
-                    coroutineScope.launch {
+                    coroutineScope.launchJob {
                         httpRequest(backendVersion.MODIFY_USER)
                             .auth().acceptJson().jsonContentType()
                             .setBody(requestBody).put().checkImpl(CheckImplType.Toast) {

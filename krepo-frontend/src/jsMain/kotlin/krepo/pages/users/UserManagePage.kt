@@ -25,12 +25,13 @@ import krepo.util.file.checkPermission
 import krepo.util.fromJson
 import krepo.util.httpRequest
 import krepo.util.jsonContentType
+import krepo.util.launchJob
 
 fun RenderContext.UserManagePage() {
     checkPermission {
         val showDeleteUserDialog = storeOf(false)
         val selectedUser = storeOf<GetUsersResponse.User?>(null)
-        coroutineScope.launch {
+        coroutineScope.launchJob {
             val users = httpRequest(backendVersion.USERS)
                 .auth().acceptJson().jsonContentType()
                 .get().checkImpl().body().fromJson<GetUsersResponse>().data
@@ -68,7 +69,7 @@ fun RenderContext.UserManagePage() {
             }
         }
         showDialog(showDeleteUserDialog, "Delete User", "Do you want to delete the user?", {}) {
-            coroutineScope.launch {
+            coroutineScope.launchJob {
                 httpRequest("${backendVersion.DELETE_USER}${selectedUser.current!!.name}")
                     .auth().acceptJson().jsonContentType()
                     .delete()

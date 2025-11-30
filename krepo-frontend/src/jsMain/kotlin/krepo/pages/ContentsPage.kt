@@ -39,7 +39,7 @@ fun RenderContext.ContentListingPage() {
     val showCreateFolderDialog = storeOf(false)
     val folderNameStore = storeOf<String?>(null)
     val repositoryContents = storeOf<MutableList<FileEntry>>(mutableListOf())
-    coroutineScope.launch {
+    coroutineScope.launchJob {
         val url = when (backendVersion) {
             is BackendVersions.Azure -> {
                 val repo = currentPath.split("/")[1]
@@ -55,7 +55,7 @@ fun RenderContext.ContentListingPage() {
         val response = api.get()
         if (response.status == 404) {
             div("has-text-centered") { NotFoundPage() }
-            return@launch
+            return@launchJob
         }
         require(response.ok) { errorToast("Failed to fetch repository contents!") }
         repositoryContents.update(response.body().fromJson<RepositoryContents>().data.toMutableList())
@@ -157,12 +157,12 @@ fun RenderContext.ContentListingPage() {
                                     changes.values() handledBy {
                                         val file = domNode.files!!.item(0)!!
                                         val reader = FileReader()
-                                        coroutineScope.launch {
+                                        coroutineScope.launchJob {
                                             infoToast("Reading file...")
                                             reader.readAsArrayBuffer(file)
                                         }
                                         reader.onload = {
-                                            coroutineScope.launch {
+                                            coroutineScope.launchJob {
                                                 val fileContent = reader.result as ArrayBuffer
                                                 val body =
                                                     UploadFilePayload(
@@ -305,7 +305,7 @@ fun RenderContext.ContentListingPage() {
         if (folderNameStore.current == null) {
             warningToast("Folder must not be null or empty!")
         } else {
-            coroutineScope.launch {
+            coroutineScope.launchJob {
                 val result = httpRequest(backendVersion.CREATE_DIRECTORY)
                     .auth().acceptJson().jsonContentType()
                     .setBody(
@@ -327,7 +327,7 @@ fun RenderContext.ContentListingPage() {
     showDialog(showDeleteFileEntryDialog, "Delete the artifacts/packages", "Delete the following contents?", {
         i { +selectedFileEntry.current }
     }) {
-        coroutineScope.launch {
+        coroutineScope.launchJob {
             httpRequest(backendVersion.DELETE_GAV)
                 .acceptJson().jsonContentType().auth()
                 .setBody(

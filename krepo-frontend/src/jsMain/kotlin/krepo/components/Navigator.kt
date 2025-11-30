@@ -192,7 +192,7 @@ fun RenderContext.NavigatorBar() {
             }
         }
     }, dialogAction = {
-        coroutineScope.launch {
+        coroutineScope.launchJob {
             val http = http("${backend}${backendVersion.LOGIN}")
                 .header("Authorization", "Basic ${"${username.current}:${password.current}".encodeToBase64()}")
                 .acceptJson().jsonContentType().post()
@@ -210,7 +210,7 @@ fun RenderContext.NavigatorBar() {
     })
 
     showDialog(showLogoutDialog, "Logout", "Do you want to logout?", {}) {
-        coroutineScope.launch {
+        coroutineScope.launchJob {
             httpRequest(backendVersion.LOGOUT).auth()
                 .acceptJson().jsonContentType().post()
             LocalStorage.TOKEN = null

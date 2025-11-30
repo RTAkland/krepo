@@ -32,7 +32,7 @@ fun RenderContext.CommonSettingPage() {
         val copyrightStore = storeOf(frontendConfig.copyright)
         val showSubmitSettingDialog = storeOf(false)
         val showResetFrontConfigDialog = storeOf(false)
-        coroutineScope.launch {
+        coroutineScope.launchJob {
             div("container") {
                 inlineStyle("max-width: 60%;")
                 h3("title is-3") { +"Update frontend settings" }
@@ -105,7 +105,7 @@ fun RenderContext.CommonSettingPage() {
             val icpLicense = icpLicenseStore.current
             val description = descriptionStore.current
             val copyright = copyrightStore.current
-            coroutineScope.launch {
+            coroutineScope.launchJob {
                 httpRequest(backendVersion.MODIFY_FRONTEND_CONFIG)
                     .auth().acceptJson().jsonContentType()
                     .setBody(FrontendConfig(pageTitle, icpLicense, description, copyright, false))
@@ -116,7 +116,7 @@ fun RenderContext.CommonSettingPage() {
             }
         }
         showDialog(showResetFrontConfigDialog, "Reset", "Do you want to reset the frontend settings?", {}) {
-            coroutineScope.launch {
+            coroutineScope.launchJob {
                 httpRequest(backendVersion.RESET_FRONTEND_CONFIG)
                     .auth().acceptJson().jsonContentType()
                     .put().checkImpl(CheckImplType.Toast) {

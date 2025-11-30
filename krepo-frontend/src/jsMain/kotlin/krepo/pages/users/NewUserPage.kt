@@ -88,7 +88,7 @@ fun RenderContext.NewUserPage() {
             } else {
                 if (validateEmail(email)) {
                     val requestBody = User(username.current, email.current, password.current)
-                    coroutineScope.launch {
+                    coroutineScope.launchJob {
                         val result = httpRequest(backendVersion.CREATE_USER)
                             .auth().acceptJson().jsonContentType()
                             .setBody(requestBody).post().body().fromJson<Map<String, String>>()

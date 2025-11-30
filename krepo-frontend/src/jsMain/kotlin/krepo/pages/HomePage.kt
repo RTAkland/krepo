@@ -20,12 +20,13 @@ import krepo.frontendConfig
 import krepo.isDarkTheme
 import krepo.util.file.LocalStorage
 import krepo.util.file.formatSize
+import krepo.util.launchJob
 import krepo.util.repo.getRepositories
 import krepo.util.string.getGradleKotlinDslRepositoryTemplate
 import krepo.util.string.getMavenRepositoryTemplate
 
 fun RenderContext.HomePage() {
-    coroutineScope.launch {
+    coroutineScope.launchJob {
         val repositories = getRepositories()
         div("container") {
             inlineStyle("max-width: 50%")

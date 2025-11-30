@@ -17,6 +17,7 @@ import krepo.coroutineScope
 import krepo.entity.system.info.AppInfoContent
 import krepo.util.fromJson
 import krepo.util.httpRequest
+import krepo.util.launchJob
 
 fun RenderContext.PrivacyPage() {
     val privacyContents = storeOf<AppInfoContent?>(null)
@@ -24,7 +25,7 @@ fun RenderContext.PrivacyPage() {
         title = "Privacy Policy",
         content = privacyContents,
     )
-    coroutineScope.launch {
+    coroutineScope.launchJob {
         val resp = httpRequest(backendVersion.PRIVACY)
             .get().body().fromJson<AppInfoContent>()
         privacyContents.update(resp)

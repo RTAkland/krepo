@@ -29,6 +29,7 @@ import krepo.util.file.checkPermission
 import krepo.util.file.formatSize
 import krepo.util.fromJson
 import krepo.util.httpRequest
+import krepo.util.launchJob
 import krepo.util.repo.getRepositories
 import krepo.util.setBody
 
@@ -93,7 +94,7 @@ fun RenderContext.IndexSettingsPage() = checkPermission {
         "Rebuild/Create indexes",
         "Rebuild all repositories indexes? (It's a dangerous action!)",
         {}) {
-        coroutineScope.launch {
+        coroutineScope.launchJob {
             infoToast("Rebuilding/Creating indexes...")
             if (selectedRepositoryStore.current != null) {
                 val resp = httpRequest(backendVersion.CREATE_REPOSITORY_INDEX)
@@ -110,7 +111,7 @@ fun RenderContext.IndexSettingsPage() = checkPermission {
         showDeleteIndexDialog,
         "Delete indexes",
         "Delete all indexes? (It's a dangerous action!)", {}) {
-        coroutineScope.launch {
+        coroutineScope.launchJob {
             infoToast("Deleting indexes...")
             if (selectedRepositoryStore.current != null) {
                 httpRequest(backendVersion.DELETE_REPOSITORY_INDEX)
@@ -122,7 +123,7 @@ fun RenderContext.IndexSettingsPage() = checkPermission {
         }
     }
 
-    coroutineScope.launch {
+    coroutineScope.launchJob {
         repositories.update(getRepositories())
     }
 }

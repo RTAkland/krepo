@@ -57,7 +57,7 @@ fun main() {
     val mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
     if (mediaQuery.matches) isDarkTheme.update(true) else isDarkTheme.update(false)
     toastContainer("default", "toast-container")
-    coroutineScope.launch {
+    coroutineScope.launchJob {
         backendVersion = try {
             httpRequest(BACKEND_VERSION_ROUTE).acceptJson().jsonContentType().get()
                 .body().fromJson<BackendVersion>().version.toBackendVersion()

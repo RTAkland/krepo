@@ -29,6 +29,7 @@ import krepo.util.byte.toByteArray
 import krepo.util.fromProtobuf
 import krepo.util.httpRequest
 import krepo.util.jsonContentType
+import krepo.util.launchJob
 import krepo.util.repo.getRepositories
 import krepo.util.string.extractQueryParams
 
@@ -118,7 +119,7 @@ fun RenderContext.SearchPage() {
                                 isLoading.update(true)
                                 isLoadingClassName.update("is-loading")
                                 searchButtonTextStore.update("Waiting 5 secs")
-                                coroutineScope.launch {
+                                coroutineScope.launchJob {
                                     if (keywordStore.current.length < 3) {
                                         errorToast("Keyword must be more than 3 characters.")
                                         isLoadingClassName.update("")
@@ -185,7 +186,7 @@ fun RenderContext.SearchPage() {
 
         }
     }
-    coroutineScope.launch {
+    coroutineScope.launchJob {
         val repoList = getRepositories()
         repoListStore.update(repoList)
         if (selectedRepoStore.current.isEmpty() && repoList.isNotEmpty()) {

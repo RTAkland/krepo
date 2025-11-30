@@ -17,6 +17,7 @@ import krepo.coroutineScope
 import krepo.entity.system.info.AppInfoContent
 import krepo.util.fromJson
 import krepo.util.httpRequest
+import krepo.util.launchJob
 
 fun RenderContext.TermsPage() {
     val termContents = storeOf<AppInfoContent?>(null)
@@ -24,7 +25,7 @@ fun RenderContext.TermsPage() {
         title = "Terms of service",
         content = termContents,
     )
-    coroutineScope.launch {
+    coroutineScope.launchJob {
         val resp = httpRequest(backendVersion.TERMS)
             .get().body().fromJson<AppInfoContent>()
         termContents.update(resp)

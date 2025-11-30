@@ -18,6 +18,7 @@ import krepo.coroutineScope
 import krepo.entity.system.info.AppInfoContent
 import krepo.util.fromJson
 import krepo.util.httpRequest
+import krepo.util.launchJob
 
 fun RenderContext.LicensePage() {
     val licenseContents = storeOf<AppInfoContent?>(null)
@@ -25,7 +26,7 @@ fun RenderContext.LicensePage() {
         title = "Licenses",
         content = licenseContents,
     )
-    coroutineScope.launch {
+    coroutineScope.launchJob {
         val resp = httpRequest(backendVersion.LICENSES)
             .get().body().fromJson<AppInfoContent>()
         licenseContents.update(resp)
