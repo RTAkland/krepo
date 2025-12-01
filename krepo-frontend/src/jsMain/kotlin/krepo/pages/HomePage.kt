@@ -11,11 +11,10 @@ package krepo.pages
 
 import dev.fritz2.core.*
 import kotlinx.browser.window
-import kotlinx.coroutines.launch
 import krepo.components.fa.svg
 import krepo.components.infoToast
 import krepo.coroutineScope
-import krepo.entity.RepositoryVisibility
+import krepo.entity.maven.RepositoryVisibility
 import krepo.frontendConfig
 import krepo.isDarkTheme
 import krepo.util.file.LocalStorage
@@ -78,7 +77,7 @@ fun RenderContext.HomePage() {
                                     div("dropdown-trigger") {
                                         button("button is-small") {
                                             isDarkTheme.data.render { if (!it) className("is-light") }
-                                            svg("fa-copy", "")
+                                            svg("fa-copy", "", 12)
                                             attr("aria-haspopup", "true")
                                             attr("aria-controls", "dropdown-menu-${repo.name}")
                                             clicks handledBy {

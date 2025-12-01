@@ -10,7 +10,7 @@ package krepo.azure.util
 
 import krepo.azure.cfg.ConfigManger
 import krepo.azure.entity.internal.MetadataFile
-import krepo.entity.FileEntry
+import krepo.entity.maven.FileEntry
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
 import software.amazon.awssdk.core.sync.RequestBody

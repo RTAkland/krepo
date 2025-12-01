@@ -19,7 +19,6 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
 import krepo.components.NavigatorBar
 import krepo.components.PageFooter
 import krepo.entity.BackendVersion
@@ -36,7 +35,7 @@ import krepo.pages.search.SearchPage
 import krepo.pages.settings.CommonSettingPage
 import krepo.pages.settings.IndexSettingsPage
 import krepo.pages.settings.MavenRepositorySettingPage
-import krepo.pages.users.EditUserPage
+import krepo.pages.users.UserSettingsPage
 import krepo.pages.users.NewUserPage
 import krepo.pages.users.UserManagePage
 import krepo.util.*
@@ -79,7 +78,7 @@ fun main() {
                     renderContext = this
                     currentPath = site
                     if (!site.startsWith("/azure/signed")) checkToken()  // check token if site is not azure signed page
-                    if (site.startsWith("/user/edit")) EditUserPage()
+                    if (site.startsWith("/user/edit")) UserSettingsPage()
                     else if (site.startsWith("/search")) SearchPage()
                     else if (site.startsWith("/azure/signed")) AzureSignedPage()
                     else if (site.startsWith("/privacy")) PrivacyPage()

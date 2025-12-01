@@ -16,7 +16,7 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.authenticate
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import krepo.entity.V2ArtifactSearchResponse
+import krepo.entity.maven.V2ArtifactSearchResponse
 
 fun Application.configureV2ArtifactsRouting() {
     routing {

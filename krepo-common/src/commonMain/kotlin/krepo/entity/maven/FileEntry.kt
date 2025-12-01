@@ -6,7 +6,7 @@
  */
 
 
-package krepo.entity
+package krepo.entity.maven
 
 import kotlinx.serialization.Serializable
 

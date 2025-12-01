@@ -1,11 +1,11 @@
 /*
  * Copyright © 2025 RTAkland
- * Date: 2025/5/6 18:06
+ * Date: 2025/12/1 21:37
  * Open Source Under Apache-2.0 License
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-package krepo.entity
+package krepo.entity.maven
 
 import kotlinx.serialization.Serializable
 import krepo.enums.RepositoryStatus
@@ -19,8 +19,6 @@ public data class ConfigRepository(
     var status: RepositoryStatus,
     val mirrorRepositories: List<MirrorRepository>
 )
-
-public typealias CreateRepository = ConfigRepository
 
 @Serializable
 public data class ModifyRepository(

@@ -17,16 +17,15 @@ import cn.rtast.kazure.auth.credentials.BearerCredential
 import cn.rtast.kazure.response.respondJson
 import cn.rtast.kazure.trigger.HttpRouting
 import krepo.azure.entity.res.CommonResponse
-import krepo.azure.entity.res.ConfigRepository
 import krepo.azure.routing.auth.KRepoTokenAuthProvider
-import krepo.entity.RepositoryVisibility
+import krepo.entity.maven.ConfigRepository
+import krepo.entity.maven.RepositoryVisibility
 import krepo.enums.RepositoryStatus
 
-private val defaultAcceptExtensions = listOf(
-    "jar", "klib", "aar",
-    "so", "a", "dll",
-    "dylib", "framework"
-)
+/**
+ * Accept all file type
+ */
+private val defaultAcceptExtensions = listOf("*")
 
 internal val repositories = listOf(
     ConfigRepository(

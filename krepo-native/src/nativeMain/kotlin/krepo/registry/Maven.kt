@@ -23,7 +23,7 @@ import io.ktor.server.response.*
 import io.ktor.util.encodeBase64
 import io.ktor.utils.io.*
 import kotlinx.io.files.Path
-import krepo.entity.MirrorRepository
+import krepo.entity.maven.MirrorRepository
 
 private val validatedArtifactExtension = listOf("klib", "jar", "aar")
 

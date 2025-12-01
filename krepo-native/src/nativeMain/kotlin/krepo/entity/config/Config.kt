@@ -9,7 +9,7 @@
 package krepo.entity.config
 
 import kotlinx.serialization.Serializable
-import krepo.entity.ConfigRepository
+import krepo.entity.maven.ConfigRepository
 import krepo.entity.FrontendConfig
 
 @Serializable

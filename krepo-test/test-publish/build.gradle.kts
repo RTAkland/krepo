@@ -30,7 +30,7 @@ publishing {
             isAllowInsecureProtocol = true
             credentials {
                 username = "admin"
-                password = "b521452d-bae3-4f11-8d39-9496cb1e09da"
+                password = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJSVEFrbGFuZCIsImlzcyI6ImtyZXBvIiwiaWF0IjoxNzY0NTk2NDA0LCJleHAiOjE3NjQ2MDAwMDQsInAiOjF9._NKok8_veNqUvsC7VkWrLFTFoGIN7B73QW7f-u9jaA4"
             }
         }
     }

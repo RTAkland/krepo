@@ -14,7 +14,6 @@ import dev.fritz2.remote.http
 import kotlinx.browser.window
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.launch
 import krepo.*
 import krepo.components.fa.svg
 import krepo.entity.user.LoginSuccessResponse
@@ -87,6 +86,10 @@ fun RenderContext.NavigatorBar() {
                                 +"Index settings"
                                 href("/#/setting/index")
                             }
+                            a("navbar-item") {
+                                +"Grant publish token"
+                                href("/#/user/edit?username=${LocalStorage.CURRENT_USERNAME}")
+                            }
                         }
                     }
                 }
@@ -104,7 +107,7 @@ fun RenderContext.NavigatorBar() {
                                     } else window.location.href = "/#/search?k=${searchKeywordStore.current}"
                                 }
                         }
-                        span("icon is-small is-left") { svg("fa-magnifying-glass", "") }
+                        span("icon is-small is-left") { svg("fa-magnifying-glass", "", size = 14) }
                         title("Search artifacts")
                     }
                 }

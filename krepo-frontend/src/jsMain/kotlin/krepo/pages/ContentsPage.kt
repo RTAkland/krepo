@@ -17,7 +17,9 @@ import krepo.components.fa.svg
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.components.warningToast
-import krepo.entity.*
+import krepo.entity.DeleteGavRequest
+import krepo.entity.UploadFileResponse
+import krepo.entity.maven.*
 import krepo.enums.CheckImplType
 import krepo.pages.other.NotFoundPage
 import krepo.util.*
@@ -34,7 +36,8 @@ fun RenderContext.ContentListingPage() {
     val selectedFileEntryIsDirectory = storeOf(true)
     val showCreateFolderDialog = storeOf(false)
     val folderNameStore = storeOf<String?>(null)
-    val repositoryContents = storeOf<List<FileEntry>>(emptyList())
+    val repositoryContentsStore = storeOf<List<FileEntry>>(emptyList())
+    val isRepositoryEmptyStore = storeOf(false)
     coroutineScope.launchJob {
         val url = when (backendVersion) {
             is BackendVersions.Azure -> {
@@ -54,9 +57,11 @@ fun RenderContext.ContentListingPage() {
             return@launchJob
         }
         require(response.ok) { errorToast("Failed to fetch repository contents!") }
-        repositoryContents.update(response.body().fromJson<RepositoryContents>().data)
+        val repositoryContents = response.body().fromJson<RepositoryContents>().data
+        if (repositoryContents.isEmpty()) isRepositoryEmptyStore.update(true)
+        repositoryContentsStore.update(repositoryContents)
     }
-    repositoryContents.data.render { artifacts ->
+    repositoryContentsStore.data.render { artifacts ->
         div("container") {
             br {}
             inlineStyle("max-width: 65%")
@@ -84,7 +89,7 @@ fun RenderContext.ContentListingPage() {
                             a("button") {
                                 val parentPath = currentPath.trimEnd('/').substringBeforeLast('/', "")
                                 href("/#$parentPath")
-                                svg("fa-arrow-left")
+                                svg("fa-arrow-left", "")
                                 title("Back")
                             }
                         }
@@ -236,10 +241,10 @@ fun RenderContext.ContentListingPage() {
                                 td("has-text-centered") { if (!entry.isDirectory) +formatSize(entry.size) else +"-" }
                                 td("has-text-left") {
                                     if (entry.owner != null) {
-                                        svg("fa-circle-check")
+                                        svg("fa-circle-check", size = 15)
                                         +"by ${entry.owner}"
                                     } else {
-                                        svg("fa-circle-question")
+                                        svg("fa-circle-question", size = 15)
                                         +"by Unknown"
                                     }
                                 }
@@ -269,7 +274,15 @@ fun RenderContext.ContentListingPage() {
                         }
                     }
                 }
-            } else h3("has-text-centered") { span("loader") {};span { +"Loading" } }
+            } else {
+                isRepositoryEmptyStore.data.render {
+                    h3("has-text-centered") {
+                        if (!it) {
+                            span("loader") {};span { +"Loading" }
+                        } else +"No content in $currentPath"
+                    }
+                }
+            }
             hr { className("mt-6") }
         }
     }

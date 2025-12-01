@@ -13,6 +13,7 @@ import cn.rtast.kazure.HttpRequest
 import cn.rtast.kazure.auth.credentials.BasicCredential
 import cn.rtast.kazure.auth.provider.BasicAuthorizationProvider
 import krepo.azure.userManager
+import krepo.azure.util.Jwt
 
 object KRepoBasicAuthProvider : BasicAuthorizationProvider {
     override fun verify(
@@ -20,6 +21,7 @@ object KRepoBasicAuthProvider : BasicAuthorizationProvider {
         context: HttpContext,
         credential: BasicCredential,
     ): Boolean {
-        return userManager.validate(credential.username, credential.password)
+        val userValidate = userManager.validate(credential.username, credential.password)
+        return if (userValidate) true else Jwt.verify(credential.password, Jwt.TokenPurpose.PUBLISH) != null
     }
 }

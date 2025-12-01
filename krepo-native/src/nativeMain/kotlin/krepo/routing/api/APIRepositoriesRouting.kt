@@ -23,14 +23,14 @@ import io.ktor.server.routing.*
 import io.ktor.util.decodeBase64Bytes
 import io.ktor.utils.io.*
 import kotlinx.io.files.Path
-import krepo.entity.ConfigRepository
-import krepo.entity.ConfigRepositoryWithSize
-import krepo.entity.CreateDirectoryRequest
-import krepo.entity.CreateRepository
-import krepo.entity.DeleteRepository
-import krepo.entity.ModifyRepository
-import krepo.entity.RepositoryVisibility
-import krepo.entity.UploadFilePayload
+import krepo.entity.maven.ConfigRepository
+import krepo.entity.maven.ConfigRepositoryWithSize
+import krepo.entity.maven.CreateDirectoryRequest
+import krepo.entity.maven.CreateRepository
+import krepo.entity.maven.DeleteRepository
+import krepo.entity.maven.ModifyRepository
+import krepo.entity.maven.RepositoryVisibility
+import krepo.entity.maven.UploadFilePayload
 
 fun Application.configureRepositoriesRouting() {
     routing {

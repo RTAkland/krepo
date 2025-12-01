@@ -13,26 +13,44 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.interfaces.DecodedJWT
 import krepo.azure.cfg.ConfigManger
+import krepo.azure.util.Jwt.TokenPurpose.Companion.toPurpose
 import krepo.entity.user.User
 import java.util.*
 
 object Jwt {
-    fun create(user: User, ttl: Int): String {
+    enum class TokenPurpose(val s: Int) {
+        PUBLISH(1), FULL_ACCESS(9);
+
+        companion object {
+            fun Int.toPurpose(): TokenPurpose? {
+                return when (this) {
+                    1 -> PUBLISH
+                    9 -> FULL_ACCESS
+                    else -> null
+                }
+            }
+        }
+    }
+
+    fun create(user: User, ttl: Int, purpose: TokenPurpose): String {
         val expirationTime = Date(System.currentTimeMillis() + ttl * 1000)
         val token = JWT.create()
             .withSubject(user.name)
             .withIssuer("krepo")
             .withIssuedAt(Date())
             .withExpiresAt(expirationTime)
+            .withClaim("p", purpose.s)
             .sign(Algorithm.HMAC256(ConfigManger.JWT_SECRET))
         return token
     }
 
-    fun verify(token: String): DecodedJWT? {
+    fun verify(token: String, purpose: TokenPurpose): DecodedJWT? {
         return try {
             val algorithm = Algorithm.HMAC256(ConfigManger.JWT_SECRET)
             val verifier = JWT.require(algorithm).build()
             val decodedJWT = verifier.verify(token)
+            val p = decodedJWT.getClaim("p").asInt().toPurpose() ?: return null
+            if (p != purpose) return null
             decodedJWT
         } catch (e: JWTVerificationException) {
             println("Invalid or expired token: ${e.message}")

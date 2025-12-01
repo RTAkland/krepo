@@ -19,21 +19,17 @@ import kotlin.time.ExperimentalTime
 private const val TOKEN_TTL = 3600  // 1 hour
 
 class TokenManager {
-    fun issue(name: String): TokenPayload {
+    fun issue(name: String, purpose: Jwt.TokenPurpose, ttl: Int = TOKEN_TTL): TokenPayload {
         val user = userManager.getUser(name)!!
-        val token = Jwt.create(user, TOKEN_TTL)
+        val token = Jwt.create(user, TOKEN_TTL, purpose)
         return TokenPayload(name, token, Clock.System.now().epochSeconds + TOKEN_TTL)
     }
 
     fun oauthIssue(uid: String): TokenPayload {
         val user = userManager.getUserByUID(uid)!!
-        val token = Jwt.create(user, TOKEN_TTL)
+        val token = Jwt.create(user, TOKEN_TTL, Jwt.TokenPurpose.FULL_ACCESS)
         return TokenPayload(user.name, token, Clock.System.now().epochSeconds + TOKEN_TTL)
     }
 
-//    fun revoke(token: String) {
-//        storageManager.removeKV(token)
-//    }
-
-    fun validate(token: String): Boolean = Jwt.verify(token) != null
+    fun validate(token: String): Boolean = Jwt.verify(token, Jwt.TokenPurpose.FULL_ACCESS) != null
 }

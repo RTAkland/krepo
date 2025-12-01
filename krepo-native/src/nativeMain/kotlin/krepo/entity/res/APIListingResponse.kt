@@ -9,7 +9,7 @@
 package krepo.entity.res
 
 import kotlinx.serialization.Serializable
-import krepo.entity.FileEntry
+import krepo.entity.maven.FileEntry
 
 @Serializable
 data class APIListingResponse(

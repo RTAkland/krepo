@@ -21,10 +21,10 @@ import krepo.azure.routing.api.repository.repositories
 import krepo.azure.tokenManager
 import krepo.azure.util.notImplemented
 import krepo.azure.util.string.castMarkdownToHtml
-import krepo.entity.ConfigRepositoryWithSize
+import krepo.entity.maven.ConfigRepositoryWithSize
 import krepo.entity.FrontendConfig
 import krepo.entity.FrontendConfigResponse
-import krepo.entity.RepositoryVisibility
+import krepo.entity.maven.RepositoryVisibility
 import krepo.util.fromJson
 
 

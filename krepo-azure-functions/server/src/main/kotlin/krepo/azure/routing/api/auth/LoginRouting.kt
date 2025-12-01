@@ -20,6 +20,7 @@ import krepo.azure.routing.auth.KRepoBasicAuthProvider
 import krepo.azure.routing.auth.KRepoTokenAuthProvider
 import krepo.azure.tokenManager
 import krepo.azure.userManager
+import krepo.azure.util.Jwt
 import krepo.azure.util.hex.md5
 import krepo.entity.user.LoginSuccessResponse
 
@@ -31,7 +32,7 @@ fun loginRouting(
     request: HttpRequest<String?>,
     context: HttpContext,
 ): HttpResponse {
-    val token = tokenManager.issue(cred.username)
+    val token = tokenManager.issue(cred.username, Jwt.TokenPurpose.FULL_ACCESS)
     val user = userManager.getUser(cred.username)!!
     val loginRes =
         LoginSuccessResponse(
@@ -47,7 +48,4 @@ context(cred: BearerCredential)
 fun logoutRouting(
     request: HttpRequest<String>,
     context: HttpContext,
-): HttpResponse {
-//    tokenManager.revoke(cred.token)
-    return request.respond("Ok", status = HttpStatus.OK)
-}
+): HttpResponse = request.respond("OK", status = HttpStatus.OK)

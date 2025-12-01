@@ -14,13 +14,12 @@ import dev.fritz2.core.RenderContext
 import dev.fritz2.core.storeOf
 import dev.fritz2.core.title
 import kotlinx.browser.window
-import kotlinx.coroutines.launch
 import krepo.backendVersion
 import krepo.components.errorToast
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.coroutineScope
-import krepo.entity.ConfigRepositoryWithSize
+import krepo.entity.maven.ConfigRepositoryWithSize
 import krepo.index.IndexRepositoryResponse
 import krepo.index.req.DeleteIndexRequest
 import krepo.index.req.RebuildIndexRequest

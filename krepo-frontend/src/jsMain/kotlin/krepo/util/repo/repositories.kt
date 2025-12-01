@@ -9,7 +9,7 @@
 package krepo.util.repo
 
 import krepo.backendVersion
-import krepo.entity.ConfigRepositoryWithSize
+import krepo.entity.maven.ConfigRepositoryWithSize
 import krepo.entity.GetRepositoriesResponse
 import krepo.util.auth
 import krepo.util.file.LocalStorage

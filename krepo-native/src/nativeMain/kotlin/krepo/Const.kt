@@ -11,10 +11,10 @@ package krepo
 import io.ktor.client.*
 import io.ktor.client.engine.curl.Curl
 import kotlinx.io.files.Path
-import krepo.entity.ConfigRepository
+import krepo.entity.maven.ConfigRepository
 import krepo.entity.FrontendConfig
-import krepo.entity.MirrorRepository
-import krepo.entity.RepositoryVisibility
+import krepo.entity.maven.MirrorRepository
+import krepo.entity.maven.RepositoryVisibility
 import krepo.entity.config.AuthConfig
 import krepo.entity.config.Config
 import krepo.enums.RepositoryStatus

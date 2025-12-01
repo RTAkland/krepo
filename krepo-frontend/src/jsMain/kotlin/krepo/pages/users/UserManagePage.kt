@@ -53,7 +53,7 @@ fun RenderContext.UserManagePage() {
                                             }
                                         }
                                         button("button is-small is-danger is-light") {
-                                            svg("fa-trash-alt")
+                                            svg("fa-trash-alt", size = 12)
                                             +"Delete"
                                             clicks handledBy {
                                                 selectedUser.update(user)

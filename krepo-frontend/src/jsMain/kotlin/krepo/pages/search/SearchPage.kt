@@ -13,7 +13,6 @@ import dev.fritz2.core.*
 import kotlinx.browser.window
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.launch
 import krepo.backendVersion
 import krepo.components.errorToast
 import krepo.components.fa.svg
@@ -21,15 +20,11 @@ import krepo.components.fa.svgBlock
 import krepo.components.infoToast
 import krepo.components.warningToast
 import krepo.coroutineScope
-import krepo.entity.ConfigRepositoryWithSize
+import krepo.entity.maven.ConfigRepositoryWithSize
 import krepo.index.IndexMetadata
 import krepo.index.IndexSearchResponse
-import krepo.util.auth
+import krepo.util.*
 import krepo.util.byte.toByteArray
-import krepo.util.fromProtobuf
-import krepo.util.httpRequest
-import krepo.util.jsonContentType
-import krepo.util.launchJob
 import krepo.util.repo.getRepositories
 import krepo.util.string.extractQueryParams
 
@@ -70,7 +65,11 @@ fun RenderContext.SearchPage() {
                                         +selected.ifEmpty { "Repository" }
                                     }
                                 }
-                                span("icon is-small") { svgBlock("fa-angle-down", "") { attr("aria-hidden", "true") } }
+                                span("icon is-small") {
+                                    svgBlock("fa-angle-down", "", size = 14) {
+                                        attr("aria-hidden", "true")
+                                    }
+                                }
                                 title("Select repository to search")
                             }
                         }

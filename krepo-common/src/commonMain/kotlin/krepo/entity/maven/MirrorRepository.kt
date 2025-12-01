@@ -5,7 +5,7 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
-package krepo.entity
+package krepo.entity.maven
 
 import kotlinx.serialization.Serializable
 

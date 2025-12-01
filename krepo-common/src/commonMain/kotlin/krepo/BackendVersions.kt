@@ -57,6 +57,8 @@ public sealed class BackendVersions(public val v: Int, public val desc: String) 
     public abstract val TERMS: RouteEndpoint
     public abstract val LICENSES: RouteEndpoint
 
+    public abstract val GRANT_PUBLISH_TOKEN: RouteEndpoint
+
 
     public class STABLE : BackendVersions(0, "Stable version") {
         override val CURRENT_USER: RouteEndpoint = createRouteEndpoint("/@/api/user")
@@ -93,6 +95,7 @@ public sealed class BackendVersions(public val v: Int, public val desc: String) 
         override val PRIVACY: RouteEndpoint = NOT_IMPLEMENTED_API
         override val TERMS: RouteEndpoint = NOT_IMPLEMENTED_API
         override val LICENSES: RouteEndpoint = NOT_IMPLEMENTED_API
+        override val GRANT_PUBLISH_TOKEN: RouteEndpoint = NOT_IMPLEMENTED_API
     }
 
     public class Azure : BackendVersions(1, "Running on Azure") {
@@ -131,6 +134,7 @@ public sealed class BackendVersions(public val v: Int, public val desc: String) 
         override val PRIVACY: RouteEndpoint = createRouteEndpoint("/api/azure/system/privacy")
         override val TERMS: RouteEndpoint = createRouteEndpoint("/api/azure/system/terms")
         override val LICENSES: RouteEndpoint = createRouteEndpoint("/api/azure/system/licenses")
+        override val GRANT_PUBLISH_TOKEN: RouteEndpoint = createRouteEndpoint("/api/azure/publish-credential")
     }
 }
 

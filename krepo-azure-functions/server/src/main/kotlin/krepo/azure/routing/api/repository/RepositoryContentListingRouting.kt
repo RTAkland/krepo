@@ -20,8 +20,8 @@ import krepo.azure.routing.auth.KRepoTokenAuthProvider
 import krepo.azure.userManager
 import krepo.azure.util.listFiles
 import krepo.azure.util.unAuth
-import krepo.entity.FileEntry
-import krepo.entity.RepositoryContents
+import krepo.entity.maven.FileEntry
+import krepo.entity.maven.RepositoryContents
 
 private fun getFiles(repo: String?, path: String?): List<FileEntry> {
     val p = if (path == "/" || path == "." || path == null) "" else path

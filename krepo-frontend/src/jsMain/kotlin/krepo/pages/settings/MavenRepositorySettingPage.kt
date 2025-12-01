@@ -11,12 +11,14 @@ package krepo.pages.settings
 
 import dev.fritz2.core.*
 import kotlinx.browser.window
-import kotlinx.coroutines.launch
 import krepo.backendVersion
 import krepo.components.*
 import krepo.components.fa.svg
 import krepo.coroutineScope
 import krepo.entity.*
+import krepo.entity.maven.ConfigRepository
+import krepo.entity.maven.ModifyRepository
+import krepo.entity.maven.RepositoryVisibility
 import krepo.enums.BadgeType
 import krepo.enums.CheckImplType
 import krepo.enums.RepositoryStatus
@@ -149,7 +151,7 @@ fun RenderContext.MavenRepositorySettingPage() {
                 val result = httpRequest(backendVersion.CREATE_REPOSITORY)
                     .auth().acceptJson().jsonContentType()
                     .setBody(
-                        CreateRepository(
+                        ConfigRepository(
                             name, visibility, allowedExtensions.split("\n"), allowSnapshot,
                             RepositoryStatus.Created,
                             listOf()

@@ -9,7 +9,7 @@
 package krepo.routing.api
 
 import krepo.entity.DeleteGavRequest
-import krepo.entity.FileEntry
+import krepo.entity.maven.FileEntry
 import krepo.entity.MavenMetadata
 import krepo.entity.kmp.KotlinToolchainMetadata
 import krepo.entity.res.APIListingResponse
@@ -31,7 +31,7 @@ import io.ktor.server.routing.*
 import kotlinx.io.files.Path
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import krepo.entity.RepositoryVisibility
+import krepo.entity.maven.RepositoryVisibility
 import krepo.util.fromJson
 import krepo.util.toJson
 
