@@ -13,11 +13,11 @@ languages and on different platforms.
 
 # Features
 
-1. Low memory usage
+1. Low memory usage (native & rs platform)
 2. High performance
-3. Mirroring repositories
-4. Etag and last-modified header verification(native only)
-5. Staged upload
+3. Mirroring repositories (native only)
+4. Etag and last-modified-date verify (azure-function & native only)
+5. Staged upload (native only)
 
 # Note
 
