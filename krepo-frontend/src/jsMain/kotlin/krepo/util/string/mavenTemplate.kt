@@ -13,12 +13,6 @@ fun getGradleKotlinDslRepositoryTemplate(repo: String): String = """
     |maven("${customBacked}/$repo")
 """.trimMargin()
 
-fun getMavenRepositoryTemplate(repo: String): String = """
-    |<repository>
-    |  <url>${customBacked}/$repo<repository></url>
-    |</repository>
-""".trimMargin()
-
 fun getGradleKotlinDslDependenciesTemplate(group: String, name: String, version: String) = """
     |implementation("$group:$name:$version")
 """.trimMargin()

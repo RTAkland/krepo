@@ -26,7 +26,12 @@
         color: rgb(176, 176, 176);
     }
 }
+
 @media (prefers-color-scheme: light) {
+    a {
+        color: cornflowerblue;
+    }
+
     a:hover {
         color: #357ABD;
     }

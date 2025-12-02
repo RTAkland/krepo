@@ -67,7 +67,7 @@ fun deleteGAVRouting(
     return request.respondText("OK")
 }
 
-@HttpRouting("/api/azure/repository/operation/directory/create")
+@HttpRouting("/api/azure/repository/operation/directory/create", [HttpMethod.POST])
 fun createRepositoryDirectory(
     request: HttpRequest<Any>,
     context: HttpContext,

@@ -8,112 +8,113 @@
 
 package krepo.azure.util
 
+import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
+import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.deleteObject
+import aws.sdk.kotlin.services.s3.headObject
+import aws.sdk.kotlin.services.s3.model.*
+import aws.sdk.kotlin.services.s3.putObject
+import aws.smithy.kotlin.runtime.content.ByteStream
+import aws.smithy.kotlin.runtime.content.writeToOutputStream
+import aws.smithy.kotlin.runtime.net.url.Url
+import aws.smithy.kotlin.runtime.time.toJvmInstant
+import kotlinx.coroutines.runBlocking
 import krepo.azure.cfg.ConfigManger
 import krepo.azure.entity.internal.MetadataFile
 import krepo.entity.maven.FileEntry
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
-import software.amazon.awssdk.core.sync.RequestBody
-import software.amazon.awssdk.regions.Region
-import software.amazon.awssdk.services.s3.S3Client
-import software.amazon.awssdk.services.s3.model.*
-import java.net.URI
+import java.io.ByteArrayOutputStream
 import java.time.Instant
 
 
 fun createClient(): S3Client {
-    return S3Client.builder()
-        .region(Region.of(ConfigManger.S3_REGION))
-        .endpointOverride(URI.create(ConfigManger.S3API))
-        .forcePathStyle(true)
-        .credentialsProvider(
-            StaticCredentialsProvider.create(
-                AwsBasicCredentials.create(
-                    ConfigManger.S3_ACCESS_KEY,
-                    ConfigManger.S3_SECRET_KEY
-                )
-            )
-        ).build()
-}
-
-fun exists(filename: String): Boolean {
-    return try {
-        createClient().headObject(
-            HeadObjectRequest.builder()
-                .bucket(ConfigManger.S3_BUCKET)
-                .key(filename)
-                .build()
-        )
-        true
-    } catch (_: NoSuchKeyException) {
-        false
-    }
-}
-
-fun uploadFile(filename: String, file: ByteArray, overwrite: Boolean): Boolean {
-    fun upload() {
-        createClient().putObject(
-            PutObjectRequest.builder()
-                .bucket(ConfigManger.S3_BUCKET)
-                .key(filename)
-                .build(),
-            RequestBody.fromBytes(file)
-        )
-    }
-    if (overwrite) {
-        upload()
-        return true
-    } else {
-        if (exists(filename)) {
-            return false
-        } else {
-            upload()
-            return true
+    return S3Client {
+        region = ConfigManger.S3_REGION
+        endpointUrl = Url.parse(ConfigManger.S3API)
+        forcePathStyle = true
+        credentialsProvider = StaticCredentialsProvider {
+            accessKeyId = ConfigManger.S3_ACCESS_KEY
+            secretAccessKey = ConfigManger.S3_SECRET_KEY
         }
     }
 }
 
-fun getFile(filename: String): ByteArray? {
-    if (!exists(filename)) return null
-    return createClient().getObject(
-        GetObjectRequest.builder()
-            .bucket(ConfigManger.S3_BUCKET)
-            .key(filename)
-            .build()
-    ).readBytes()
+fun headObject(filename: String) = runBlocking {
+    return@runBlocking createClient().headObject {
+        bucket = ConfigManger.S3_BUCKET
+        key = filename
+    }
+}
+
+fun exists(filename: String): Boolean = runBlocking {
+    return@runBlocking try {
+        createClient().headObject {
+            bucket = ConfigManger.S3_BUCKET
+            key = filename
+        }
+        true
+    } catch (_: Exception) {
+        false
+    }
+}
+
+fun uploadFile(filename: String, file: ByteArray, overwrite: Boolean): Boolean = runBlocking {
+    suspend fun upload() {
+        createClient().putObject {
+            bucket = ConfigManger.S3_BUCKET
+            key = filename
+            body = ByteStream.fromBytes(file)
+        }
+    }
+    if (overwrite) {
+        upload()
+        return@runBlocking true
+    } else {
+        if (exists(filename)) {
+            return@runBlocking false
+        } else {
+            upload()
+            return@runBlocking true
+        }
+    }
+}
+
+fun getFileContentAsByteArray(filename: String): ByteArray? = runBlocking {
+    return@runBlocking createClient().getObject(GetObjectRequest {
+        bucket = ConfigManger.S3_BUCKET
+        key = filename
+    }) {
+        val os = ByteArrayOutputStream()
+        it.body?.writeToOutputStream(os) ?: return@getObject null
+        os.toByteArray()
+    }
 }
 
 fun getFileWithMetadata(
     filename: String,
     etag: String?,
     ifModifiedSince: Instant? = null,
-): MetadataFile? {
+): MetadataFile? = runBlocking {
     val client = createClient()
-    fun retrieveFile(key: String): MetadataFile? {
-        if (!exists(key)) return null
-        val resp = client.getObject(
-            GetObjectRequest.builder()
-                .bucket(ConfigManger.S3_BUCKET)
-                .key(key)
-                .build()
-        )
-        val bytes = resp.readBytes()
-        val etag = resp.response().eTag()
-        val lastModified = resp.response().lastModified()
-        return MetadataFile(etag, bytes, lastModified, false)
+    suspend fun retrieveFile(fileKey: String): MetadataFile? {
+        val os = ByteArrayOutputStream()
+        val resp = client.getObject(GetObjectRequest {
+            bucket = ConfigManger.S3_BUCKET
+            key = fileKey
+        }) {
+            it.body?.writeToOutputStream(os)
+            it
+        }
+        val etag = resp.eTag!!
+        val lastModified = resp.lastModified?.toJvmInstant()
+        return MetadataFile(etag, os.toByteArray(), lastModified, false)
     }
-    if (etag == null && ifModifiedSince == null) return retrieveFile(filename) else {
-        val resp = client.headObject(
-            HeadObjectRequest.builder()
-                .bucket(ConfigManger.S3_BUCKET)
-                .key(filename)
-                .build()
-        )
-        val remoteEtag = resp.eTag()
-        val remoteLastModified = resp.lastModified()
+    if (etag == null && ifModifiedSince == null) return@runBlocking retrieveFile(filename) else {
+        val resp = headObject(filename)
+        val remoteEtag = resp.eTag!!
+        val remoteLastModified = resp.lastModified!!.toJvmInstant()
         val matched = (etag != null && etag == remoteEtag) ||
                 (ifModifiedSince != null && !remoteLastModified.isAfter(ifModifiedSince))
-        return if (!matched) retrieveFile(filename)
+        return@runBlocking if (!matched) retrieveFile(filename)
         else MetadataFile(remoteEtag, null, remoteLastModified, true)
     }
 }
@@ -122,45 +123,47 @@ fun getFileWithMetadata(
 fun listAllFiles(
     path: String,
     delimiter: String? = "/",
-): List<String> {
+): List<String> = runBlocking {
     val client = createClient()
     val results = mutableListOf<String>()
     var continuationToken: String? = null
+
     do {
-        val builder = ListObjectsV2Request.builder()
-            .bucket(ConfigManger.S3_BUCKET)
-            .prefix(path)
-        if (delimiter != null) builder.delimiter(delimiter)
-        if (continuationToken != null) builder.continuationToken(continuationToken)
-        val response = client.listObjectsV2(builder.build())
+        val builder = ListObjectsV2Request {
+            bucket = ConfigManger.S3_BUCKET
+            prefix = path
+            delimiter?.let { this.delimiter = it }
+            continuationToken?.let { this.continuationToken = it }
+        }
+        val response = client.listObjectsV2(builder)
         fun relativeName(fullKey: String): String {
             return if (fullKey.startsWith(path)) {
                 fullKey.substring(path.length)
-            } else fullKey
+            } else {
+                fullKey
+            }
         }
 
-        val files = response.contents()
-            .filter { it.key() != path }
-            .map { obj -> relativeName(obj.key()) }
-        results.addAll(files)
-        continuationToken = if (response.isTruncated) response.nextContinuationToken() else null
+        val files = response.contents?.mapNotNull { obj ->
+            if (obj.key != path) relativeName(obj.key!!) else null
+        }
+        files?.let { results.addAll(it) }
+        continuationToken = response.nextContinuationToken
     } while (continuationToken != null)
-    return results
+    client.close()
+    return@runBlocking results
 }
 
 
-fun listFiles(path: String, delimiter: String? = "/"): List<FileEntry> {
+fun listFiles(path: String, delimiter: String? = "/"): List<FileEntry> = runBlocking {
     val prefix = if (path.isEmpty() || path.endsWith("/")) path else "$path/"
-    val builder = ListObjectsV2Request.builder()
-        .bucket(ConfigManger.S3_BUCKET)
-        .prefix(prefix)
-
-    if (delimiter != null) {
-        builder.delimiter(delimiter)
+    val builder = ListObjectsV2Request {
+        bucket = ConfigManger.S3_BUCKET
+        this.prefix = prefix
+        delimiter?.let { this.delimiter = it }
     }
-
-    val response = createClient().listObjectsV2(builder.build())
-
+    val s3Client = createClient()
+    val response = s3Client.listObjectsV2(builder)
     fun relativeName(fullKey: String): String {
         return if (fullKey.startsWith(prefix)) {
             fullKey.substring(prefix.length)
@@ -168,69 +171,68 @@ fun listFiles(path: String, delimiter: String? = "/"): List<FileEntry> {
     }
 
     val folders = if (delimiter != null) {
-        response.commonPrefixes()
-            .map { cp ->
-                val name = relativeName(cp.prefix())
-                val dirName = if (name.endsWith("/")) name else "$name/"
-                FileEntry(dirName.removeSuffix("/"), true, 0, 0)
-            }
+        response.commonPrefixes?.map { cp ->
+            val name = relativeName(cp.prefix ?: "")
+            val dirName = if (name.endsWith("/")) name else "$name/"
+            FileEntry(dirName.removeSuffix("/"), true, 0, 0)
+        } ?: emptyList()
     } else emptyList()
+    val files = response.contents?.filter { it.key != prefix }
+        ?.map { obj ->
+            val name = relativeName(obj.key ?: "")
+            FileEntry(name.removeSuffix("/"), false, obj.size ?: 0L, obj.lastModified?.epochSeconds ?: 0L)
+        } ?: emptyList()
 
-    val files = response.contents()
-        .filter { it.key() != prefix }
-        .map { obj ->
-            val name = relativeName(obj.key())
-            FileEntry(name.removeSuffix("/"), false, obj.size(), obj.lastModified().epochSecond)
-        }
-
-    return folders + files
+    s3Client.close()
+    return@runBlocking folders + files
 }
 
 
-fun deleteFile(path: String) {
-    createClient().deleteObject(
-        DeleteObjectRequest.builder()
-            .bucket(ConfigManger.S3_BUCKET)
-            .key(path)
-            .build()
-    )
+fun deleteFile(path: String) = runBlocking {
+    createClient().deleteObject {
+        bucket = ConfigManger.S3_BUCKET
+        key = path
+    }
 }
 
-fun deleteDirectory(path: String) {
+fun deleteDirectory(path: String) = runBlocking {
     val client = createClient()
     try {
         val normalizedPath = path.trimEnd('/')
         val files = listFiles(path, null)
             .map { file ->
                 val key = if (normalizedPath.isEmpty()) file.name else "$normalizedPath/${file.name}"
-                ObjectIdentifier.builder().key(key).build()
-            }
-            .toList()
+                ObjectIdentifier { this.key = key }
+            }.toList()
         if (files.isEmpty()) {
             println("No files found in $path to delete.")
-            return
+            return@runBlocking
         }
-        val deleteRequest = DeleteObjectsRequest.builder()
-            .bucket(ConfigManger.S3_BUCKET)
-            .delete(Delete.builder().objects(files).build())
-            .build()
-
+        val deleteRequest = DeleteObjectsRequest {
+            bucket = ConfigManger.S3_BUCKET
+            delete = Delete { objects = files }
+        }
         client.deleteObjects(deleteRequest)
+    } catch (e: Exception) {
+        println("Failed to delete objects: ${e.message}")
     } finally {
         client.close()
     }
 }
 
-fun deleteDirectoryIndividually(path: String) {
+fun deleteDirectoryIndividually(path: String) = runBlocking {
     val client = createClient()
     val normalizedPath = path.trimEnd('/')
     val files = listFiles(path, null)
     files.forEach { file ->
-        val key = if (normalizedPath.isEmpty()) file.name else "$normalizedPath/${file.name}"
+        val fileKey = if (normalizedPath.isEmpty()) file.name else "$normalizedPath/${file.name}"
         try {
-            client.deleteObject { it.bucket(ConfigManger.S3_BUCKET).key(key) }
+            client.deleteObject {
+                bucket = ConfigManger.S3_BUCKET
+                key = fileKey
+            }
         } catch (e: Exception) {
-            println("Failed to delete $key: ${e.message}")
+            println("Failed to delete $fileKey: ${e.message}")
         }
     }
     client.close()

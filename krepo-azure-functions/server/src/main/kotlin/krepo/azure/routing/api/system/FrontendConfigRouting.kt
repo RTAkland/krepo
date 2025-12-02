@@ -21,9 +21,10 @@ import krepo.azure.routing.api.repository.repositories
 import krepo.azure.tokenManager
 import krepo.azure.util.notImplemented
 import krepo.azure.util.string.castMarkdownToHtml
-import krepo.entity.maven.ConfigRepositoryWithSize
+import krepo.entity.BackendVersion
 import krepo.entity.FrontendConfig
 import krepo.entity.FrontendConfigResponse
+import krepo.entity.maven.ConfigRepositoryWithSize
 import krepo.entity.maven.RepositoryVisibility
 import krepo.util.fromJson
 
@@ -34,11 +35,16 @@ val DEFAULT_FRONTEND_CONFIG
         val rawCfg = res.fromJson<FrontendConfig>()
         val cfg = FrontendConfig(
             rawCfg.pageTitle, rawCfg.icpLicense, rawCfg.description?.castMarkdownToHtml(),
-            rawCfg.copyright.castMarkdownToHtml(), rawCfg.enableAzureSignIn
+            rawCfg.copyright.castMarkdownToHtml(), rawCfg.enableAzureSignIn,
+            BackendVersion(1, -1)  // 1 -> Azure backend schema, -1 -> removed patch version
         )
         cfg
     }
 
+/**
+ * frontend config has merged into backend version api endpoint
+ * @see krepo.azure.routing.api.backendVersionRouting
+ */
 @HttpRouting("/api/azure/config/frontend")
 fun frontendConfigRouting(
     request: HttpRequest<String?>,

@@ -17,16 +17,13 @@ plugins {
 
 dependencies {
     implementation(project(":krepo-common"))
-    implementation(libs.aws.s3)
-    implementation(libs.aws.auth)
-    implementation(libs.aws.netty.nio.client)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.okhttp)
-    implementation(libs.jedis)
     implementation(libs.xmlutil.core)
     implementation(libs.xmlutil.serialization)
     implementation(libs.markdown)
     implementation(libs.java.jwt)
+    implementation(libs.aws.s3)
 }
 
 kotlin {
@@ -113,4 +110,8 @@ tasks.named("azureFunctionsRun") {
 
 tasks.named("azureFunctionsPackage") {
     dependsOn(tasks.named("generateResources"))
+}
+
+tasks.processResources {
+    exclude("*")
 }

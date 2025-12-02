@@ -11,10 +11,8 @@ package krepo.pages.settings
 
 import dev.fritz2.core.*
 import kotlinx.browser.window
-import kotlinx.coroutines.launch
 import krepo.backendVersion
 import krepo.components.fa.svg
-import krepo.components.fa.svgBlock
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.coroutineScope
@@ -108,7 +106,7 @@ fun RenderContext.CommonSettingPage() {
             coroutineScope.launchJob {
                 httpRequest(backendVersion.MODIFY_FRONTEND_CONFIG)
                     .auth().acceptJson().jsonContentType()
-                    .setBody(FrontendConfig(pageTitle, icpLicense, description, copyright, false))
+                    .setBody(FrontendConfig(pageTitle, icpLicense, description, copyright, false, null))
                     .put().checkImpl(CheckImplType.Toast) {
                         infoToast("Saved!")
                         window.location.reload()

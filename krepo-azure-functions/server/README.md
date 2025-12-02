@@ -27,7 +27,7 @@ Envs description
 13. `CF_EMAIL` cloudflare email ~not used
 14. `CF_KV_TOKEN` cloudflare kv token ~optional
 15. `CF_KV_NAMESPACE_ID` cloudflare kv namespace id ~optional
-16. `AUTH_STORAGE_TYPE` when enable azure sign in, store `state`, `REDIS` or `CF_KV` ~required
+16. `AUTH_STORAGE_TYPE` when enable azure sign in, store `state`, must be `CF_KV` ~required
 17. `REDIS_URI` redis uri ~optional
 18. `FRONTEND_URL` redirect when access repository name
 19. `JWT_SECRET` json web token secret ~required

@@ -14,8 +14,6 @@ import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import krepo.azure.CLOUDFLARE_API_URL
 import krepo.azure.util.client
-import redis.clients.jedis.Jedis
-import java.net.URI
 
 class StorageManager {
 
@@ -49,12 +47,11 @@ class StorageManager {
     }
 
     enum class AuthStorageType {
-        CloudflareKV, Redis;
+        CloudflareKV;
 
         companion object {
             fun fromString(str: String): AuthStorageType = when (str) {
                 "CF_KV" -> CloudflareKV
-                "REDIS" -> Redis
                 else -> throw IllegalStateException("No storage type of $str")
             }
         }
@@ -62,43 +59,21 @@ class StorageManager {
 
     private val type = AuthStorageType.fromString(ConfigManger.AUTH_STORAGE_TYPE)
 
-    fun createRedis(): Jedis {
-        val jedis = Jedis(URI.create(ConfigManger.REDIS_URI))
-        return jedis
-    }
-
     fun setKV(name: String, value: String, ttl: Int = -1) {
         when (type) {
             AuthStorageType.CloudflareKV -> CF_KV.setValue(name, value, ttl)
-            AuthStorageType.Redis -> {
-                val redis = createRedis()
-                if (ttl >= 1) redis.setex(name, ttl.toLong(), value)
-                else redis.set(name, value)
-                redis.close()
-            }
         }
     }
 
     fun getKV(name: String): String? {
         return when (type) {
             AuthStorageType.CloudflareKV -> CF_KV.getValue(name)
-            AuthStorageType.Redis -> {
-                val redis = createRedis()
-                val value = redis.get(name)
-                redis.close()
-                value
-            }
         }
     }
 
     fun removeKV(name: String) {
         when (type) {
             AuthStorageType.CloudflareKV -> CF_KV.removeKey(name)
-            AuthStorageType.Redis -> {
-                val redis = createRedis()
-                redis.del(name)
-                redis.close()
-            }
         }
     }
 }

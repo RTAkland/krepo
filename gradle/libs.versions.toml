@@ -10,7 +10,7 @@ kotlinx-io = "0.7.0"
 kotlinx-coroutines = "1.10.2"
 xmlutil = "0.90.3"
 kotlinx-serialization = "1.8.1"
-aws-sdk = "2.38.2"
+aws-sdk-kotlin = "1.5.63"
 ktor = "3.3.1"
 jedis = "7.1.0"
 markdown = "0.7.3"
@@ -36,10 +36,7 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version.ref = "kotlinx-serialization" }
-aws-s3 = { module = "software.amazon.awssdk:s3", version.ref = "aws-sdk" }
-aws-auth = { module = "software.amazon.awssdk:auth", version.ref = "aws-sdk" }
-aws-netty-nio-client = { module = "software.amazon.awssdk:netty-nio-client", version.ref = "aws-sdk" }
-jedis = { module = "redis.clients:jedis", version.ref = "jedis" }
+aws-s3 = { module = "aws.sdk.kotlin:s3", version.ref = "aws-sdk-kotlin" }
 xmlutil-core = { module = "io.github.pdvrieze.xmlutil:core", version.ref = "xmlutil" }
 xmlutil-serialization = { module = "io.github.pdvrieze.xmlutil:serialization", version.ref = "xmlutil" }
 markdown = { module = "org.jetbrains:markdown", version.ref = "markdown" }

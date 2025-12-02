@@ -21,7 +21,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import krepo.components.NavigatorBar
 import krepo.components.PageFooter
-import krepo.entity.BackendVersion
 import krepo.entity.FrontendConfig
 import krepo.entity.FrontendConfigResponse
 import krepo.pages.ContentListingPage
@@ -35,9 +34,9 @@ import krepo.pages.search.SearchPage
 import krepo.pages.settings.CommonSettingPage
 import krepo.pages.settings.IndexSettingsPage
 import krepo.pages.settings.MavenRepositorySettingPage
-import krepo.pages.users.UserSettingsPage
 import krepo.pages.users.NewUserPage
 import krepo.pages.users.UserManagePage
+import krepo.pages.users.UserSettingsPage
 import krepo.util.*
 import kotlin.time.ExperimentalTime
 
@@ -57,18 +56,11 @@ fun main() {
     if (mediaQuery.matches) isDarkTheme.update(true) else isDarkTheme.update(false)
     toastContainer("default", "toast-container")
     coroutineScope.launchJob {
-        backendVersion = try {
-            httpRequest(BACKEND_VERSION_ROUTE).acceptJson().jsonContentType().get()
-                .body().fromJson<BackendVersion>().version.toBackendVersion()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            BackendVersions.STABLE()
-        }
-
-        frontendConfig = httpRequest(backendVersion.FRONTEND_CONFIG)
+        val fc = httpRequest(BACKEND_VERSION_ROUTE)
             .auth().acceptJson()
             .jsonContentType().get()
-            .body().fromJson<FrontendConfigResponse>().data
+            .body().fromJson<FrontendConfigResponse>()
+        frontendConfig = fc.data
         document.title = frontendConfig.pageTitle
         render("#target") {
             NavigatorBar()
@@ -84,7 +76,7 @@ fun main() {
                     else if (site.startsWith("/privacy")) PrivacyPage()
                     else if (site.startsWith("/terms")) TermsPage()
                     else when (site) {
-                        "/", "contents" -> HomePage()
+                        "/", "contents" -> HomePage(fc.repositories)
                         "/user/manage" -> UserManagePage()
                         "/user/create" -> NewUserPage()
                         "/setting" -> CommonSettingPage()

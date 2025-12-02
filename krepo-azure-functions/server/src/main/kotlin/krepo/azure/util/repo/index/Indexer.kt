@@ -9,7 +9,7 @@
 package krepo.azure.util.repo.index
 
 import krepo.azure.util.deleteFile
-import krepo.azure.util.getFile
+import krepo.azure.util.getFileContentAsByteArray
 import krepo.azure.util.listAllFiles
 import krepo.azure.util.string.fromXmlString
 import krepo.azure.util.timestamp
@@ -41,7 +41,7 @@ object Indexer {
         val files = listAllFiles(repository, null)
             .filter { it.endsWith("maven-metadata.xml") }
         files.forEach {
-            val content = getFile("${repository}$it")!!
+            val content = getFileContentAsByteArray("${repository}$it")!!
             indexOnce(repository, it, content)
         }
     }
@@ -54,7 +54,7 @@ object Indexer {
         val latestVersion = metadata.versioning.latest
         val timestamp = metadata.versioning.lastUpdated.timestamp
         val indexFileName = "artifacts-index/${artifactId}@${repository}@${group}@${latestVersion}@${timestamp}"
-        uploadFile(indexFileName, byteArrayOf(0x01), true)
+        uploadFile(indexFileName, byteArrayOf(), true)
         println("Indexing $indexFileName")
     }
 

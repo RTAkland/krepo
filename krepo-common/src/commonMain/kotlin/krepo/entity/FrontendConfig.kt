@@ -15,5 +15,6 @@ public data class FrontendConfig(
     val icpLicense: String?,
     val description: String?,
     val copyright: String,
-    val enableAzureSignIn: Boolean
+    val enableAzureSignIn: Boolean,
+    val backendVersion: BackendVersion?
 )
