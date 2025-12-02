@@ -75,8 +75,12 @@ fun RenderContext.HomePage(repos: List<ConfigRepositoryWithSize>?) {
                             div("dropdown is-hoverable is-centered is-inline-block") {
                                 div("dropdown-trigger") {
                                     button("button is-small") {
-                                        isDarkTheme.data.render { if (!it) className("is-light") }
-                                        svg("fa-copy", "", 12)
+                                        isDarkTheme.data.render {
+                                            if (!it) {
+                                                className("is-light")
+                                                svg("fa-copy", "", 12)
+                                            } else svg("fa-copy-light", "", 12)
+                                        }
                                         attr("aria-haspopup", "true")
                                         attr("aria-controls", "dropdown-menu-${repo.name}")
                                         clicks handledBy {
