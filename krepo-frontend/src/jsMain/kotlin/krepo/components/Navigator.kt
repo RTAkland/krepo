@@ -35,7 +35,7 @@ fun RenderContext.NavigatorBar() {
         attr("role", "navigation")
         attr("aria-label", "main navigation")
         div("navbar-brand") {
-            a("navbar-item is-rounded ml-2 navbar-app-name-text") {
+            a("navbar-item is-rounded navbar-app-name-text") {
                 href("#")
                 +frontendConfig.pageTitle
                 title("Back to home page")
@@ -45,9 +45,6 @@ fun RenderContext.NavigatorBar() {
                 attr("aria-label", "menu")
                 attr("aria-expanded", "false")
                 attr("data-target", "navbarBasic")
-                span { attr("aria-hidden", "true") }
-                span { attr("aria-hidden", "true") }
-                span { attr("aria-hidden", "true") }
             }
         }
         div("navbar-menu") {

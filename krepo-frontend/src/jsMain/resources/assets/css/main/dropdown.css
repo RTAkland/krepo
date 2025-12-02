@@ -9,3 +9,7 @@
     left: 50%;
     transform: translateX(-50%);
 }
+
+.dropdown-item.is-active {
+    color: white;
+}

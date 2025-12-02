@@ -235,7 +235,7 @@ fun RenderContext.ContentListingPage() {
                                     }
                                 }
                                 td("has-text-centered") {
-                                    span("ml-5") { +getDate(entry.timestamp) }
+                                    span("ml-5") { +formatDate(entry.timestamp) }
                                     title(entry.timestamp.toString())
                                 }
                                 td("has-text-centered") { if (!entry.isDirectory) +formatSize(entry.size) else +"-" }

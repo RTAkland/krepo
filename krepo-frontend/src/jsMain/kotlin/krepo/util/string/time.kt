@@ -7,7 +7,7 @@
 
 package krepo.util.string
 
-fun getDate(timestamp: Long): String {
+fun formatDate(timestamp: Long): String {
     val date = js("new Date(timestamp * 1000)")
     fun pad(n: Int) = if (n < 10) "0$n" else "$n"
     val year = date.getFullYear() as Int

@@ -8,12 +8,8 @@
 
 package krepo.azure.util.repo.index
 
-import krepo.azure.util.deleteFile
-import krepo.azure.util.getFileContentAsByteArray
-import krepo.azure.util.listAllFiles
+import krepo.azure.util.*
 import krepo.azure.util.string.fromXmlString
-import krepo.azure.util.timestamp
-import krepo.azure.util.uploadFile
 import krepo.index.IndexMetadata
 
 object Indexer {
@@ -22,21 +18,6 @@ object Indexer {
         return IndexMetadata(parts[1], parts[2], parts.first(), parts[3], parts.last().toLong())
     }
 
-    /**
-     * `This API is dangerous, please use it with caution.`
-     *
-     * `This API is dangerous, please use it with caution.`
-     *
-     * `This API is dangerous, please use it with caution.`
-     *
-     * `This API is dangerous, please use it with caution.`
-     *
-     * `This API is dangerous, please use it with caution.`
-     *
-     * `This API is dangerous, please use it with caution.`
-     *
-     * `This API is dangerous, please use it with caution.`
-     */
     fun indexAll(repository: String) {
         val files = listAllFiles(repository, null)
             .filter { it.endsWith("maven-metadata.xml") }
@@ -60,8 +41,7 @@ object Indexer {
 
     fun deleteIndex(repository: String) {
         listAllFiles("artifacts-index/")
-            .filter { it.parseIndexMetadata().repo == repository }
-            .forEach { deleteFile("artifacts-index/$it") }
+            .forEach { if (it.split("@")[1] == repository) deleteFile("artifacts-index/$it") }
     }
 
     fun search(keyword: String, repo: String? = null): List<IndexMetadata> {

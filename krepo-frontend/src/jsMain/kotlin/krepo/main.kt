@@ -61,6 +61,7 @@ fun main() {
             .jsonContentType().get()
             .body().fromJson<FrontendConfigResponse>()
         frontendConfig = fc.data
+        backendVersion = fc.data.backendVersion?.version?.toBackendVersion() ?: BackendVersions.STABLE()
         document.title = frontendConfig.pageTitle
         render("#target") {
             NavigatorBar()

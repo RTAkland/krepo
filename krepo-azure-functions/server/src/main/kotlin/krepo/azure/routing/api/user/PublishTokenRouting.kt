@@ -5,6 +5,7 @@
  * https://www.apache.org/licenses/LICENSE-2.0
  */
 
+@file:Suppress("unused")
 
 package krepo.azure.routing.api.user
 
@@ -18,7 +19,6 @@ import cn.rtast.kazure.response.respondJson
 import cn.rtast.kazure.trigger.HttpRouting
 import krepo.azure.routing.auth.KRepoTokenAuthProvider
 import krepo.azure.tokenManager
-import krepo.azure.util.Jwt
 import krepo.entity.maven.token.GrantPublishTokenRequest
 import krepo.entity.maven.token.GrantPublishTokenResponse
 import krepo.util.fromJson
@@ -31,7 +31,7 @@ fun createUserPublishCredentialRouting(
     context: HttpContext,
 ): HttpResponse {
     val username = request.body.fromJson<GrantPublishTokenRequest>().name
-    val publishToken = tokenManager.issue(username, Jwt.TokenPurpose.PUBLISH, 31_536_000)
+    val publishToken = tokenManager.issuePublish(username)
     val resp = GrantPublishTokenResponse(username, publishToken.value, publishToken.expiredAt)
     return request.respondJson(resp)
 }

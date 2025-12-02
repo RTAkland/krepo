@@ -96,17 +96,21 @@ fun getFileWithMetadata(
 ): MetadataFile? = runBlocking {
     val client = createClient()
     suspend fun retrieveFile(fileKey: String): MetadataFile? {
-        val os = ByteArrayOutputStream()
-        val resp = client.getObject(GetObjectRequest {
-            bucket = ConfigManger.S3_BUCKET
-            key = fileKey
-        }) {
-            it.body?.writeToOutputStream(os)
-            it
+        return try {
+            val os = ByteArrayOutputStream()
+            val resp = client.getObject(GetObjectRequest {
+                bucket = ConfigManger.S3_BUCKET
+                key = fileKey
+            }) {
+                it.body?.writeToOutputStream(os)
+                it
+            }
+            val etag = resp.eTag!!
+            val lastModified = resp.lastModified?.toJvmInstant()
+            return MetadataFile(etag, os.toByteArray(), lastModified, false)
+        } catch (_: NoSuchKey) {
+            null
         }
-        val etag = resp.eTag!!
-        val lastModified = resp.lastModified?.toJvmInstant()
-        return MetadataFile(etag, os.toByteArray(), lastModified, false)
     }
     if (etag == null && ifModifiedSince == null) return@runBlocking retrieveFile(filename) else {
         val resp = headObject(filename)

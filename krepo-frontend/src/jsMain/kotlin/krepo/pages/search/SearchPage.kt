@@ -27,17 +27,40 @@ import krepo.util.*
 import krepo.util.byte.toByteArray
 import krepo.util.repo.getRepositories
 import krepo.util.string.extractQueryParams
+import krepo.util.string.formatDate
 
 fun RenderContext.SearchPage() {
     val queryParam = extractQueryParams(window.location.href)
     val keywordStore = storeOf(queryParam["k"] ?: "")
     val repoListStore = storeOf<List<ConfigRepositoryWithSize>>(emptyList())
-    val selectedRepoStore = storeOf(queryParam["r"] ?: "")
+    val selectedRepoStore = storeOf("releases")
     val resultStore = storeOf<IndexSearchResponse?>(null)
     val isButtonDisabled = storeOf(false)
     val isLoading = storeOf(false)
     val isLoadingClassName = storeOf("")
     val searchButtonTextStore = storeOf("Search")
+
+    fun searchInner() {
+        if (!isButtonDisabled.current) {
+            isButtonDisabled.update(true)
+            isLoading.update(true)
+            isLoadingClassName.update("is-loading")
+            searchButtonTextStore.update("Waiting 5 secs")
+            coroutineScope.launchJob {
+                if (keywordStore.current.length < 3) {
+                    errorToast("Keyword must be more than 3 characters.")
+                    isLoadingClassName.update("")
+                } else {
+                    search(keywordStore.current, selectedRepoStore.current, resultStore, isLoading)
+                    isLoadingClassName.update("")
+                    delay(5000) // Wait for 5 seconds
+                }
+                searchButtonTextStore.update("Search")
+                isButtonDisabled.update(false)
+                isLoading.update(false)
+            }
+        } else warningToast("Please wait 5 seconds before trying again")
+    }
 
     div("container mt-5") {
         h2("title is-3 has-text-centered mb-5") { +"Search Artifacts" }
@@ -62,7 +85,7 @@ fun RenderContext.SearchPage() {
                                 attr("aria-controls", "dropdown-menu")
                                 span {
                                     selectedRepoStore.data.render { selected ->
-                                        +selected.ifEmpty { "Repository" }
+                                        +selected.ifEmpty { "releases" }
                                     }
                                 }
                                 span("icon is-small") {
@@ -112,28 +135,7 @@ fun RenderContext.SearchPage() {
                             svg("fa-search")
                             +it
                         }
-                        clicks handledBy {
-                            if (!isButtonDisabled.current) {
-                                isButtonDisabled.update(true)
-                                isLoading.update(true)
-                                isLoadingClassName.update("is-loading")
-                                searchButtonTextStore.update("Waiting 5 secs")
-                                coroutineScope.launchJob {
-                                    if (keywordStore.current.length < 3) {
-                                        errorToast("Keyword must be more than 3 characters.")
-                                        isLoadingClassName.update("")
-                                    } else {
-                                        infoToast("Searching...")
-                                        search(keywordStore.current, selectedRepoStore.current, resultStore, isLoading)
-                                        isLoadingClassName.update("")
-                                        delay(5000) // Wait for 5 seconds
-                                    }
-                                    searchButtonTextStore.update("Search")
-                                    isButtonDisabled.update(false)
-                                    isLoading.update(false)
-                                }
-                            } else warningToast("Please wait 5 seconds before trying again")
-                        }
+                        clicks handledBy { searchInner() }
                     }
                 }
             }
@@ -141,14 +143,7 @@ fun RenderContext.SearchPage() {
         div("mt-4") {
             inlineStyle("padding-left: 100px; padding-right:100px;")
             div("has-text-centered") {
-                isLoading.data.render { loading ->
-                    if (loading) {
-                        span("icon is-small") {
-                            i("fas fa-spinner fa-spin") {}
-                            +" Searching..."
-                        }
-                    }
-                }
+                isLoading.data.render { loading -> if (loading) span("icon is-small") { +"Searching..." } }
             }
             resultStore.data.render { result ->
                 when {
@@ -169,8 +164,9 @@ fun RenderContext.SearchPage() {
                         table("table is-striped is-hoverable is-fullwidth") {
                             thead {
                                 tr {
-                                    th("has-text-centered") { +"Repository" }
-                                    th("has-text-centered") { +"Path" }
+                                    th("has-text-centered") { }
+                                    th { }
+                                    th {}
                                 }
                             }
                             tbody {
@@ -188,10 +184,9 @@ fun RenderContext.SearchPage() {
     coroutineScope.launchJob {
         val repoList = getRepositories()
         repoListStore.update(repoList)
-        if (selectedRepoStore.current.isEmpty() && repoList.isNotEmpty()) {
-            selectedRepoStore.update(repoList.first().name)
-        }
+        if (repoList.isNotEmpty()) selectedRepoStore.update(repoList.first().name)
         updateURI(keywordStore.current, repoList.first().name)
+        searchInner()
     }
 }
 
@@ -224,14 +219,17 @@ private suspend fun search(
 private fun RenderContext.renderArtifactRow(artifact: IndexMetadata) {
     tr {
         td("has-text-centered") { +artifact.repo }
-        td("has-text-centered") {
+        td {
             val gav = "${artifact.repo}/" +
                     "${artifact.group.replace(".", "/").removePrefix("/")}/" +
                     "${artifact.artifact}/${artifact.version}"
-            a("has-text-link") {
+            a {
                 href("/#/$gav")
                 +gav
             }
+        }
+        td {
+            +formatDate(artifact.lastModified)
         }
     }
 }

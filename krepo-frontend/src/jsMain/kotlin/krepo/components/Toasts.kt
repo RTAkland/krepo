@@ -16,15 +16,15 @@ import kotlin.time.Duration.Companion.seconds
 
 fun warningToast(message: String, duration: Duration = 2.5.seconds) =
     toast("default", duration.inWholeMilliseconds) {
-        div("notification is-light p-4 toast-message mb-2") { svg("fa-triangle-exclamation");+message }
+        div("notification is-light p-4 toast-message mb-2") { svg("fa-triangle-exclamation", size = 13);+message }
     }
 
 fun errorToast(message: String, duration: Duration = 2.5.seconds) =
     toast("default", duration.inWholeMilliseconds) {
-        div("notification is-light p-4 toast-message mb-2") { svg("fa-xmark");+message }
+        div("notification is-light p-4 toast-message mb-2") { svg("fa-xmark", size = 13);+message }
     }
 
 fun infoToast(message: String, duration: Duration = 2.5.seconds) =
     toast("default", duration.inWholeMilliseconds) {
-        div("notification is-light p-4 toast-message mb-2") { svg("fa-info-circle");+message }
+        div("notification is-light p-4 toast-message mb-2") { svg("fa-info-circle", size = 13   );+message }
     }

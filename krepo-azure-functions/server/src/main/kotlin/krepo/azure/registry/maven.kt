@@ -23,7 +23,6 @@ import java.time.Instant
 import java.util.*
 import java.util.logging.Logger
 
-
 fun handleRequest(
     request: HttpRequest<ByteArray?>,
     repository: String,
@@ -34,6 +33,10 @@ fun handleRequest(
     else serveArtifact(request, repository, path, logger, request.httpMethod)
 }
 
+/**
+ * all repositories are not allowed to publish
+ * exists version artifacts
+ */
 fun deployArtifact(
     request: HttpRequest<ByteArray?>,
     repository: String,
@@ -41,9 +44,11 @@ fun deployArtifact(
     logger: Logger,
 ): HttpResponse {
     val content = request.body!!
-    if (path.endsWith("maven-metadata.xml")) Indexer.indexOnce(repository, path, content)
-    uploadFile("$repository/$path", content, true)
-    return request.respondText("Ok")
+    if (uploadFile("$repository/$path", content, false)) {
+        if (path.endsWith("maven-metadata.xml")) Indexer.indexOnce(repository, path, content)
+        return request.respondText("Ok")
+    }
+    return request.respondText("Conflict", HttpStatus.CONFLICT)
 }
 
 fun serveArtifact(
