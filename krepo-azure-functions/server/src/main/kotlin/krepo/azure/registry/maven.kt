@@ -18,6 +18,7 @@ import cn.rtast.kazure.response.respondBytes
 import cn.rtast.kazure.response.respondText
 import krepo.azure.util.*
 import krepo.azure.util.repo.index.Indexer
+import krepo.azure.util.string.mimeType
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.*
@@ -66,7 +67,7 @@ fun serveArtifact(
     val headers = mutableMapOf(
         "ETag" to content.etag,
         "Content-Length" to (content.bytes?.size ?: 0L).toString(),
-        "Content-Type" to "application/octet-stream"
+        "Content-Type" to path.mimeType
     )
     content.lastModified?.let { headers["Last-Modified"] = formatHttpDate(it) }
     return when {
