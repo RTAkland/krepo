@@ -14,9 +14,10 @@ import cn.rtast.kazure.HttpRequest
 import cn.rtast.kazure.HttpResponse
 import cn.rtast.kazure.response.respondRedirect
 import cn.rtast.kazure.trigger.HttpRouting
+import krepo.azure.cfg.ConfigManger
 
 @HttpRouting("//")
 fun indexRouting(
     request: HttpRequest<*>,
     context: HttpContext
-): HttpResponse = request.respondRedirect("https://pkg.rtast.cn")
+): HttpResponse = request.respondRedirect(ConfigManger.FRONTEND_URL)

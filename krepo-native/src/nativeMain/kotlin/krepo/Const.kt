@@ -9,14 +9,15 @@
 package krepo
 
 import io.ktor.client.*
-import io.ktor.client.engine.curl.Curl
+import io.ktor.client.engine.curl.*
 import kotlinx.io.files.Path
-import krepo.entity.maven.ConfigRepository
+import krepo.entity.BackendVersion
 import krepo.entity.FrontendConfig
-import krepo.entity.maven.MirrorRepository
-import krepo.entity.maven.RepositoryVisibility
 import krepo.entity.config.AuthConfig
 import krepo.entity.config.Config
+import krepo.entity.maven.ConfigRepository
+import krepo.entity.maven.MirrorRepository
+import krepo.entity.maven.RepositoryVisibility
 import krepo.enums.RepositoryStatus
 import krepo.util.file.mkdirs
 
@@ -63,13 +64,14 @@ val DEFAULT_CONFIG = Config(
             RepositoryStatus.Available,
             listOf()
         ),
-    ), true, "https://pkg.rtast.cn",
+    ), true, "https://next.pkg.rtast.cn",
     FrontendConfig(
         "Maven Repo of RTAST",
         "皖ICP备2024066235-1号",
         "这里是RTAST的Maven仓库!",
         "© #YEAR#  Made by  <a href=\"https://github.com/RTAkland\" target=\"_blank\">RTAkland</a>",
-        true
+        true,
+        BackendVersion(0, -1)
     ),
     AuthConfig("clientId", "clientSecret", "http://localhost:9098/api/signin/azure")
 )

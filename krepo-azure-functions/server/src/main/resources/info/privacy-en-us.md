@@ -33,7 +33,7 @@ interact with is handled exclusively within the context of the application.
 
 If you have any questions about this Privacy Policy, feel free to contact us at:
 
-- **Email**: [krepo@pkg.rtast.cn](mailto:krepo@pkg.rtast.cn)
+- **Email**: [krepo@next.pkg.rtast.cn](mailto:krepo@next.pkg.rtast.cn)
 
 > All rights reserved
 

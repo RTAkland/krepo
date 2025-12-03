@@ -9,19 +9,16 @@
 
 package krepo.routing
 
-import krepo.RESOURCE_PATH
-import krepo.fr.resources.getResource
-import krepo.fr.resources.resourceIndex
-import krepo.util.contentTypeMapper
-import krepo.util.file.exists
-import krepo.util.file.rawSource
-import krepo.util.initialResources
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.io.files.Path
-import platform.posix.exit
+import krepo.RESOURCE_PATH
+import krepo.fr.resources.getResource
+import krepo.fr.resources.resourceIndex
+import krepo.util.contentTypeMapper
+import krepo.util.file.rawSource
 import kotlin.time.ExperimentalTime
 
 fun Application.configureHomePageRouting() {

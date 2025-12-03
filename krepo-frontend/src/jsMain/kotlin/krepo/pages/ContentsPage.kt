@@ -47,7 +47,7 @@ fun RenderContext.ContentListingPage() {
                     "${backendVersion.GET_PRIVATE_REPOSITORY_CONTENTS}?repo=$repo&path=$path"
             }
 
-            is BackendVersions.STABLE -> "${backendVersion.GET_PUBLIC_REPOSITORY_CONTENTS}${currentPath.removePrefix("/")}"
+            is BackendVersions.Legacy -> "${backendVersion.GET_PUBLIC_REPOSITORY_CONTENTS}${currentPath.removePrefix("/")}"
         }
         val api = httpRequest(url)
             .auth().acceptJson().jsonContentType()

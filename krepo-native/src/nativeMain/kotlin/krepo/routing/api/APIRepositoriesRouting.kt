@@ -26,7 +26,6 @@ import kotlinx.io.files.Path
 import krepo.entity.maven.ConfigRepository
 import krepo.entity.maven.ConfigRepositoryWithSize
 import krepo.entity.maven.CreateDirectoryRequest
-import krepo.entity.maven.CreateRepository
 import krepo.entity.maven.DeleteRepository
 import krepo.entity.maven.ModifyRepository
 import krepo.entity.maven.RepositoryVisibility
@@ -124,7 +123,7 @@ private fun Route.configureDeleteRepositoryRouting() {
 
 private fun Route.configureAddRepositoryRouting() {
     post("/new") {
-        val repositoryInfo = call.receive<CreateRepository>()
+        val repositoryInfo = call.receive<ConfigRepository>()
         val config = configManager.getConfig()
         if (config.repositories.any { it.name == repositoryInfo.name }) {
             call.respond(HttpStatusCode.Conflict, CommonResponse(409, "当前已有同名仓库: ${repositoryInfo.name}"))

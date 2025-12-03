@@ -83,6 +83,7 @@ kotlin {
 
             implementation(libs.xmlutil.core)
             implementation(libs.xmlutil.serialization)
+            implementation("org.kotlincrypto.hash:md:0.8.0")
         }
     }
 }

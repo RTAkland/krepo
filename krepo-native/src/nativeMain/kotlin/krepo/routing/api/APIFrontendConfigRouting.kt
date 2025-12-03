@@ -7,9 +7,6 @@
 
 package krepo.routing.api
 
-import krepo.configManager
-import krepo.entity.res.CommonDataResponse
-import krepo.entity.res.CommonResponse
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -17,10 +14,53 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import krepo.DEFAULT_CONFIG
+import krepo.configManager
+import krepo.entity.BackendVersion
 import krepo.entity.FrontendConfig
+import krepo.entity.FrontendConfigResponse
+import krepo.entity.maven.ConfigRepositoryWithSize
+import krepo.entity.maven.RepositoryVisibility
+import krepo.entity.res.CommonDataResponse
+import krepo.entity.res.CommonResponse
+import krepo.tokenManager
+import krepo.util.respondJson
+import krepo.util.toJson
 
 fun Application.configureAPIFrontendConfigRouting() {
     routing {
+        get("/api/version") {
+            val token = call.principal<BearerTokenCredential>()
+            val repos = if (token == null) {
+                configManager.getConfig().repositories.toMutableList().apply {
+                    removeAll {
+                        it.visibility == RepositoryVisibility.Internal
+                    }
+                }
+            } else {
+                val isValidToken = tokenManager.validate(token.token)
+                if (isValidToken) configManager.getConfig().repositories else {
+                    configManager.getConfig().repositories.toMutableList().apply {
+                        removeAll {
+                            it.visibility == RepositoryVisibility.Internal
+                        }
+                    }
+                }
+            }
+            val resp = FrontendConfigResponse(
+                configManager.getConfig().frontendConfig,
+                repos.map {
+                    ConfigRepositoryWithSize(
+                        it.name,
+                        it.visibility,
+                        it.acceptExtensions,
+                        it.allowSnapshot,
+                        it.status,
+                        0L
+                    )
+                }
+            )
+            call.respondJson(resp.toJson())
+        }
         route("/@/api/config") {
             configureGetFrontendConfigRouting()
             authenticate("api") {
@@ -40,7 +80,8 @@ private fun Route.configureResetFrontendConfigRouting() {
                     DEFAULT_CONFIG.frontendConfig.icpLicense,
                     DEFAULT_CONFIG.frontendConfig.description,
                     DEFAULT_CONFIG.frontendConfig.copyright,
-                    DEFAULT_CONFIG.frontendConfig.enableAzureSignIn
+                    DEFAULT_CONFIG.frontendConfig.enableAzureSignIn,
+                    BackendVersion(0, -1)
                 ),
             )
         configManager.write(newConfig)
@@ -60,7 +101,8 @@ private fun Route.configureUpdateFrontendConfigRouting() {
                 icpLicense,
                 putConfig.description,
                 putConfig.copyright,
-                currentConfig.frontendConfig.enableAzureSignIn
+                currentConfig.frontendConfig.enableAzureSignIn,
+                BackendVersion(0, -1)
             ),
         )
         configManager.write(newConfig)
@@ -79,7 +121,8 @@ private fun Route.configureGetFrontendConfigRouting() {
                     config.icpLicense,
                     config.description,
                     config.copyright,
-                    config.enableAzureSignIn
+                    config.enableAzureSignIn,
+                    BackendVersion(0, -1)
                 )
             )
         )

@@ -6,7 +6,7 @@
  */
 
 @file:Suppress("unused")
-@file:OptIn(ExperimentalForeignApi::class, ExperimentalTime::class, ExperimentalNativeApi::class)
+@file:OptIn(ExperimentalForeignApi::class, ExperimentalTime::class, ExperimentalNativeApi::class, UnsafeNumber::class)
 
 package krepo.util.file
 
@@ -17,6 +17,7 @@ import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.core.*
 import io.ktor.utils.io.readAvailable
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.UnsafeNumber
 import kotlinx.io.Buffer
 import kotlinx.io.buffered
 import kotlinx.io.files.Path
@@ -115,7 +116,7 @@ fun Path.calculateDirectorySize(): Float {
 
 fun Path.getFileModifiedTimestamp(): Long {
     return try {
-        get_file_modified_time(this.toString())
+        get_file_modified_time(this.toString()).toLong()
     } catch (_: Exception) {
         -26034180322L
     }

@@ -6,7 +6,7 @@
  */
 
 
-@file:OptIn(ExperimentalUuidApi::class)
+@file:OptIn(ExperimentalUuidApi::class, ExperimentalStdlibApi::class)
 
 package krepo.routing.api.oauth
 
@@ -30,6 +30,7 @@ import krepo.entity.user.oauth.AzureSignResponse
 import krepo.entity.user.oauth.AzureUserInfo
 import krepo.util.fromJson
 import krepo.util.toJson
+import org.kotlincrypto.hash.md.MD5
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -80,7 +81,7 @@ fun Application.configureAzureSignInRouting() {
                             val respBase64 = AzureLoginSuccess(
                                 token, localUserInfo!!.email,
                                 localUserInfo.name,
-                                expiredAt
+                                expiredAt, MD5().digest(localUserInfo.email.encodeToByteArray()).toHexString()
                             ).toJson().encodeBase64()
                             call.respondRedirect("/#/azure/signed?d=$respBase64")
                         } else {

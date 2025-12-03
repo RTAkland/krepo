@@ -60,7 +60,7 @@ public sealed class BackendVersions(public val v: Int, public val desc: String) 
     public abstract val GRANT_PUBLISH_TOKEN: RouteEndpoint
 
 
-    public class STABLE : BackendVersions(0, "Stable version") {
+    public class Legacy : BackendVersions(0, "Stable version") {
         override val CURRENT_USER: RouteEndpoint = createRouteEndpoint("/@/api/user")
         override val USERS: RouteEndpoint = createRouteEndpoint("/@/api/user/")
         override val LOGIN: RouteEndpoint = createRouteEndpoint("/@/api/login")
@@ -139,7 +139,7 @@ public sealed class BackendVersions(public val v: Int, public val desc: String) 
 }
 
 public fun Int.toBackendVersion(): BackendVersions = when (this) {
-    0 -> BackendVersions.STABLE()
+    0 -> BackendVersions.Legacy()
     1 -> BackendVersions.Azure()
     else -> throw IllegalArgumentException("Unknown backend version: $this")
 }

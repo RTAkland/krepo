@@ -21,4 +21,4 @@ fun getCurrentHttpUrl(): String {
 
 val customBacked
     get() = if (!developmentMode) "https://repo.maven.rtast.cn" else if (developmentMode) "http://127.0.0.1:7071"
-    else if (backendVersion is BackendVersions.STABLE) getCurrentHttpUrl() else getCurrentHttpUrl()
+    else if (backendVersion is BackendVersions.Legacy) getCurrentHttpUrl() else getCurrentHttpUrl()
