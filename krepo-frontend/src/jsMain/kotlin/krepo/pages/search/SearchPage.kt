@@ -17,7 +17,6 @@ import krepo.backendVersion
 import krepo.components.errorToast
 import krepo.components.fa.svg
 import krepo.components.fa.svgBlock
-import krepo.components.infoToast
 import krepo.components.warningToast
 import krepo.coroutineScope
 import krepo.entity.maven.ConfigRepositoryWithSize

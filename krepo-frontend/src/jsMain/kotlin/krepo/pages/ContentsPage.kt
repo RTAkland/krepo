@@ -67,6 +67,7 @@ fun RenderContext.ContentListingPage() {
             inlineStyle("max-width: 65%")
             div("level-left") {
                 h4("title is-4") {
+                    id("index-of-sep-id")
                     +"Index of /"
                     val segments = currentPath.trim('/').split("/")
                     val basePath = StringBuilder("/#")
@@ -81,7 +82,7 @@ fun RenderContext.ContentListingPage() {
                     }
                 }
             }
-            hr {}
+            hr("index-sep") {}
             if (currentPath.isNotEmpty()) {
                 div("mb-4") {
                     div("level") {
@@ -235,8 +236,10 @@ fun RenderContext.ContentListingPage() {
                                     }
                                 }
                                 td("has-text-centered") {
-                                    span("ml-5") { +formatDate(entry.timestamp) }
-                                    title(entry.timestamp.toString())
+                                    span("ml-5") {
+                                        +formatDate(entry.timestamp)
+                                        title(entry.timestamp.toString())
+                                    }
                                 }
                                 td("has-text-centered") { if (!entry.isDirectory) +formatSize(entry.size) else +"-" }
                                 td("has-text-left") {

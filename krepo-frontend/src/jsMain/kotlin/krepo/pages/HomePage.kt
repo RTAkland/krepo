@@ -30,7 +30,7 @@ import krepo.util.string.getGradleKotlinDslRepositoryTemplate
 fun RenderContext.HomePage(repos: List<ConfigRepositoryWithSize>?) {
     val repositories = storeOf(repos ?: emptyList())
     if (repositories.current.isEmpty()) coroutineScope.launchJob { repositories.update(getRepositories()) }
-    div("container") {
+    div("container app-navbar") {
         inlineStyle("max-width: 50%")
         div("mt-5 is-flex is-align-items-start") {
             if (frontendConfig.description != null) span {

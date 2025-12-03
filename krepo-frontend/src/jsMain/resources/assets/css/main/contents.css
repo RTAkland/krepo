@@ -1,0 +1,26 @@
+/*
+ * Copyright © 2025 RTAkland
+ * Date: 2025/4/17 00:25
+ * Open Source Under Apache-2.0 License
+ * https://www.apache.org/licenses/LICENSE-2.0
+ */
+
+:root {
+    --index-sep-width: 40%;
+}
+
+.index-sep {
+    width: 0;
+    height: 2px;
+    border: none;
+    animation: expand 600ms forwards;
+}
+
+@keyframes expand {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: var(--index-sep-width);
+    }
+}

@@ -30,7 +30,6 @@ fun RenderContext.NavigatorBar() {
     val searchKeywordStore = storeOf("")
     val oauthButtonDisabled = storeOf(false)
     nav("navbar level") {
-        inlineStyle("background-color: #5181B8")
         inlineStyle("color: #FFFFFF")
         attr("role", "navigation")
         attr("aria-label", "main navigation")
@@ -93,6 +92,7 @@ fun RenderContext.NavigatorBar() {
                 div("navbar-item") {
                     div("control has-icons-left has-icons-right") {
                         input("input is-rounded") {
+                            id("searchInput")
                             type("text")
                             placeholder("Fill in keyword to search...")
                             changes.values() handledBy searchKeywordStore.update
