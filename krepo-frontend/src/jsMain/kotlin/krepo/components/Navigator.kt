@@ -15,7 +15,7 @@ import kotlinx.browser.window
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.mapNotNull
 import krepo.*
-import krepo.components.fa.svg
+import krepo.components.fa.autoSvg
 import krepo.entity.user.LoginSuccessResponse
 import krepo.entity.user.oauth.AzureRequestSignInURL
 import krepo.entity.user.oauth.AzureSignInURL
@@ -106,7 +106,7 @@ fun RenderContext.NavigatorBar() {
                                     } else window.location.href = "/#/search?k=${searchKeywordStore.current}"
                                 }
                         }
-                        span("icon is-small is-left") { svg("fa-magnifying-glass", "", size = 14) }
+                        span("icon is-small is-left") { autoSvg("fa-magnifying-glass", "", size = 14) }
                         title("Search artifacts")
                     }
                 }

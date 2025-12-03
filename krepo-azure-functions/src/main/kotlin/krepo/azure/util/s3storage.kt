@@ -19,7 +19,7 @@ import aws.smithy.kotlin.runtime.content.writeToOutputStream
 import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.time.toJvmInstant
 import kotlinx.coroutines.runBlocking
-import krepo.azure.cfg.ConfigManger
+import krepo.azure.manager.ConfigManger
 import krepo.azure.entity.internal.MetadataFile
 import krepo.entity.maven.FileEntry
 import java.io.ByteArrayOutputStream

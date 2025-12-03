@@ -13,6 +13,7 @@ import dev.fritz2.core.*
 import kotlinx.browser.window
 import krepo.backendVersion
 import krepo.components.errorToast
+import krepo.components.fa.autoSvg
 import krepo.components.fa.svg
 import krepo.components.infoToast
 import krepo.components.showDialog
@@ -75,8 +76,8 @@ fun RenderContext.NewUserPage() {
                 }
                 div("is-grouped is-right buttons") {
                     div("control") {
-                        button("button is-info is-light") {
-                            svg("fa-check")
+                        button("button") {
+                            autoSvg("fa-check")
                             +"Confirm"
                             clicks handledBy { showCreateUserDialog.update(true) }
                         }

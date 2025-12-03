@@ -8,7 +8,7 @@
 
 @file:OptIn(ExperimentalTime::class)
 
-package krepo.azure.cfg
+package krepo.azure.manager
 
 import krepo.azure.entity.internal.TokenPayload
 import krepo.azure.userManager

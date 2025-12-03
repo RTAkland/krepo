@@ -11,14 +11,11 @@ package krepo.pages.settings
 
 import dev.fritz2.core.*
 import krepo.backendVersion
-import krepo.components.badge
-import krepo.components.fa.svg
+import krepo.components.fa.autoSvg
 import krepo.components.showDialog
 import krepo.coroutineScope
 import krepo.entity.maven.GetRepositoriesResponse
 import krepo.entity.maven.RepositoryVisibility
-import krepo.enums.BadgeType
-import krepo.enums.RepositoryStatus
 import krepo.util.auth
 import krepo.util.byte.fromProtoBuf
 import krepo.util.file.checkPermission
@@ -59,8 +56,8 @@ fun RenderContext.MavenRepositorySettingPage() {
                 div("level") {
                     div("level-left") { h3("title is-4") { +"Repository List" } }
                     div("level-right") {
-                        button("button is-light") {
-                            svg("fa-plus")
+                        button("button") {
+                            autoSvg("fa-plus")
                             +"Add Repository"
                             clicks handledBy { showCreateRepositoryFormDialog.update(true) }
                         }
@@ -70,41 +67,27 @@ fun RenderContext.MavenRepositorySettingPage() {
                     div("box is-flex is-justify-content-space-between is-align-items-center") {
                         span {
                             when (repo.visibility) {
-                                RepositoryVisibility.Internal -> svg("fa-eye-slash")
-                                RepositoryVisibility.Public -> svg("fa-eye")
+                                RepositoryVisibility.Internal -> autoSvg("fa-eye-slash")
+                                RepositoryVisibility.Public -> autoSvg("fa-eye")
                             }
                             a("is-size-5") {
                                 +repo.name
                                 href("/#/${repo.name}")
                                 title("Click to view the content of this repository")
                             }
-                            i {
-                                p {
-                                    when (repo.visibility) {
-                                        RepositoryVisibility.Internal -> inlineStyle("color: red;")
-                                        RepositoryVisibility.Public -> inlineStyle("color: green;")
-                                    }
-                                    when (repo.status) {
-                                        RepositoryStatus.Deleted -> badge(BadgeType.Deleted) { svg("fa-xmark") }
-                                        RepositoryStatus.Created -> badge(BadgeType.Created) { svg("fa-hourglass") }
-                                        RepositoryStatus.Available -> badge(BadgeType.Available) { svg("fa-check") }
-                                        RepositoryStatus.Modified -> badge(BadgeType.Modified) { svg("fa-hourglass") }
-                                    }
-                                    +repo.visibility.desc
-                                }
-                            }
+                            span("tag ml-2") { +repo.visibility.desc }
                         }
                         div {
-                            button("button is-small is-light is-info mr-2") {
-                                svg("fa-user-pen")
+                            button("button is-small mr-2") {
+                                autoSvg("fa-user-pen")
                                 +"Edit"
                                 clicks handledBy {
                                     selectedRepositoryName.update(repo.name)
                                     showModifyRepositoryStore.update(true)
                                 }
                             }
-                            button("button is-small is-light is-danger") {
-                                svg("fa-trash-alt")
+                            button("button is-small") {
+                                autoSvg("fa-trash-alt")
                                 +"Delete"
                                 clicks handledBy {
                                     selectedRepositoryName.update(repo.name)

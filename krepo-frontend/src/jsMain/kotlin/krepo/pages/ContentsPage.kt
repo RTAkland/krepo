@@ -13,7 +13,7 @@ import dev.fritz2.core.*
 import kotlinx.browser.window
 import krepo.*
 import krepo.components.errorToast
-import krepo.components.fa.svg
+import krepo.components.fa.autoSvg
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.components.warningToast
@@ -88,7 +88,7 @@ fun RenderContext.ContentListingPage() {
                             a("button") {
                                 val parentPath = currentPath.trimEnd('/').substringBeforeLast('/', "")
                                 href("/#$parentPath")
-                                svg("fa-arrow-left", "")
+                                autoSvg("fa-arrow-left", "")
                                 title("Back")
                             }
                         }
@@ -107,7 +107,7 @@ fun RenderContext.ContentListingPage() {
                                 val (group, name, version) = parseGAV(simplePath, repo)
                                 div("dropdown has-dropdown is-hoverable has-background is-centered") {
                                     button("button") {
-                                        svg("fa-copy", "")
+                                        autoSvg("fa-copy", "")
                                         title("Copy dependency URL")
                                         clicks handledBy {
                                             window.navigator.clipboard.writeText(
@@ -146,7 +146,7 @@ fun RenderContext.ContentListingPage() {
                                 label("button") {
                                     title("Upload file")
                                     attr("for", "fileInput")
-                                    svg("fa-upload", "")
+                                    autoSvg("fa-upload", "")
                                 }
                                 input("file-input") {
                                     id("fileInput")
@@ -183,13 +183,13 @@ fun RenderContext.ContentListingPage() {
                                 }
                                 a("button") {
                                     title("Create folder")
-                                    svg("fa-folder-plus", "")
+                                    autoSvg("fa-folder-plus", "")
                                     clicks handledBy { showCreateFolderDialog.update(true) }
                                 }
                             }
                             a("button mr-2") {
                                 title("Preferences")
-                                svg("fa-sliders", "")
+                                autoSvg("fa-sliders", "")
                                 clicks handledBy { infoToast("Nothing to set.") }
                             }
                         }
@@ -242,11 +242,11 @@ fun RenderContext.ContentListingPage() {
                                 td("has-text-left") {
                                     span {
                                         if (entry.owner != null) {
-                                            svg("fa-circle-check", size = 15)
+                                            autoSvg("fa-circle-check", size = 15)
                                             +"by ${entry.owner}"
                                             title("Published by ${entry.owner}")
                                         } else {
-                                            svg("fa-circle-question", size = 15)
+                                            autoSvg("fa-circle-question", size = 15)
                                             +"by Unknown"
                                             title("Owned by Unknown")
                                         }
@@ -258,14 +258,7 @@ fun RenderContext.ContentListingPage() {
                                         button("button is-small") {
                                             val name = if (entry.isDirectory) "directory" else "file"
                                             title("Delete $name")
-                                            img trashImg@{
-                                                isDarkTheme.data.render {
-                                                    if (it) this@trashImg.src("assets/img/trash-light.svg")
-                                                    else this@trashImg.src("assets/img/trash-light.svg")
-                                                }
-                                                attr("alt", "Delete icon")
-                                                inlineStyle("width: 1.1rem; height: 1.1rem;")
-                                            }
+                                            autoSvg("fa-trash-alt", "", size = 12)
                                             clicks handledBy {
                                                 showDeleteFileEntryDialog.update(true)
                                                 selectedFileEntry.update("$currentPath/${entry.name}".removePrefix("/"))

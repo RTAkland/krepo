@@ -14,7 +14,7 @@ import cn.rtast.kazure.HttpRequest
 import cn.rtast.kazure.HttpResponse
 import cn.rtast.kazure.response.respondRedirect
 import cn.rtast.kazure.trigger.HttpRouting
-import krepo.azure.cfg.ConfigManger
+import krepo.azure.manager.ConfigManger
 
 @HttpRouting("/releases")
 fun redirectReleasesRouting(

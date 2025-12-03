@@ -11,6 +11,7 @@ package krepo.components.fa
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.src
 import dev.fritz2.core.width
+import krepo.isDarkTheme
 
 fun RenderContext.svg(
     name: String,
@@ -19,7 +20,19 @@ fun RenderContext.svg(
 ) {
     img(className) faIcon@{
         inlineStyle("vertical-align: middle;")
-        src("assets/img/fa/${name.removePrefix("fa-")}.svg")
+        src("assets/img/fa/origin/${name.removePrefix("fa-")}.svg")
+        width(size)
+    }
+}
+
+fun RenderContext.svgm(
+    name: String,
+    className: String = "mr-2",
+    size: Int = 16,
+) {
+    img(className) {
+        inlineStyle("vertical-align: middle;")
+        src("assets/img/fa/modified/${name.removePrefix("fa-")}.svg")
         width(size)
     }
 }
@@ -28,12 +41,22 @@ fun RenderContext.svgBlock(
     name: String,
     className: String = "mr-2",
     size: Int = 16,
-    block: RenderContext.() -> Unit = {}
+    block: RenderContext.() -> Unit = {},
 ) {
     img(className) faIcon@{
         inlineStyle("vertical-align: middle;")
-        src("assets/img/fa/${name.removePrefix("fa-")}.svg")
+        src("assets/img/fa/origin/${name.removePrefix("fa-")}.svg")
         width(size)
         this.block()
+    }
+}
+
+fun RenderContext.autoSvg(
+    name: String,
+    className: String = "mr-2",
+    size: Int = 16,
+) {
+    isDarkTheme.data.render {
+        if (!it) svg(name, className, size) else svgm(name, className, size)
     }
 }

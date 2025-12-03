@@ -13,6 +13,7 @@ import dev.fritz2.core.RenderContext
 import dev.fritz2.core.storeOf
 import kotlinx.browser.window
 import krepo.backendVersion
+import krepo.components.fa.autoSvg
 import krepo.components.fa.svg
 import krepo.components.infoToast
 import krepo.components.showDialog
@@ -41,15 +42,15 @@ fun RenderContext.UserManagePage() {
                                     p("subtitle is-6 has-text-grey") { +user.email }
                                     span("has-text-grey") { +user.ex!!.namespaces.joinToString(", ") }
                                     div("buttons") {
-                                        button("button is-small is-link is-light") {
-                                            svg("fa-user-pen")
+                                        button("button is-small") {
+                                            autoSvg("fa-user-pen")
                                             +"Edit"
                                             clicks handledBy {
                                                 window.location.href = "/#/user/edit?username=${user.name}"
                                             }
                                         }
-                                        button("button is-small is-danger is-light") {
-                                            svg("fa-trash-alt", size = 12)
+                                        button("button is-small") {
+                                            autoSvg("fa-trash-alt", size = 12)
                                             +"Delete"
                                             clicks handledBy {
                                                 selectedUser.update(user)

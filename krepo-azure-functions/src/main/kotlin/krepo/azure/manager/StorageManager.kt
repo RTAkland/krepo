@@ -6,7 +6,7 @@
  */
 
 
-package krepo.azure.cfg
+package krepo.azure.manager
 
 import io.ktor.client.request.*
 import io.ktor.client.statement.*

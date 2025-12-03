@@ -6,7 +6,7 @@
  */
 
 
-package krepo.azure.cfg
+package krepo.azure.manager
 
 import krepo.azure.resources.resources
 import krepo.azure.util.string.fromJson

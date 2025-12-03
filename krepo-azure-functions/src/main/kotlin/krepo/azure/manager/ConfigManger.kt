@@ -6,7 +6,7 @@
  */
 
 
-package krepo.azure.cfg
+package krepo.azure.manager
 
 object ConfigManger {
     private fun get(name: String): String = System.getenv(name)

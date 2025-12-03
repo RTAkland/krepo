@@ -13,7 +13,7 @@ import com.auth0.jwt.JWTCreator
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.interfaces.DecodedJWT
-import krepo.azure.cfg.ConfigManger
+import krepo.azure.manager.ConfigManger
 import krepo.azure.util.Jwt.TokenPurpose.Companion.toPurpose
 import krepo.azure.util.Jwt.TokenPurpose.Companion.withPurpose
 import krepo.entity.user.User

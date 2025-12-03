@@ -18,15 +18,12 @@ import cn.rtast.kazure.response.respond
 import cn.rtast.kazure.response.respondRedirect
 import cn.rtast.kazure.response.respondText
 import cn.rtast.kazure.trigger.HttpRouting
-import com.microsoft.azure.functions.annotation.AuthorizationLevel
-import com.microsoft.azure.functions.annotation.FunctionName
-import com.microsoft.azure.functions.annotation.HttpTrigger
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
-import krepo.azure.cfg.ConfigManger
+import krepo.azure.manager.ConfigManger
 import krepo.azure.entity.internal.AzureAccessToken
 import krepo.azure.storageManager
 import krepo.azure.tokenManager
@@ -45,7 +42,6 @@ import krepo.entity.user.oauth.AzureSignResponse
 import krepo.entity.user.oauth.AzureUserInfo
 import krepo.util.fromProtobuf
 import krepo.util.toProtobuf
-import java.util.Optional
 import java.util.UUID
 
 private val AZURE_LOGIN_URL = "https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize" +

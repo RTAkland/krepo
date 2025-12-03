@@ -62,7 +62,7 @@ fun RenderContext.IndexSettingsPage() = checkPermission {
                                     td("has-text-centered") { span("tag") { +repo.status.toString() } }
                                     td("has-text-centered") { span("tag") { +formatSize(repo.size ?: 0L) } }
                                     td("has-text-centered") {
-                                        button("button is-warning is-light is-small mr-2") {
+                                        button("button is-small mr-2") {
                                             +"Rebuild"
                                             clicks handledBy {
                                                 showRebuildIndexDialog.update(true)
@@ -70,7 +70,7 @@ fun RenderContext.IndexSettingsPage() = checkPermission {
                                             }
                                             title("Rebuild indexes or create indexed")
                                         }
-                                        button("button is-danger is-light is-small") {
+                                        button("button is-small") {
                                             +"Delete"
                                             clicks handledBy {
                                                 showDeleteIndexDialog.update(true)

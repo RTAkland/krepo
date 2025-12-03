@@ -10,6 +10,7 @@
 
 package krepo.util
 
+import kotlinx.browser.window
 import krepo.components.warningToast
 import krepo.util.file.LocalStorage
 import kotlin.time.Clock
@@ -20,8 +21,9 @@ fun checkToken() {
     if (tokenExpireTimestamp != null) {
         val now = Clock.System.now().epochSeconds
         if (now >= tokenExpireTimestamp) {
-            warningToast("The Session has expired.")
             LocalStorage.clearAll()
+            window.location.reload()
+            warningToast("The Session has expired.")
         }
     }
 }

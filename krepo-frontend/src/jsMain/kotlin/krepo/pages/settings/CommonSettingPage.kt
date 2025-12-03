@@ -12,6 +12,7 @@ package krepo.pages.settings
 import dev.fritz2.core.*
 import kotlinx.browser.window
 import krepo.backendVersion
+import krepo.components.fa.autoSvg
 import krepo.components.fa.svg
 import krepo.components.infoToast
 import krepo.components.showDialog
@@ -81,15 +82,15 @@ fun RenderContext.CommonSettingPage() {
                     }
                     div("is-grouped is-right buttons") {
                         div("control") {
-                            button("button is-danger is-light") {
-                                svg("fa-rotate-left")
+                            button("button") {
+                                autoSvg("fa-rotate-left")
                                 +"Reset"
                                 clicks handledBy { showResetFrontConfigDialog.update(true) }
                             }
                         }
                         div("control") {
-                            button("button is-info is-light") {
-                                svg("fa-floppy-disk")
+                            button("button") {
+                                autoSvg("fa-floppy-disk")
                                 +"Save"
                                 clicks handledBy { showSubmitSettingDialog.update(true) }
                             }
