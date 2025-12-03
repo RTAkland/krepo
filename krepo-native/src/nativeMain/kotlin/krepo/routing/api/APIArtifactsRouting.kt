@@ -32,8 +32,8 @@ import kotlinx.io.files.Path
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import krepo.entity.maven.RepositoryVisibility
-import krepo.util.fromJson
-import krepo.util.toJson
+import krepo.util.string.fromJson
+import krepo.util.string.toJson
 
 private suspend fun ApplicationCall.serveLatestVersion(repository: String) {
     val path = parameters.getAll("path")!!.joinToString("/")

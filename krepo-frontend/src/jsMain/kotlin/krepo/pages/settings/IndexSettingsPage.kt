@@ -24,13 +24,13 @@ import krepo.index.IndexRepositoryResponse
 import krepo.index.req.DeleteIndexRequest
 import krepo.index.req.RebuildIndexRequest
 import krepo.util.auth
+import krepo.util.byte.fromProtoBuf
 import krepo.util.file.checkPermission
 import krepo.util.file.formatSize
-import krepo.util.fromJson
 import krepo.util.httpRequest
 import krepo.util.launchJob
 import krepo.util.repo.getRepositories
-import krepo.util.setBody
+import krepo.util.setOctetBody
 
 fun RenderContext.IndexSettingsPage() = checkPermission {
     val repositories = storeOf<List<ConfigRepositoryWithSize>>(emptyList())
@@ -97,8 +97,8 @@ fun RenderContext.IndexSettingsPage() = checkPermission {
             infoToast("Rebuilding/Creating indexes...")
             if (selectedRepositoryStore.current != null) {
                 val resp = httpRequest(backendVersion.CREATE_REPOSITORY_INDEX)
-                    .auth().setBody(RebuildIndexRequest(selectedRepositoryStore.current!!))
-                    .post().body().fromJson<IndexRepositoryResponse>()
+                    .auth().setOctetBody(RebuildIndexRequest(selectedRepositoryStore.current!!))
+                    .post().arrayBuffer().fromProtoBuf<IndexRepositoryResponse>()
                 if (resp.success) {
                     infoToast("Rebuild/Create indexes success, taking ${resp.consuming} seconds")
                 } else errorToast("Rebuild/Create indexes failed ${resp.message}")
@@ -114,8 +114,8 @@ fun RenderContext.IndexSettingsPage() = checkPermission {
             infoToast("Deleting indexes...")
             if (selectedRepositoryStore.current != null) {
                 httpRequest(backendVersion.DELETE_REPOSITORY_INDEX)
-                    .auth().setBody(DeleteIndexRequest(selectedRepositoryStore.current!!))
-                    .delete().body()
+                    .auth().setOctetBody(DeleteIndexRequest(selectedRepositoryStore.current!!))
+                    .delete()
                 infoToast("Indexes deleted.")
                 window.location.reload()
             } else errorToast("No repository selected.")

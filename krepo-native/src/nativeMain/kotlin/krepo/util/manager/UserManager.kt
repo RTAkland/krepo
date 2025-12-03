@@ -16,8 +16,8 @@ import krepo.util.file.exists
 import krepo.util.file.readText
 import krepo.util.file.writeText
 import kotlinx.io.files.Path
-import krepo.util.fromJson
-import krepo.util.toJson
+import krepo.util.string.fromJson
+import krepo.util.string.toJson
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 

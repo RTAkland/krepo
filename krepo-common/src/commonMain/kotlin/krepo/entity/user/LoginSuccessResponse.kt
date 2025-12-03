@@ -17,5 +17,5 @@ public data class LoginSuccessResponse(
     val email: String,
     val username: String,
     val expiredAt: Long,
-    val avatarMd5: String?
+    val avatarMd5: String
 )

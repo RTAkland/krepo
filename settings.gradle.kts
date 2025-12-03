@@ -3,14 +3,11 @@
 rootProject.name = "krepo"
 
 listOf(
-    "native",
     "frontend",
-    "test:test-publish",
-    "test:test-publish2",
-    "azure-functions:server",
-    "azure-functions:auth",
+    "azure-functions",
     "common",
-    "rs"
+    "rs",
+    "test",
 ).forEach { include("krepo-$it") }
 
 pluginManagement {

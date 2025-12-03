@@ -1,27 +1,14 @@
 # krepo
 
 krepo is a maven repository server software, it has many parts, include `frontend` and `backend` implemented in
-different
-languages and on different platforms.
+different languages and on different platforms.
 
-[krepo(Kotlin native)](krepo-native) runs on `Linux amd64`, `Linux Arm64` and `Macos64`.
-***Low memory usage, 25MiB+-***
-
-[krepo(Kotlin JVM)](krepo-azure-functions/server) runs on `Azure Functions` only. ***It's serverless*** and ***mainly supported***
+[krepo(Kotlin JVM)](krepo-azure-functions/server) runs on `Azure Functions` only. ***It's serverless*** and
+***mainly supported***
 
 [krepo(Rust)](krepo-rs) runs on any platform that Rust can compile for. ***Publish and Download only***
 
-# Features
-
-1. Low memory usage (native & rs platform)
-2. High performance
-3. Mirroring repositories (native only)
-4. Etag and last-modified-date verify (azure-function & native only)
-5. Staged upload (native only)
-
 # Note
-
-> Init the project first by executing `./init.sh`
 
 # Build frontend
 
@@ -29,38 +16,20 @@ languages and on different platforms.
 $ ./gradlew :krepo-frontend:jsBrowserDistribution
 ```
 
-> To deploy on Cloudflare Workers, the static files at `krepo-frontend/build/worker-dist/`.  
-> To Deploy on Vercel, the static files at `krepo-frontend/build/vercel-dist/`.
-
 # Build backend
-
-## Azure functions
 
 > Before build functions, rename `users.template.json` to `users.json` in
 `krepo-azure-functions/server/src/main/resources/`,
 > and edit the users.
 
-> Rename `local.settings.template.json` to "local.settings.json" in `krepo-azure-functions/server/` if you want to run
+> Rename `local.settings.template.json` to "local.settings.json" in `krepo-azure-functions/` if you want to run
 > functions locally.
 
 ```shell
-$ ./gradlew :krepo-azure-functions:server:azureFunctionsPackageZip
+$ ./gradlew :krepo-azure-functions:generateResources :krepo-azure-functions:azureFunctionsPackageZip
 ```
 
-Function zip file at `krepo-azure-functions/server/build/azure-functions/krepo-server.zip`
-
-## Kotlin Native platforms
-
-```shell
-# For Linux amd64
-$ ./gradlew :krepo-frontend:jsBrowserDistribution generateResources :krepo-native:linkReleaseExecutableLinuxX64
-
-# For Linux arm64
-$ ./gradlew :krepo-frontend:jsBrowserDistribution generateResources :krepo-native:linkReleaseExecutableLinuxArm64
-
-# For Macos64
-$ ./gradlew :krepo-frontend:jsBrowserDistribution generateResources :krepo-native:linkReleaseExecutablMacosX64
-```
+Function zip file at `krepo-azure-functions/build/azure-functions/krepo-server.zip`
 
 ## Rust platforms
 

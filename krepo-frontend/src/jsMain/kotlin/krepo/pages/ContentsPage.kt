@@ -17,12 +17,11 @@ import krepo.components.fa.svg
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.components.warningToast
-import krepo.entity.DeleteGavRequest
-import krepo.entity.UploadFileResponse
 import krepo.entity.maven.*
 import krepo.enums.CheckImplType
 import krepo.pages.other.NotFoundPage
 import krepo.util.*
+import krepo.util.byte.fromProtoBuf
 import krepo.util.byte.toByteArray
 import krepo.util.file.LocalStorage
 import krepo.util.file.formatSize
@@ -49,15 +48,14 @@ fun RenderContext.ContentListingPage() {
 
             is BackendVersions.Legacy -> "${backendVersion.GET_PUBLIC_REPOSITORY_CONTENTS}${currentPath.removePrefix("/")}"
         }
-        val api = httpRequest(url)
-            .auth().acceptJson().jsonContentType()
+        val api = httpRequest(url).auth().octetType()
         val response = api.get()
         if (response.status == 404) {
             div("has-text-centered") { NotFoundPage() }
             return@launchJob
         }
         require(response.ok) { errorToast("Failed to fetch repository contents!") }
-        val repositoryContents = response.body().fromJson<RepositoryContents>().data
+        val repositoryContents = response.arrayBuffer().fromProtoBuf<RepositoryContents>().data
         if (repositoryContents.isEmpty()) isRepositoryEmptyStore.update(true)
         repositoryContentsStore.update(repositoryContents)
     }
@@ -172,9 +170,8 @@ fun RenderContext.ContentListingPage() {
                                                     )
                                                 infoToast("Uploading...")
                                                 val result = httpRequest(backendVersion.UPLOAD_FILE)
-                                                    .auth().acceptJson().jsonContentType()
-                                                    .setBody(body).post().body()
-                                                    .fromJson<UploadFileResponse>()
+                                                    .auth().setOctetBody(body).post().arrayBuffer()
+                                                    .fromProtoBuf<UploadFileResponse>()
                                                 when (result.code) {
                                                     200 -> window.location.reload()
                                                     409 -> errorToast("Upload failed, Conflict!")
@@ -305,14 +302,14 @@ fun RenderContext.ContentListingPage() {
         } else {
             coroutineScope.launchJob {
                 val result = httpRequest(backendVersion.CREATE_DIRECTORY)
-                    .auth().acceptJson().jsonContentType()
-                    .setBody(
+                    .auth().setOctetBody(
                         CreateDirectoryRequest(
                             "${
                                 currentPath.removeSuffix("/").removePrefix("/")
                             }/${folderNameStore.current}"
                         )
-                    ).post().checkImpl(CheckImplType.Toast).body().fromJson<CreateDirectoryResponse>()
+                    ).post().checkImpl(CheckImplType.Toast)
+                    .arrayBuffer().fromProtoBuf<CreateDirectoryResponse>()
                 if (result.code == 200) {
                     infoToast("New folder successfully created")
                     window.location.reload()
@@ -327,14 +324,12 @@ fun RenderContext.ContentListingPage() {
     }) {
         coroutineScope.launchJob {
             httpRequest(backendVersion.DELETE_GAV)
-                .acceptJson().jsonContentType().auth()
-                .setBody(
-                    DeleteGavRequest(
+                .auth().setOctetBody(
+                    DeleteGAVRequest(
                         selectedFileEntry.current,
                         selectedFileEntryIsDirectory.current
                     )
-                )
-                .delete()
+                ).delete()
             window.location.reload()
         }
         infoToast("Deleting...")

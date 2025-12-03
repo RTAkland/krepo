@@ -13,8 +13,3 @@ import kotlinx.serialization.Serializable
 public data class CreateDirectoryRequest(
     val path: String
 )
-
-@Serializable
-public data class CreateDirectoryResponse(
-    val code: Int
-)

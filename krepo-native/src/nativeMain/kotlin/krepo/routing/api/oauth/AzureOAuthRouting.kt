@@ -28,8 +28,8 @@ import krepo.entity.user.oauth.AzureLoginSuccess
 import krepo.entity.user.oauth.AzureSignInURL
 import krepo.entity.user.oauth.AzureSignResponse
 import krepo.entity.user.oauth.AzureUserInfo
-import krepo.util.fromJson
-import krepo.util.toJson
+import krepo.util.string.fromJson
+import krepo.util.string.toJson
 import org.kotlincrypto.hash.md.MD5
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid

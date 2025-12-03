@@ -12,9 +12,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 public data class AzureLoginSuccess(
-    val t: String,
-    val e: String,
-    val n: String,
-    val ex: Long,
-    val m: String
+    val token: String,
+    val email: String,
+    val name: String,
+    val expire: Long,
+    val avatarMd5: String
 )

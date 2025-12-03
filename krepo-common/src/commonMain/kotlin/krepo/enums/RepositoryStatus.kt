@@ -11,11 +11,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 public enum class RepositoryStatus(public val desc: String) {
-    Deleted("已删除"),
-
-    Created("已创建"),
-
-    Available("可用"),
-
-    Modified("已修改")
+    Deleted("Deleted"), Created("Created"),
+    Available("Available"), Modified("Modified")
 }

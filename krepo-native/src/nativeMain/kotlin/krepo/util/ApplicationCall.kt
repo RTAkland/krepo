@@ -10,6 +10,7 @@ package krepo.util
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
+import krepo.util.string.toJson
 
 suspend inline fun <reified T> ApplicationCall.respondJson(content: T, code: Int = 200) {
     respondText(

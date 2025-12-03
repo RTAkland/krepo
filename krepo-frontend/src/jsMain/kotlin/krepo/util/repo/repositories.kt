@@ -10,18 +10,18 @@ package krepo.util.repo
 
 import krepo.backendVersion
 import krepo.entity.maven.ConfigRepositoryWithSize
-import krepo.entity.GetRepositoriesResponse
+import krepo.entity.maven.GetRepositoriesResponse
 import krepo.util.auth
+import krepo.util.byte.fromProtoBuf
 import krepo.util.file.LocalStorage
-import krepo.util.fromJson
 import krepo.util.httpRequest
-import krepo.util.jsonContentType
+import krepo.util.octetType
 
 suspend fun getRepositories(): List<ConfigRepositoryWithSize> {
     val repositoriesAPIEndpoint =
         if (LocalStorage.TOKEN == null) backendVersion.LIST_PUBLIC_REPOSITORIES else backendVersion.LIST_ALL_REPOSITORIES
     val repositories = httpRequest(repositoriesAPIEndpoint)
-        .auth().acceptJson().jsonContentType()
-        .get().body().fromJson<GetRepositoriesResponse>().data.sortedBy { it.visibility }
+        .auth().octetType().get().arrayBuffer().fromProtoBuf<GetRepositoriesResponse>()
+        .data.sortedBy { it.visibility }
     return repositories
 }

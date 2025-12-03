@@ -19,7 +19,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Build
-        run: ./gradlew replaceDef isDevelopmentModeTask :krepo-frontend:jsBrowserDistribution
+        run: ./gradlew isDevelopmentModeTask :krepo-frontend:jsBrowserDistribution
       - name: Install Vercel CLI
         run: npm install -g vercel@22.0.1
       - name: Deploy to Vercel Action

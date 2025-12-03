@@ -105,8 +105,7 @@ fun RenderContext.CommonSettingPage() {
             val copyright = copyrightStore.current
             coroutineScope.launchJob {
                 httpRequest(backendVersion.MODIFY_FRONTEND_CONFIG)
-                    .auth().acceptJson().jsonContentType()
-                    .setBody(FrontendConfig(pageTitle, icpLicense, description, copyright, false, null))
+                    .auth().setOctetBody(FrontendConfig(pageTitle, icpLicense, description, copyright, false, null))
                     .put().checkImpl(CheckImplType.Toast) {
                         infoToast("Saved!")
                         window.location.reload()
@@ -116,8 +115,7 @@ fun RenderContext.CommonSettingPage() {
         showDialog(showResetFrontConfigDialog, "Reset", "Do you want to reset the frontend settings?", {}) {
             coroutineScope.launchJob {
                 httpRequest(backendVersion.RESET_FRONTEND_CONFIG)
-                    .auth().acceptJson().jsonContentType()
-                    .put().checkImpl(CheckImplType.Toast) {
+                    .auth().put().checkImpl(CheckImplType.Toast) {
                         infoToast("Rested!")
                         window.location.reload()
                     }

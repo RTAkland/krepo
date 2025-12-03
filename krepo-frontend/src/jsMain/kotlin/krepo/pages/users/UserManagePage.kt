@@ -12,29 +12,24 @@ package krepo.pages.users
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.storeOf
 import kotlinx.browser.window
-import kotlinx.coroutines.launch
 import krepo.backendVersion
 import krepo.components.fa.svg
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.coroutineScope
-import krepo.entity.GetUsersResponse
-import krepo.util.auth
-import krepo.util.checkImpl
+import krepo.entity.user.GetUsersResponse
+import krepo.entity.user.NoSensitiveUser
+import krepo.util.*
+import krepo.util.byte.fromProtoBuf
 import krepo.util.file.checkPermission
-import krepo.util.fromJson
-import krepo.util.httpRequest
-import krepo.util.jsonContentType
-import krepo.util.launchJob
 
 fun RenderContext.UserManagePage() {
     checkPermission {
         val showDeleteUserDialog = storeOf(false)
-        val selectedUser = storeOf<GetUsersResponse.User?>(null)
+        val selectedUser = storeOf<NoSensitiveUser?>(null)
         coroutineScope.launchJob {
             val users = httpRequest(backendVersion.USERS)
-                .auth().acceptJson().jsonContentType()
-                .get().checkImpl().body().fromJson<GetUsersResponse>().data
+                .auth().get().checkImpl().arrayBuffer().fromProtoBuf<GetUsersResponse>().data
             div("container") {
                 h2("title is-3 mt-4 mb-4") { +"Users" }
                 div("columns is-multiline") {
@@ -44,6 +39,7 @@ fun RenderContext.UserManagePage() {
                                 div("card-content") {
                                     p("title is-5") { +user.name }
                                     p("subtitle is-6 has-text-grey") { +user.email }
+                                    span("has-text-grey") { +user.ex!!.namespaces.joinToString(", ") }
                                     div("buttons") {
                                         button("button is-small is-link is-light") {
                                             svg("fa-user-pen")
@@ -70,9 +66,8 @@ fun RenderContext.UserManagePage() {
         }
         showDialog(showDeleteUserDialog, "Delete User", "Do you want to delete the user?", {}) {
             coroutineScope.launchJob {
-                httpRequest("${backendVersion.DELETE_USER}${selectedUser.current!!.name}")
-                    .auth().acceptJson().jsonContentType()
-                    .delete()
+                httpRequest("${backendVersion.DELETE_USER}${selectedUser.current!!.name}").auth()
+                    .octetType().delete()
                 infoToast("Deleted")
                 window.location.reload()
             }

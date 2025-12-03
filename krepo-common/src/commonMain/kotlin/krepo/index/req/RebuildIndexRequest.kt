@@ -8,12 +8,10 @@
 
 package krepo.index.req
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 public data class RebuildIndexRequest(
-    @SerialName("r")
     val repository: String
 )
 

@@ -19,6 +19,7 @@ import krepo.components.errorToast
 import krepo.enums.CheckImplType
 import krepo.pages.other.NotImplPage
 import krepo.renderContext
+import krepo.util.byte.toArrayBuffer
 import krepo.util.file.LocalStorage
 
 fun httpRequest(url: String): Request = http(backend + url)
@@ -29,16 +30,28 @@ fun Request.auth() = LocalStorage.TOKEN?.let { header("Authorization", "Bearer $
 
 fun Request.jsonContentType() = this.contentType("application/json")
 
-inline fun <reified T> Request.body(body: T) = this.body(body.toJson())
+/**
+ * for azure functions
+ */
+inline fun <reified T> Request.body(body: T) = this.arrayBuffer(body.toProtobuf().toArrayBuffer())
+    .header("Content-Type", "application/octet-stream")
 
-inline fun <reified T> Request.setBody(body: T) = body(body)
+inline fun <reified T> Request.setOctetBody(body: T) = body(body)
+
+fun Request.octetType(): Request = header("Content-Type", "application/octet-stream")
+
+fun Request.setStringBody(body: String) = this.body(body)
 
 fun Response.checkImpl(type: CheckImplType = CheckImplType.Page, block: RenderContext.() -> Unit = {}): Response {
     if (this.status == 501) {
         when (type) {
             CheckImplType.Page -> renderContext.NotImplPage()
-            CheckImplType.Toast -> errorToast("This API/page is not implemented yet.")
+            CheckImplType.Toast -> notImplToast()
         }
     } else renderContext.block()
     return this
+}
+
+fun notImplToast() {
+    errorToast("This API/page is not implemented yet.")
 }

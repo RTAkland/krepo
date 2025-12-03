@@ -8,13 +8,10 @@
 
 package krepo.entity
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 public data class BackendVersion(
-    @SerialName("v")
     val version: Int,
-    @SerialName("p")
     val patch: Int
 )

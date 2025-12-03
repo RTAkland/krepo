@@ -22,6 +22,7 @@ import krepo.entity.maven.token.GrantPublishTokenRequest
 import krepo.entity.maven.token.GrantPublishTokenResponse
 import krepo.enums.CheckImplType
 import krepo.util.*
+import krepo.util.byte.fromProtoBuf
 import krepo.util.file.LocalStorage
 import krepo.util.file.checkPermission
 import krepo.util.string.validateEmail
@@ -118,8 +119,8 @@ fun RenderContext.UserSettingsPage() = checkPermission {
         coroutineScope.launchJob {
             infoToast("Generating...")
             val resp = httpRequest(backendVersion.GRANT_PUBLISH_TOKEN)
-                .auth().setBody(GrantPublishTokenRequest(LocalStorage.CURRENT_USERNAME!!))
-                .post().body().fromJson<GrantPublishTokenResponse>()
+                .auth().setOctetBody(GrantPublishTokenRequest(LocalStorage.CURRENT_USERNAME!!))
+                .post().arrayBuffer().fromProtoBuf<GrantPublishTokenResponse>()
             generatedPublishTokenResponseStore.update(resp)
         }
     }
@@ -136,8 +137,7 @@ fun RenderContext.UserSettingsPage() = checkPermission {
                 )
                 coroutineScope.launchJob {
                     httpRequest(backendVersion.MODIFY_USER)
-                        .auth().acceptJson().jsonContentType()
-                        .setBody(requestBody).put().checkImpl(CheckImplType.Toast) {
+                        .auth().setOctetBody(requestBody).put().checkImpl(CheckImplType.Toast) {
                             infoToast("User info updated")
                             window.location.href = "/#/user/manage"
                         }

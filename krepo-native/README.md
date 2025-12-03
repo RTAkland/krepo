@@ -1,0 +1,1 @@
+Deprecated target, it's not supported.

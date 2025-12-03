@@ -38,6 +38,7 @@ import krepo.pages.users.NewUserPage
 import krepo.pages.users.UserManagePage
 import krepo.pages.users.UserSettingsPage
 import krepo.util.*
+import krepo.util.byte.fromProtoBuf
 import kotlin.time.ExperimentalTime
 
 val router = routerOf("contents")
@@ -57,9 +58,7 @@ fun main() {
     toastContainer("default", "toast-container")
     coroutineScope.launchJob {
         val fc = httpRequest(BACKEND_VERSION_ROUTE)
-            .auth().acceptJson()
-            .jsonContentType().get()
-            .body().fromJson<FrontendConfigResponse>()
+            .auth().get().arrayBuffer().fromProtoBuf<FrontendConfigResponse>()
         frontendConfig = fc.data
         backendVersion = fc.data.backendVersion?.version?.toBackendVersion() ?: BackendVersions.Legacy()
         document.title = frontendConfig.pageTitle

@@ -24,7 +24,7 @@ import krepo.entity.res.CommonDataResponse
 import krepo.entity.res.CommonResponse
 import krepo.tokenManager
 import krepo.util.respondJson
-import krepo.util.toJson
+import krepo.util.string.toJson
 
 fun Application.configureAPIFrontendConfigRouting() {
     routing {

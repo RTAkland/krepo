@@ -17,8 +17,10 @@ import kotlinx.coroutines.flow.mapNotNull
 import krepo.*
 import krepo.components.fa.svg
 import krepo.entity.user.LoginSuccessResponse
+import krepo.entity.user.oauth.AzureRequestSignInURL
 import krepo.entity.user.oauth.AzureSignInURL
 import krepo.util.*
+import krepo.util.byte.fromProtoBuf
 import krepo.util.file.LocalStorage
 import krepo.util.string.encodeToBase64
 
@@ -183,9 +185,9 @@ fun RenderContext.NavigatorBar() {
 
                 clicks handledBy {
                     oauthButtonDisabled.update(true)
+                    val body = AzureRequestSignInURL(getCurrentHttpUrl().encodeToBase64(), "azure")
                     val loginUrl = httpRequest(backendVersion.AZURE_SIGN_IN_URL)
-                        .queryParameters(mapOf("host" to getCurrentHttpUrl().encodeToBase64(), "v" to "azure"))
-                        .get().body().fromJson<AzureSignInURL>()
+                        .setOctetBody(body).post().arrayBuffer().fromProtoBuf<AzureSignInURL>()
                     oauthButtonDisabled.update(false)
                     window.location.href = loginUrl.url
                 }
@@ -194,14 +196,13 @@ fun RenderContext.NavigatorBar() {
     }, dialogAction = {
         coroutineScope.launchJob {
             val http = http("${backend}${backendVersion.LOGIN}")
-                .header("Authorization", "Basic ${"${username.current}:${password.current}".encodeToBase64()}")
-                .acceptJson().jsonContentType().post()
+                .header("Authorization", "Basic ${"${username.current}:${password.current}".encodeToBase64()}").post()
             if (http.ok) {
-                val response = http.body().fromJson<LoginSuccessResponse>()
+                val response = http.arrayBuffer().fromProtoBuf<LoginSuccessResponse>()
                 setLoginInfo(
                     response.token, username.current,
                     response.expiredAt, response.email,
-                    response.avatarMd5 ?: ""
+                    response.avatarMd5
                 )
                 infoToast("Logged in")
                 window.location.reload()
@@ -211,8 +212,7 @@ fun RenderContext.NavigatorBar() {
 
     showDialog(showLogoutDialog, "Logout", "Do you want to logout?", {}) {
         coroutineScope.launchJob {
-            httpRequest(backendVersion.LOGOUT).auth()
-                .acceptJson().jsonContentType().post()
+            httpRequest(backendVersion.LOGOUT).auth().octetType().post()
             LocalStorage.TOKEN = null
             LocalStorage.CURRENT_USERNAME = null
             LocalStorage.AVATAR = null

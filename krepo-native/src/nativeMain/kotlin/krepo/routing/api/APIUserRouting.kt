@@ -8,11 +8,6 @@
 
 package krepo.routing.api
 
-import krepo.entity.user.User
-import krepo.entity.res.*
-import krepo.tokenManager
-import krepo.userManager
-import krepo.util.respondJson
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -20,7 +15,15 @@ import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import krepo.entity.res.AuthSuccessResponse
+import krepo.entity.res.CommonDataResponse
+import krepo.entity.res.CommonResponse
+import krepo.entity.res.LogoutResponse
 import krepo.entity.user.NoSensitiveUser
+import krepo.entity.user.User
+import krepo.tokenManager
+import krepo.userManager
+import krepo.util.respondJson
 
 fun Application.configureAPIUserRouting() {
     install(CORS) {
@@ -68,7 +71,8 @@ fun Application.configureAPIUserRouting() {
             }
 
             get("/@/api/user/") {
-                val users = userManager.getAllUsers().map { NoSensitiveUser(it.name, it.email) }
+                val users =
+                    userManager.getAllUsers().map { NoSensitiveUser(it.name, it.email, User.UserExtraInfo(setOf())) }
                 call.respond(HttpStatusCode.OK, CommonDataResponse(200, users))
             }
 
@@ -77,7 +81,10 @@ fun Application.configureAPIUserRouting() {
                 if (user == null) {
                     call.respond(HttpStatusCode.NotFound, CommonDataResponse(404, null))
                 } else {
-                    call.respond(HttpStatusCode.OK, CommonDataResponse(200, NoSensitiveUser(user.name, user.email)))
+                    call.respond(
+                        HttpStatusCode.OK,
+                        CommonDataResponse(200, NoSensitiveUser(user.name, user.email, User.UserExtraInfo(setOf())))
+                    )
                 }
             }
 

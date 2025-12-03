@@ -15,8 +15,8 @@ import krepo.components.infoToast
 import krepo.components.setLoginInfo
 import krepo.currentPath
 import krepo.entity.user.oauth.AzureLoginSuccess
-import krepo.util.fromJson
-import krepo.util.string.decodeToString
+import krepo.util.fromProtobuf
+import krepo.util.string.decodeToByteArray
 import krepo.util.string.extractQueryParams
 
 fun RenderContext.AzureSignedPage() {
@@ -25,8 +25,8 @@ fun RenderContext.AzureSignedPage() {
     }
     try {
         val data = extractQueryParams(currentPath)["d"]!!
-            .decodeToString().fromJson<AzureLoginSuccess>()
-        setLoginInfo(data.t, data.n, data.ex, data.e, data.m)
+            .decodeToByteArray().fromProtobuf<AzureLoginSuccess>()
+        setLoginInfo(data.token, data.name, data.expire, data.email, data.avatarMd5)
         infoToast("Logged in")
     } catch (e: Exception) {
         e.printStackTrace()

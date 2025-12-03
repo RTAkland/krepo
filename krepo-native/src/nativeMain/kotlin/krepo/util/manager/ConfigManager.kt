@@ -19,8 +19,8 @@ import krepo.util.file.rootPathOf
 import krepo.util.file.writeText
 import kotlinx.io.files.Path
 import krepo.enums.RepositoryStatus
-import krepo.util.fromJson
-import krepo.util.toJson
+import krepo.util.string.fromJson
+import krepo.util.string.toJson
 
 class ConfigManager {
     private val file = Path(DATA_PATH, "config.json")

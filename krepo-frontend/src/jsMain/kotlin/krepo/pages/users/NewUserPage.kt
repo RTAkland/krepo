@@ -11,18 +11,20 @@ package krepo.pages.users
 
 import dev.fritz2.core.*
 import kotlinx.browser.window
-import kotlinx.coroutines.launch
 import krepo.backendVersion
 import krepo.components.errorToast
 import krepo.components.fa.svg
-import krepo.components.fa.svgBlock
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.components.warningToast
 import krepo.coroutineScope
 import krepo.entity.user.User
-import krepo.util.*
+import krepo.util.auth
+import krepo.util.byte.fromProtoBuf
 import krepo.util.file.checkPermission
+import krepo.util.httpRequest
+import krepo.util.launchJob
+import krepo.util.setOctetBody
 import krepo.util.string.validateEmail
 
 fun RenderContext.NewUserPage() {
@@ -90,8 +92,8 @@ fun RenderContext.NewUserPage() {
                     val requestBody = User(username.current, email.current, password.current)
                     coroutineScope.launchJob {
                         val result = httpRequest(backendVersion.CREATE_USER)
-                            .auth().acceptJson().jsonContentType()
-                            .setBody(requestBody).post().body().fromJson<Map<String, String>>()
+                            .auth().setOctetBody(requestBody).post()
+                            .arrayBuffer().fromProtoBuf<Map<String, String>>()
                         val code = result["code"]!!.toInt()
                         if (code == 200) {
                             infoToast("User created")

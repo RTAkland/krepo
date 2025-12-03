@@ -13,10 +13,6 @@ plugins {
 }
 
 kotlin {
-    linuxArm64()
-    linuxX64()
-    macosX64()
-    mingwX64()
     js(IR) { browser() }
     jvm { compilerOptions.jvmTarget = JvmTarget.JVM_17 }
 
@@ -25,7 +21,6 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(libs.kotlinx.serialization.core)
-            api(libs.kotlinx.serialization.json)
             api(libs.kotlinx.serialization.protobuf)
         }
     }

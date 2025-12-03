@@ -8,7 +8,7 @@ plugins {
 val appVersion: String by extra
 
 allprojects {
-    group = "cn.rtast.krepo"
+    group = "krepo"
     version = appVersion
 
     repositories {

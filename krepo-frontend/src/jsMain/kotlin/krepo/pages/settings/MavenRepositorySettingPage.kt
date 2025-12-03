@@ -10,20 +10,21 @@
 package krepo.pages.settings
 
 import dev.fritz2.core.*
-import kotlinx.browser.window
 import krepo.backendVersion
-import krepo.components.*
+import krepo.components.badge
 import krepo.components.fa.svg
+import krepo.components.showDialog
 import krepo.coroutineScope
-import krepo.entity.*
-import krepo.entity.maven.ConfigRepository
-import krepo.entity.maven.ModifyRepository
+import krepo.entity.maven.GetRepositoriesResponse
 import krepo.entity.maven.RepositoryVisibility
 import krepo.enums.BadgeType
-import krepo.enums.CheckImplType
 import krepo.enums.RepositoryStatus
-import krepo.util.*
+import krepo.util.auth
+import krepo.util.byte.fromProtoBuf
 import krepo.util.file.checkPermission
+import krepo.util.httpRequest
+import krepo.util.launchJob
+import krepo.util.notImplToast
 
 fun RenderContext.prettyCheckbox(labelText: String, store: Store<Boolean>) {
     div("field mt-3") {
@@ -52,8 +53,7 @@ fun RenderContext.MavenRepositorySettingPage() {
         val showModifyRepositoryStore = storeOf(false)
         coroutineScope.launchJob {
             val repositories = httpRequest(backendVersion.LIST_ALL_REPOSITORIES)
-                .auth().acceptJson().jsonContentType()
-                .get().body().fromJson<GetRepositoriesResponse>().data
+                .auth().get().arrayBuffer().fromProtoBuf<GetRepositoriesResponse>().data
             section("container") {
                 inlineStyle("max-width: 60%")
                 div("level") {
@@ -122,16 +122,17 @@ fun RenderContext.MavenRepositorySettingPage() {
             "Do you want to delete the repository? Deleting a repository is only a logical deletion, the folder will not be deleted",
             {}) {
             coroutineScope.launchJob {
-                val result = httpRequest(backendVersion.DELETE_REPOSITORY)
-                    .auth().acceptJson().jsonContentType()
-                    .setBody(mapOf("name" to selectedRepositoryName.current))
-                    .delete().checkImpl(CheckImplType.Toast).body().fromJson<DeleteRepositoryResponse>()
-                when (result.code) {
-                    200 -> infoToast(result.message)
-                    409 -> warningToast(result.message)
-                    else -> errorToast("Unknown error!")
-                }
-                window.location.reload()
+//                val result = httpRequest(backendVersion.DELETE_REPOSITORY)
+//                    .auth().setOctetBody(mapOf("name" to selectedRepositoryName.current))
+//                    .delete().checkImpl(CheckImplType.Toast)
+//                    .arrayBuffer().fromProtoBuf<DeleteRepositoryResponse>()
+//                when (result.code) {
+//                    200 -> infoToast(result.message)
+//                    409 -> warningToast(result.message)
+//                    else -> errorToast("Unknown error!")
+//                }
+//                window.location.reload()
+                notImplToast()
             }
         }
         createModifyRepositoryDialog(
@@ -144,25 +145,25 @@ fun RenderContext.MavenRepositorySettingPage() {
             selectedRepositoryName
         ) {
             coroutineScope.launchJob {
-                val name = nameStore.current
-                val visibility = visibilityStore.current
-                val allowedExtensions = allowedExtensionsStore.current
-                val allowSnapshot = snapshotStore.current
-                val result = httpRequest(backendVersion.CREATE_REPOSITORY)
-                    .auth().acceptJson().jsonContentType()
-                    .setBody(
-                        ConfigRepository(
-                            name, visibility, allowedExtensions.split("\n"), allowSnapshot,
-                            RepositoryStatus.Created,
-                            listOf()
-                        )
-                    ).post().checkImpl(CheckImplType.Toast).body().fromJson<CreateRepositoryResponse>()
-                when (result.code) {
-                    200 -> infoToast(result.message)
-                    409 -> warningToast(result.message)
-                    else -> errorToast("Unknown error!")
-                }
-                window.location.reload()
+//                val name = nameStore.current
+//                val visibility = visibilityStore.current
+//                val allowedExtensions = allowedExtensionsStore.current
+//                val allowSnapshot = snapshotStore.current
+//                val result = httpRequest(backendVersion.CREATE_REPOSITORY)
+//                    .auth().setOctetBody(
+//                        ConfigRepository(
+//                            name, visibility, allowedExtensions.split("\n"), allowSnapshot,
+//                            RepositoryStatus.Created,
+//                            listOf()
+//                        )
+//                    ).post().arrayBuffer().fromProtoBuf<CreateRepositoryResponse>()
+//                when (result.code) {
+//                    200 -> infoToast(result.message)
+//                    409 -> warningToast(result.message)
+//                    else -> errorToast("Unknown error!")
+//                }
+//                window.location.reload()
+                notImplToast()
             }
         }
         createModifyRepositoryDialog(
@@ -175,28 +176,28 @@ fun RenderContext.MavenRepositorySettingPage() {
             selectedRepositoryName
         ) {
             coroutineScope.launchJob {
-                val name = nameStore.current
-                val visibility = visibilityStore.current
-                val allowedExtensions = allowedExtensionsStore.current
-                val allowSnapshot = snapshotStore.current
-                val result = httpRequest(backendVersion.MODIFY_REPOSITORY)
-                    .auth().acceptJson().jsonContentType()
-                    .setBody(
-                        ModifyRepository(
-                            selectedRepositoryName.current,
-                            name,
-                            visibility,
-                            allowedExtensions.split("\n"),
-                            allowSnapshot,
-                            RepositoryStatus.Modified
-                        )
-                    ).put().checkImpl(CheckImplType.Toast).body().fromJson<ModifyRepositoryResponse>()
-                when (result.code) {
-                    200 -> infoToast(result.message)
-                    409 -> warningToast(result.message)
-                    else -> errorToast("Unknown error!")
-                }
-                window.location.reload()
+//                val name = nameStore.current
+//                val visibility = visibilityStore.current
+//                val allowedExtensions = allowedExtensionsStore.current
+//                val allowSnapshot = snapshotStore.current
+//                val result = httpRequest(backendVersion.MODIFY_REPOSITORY)
+//                    .auth().setOctetBody(
+//                        ModifyRepository(
+//                            selectedRepositoryName.current,
+//                            name,
+//                            visibility,
+//                            allowedExtensions.split("\n"),
+//                            allowSnapshot,
+//                            RepositoryStatus.Modified
+//                        )
+//                    ).put().arrayBuffer().fromProtoBuf<ModifyRepositoryResponse>()
+//                when (result.code) {
+//                    200 -> infoToast(result.message)
+//                    409 -> warningToast(result.message)
+//                    else -> errorToast("Unknown error!")
+//                }
+//                window.location.reload()
+                notImplToast()
             }
         }
     }

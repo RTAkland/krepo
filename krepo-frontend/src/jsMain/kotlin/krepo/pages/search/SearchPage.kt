@@ -207,7 +207,7 @@ private suspend fun search(
     loadingStore.update(true)
     updateURI(keyword, repo)
     val response = httpRequest("${backendVersion.SEARCH_ARTIFACT}?k=$keyword&r=$repo")
-        .acceptJson().jsonContentType().auth().get().arrayBuffer()
+        .auth().octetType().get().arrayBuffer()
         .toByteArray().fromProtobuf<IndexSearchResponse>()
     if (response.code == 401) errorToast("You have no permission to search $repo")
     if (response.code == 499) errorToast("Keyword must be more than 3 characters.")
