@@ -243,24 +243,28 @@ fun RenderContext.ContentListingPage() {
                                 }
                                 td("has-text-centered") { if (!entry.isDirectory) +formatSize(entry.size) else +"-" }
                                 td("has-text-left") {
-                                    if (entry.owner != null) {
-                                        svg("fa-circle-check", size = 15)
-                                        +"by ${entry.owner}"
-                                    } else {
-                                        svg("fa-circle-question", size = 15)
-                                        +"by Unknown"
+                                    span {
+                                        if (entry.owner != null) {
+                                            svg("fa-circle-check", size = 15)
+                                            +"by ${entry.owner}"
+                                            title("Published by ${entry.owner}")
+                                        } else {
+                                            svg("fa-circle-question", size = 15)
+                                            +"by Unknown"
+                                            title("Owned by Unknown")
+                                        }
                                     }
                                 }
                                 if (LocalStorage.TOKEN != null) {
                                     td {
                                         inlineStyle("text-align: center;")
-                                        button("button is-danger is-small") {
+                                        button("button is-small") {
                                             val name = if (entry.isDirectory) "directory" else "file"
                                             title("Delete $name")
                                             img trashImg@{
                                                 isDarkTheme.data.render {
                                                     if (it) this@trashImg.src("assets/img/trash-light.svg")
-                                                    else this@trashImg.src("assets/img/trash.svg")
+                                                    else this@trashImg.src("assets/img/trash-light.svg")
                                                 }
                                                 attr("alt", "Delete icon")
                                                 inlineStyle("width: 1.1rem; height: 1.1rem;")
