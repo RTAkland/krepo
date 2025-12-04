@@ -10,19 +10,17 @@
 package krepo.pages.other
 
 import dev.fritz2.core.RenderContext
-import kotlinx.browser.window
 import krepo.components.infoToast
 import krepo.components.setLoginInfo
 import krepo.currentPath
 import krepo.entity.user.oauth.AzureLoginSuccess
 import krepo.util.fromProtobuf
+import krepo.util.navTo
 import krepo.util.string.decodeToByteArray
 import krepo.util.string.extractQueryParams
 
 fun RenderContext.AzureSignedPage() {
-    h1("has-text-centered") {
-        +"Setting up user info..."
-    }
+    h1("has-text-centered") { +"Setting up user info..." }
     try {
         val data = extractQueryParams(currentPath)["d"]!!
             .decodeToByteArray().fromProtobuf<AzureLoginSuccess>()
@@ -31,7 +29,6 @@ fun RenderContext.AzureSignedPage() {
     } catch (e: Exception) {
         e.printStackTrace()
     } finally {
-        window.location.href = "/#/"
-        window.location.reload()
+        navTo("/", reload = true)
     }
 }

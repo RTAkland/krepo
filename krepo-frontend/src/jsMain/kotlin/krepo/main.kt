@@ -26,7 +26,6 @@ import krepo.entity.FrontendConfigResponse
 import krepo.pages.ContentListingPage
 import krepo.pages.HomePage
 import krepo.pages.info.LicensePage
-import krepo.pages.info.PrivacyPage
 import krepo.pages.info.TermsPage
 import krepo.pages.other.AzureSignedPage
 import krepo.pages.other.NoPermission
@@ -34,7 +33,7 @@ import krepo.pages.search.SearchPage
 import krepo.pages.settings.CommonSettingPage
 import krepo.pages.settings.IndexSettingsPage
 import krepo.pages.settings.MavenRepositorySettingPage
-import krepo.pages.users.NewUserPage
+import krepo.pages.users.CreateUserPage
 import krepo.pages.users.UserManagePage
 import krepo.pages.users.UserSettingsPage
 import krepo.util.*
@@ -73,12 +72,11 @@ fun main() {
                     if (site.startsWith("/user/edit")) UserSettingsPage()
                     else if (site.startsWith("/search")) SearchPage()
                     else if (site.startsWith("/azure/signed")) AzureSignedPage()
-                    else if (site.startsWith("/privacy")) PrivacyPage()
                     else if (site.startsWith("/terms")) TermsPage()
                     else when (site) {
                         "/", "contents" -> HomePage(fc.repositories)
                         "/user/manage" -> UserManagePage()
-                        "/user/create" -> NewUserPage()
+                        "/user/create" -> CreateUserPage()
                         "/setting" -> CommonSettingPage()
                         "/setting/repository" -> MavenRepositorySettingPage()
                         "/setting/index" -> IndexSettingsPage()

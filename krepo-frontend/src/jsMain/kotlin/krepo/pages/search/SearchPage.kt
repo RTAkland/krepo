@@ -15,8 +15,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import krepo.backendVersion
 import krepo.components.errorToast
-import krepo.components.fa.svg
-import krepo.components.fa.svgBlock
+import krepo.util.img.autoFASvg
 import krepo.components.warningToast
 import krepo.coroutineScope
 import krepo.entity.maven.ConfigRepositoryWithSize
@@ -87,11 +86,7 @@ fun RenderContext.SearchPage() {
                                         +selected.ifEmpty { "releases" }
                                     }
                                 }
-                                span("icon is-small") {
-                                    svgBlock("fa-angle-down", "", size = 14) {
-                                        attr("aria-hidden", "true")
-                                    }
-                                }
+                                span("icon is-small") { autoFASvg("fa-angle-down", "", size = 14) }
                                 title("Select repository to search")
                             }
                         }
@@ -131,7 +126,7 @@ fun RenderContext.SearchPage() {
                         }
                         className(isLoadingClassName.data)
                         searchButtonTextStore.data.render {
-                            svg("fa-search")
+                            autoFASvg("fa-magnifying-glass")
                             +it
                         }
                         clicks handledBy { searchInner() }

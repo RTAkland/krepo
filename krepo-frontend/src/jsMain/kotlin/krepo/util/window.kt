@@ -22,3 +22,13 @@ fun getCurrentHttpUrl(): String {
 val customBacked
     get() = if (!developmentMode) "https://repo.maven.rtast.cn" else if (developmentMode) "http://127.0.0.1:7071"
     else if (backendVersion is BackendVersions.Legacy) getCurrentHttpUrl() else getCurrentHttpUrl()
+
+fun navTo(
+    target: String,
+    args: Map<String, Any?> = mapOf(),
+    reload: Boolean = false,
+) {
+    val t = args.map { "${it.key}=${it.value.toString()}" }.joinToString("&")
+    window.location.href = target + if (args.isNotEmpty()) "?$t" else ""
+    if (reload) window.location.reload()
+}

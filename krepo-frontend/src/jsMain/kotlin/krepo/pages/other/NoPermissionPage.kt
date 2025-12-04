@@ -10,8 +10,8 @@
 package krepo.pages.other
 
 import dev.fritz2.core.RenderContext
-import dev.fritz2.core.href
 import kotlinx.browser.window
+import krepo.util.navTo
 import kotlin.time.Duration.Companion.seconds
 
 fun RenderContext.NoPermission() {
@@ -23,7 +23,7 @@ fun RenderContext.NoPermission() {
         p("subtitle is-5") { +"You will be redirect to home page in 5 seconds" }
         a("button is-danger mt-4") {
             +"Back to home page"
-            href("/#/")
+            clicks handledBy { navTo("/") }
         }
     }
 }

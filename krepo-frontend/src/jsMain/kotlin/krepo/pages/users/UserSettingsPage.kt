@@ -12,7 +12,6 @@ package krepo.pages.users
 import dev.fritz2.core.*
 import kotlinx.browser.window
 import krepo.backendVersion
-import krepo.components.fa.svg
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.components.warningToast
@@ -20,11 +19,14 @@ import krepo.coroutineScope
 import krepo.currentPath
 import krepo.entity.maven.token.GrantPublishTokenRequest
 import krepo.entity.maven.token.GrantPublishTokenResponse
-import krepo.enums.CheckImplType
-import krepo.util.*
+import krepo.util.auth
 import krepo.util.byte.fromProtoBuf
 import krepo.util.file.LocalStorage
 import krepo.util.file.checkPermission
+import krepo.util.httpRequest
+import krepo.util.img.autoFASvg
+import krepo.util.launchJob
+import krepo.util.setOctetBody
 import krepo.util.string.validateEmail
 
 fun RenderContext.UserSettingsPage() = checkPermission {
@@ -38,7 +40,7 @@ fun RenderContext.UserSettingsPage() = checkPermission {
         div("container") {
             inlineStyle("max-width: 600px;")
             h3("title is-3 has-text-centered mb-6") {
-                i("fas fa-user-pen mr-2") {}
+                autoFASvg("fa-user-pen", "mr-2 mb-2", size = 32)
                 +"User settings"
             }
             div("box mx-auto") {
@@ -53,7 +55,7 @@ fun RenderContext.UserSettingsPage() = checkPermission {
                                     placeholder("Input username here")
                                     value(user)
                                 }
-                                span("icon is-small is-left") { svg("fa-user", "") }
+                                span("icon is-small is-left") { autoFASvg("fa-user", "") }
                             }
                         }
                     }
@@ -67,7 +69,7 @@ fun RenderContext.UserSettingsPage() = checkPermission {
                                     value(email.data)
                                     changes.values() handledBy email.update
                                 }
-                                span("icon is-small is-left") { svg("fa-envelope", "") }
+                                span("icon is-small is-left") { autoFASvg("fa-envelope", "") }
                             }
                         }
                     }
@@ -81,20 +83,21 @@ fun RenderContext.UserSettingsPage() = checkPermission {
                                     value(password.data)
                                     changes.values() handledBy password.update
                                 }
-                                span("icon is-small is-left") { svg("fa-lock", "") }
+                                span("icon is-small is-left") { autoFASvg("fa-lock", "") }
                             }
                         }
                     }
                     div("column is-full") {
                         div("field is-grouped is-grouped-right mt-5") {
-                            button("button is-light") {
-                                svg("fa-key")
+                            button("button") {
+                                autoFASvg("fa-key")
                                 +"Generate publish token"
                                 clicks handledBy { showGenerateNewPublishTokenDialogStore.update(true) }
                             }
-                            button("button is-light") updateInfoButton@{
-                                svg("fa-pen-to-square")
+                            button("button") updateInfoButton@{
+                                autoFASvg("fa-pen-to-square")
                                 +"Update user info"
+                                disabled(true)
                                 clicks handledBy { showUpdateUserDialog.update(true) }
                             }
                         }
@@ -119,7 +122,7 @@ fun RenderContext.UserSettingsPage() = checkPermission {
         coroutineScope.launchJob {
             infoToast("Generating...")
             val resp = httpRequest(backendVersion.GRANT_PUBLISH_TOKEN)
-                .auth().setOctetBody(GrantPublishTokenRequest(LocalStorage.CURRENT_USERNAME!!))
+                .auth().setOctetBody(GrantPublishTokenRequest(LocalStorage.USERNAME!!))
                 .post().arrayBuffer().fromProtoBuf<GrantPublishTokenResponse>()
             generatedPublishTokenResponseStore.update(resp)
         }
@@ -137,10 +140,9 @@ fun RenderContext.UserSettingsPage() = checkPermission {
                 )
                 coroutineScope.launchJob {
                     httpRequest(backendVersion.MODIFY_USER)
-                        .auth().setOctetBody(requestBody).put().checkImpl(CheckImplType.Toast) {
-                            infoToast("User info updated")
-                            window.location.href = "/#/user/manage"
-                        }
+                        .auth().setOctetBody(requestBody).put()
+                    infoToast("User info updated")
+                    window.location.href = "/#/user/manage"
                 }
             }
         }

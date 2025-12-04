@@ -9,16 +9,11 @@
 
 package krepo.util
 
-import dev.fritz2.core.RenderContext
 import dev.fritz2.remote.Request
-import dev.fritz2.remote.Response
 import dev.fritz2.remote.http
 import krepo.RouteEndpoint
 import krepo.backend
 import krepo.components.errorToast
-import krepo.enums.CheckImplType
-import krepo.pages.other.NotImplPage
-import krepo.renderContext
 import krepo.util.byte.toArrayBuffer
 import krepo.util.file.LocalStorage
 
@@ -41,16 +36,6 @@ inline fun <reified T> Request.setOctetBody(body: T) = body(body)
 fun Request.octetType(): Request = header("Content-Type", "application/octet-stream")
 
 fun Request.setStringBody(body: String) = this.body(body)
-
-fun Response.checkImpl(type: CheckImplType = CheckImplType.Page, block: RenderContext.() -> Unit = {}): Response {
-    if (this.status == 501) {
-        when (type) {
-            CheckImplType.Page -> renderContext.NotImplPage()
-            CheckImplType.Toast -> notImplToast()
-        }
-    } else renderContext.block()
-    return this
-}
 
 fun notImplToast() {
     errorToast("This API/page is not implemented yet.")

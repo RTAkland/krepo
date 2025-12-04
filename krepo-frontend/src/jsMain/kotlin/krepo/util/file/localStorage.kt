@@ -23,10 +23,10 @@ object LocalStorage {
     var TOKEN
         get() = getLocalStorage("mvn_token")
         set(value) = if (value == null) removeLocalStorage("mvn_token") else setLocalStorage("mvn_token", value)
-    var CURRENT_USERNAME
+    var USERNAME
         get() = getLocalStorage("mvn_user")
         set(value) = if (value == null) removeLocalStorage("mvn_user") else setLocalStorage("mvn_user", value)
-    var EMAIL_ADDRESS
+    var EMAIL
         get() = getLocalStorage("mvn_email")
         set(value) = if (value == null) removeLocalStorage("mvn_email") else setLocalStorage("mvn_email", value)
     var AVATAR
@@ -39,8 +39,8 @@ object LocalStorage {
 
     fun clearAll() {
         TOKEN = null
-        CURRENT_USERNAME = null
-        EMAIL_ADDRESS = null
+        USERNAME = null
+        EMAIL = null
         AVATAR = null
         EXPIRED_TIMESTAMP = null
     }

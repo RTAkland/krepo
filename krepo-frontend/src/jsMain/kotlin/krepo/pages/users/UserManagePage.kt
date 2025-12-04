@@ -10,11 +10,11 @@
 package krepo.pages.users
 
 import dev.fritz2.core.RenderContext
+import dev.fritz2.core.disabled
 import dev.fritz2.core.storeOf
 import kotlinx.browser.window
 import krepo.backendVersion
-import krepo.components.fa.autoSvg
-import krepo.components.fa.svg
+import krepo.util.img.autoFASvg
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.coroutineScope
@@ -30,7 +30,7 @@ fun RenderContext.UserManagePage() {
         val selectedUser = storeOf<NoSensitiveUser?>(null)
         coroutineScope.launchJob {
             val users = httpRequest(backendVersion.USERS)
-                .auth().get().checkImpl().arrayBuffer().fromProtoBuf<GetUsersResponse>().data
+                .auth().get().arrayBuffer().fromProtoBuf<GetUsersResponse>().data
             div("container") {
                 h2("title is-3 mt-4 mb-4") { +"Users" }
                 div("columns is-multiline") {
@@ -43,15 +43,17 @@ fun RenderContext.UserManagePage() {
                                     span("has-text-grey") { +user.ex!!.namespaces.joinToString(", ") }
                                     div("buttons") {
                                         button("button is-small") {
-                                            autoSvg("fa-user-pen")
+                                            autoFASvg("fa-user-pen")
                                             +"Edit"
+                                            disabled(true)
                                             clicks handledBy {
                                                 window.location.href = "/#/user/edit?username=${user.name}"
                                             }
                                         }
                                         button("button is-small") {
-                                            autoSvg("fa-trash-alt", size = 12)
+                                            autoFASvg("fa-trash-alt", size = 12)
                                             +"Delete"
+                                            disabled(true)
                                             clicks handledBy {
                                                 selectedUser.update(user)
                                                 showDeleteUserDialog.update(true)

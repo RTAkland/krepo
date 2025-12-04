@@ -13,12 +13,11 @@ import dev.fritz2.core.*
 import kotlinx.browser.window
 import krepo.*
 import krepo.components.errorToast
-import krepo.components.fa.autoSvg
+import krepo.util.img.autoFASvg
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.components.warningToast
 import krepo.entity.maven.*
-import krepo.enums.CheckImplType
 import krepo.pages.other.NotFoundPage
 import krepo.util.*
 import krepo.util.byte.fromProtoBuf
@@ -86,9 +85,8 @@ fun RenderContext.ContentListingPage() {
                     div("level") {
                         div("level-left") {
                             a("button") {
-                                val parentPath = currentPath.trimEnd('/').substringBeforeLast('/', "")
-                                href("/#$parentPath")
-                                autoSvg("fa-arrow-left", "")
+                                clicks handledBy { window.history.back() }
+                                autoFASvg("fa-arrow-left", "")
                                 title("Back")
                             }
                         }
@@ -107,7 +105,7 @@ fun RenderContext.ContentListingPage() {
                                 val (group, name, version) = parseGAV(simplePath, repo)
                                 div("dropdown has-dropdown is-hoverable has-background is-centered") {
                                     button("button") {
-                                        autoSvg("fa-copy", "")
+                                        autoFASvg("fa-copy", "")
                                         title("Copy dependency URL")
                                         clicks handledBy {
                                             window.navigator.clipboard.writeText(
@@ -146,7 +144,7 @@ fun RenderContext.ContentListingPage() {
                                 label("button") {
                                     title("Upload file")
                                     attr("for", "fileInput")
-                                    autoSvg("fa-upload", "")
+                                    autoFASvg("fa-upload", "")
                                 }
                                 input("file-input") {
                                     id("fileInput")
@@ -183,13 +181,13 @@ fun RenderContext.ContentListingPage() {
                                 }
                                 a("button") {
                                     title("Create folder")
-                                    autoSvg("fa-folder-plus", "")
+                                    autoFASvg("fa-folder-plus", "")
                                     clicks handledBy { showCreateFolderDialog.update(true) }
                                 }
                             }
                             a("button mr-2") {
                                 title("Preferences")
-                                autoSvg("fa-sliders", "")
+                                autoFASvg("fa-sliders", "")
                                 clicks handledBy { infoToast("Nothing to set.") }
                             }
                         }
@@ -242,11 +240,11 @@ fun RenderContext.ContentListingPage() {
                                 td("has-text-left") {
                                     span {
                                         if (entry.owner != null) {
-                                            autoSvg("fa-circle-check", size = 15)
+                                            autoFASvg("fa-circle-check", size = 15)
                                             +"by ${entry.owner}"
                                             title("Published by ${entry.owner}")
                                         } else {
-                                            autoSvg("fa-circle-question", size = 15)
+                                            autoFASvg("fa-circle-question", size = 15)
                                             +"by Unknown"
                                             title("Owned by Unknown")
                                         }
@@ -258,7 +256,7 @@ fun RenderContext.ContentListingPage() {
                                         button("button is-small") {
                                             val name = if (entry.isDirectory) "directory" else "file"
                                             title("Delete $name")
-                                            autoSvg("fa-trash-alt", "", size = 12)
+                                            autoFASvg("fa-trash-alt", "", size = 12)
                                             clicks handledBy {
                                                 showDeleteFileEntryDialog.update(true)
                                                 selectedFileEntry.update("$currentPath/${entry.name}".removePrefix("/"))
@@ -301,8 +299,7 @@ fun RenderContext.ContentListingPage() {
                                 currentPath.removeSuffix("/").removePrefix("/")
                             }/${folderNameStore.current}"
                         )
-                    ).post().checkImpl(CheckImplType.Toast)
-                    .arrayBuffer().fromProtoBuf<CreateDirectoryResponse>()
+                    ).post().arrayBuffer().fromProtoBuf<CreateDirectoryResponse>()
                 if (result.code == 200) {
                     infoToast("New folder successfully created")
                     window.location.reload()

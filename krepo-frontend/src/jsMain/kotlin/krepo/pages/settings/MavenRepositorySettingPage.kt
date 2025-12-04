@@ -11,17 +11,14 @@ package krepo.pages.settings
 
 import dev.fritz2.core.*
 import krepo.backendVersion
-import krepo.components.fa.autoSvg
+import krepo.util.img.autoFASvg
 import krepo.components.showDialog
 import krepo.coroutineScope
 import krepo.entity.maven.GetRepositoriesResponse
 import krepo.entity.maven.RepositoryVisibility
-import krepo.util.auth
+import krepo.util.*
 import krepo.util.byte.fromProtoBuf
 import krepo.util.file.checkPermission
-import krepo.util.httpRequest
-import krepo.util.launchJob
-import krepo.util.notImplToast
 
 fun RenderContext.prettyCheckbox(labelText: String, store: Store<Boolean>) {
     div("field mt-3") {
@@ -57,8 +54,9 @@ fun RenderContext.MavenRepositorySettingPage() {
                     div("level-left") { h3("title is-4") { +"Repository List" } }
                     div("level-right") {
                         button("button") {
-                            autoSvg("fa-plus")
+                            autoFASvg("fa-plus")
                             +"Add Repository"
+                            disabled(true)
                             clicks handledBy { showCreateRepositoryFormDialog.update(true) }
                         }
                     }
@@ -67,28 +65,30 @@ fun RenderContext.MavenRepositorySettingPage() {
                     div("box is-flex is-justify-content-space-between is-align-items-center") {
                         span {
                             when (repo.visibility) {
-                                RepositoryVisibility.Internal -> autoSvg("fa-eye-slash")
-                                RepositoryVisibility.Public -> autoSvg("fa-eye")
+                                RepositoryVisibility.Internal -> autoFASvg("fa-eye-slash")
+                                RepositoryVisibility.Public -> autoFASvg("fa-eye")
                             }
                             a("is-size-5") {
                                 +repo.name
-                                href("/#/${repo.name}")
+                                clicks handledBy { navTo("/#/${repo.name}") }
                                 title("Click to view the content of this repository")
                             }
                             span("tag ml-2") { +repo.visibility.desc }
                         }
                         div {
                             button("button is-small mr-2") {
-                                autoSvg("fa-user-pen")
+                                autoFASvg("fa-user-pen")
                                 +"Edit"
+                                disabled(true)
                                 clicks handledBy {
                                     selectedRepositoryName.update(repo.name)
                                     showModifyRepositoryStore.update(true)
                                 }
                             }
                             button("button is-small") {
-                                autoSvg("fa-trash-alt")
+                                autoFASvg("fa-trash-alt")
                                 +"Delete"
+                                disabled(true)
                                 clicks handledBy {
                                     selectedRepositoryName.update(repo.name)
                                     showDeleteRepositoryDialog.update(true)
@@ -104,19 +104,17 @@ fun RenderContext.MavenRepositorySettingPage() {
             "Delete the repository",
             "Do you want to delete the repository? Deleting a repository is only a logical deletion, the folder will not be deleted",
             {}) {
-            coroutineScope.launchJob {
+//            coroutineScope.launchJob {
 //                val result = httpRequest(backendVersion.DELETE_REPOSITORY)
 //                    .auth().setOctetBody(mapOf("name" to selectedRepositoryName.current))
-//                    .delete().checkImpl(CheckImplType.Toast)
-//                    .arrayBuffer().fromProtoBuf<DeleteRepositoryResponse>()
+//                    .delete().arrayBuffer().fromProtoBuf<DeleteRepositoryResponse>()
 //                when (result.code) {
 //                    200 -> infoToast(result.message)
 //                    409 -> warningToast(result.message)
 //                    else -> errorToast("Unknown error!")
 //                }
 //                window.location.reload()
-                notImplToast()
-            }
+//            }
         }
         createModifyRepositoryDialog(
             showCreateRepositoryFormDialog,
@@ -127,7 +125,7 @@ fun RenderContext.MavenRepositorySettingPage() {
             "Create Repository",
             selectedRepositoryName
         ) {
-            coroutineScope.launchJob {
+//            coroutineScope.launchJob {
 //                val name = nameStore.current
 //                val visibility = visibilityStore.current
 //                val allowedExtensions = allowedExtensionsStore.current
@@ -146,8 +144,7 @@ fun RenderContext.MavenRepositorySettingPage() {
 //                    else -> errorToast("Unknown error!")
 //                }
 //                window.location.reload()
-                notImplToast()
-            }
+//            }
         }
         createModifyRepositoryDialog(
             showModifyRepositoryStore,
@@ -158,7 +155,7 @@ fun RenderContext.MavenRepositorySettingPage() {
             "Update repository settings",
             selectedRepositoryName
         ) {
-            coroutineScope.launchJob {
+//            coroutineScope.launchJob {
 //                val name = nameStore.current
 //                val visibility = visibilityStore.current
 //                val allowedExtensions = allowedExtensionsStore.current
@@ -180,8 +177,7 @@ fun RenderContext.MavenRepositorySettingPage() {
 //                    else -> errorToast("Unknown error!")
 //                }
 //                window.location.reload()
-                notImplToast()
-            }
+//            }
         }
     }
 }

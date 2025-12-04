@@ -15,7 +15,7 @@ import kotlinx.browser.window
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.mapNotNull
 import krepo.*
-import krepo.components.fa.autoSvg
+import krepo.util.img.autoFASvg
 import krepo.entity.user.LoginSuccessResponse
 import krepo.entity.user.oauth.AzureRequestSignInURL
 import krepo.entity.user.oauth.AzureSignInURL
@@ -37,9 +37,9 @@ fun RenderContext.NavigatorBar() {
         attr("aria-label", "main navigation")
         div("navbar-brand") {
             a("navbar-item is-rounded navbar-app-name-text") {
-                href("#")
                 +frontendConfig.pageTitle
                 title("Back to home page")
+                clicks handledBy { navTo("/") }
             }
             a("navbar-burger") {
                 attr("role", "button")
@@ -53,40 +53,36 @@ fun RenderContext.NavigatorBar() {
             div("navbar-start") {
                 if (LocalStorage.TOKEN != null) {
                     div("navbar-item has-dropdown is-hoverable") {
-                        a("navbar-link") {
-                            +"Users"
-                        }
+                        a("navbar-link") { +"Users" }
                         div("navbar-dropdown") {
                             a("navbar-item") {
-                                href("/#/user/manage")
                                 +"User list"
+                                clicks handledBy { navTo("/#/user/manage") }
                             }
                             a("navbar-item") {
-                                href("/#/user/create")
                                 +"Create user"
+                                clicks handledBy { navTo("/#/user/create") }
                             }
                         }
                     }
                     div("navbar-item has-dropdown is-hoverable") {
-                        a("navbar-link") {
-                            +"Settings"
-                        }
+                        a("navbar-link") { +"Settings" }
                         div("navbar-dropdown") {
                             a("navbar-item") {
                                 +"Frontend settings"
-                                href("/#/setting")
+                                clicks handledBy { navTo("/#/setting") }
                             }
                             a("navbar-item") {
                                 +"Repository settings"
-                                href("/#/setting/repository")
+                                clicks handledBy { navTo("/#/setting/repository") }
                             }
                             a("navbar-item") {
                                 +"Index settings"
-                                href("/#/setting/index")
+                                clicks handledBy { navTo("/#/setting/index") }
                             }
                             a("navbar-item") {
                                 +"Grant publish token"
-                                href("/#/user/edit?username=${LocalStorage.CURRENT_USERNAME}")
+                                clicks handledBy { navTo("/#/user/edit", mapOf("username" to LocalStorage.USERNAME)) }
                             }
                         }
                     }
@@ -106,7 +102,7 @@ fun RenderContext.NavigatorBar() {
                                     } else window.location.href = "/#/search?k=${searchKeywordStore.current}"
                                 }
                         }
-                        span("icon is-small is-left") { autoSvg("fa-magnifying-glass", "", size = 14) }
+                        span("icon is-small is-left") { autoFASvg("fa-magnifying-glass", "", size = 14) }
                         title("Search artifacts")
                     }
                 }
@@ -127,13 +123,13 @@ fun RenderContext.NavigatorBar() {
                                     attr("alt", "Avatar")
                                     className("is-rounded")
                                 }
-                                title(LocalStorage.CURRENT_USERNAME!!)
+                                title(LocalStorage.USERNAME!!)
                             }
                             span("mr-2") {
                                 b {
                                     a {
-                                        href("/#/user/edit?username=${LocalStorage.CURRENT_USERNAME!!}")
-                                        +LocalStorage.CURRENT_USERNAME!!
+                                        href("/#/user/edit?username=${LocalStorage.USERNAME!!}")
+                                        +LocalStorage.USERNAME!!
                                         title("Update user info")
                                     }
                                 }
@@ -214,9 +210,9 @@ fun RenderContext.NavigatorBar() {
         coroutineScope.launchJob {
             httpRequest(backendVersion.LOGOUT).auth().octetType().post()
             LocalStorage.TOKEN = null
-            LocalStorage.CURRENT_USERNAME = null
+            LocalStorage.USERNAME = null
             LocalStorage.AVATAR = null
-            LocalStorage.EMAIL_ADDRESS = null
+            LocalStorage.EMAIL = null
             window.location.href = "/#/"
             window.location.reload()
         }
@@ -232,8 +228,8 @@ fun setLoginInfo(
     md5: String,
 ) {
     LocalStorage.TOKEN = token
-    LocalStorage.CURRENT_USERNAME = username
-    LocalStorage.EMAIL_ADDRESS = email
+    LocalStorage.USERNAME = username
+    LocalStorage.EMAIL = email
     LocalStorage.AVATAR = "https://gravatar.rtast.cn/avatar/${md5}?d=identicon"
     LocalStorage.EXPIRED_TIMESTAMP = expired
 }

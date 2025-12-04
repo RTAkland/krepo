@@ -12,16 +12,14 @@ package krepo.pages.settings
 import dev.fritz2.core.*
 import kotlinx.browser.window
 import krepo.backendVersion
-import krepo.components.fa.autoSvg
-import krepo.components.fa.svg
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.coroutineScope
 import krepo.entity.FrontendConfig
-import krepo.enums.CheckImplType
 import krepo.frontendConfig
 import krepo.util.*
 import krepo.util.file.checkPermission
+import krepo.util.img.autoFASvg
 
 fun RenderContext.CommonSettingPage() {
     checkPermission {
@@ -83,15 +81,17 @@ fun RenderContext.CommonSettingPage() {
                     div("is-grouped is-right buttons") {
                         div("control") {
                             button("button") {
-                                autoSvg("fa-rotate-left")
+                                autoFASvg("fa-rotate-left")
                                 +"Reset"
+                                disabled(true)
                                 clicks handledBy { showResetFrontConfigDialog.update(true) }
                             }
                         }
                         div("control") {
                             button("button") {
-                                autoSvg("fa-floppy-disk")
+                                autoFASvg("fa-floppy-disk")
                                 +"Save"
+                                disabled(true)
                                 clicks handledBy { showSubmitSettingDialog.update(true) }
                             }
                         }
@@ -105,21 +105,19 @@ fun RenderContext.CommonSettingPage() {
             val description = descriptionStore.current
             val copyright = copyrightStore.current
             coroutineScope.launchJob {
-                httpRequest(backendVersion.MODIFY_FRONTEND_CONFIG)
-                    .auth().setOctetBody(FrontendConfig(pageTitle, icpLicense, description, copyright, false, null))
-                    .put().checkImpl(CheckImplType.Toast) {
-                        infoToast("Saved!")
-                        window.location.reload()
-                    }
+                httpRequest(backendVersion.MODIFY_FRONTEND_CONFIG).auth()
+                    .setOctetBody(FrontendConfig(pageTitle, icpLicense, description, copyright, false, null))
+                    .put()
+                infoToast("Saved!")
+                window.location.reload()
             }
         }
         showDialog(showResetFrontConfigDialog, "Reset", "Do you want to reset the frontend settings?", {}) {
             coroutineScope.launchJob {
                 httpRequest(backendVersion.RESET_FRONTEND_CONFIG)
-                    .auth().put().checkImpl(CheckImplType.Toast) {
-                        infoToast("Rested!")
-                        window.location.reload()
-                    }
+                    .auth().put()
+                infoToast("Rested!")
+                window.location.reload()
             }
         }
     }

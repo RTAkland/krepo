@@ -20,8 +20,6 @@ fun RenderContext.PageFooter() {
         div("footer-inner columns is-mobile is-vcentered is-multiline") {
             a { href("/#/terms?l=en-us"); inlineStyle("margin-left: 30px;"); +"Terms" }
             span("mx-1") { +"·" }
-            a { href("/#/privacy?l=en-us"); +"Privacy" }
-            span("mx-1") { +"·" }
             a { href("/#/licenses"); +"Licenses" }
             // right
             div("column is-flex-grow-1 has-text-right") {

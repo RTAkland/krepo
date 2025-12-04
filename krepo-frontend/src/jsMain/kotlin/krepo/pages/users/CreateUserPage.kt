@@ -13,8 +13,7 @@ import dev.fritz2.core.*
 import kotlinx.browser.window
 import krepo.backendVersion
 import krepo.components.errorToast
-import krepo.components.fa.autoSvg
-import krepo.components.fa.svg
+import krepo.util.img.autoFASvg
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.components.warningToast
@@ -28,7 +27,7 @@ import krepo.util.launchJob
 import krepo.util.setOctetBody
 import krepo.util.string.validateEmail
 
-fun RenderContext.NewUserPage() {
+fun RenderContext.CreateUserPage() {
     checkPermission {
         val username = storeOf("")
         val email = storeOf("")
@@ -41,7 +40,7 @@ fun RenderContext.NewUserPage() {
                 div("field") {
                     label("label") { +"Username" }
                     div("control has-icons-left") {
-                        span("icon is-small is-left mr-2") { svg("fa-user", "") }
+                        span("icon is-small is-left mr-2") { autoFASvg("fa-user", "") }
                         input("input") {
                             type("text")
                             placeholder("Fill in the username here")
@@ -53,7 +52,7 @@ fun RenderContext.NewUserPage() {
                 div("field") {
                     label("label") { +"Email" }
                     div("control has-icons-left") {
-                        span("icon is-small is-left mr-2") { svg("fa-envelope", "") }
+                        span("icon is-small is-left mr-2") { autoFASvg("fa-envelope", "") }
                         input("input") {
                             type("email")
                             placeholder("Fill in the email here")
@@ -65,7 +64,7 @@ fun RenderContext.NewUserPage() {
                 div("field") {
                     label("label") { +"Password" }
                     div("control has-icons-left") {
-                        span("icon is-small is-key mr-2") { svg("fa-user", "") }
+                        span("icon is-small is-key mr-2") { autoFASvg("fa-key", "") }
                         input("input") {
                             type("password")
                             placeholder("Fill in the password here")
@@ -77,7 +76,7 @@ fun RenderContext.NewUserPage() {
                 div("is-grouped is-right buttons") {
                     div("control") {
                         button("button") {
-                            autoSvg("fa-check")
+                            autoFASvg("fa-check")
                             +"Confirm"
                             clicks handledBy { showCreateUserDialog.update(true) }
                         }

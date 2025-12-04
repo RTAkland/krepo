@@ -6,14 +6,14 @@
  */
 
 
-package krepo.components.fa
+package krepo.util.img
 
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.src
 import dev.fritz2.core.width
 import krepo.isDarkTheme
 
-fun RenderContext.svg(
+private fun RenderContext.svg(
     name: String,
     className: String = "mr-2",
     size: Int = 16,
@@ -25,7 +25,7 @@ fun RenderContext.svg(
     }
 }
 
-fun RenderContext.svgm(
+private fun RenderContext.svgm(
     name: String,
     className: String = "mr-2",
     size: Int = 16,
@@ -37,21 +37,7 @@ fun RenderContext.svgm(
     }
 }
 
-fun RenderContext.svgBlock(
-    name: String,
-    className: String = "mr-2",
-    size: Int = 16,
-    block: RenderContext.() -> Unit = {},
-) {
-    img(className) faIcon@{
-        inlineStyle("vertical-align: middle;")
-        src("assets/img/fa/origin/${name.removePrefix("fa-")}.svg")
-        width(size)
-        this.block()
-    }
-}
-
-fun RenderContext.autoSvg(
+fun RenderContext.autoFASvg(
     name: String,
     className: String = "mr-2",
     size: Int = 16,
