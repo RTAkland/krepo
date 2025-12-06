@@ -14,7 +14,7 @@ import dev.fritz2.core.href
 import dev.fritz2.core.storeOf
 import dev.fritz2.core.title
 import kotlinx.browser.window
-import krepo.util.img.autoFASvg
+import krepo.util.img.autoSvg
 import krepo.components.infoToast
 import krepo.coroutineScope
 import krepo.entity.maven.ConfigRepositoryWithSize
@@ -75,7 +75,7 @@ fun RenderContext.HomePage(repos: List<ConfigRepositoryWithSize>?) {
                             div("dropdown is-hoverable is-centered is-inline-block") {
                                 div("dropdown-trigger") {
                                     button("button is-small") {
-                                        autoFASvg("fa-copy", "", 12)
+                                        autoSvg("fa-copy", "", 12)
                                         attr("aria-haspopup", "true")
                                         attr("aria-controls", "dropdown-menu-${repo.name}")
                                         clicks handledBy {

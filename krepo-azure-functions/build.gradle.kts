@@ -44,7 +44,7 @@ kazure {
 }
 
 kembeddable {
-    resourcePath.add(File("src/main/resources"))
+    resourcePath.add(File("krepo-azure-functions/src/main/resources"))
     packageName = "krepo.azure.resources"
 }
 

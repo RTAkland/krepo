@@ -59,7 +59,7 @@ fun main() {
         val fc = httpRequest(BACKEND_VERSION_ROUTE)
             .auth().get().arrayBuffer().fromProtoBuf<FrontendConfigResponse>()
         frontendConfig = fc.data
-        backendVersion = fc.data.backendVersion?.version?.toBackendVersion() ?: BackendVersions.Legacy()
+        backendVersion = fc.data.backendVersion?.version?.toBackendVersion()!!
         document.title = frontendConfig.pageTitle
         render("#target") {
             NavigatorBar()

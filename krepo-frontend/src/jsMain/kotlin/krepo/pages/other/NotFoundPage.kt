@@ -10,12 +10,12 @@
 package krepo.pages.other
 
 import dev.fritz2.core.RenderContext
-import krepo.util.img.autoFASvg
+import krepo.util.img.autoSvg
 import krepo.util.navTo
 
 fun RenderContext.NotFoundPage() {
     div("has-text-centered") {
-        autoFASvg("fa-ban", "", 128)
+        autoSvg("fa-ban", "", 128)
         h1("title is-3") { +"There's nothing here." }
         a("button is-danger") {
             +"Back to home page"

@@ -13,7 +13,7 @@ import dev.fritz2.core.*
 import kotlinx.browser.window
 import krepo.backendVersion
 import krepo.components.errorToast
-import krepo.util.img.autoFASvg
+import krepo.util.img.autoSvg
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.components.warningToast
@@ -40,7 +40,7 @@ fun RenderContext.CreateUserPage() {
                 div("field") {
                     label("label") { +"Username" }
                     div("control has-icons-left") {
-                        span("icon is-small is-left mr-2") { autoFASvg("fa-user", "") }
+                        span("icon is-small is-left mr-2") { autoSvg("fa-user", "") }
                         input("input") {
                             type("text")
                             placeholder("Fill in the username here")
@@ -52,7 +52,7 @@ fun RenderContext.CreateUserPage() {
                 div("field") {
                     label("label") { +"Email" }
                     div("control has-icons-left") {
-                        span("icon is-small is-left mr-2") { autoFASvg("fa-envelope", "") }
+                        span("icon is-small is-left mr-2") { autoSvg("fa-envelope", "") }
                         input("input") {
                             type("email")
                             placeholder("Fill in the email here")
@@ -64,7 +64,7 @@ fun RenderContext.CreateUserPage() {
                 div("field") {
                     label("label") { +"Password" }
                     div("control has-icons-left") {
-                        span("icon is-small is-key mr-2") { autoFASvg("fa-key", "") }
+                        span("icon is-small is-key mr-2") { autoSvg("fa-key", "") }
                         input("input") {
                             type("password")
                             placeholder("Fill in the password here")
@@ -76,7 +76,7 @@ fun RenderContext.CreateUserPage() {
                 div("is-grouped is-right buttons") {
                     div("control") {
                         button("button") {
-                            autoFASvg("fa-check")
+                            autoSvg("fa-check")
                             +"Confirm"
                             clicks handledBy { showCreateUserDialog.update(true) }
                         }

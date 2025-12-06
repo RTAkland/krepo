@@ -14,7 +14,7 @@ import dev.fritz2.core.disabled
 import dev.fritz2.core.storeOf
 import kotlinx.browser.window
 import krepo.backendVersion
-import krepo.util.img.autoFASvg
+import krepo.util.img.autoSvg
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.coroutineScope
@@ -43,7 +43,7 @@ fun RenderContext.UserManagePage() {
                                     span("has-text-grey") { +user.ex!!.namespaces.joinToString(", ") }
                                     div("buttons") {
                                         button("button is-small") {
-                                            autoFASvg("fa-user-pen")
+                                            autoSvg("fa-user-pen")
                                             +"Edit"
                                             disabled(true)
                                             clicks handledBy {
@@ -51,7 +51,7 @@ fun RenderContext.UserManagePage() {
                                             }
                                         }
                                         button("button is-small") {
-                                            autoFASvg("fa-trash-alt", size = 12)
+                                            autoSvg("fa-trash-alt", size = 12)
                                             +"Delete"
                                             disabled(true)
                                             clicks handledBy {

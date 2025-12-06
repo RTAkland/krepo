@@ -13,7 +13,7 @@ import dev.fritz2.core.*
 import kotlinx.browser.window
 import krepo.*
 import krepo.components.errorToast
-import krepo.util.img.autoFASvg
+import krepo.util.img.autoSvg
 import krepo.components.infoToast
 import krepo.components.showDialog
 import krepo.components.warningToast
@@ -44,8 +44,6 @@ fun RenderContext.ContentListingPage() {
                 if (repo != "private") "${backendVersion.GET_PUBLIC_REPOSITORY_CONTENTS}?repo=$repo&path=$path" else
                     "${backendVersion.GET_PRIVATE_REPOSITORY_CONTENTS}?repo=$repo&path=$path"
             }
-
-            is BackendVersions.Legacy -> "${backendVersion.GET_PUBLIC_REPOSITORY_CONTENTS}${currentPath.removePrefix("/")}"
         }
         val api = httpRequest(url).auth().octetType()
         val response = api.get()
@@ -86,7 +84,7 @@ fun RenderContext.ContentListingPage() {
                         div("level-left") {
                             a("button") {
                                 clicks handledBy { window.history.back() }
-                                autoFASvg("fa-arrow-left", "")
+                                autoSvg("fa-arrow-left", "")
                                 title("Back")
                             }
                         }
@@ -105,7 +103,7 @@ fun RenderContext.ContentListingPage() {
                                 val (group, name, version) = parseGAV(simplePath, repo)
                                 div("dropdown has-dropdown is-hoverable has-background is-centered") {
                                     button("button") {
-                                        autoFASvg("fa-copy", "")
+                                        autoSvg("fa-copy", "")
                                         title("Copy dependency URL")
                                         clicks handledBy {
                                             window.navigator.clipboard.writeText(
@@ -144,7 +142,7 @@ fun RenderContext.ContentListingPage() {
                                 label("button") {
                                     title("Upload file")
                                     attr("for", "fileInput")
-                                    autoFASvg("fa-upload", "")
+                                    autoSvg("fa-upload", "")
                                 }
                                 input("file-input") {
                                     id("fileInput")
@@ -181,13 +179,13 @@ fun RenderContext.ContentListingPage() {
                                 }
                                 a("button") {
                                     title("Create folder")
-                                    autoFASvg("fa-folder-plus", "")
+                                    autoSvg("fa-folder-plus", "")
                                     clicks handledBy { showCreateFolderDialog.update(true) }
                                 }
                             }
                             a("button mr-2") {
                                 title("Preferences")
-                                autoFASvg("fa-sliders", "")
+                                autoSvg("fa-sliders", "")
                                 clicks handledBy { infoToast("Nothing to set.") }
                             }
                         }
@@ -236,15 +234,15 @@ fun RenderContext.ContentListingPage() {
                                         title(entry.timestamp.toString())
                                     }
                                 }
-                                td("has-text-centered") { if (!entry.isDirectory) +formatSize(entry.size) else +"-" }
+                                td("has-text-left") { if (!entry.isDirectory) +formatSize(entry.size) else +"-" }
                                 td("has-text-left") {
                                     span {
                                         if (entry.owner != null) {
-                                            autoFASvg("fa-circle-check", size = 15)
+                                            autoSvg("fa-circle-check", size = 15)
                                             +"by ${entry.owner}"
                                             title("Published by ${entry.owner}")
                                         } else {
-                                            autoFASvg("fa-circle-question", size = 15)
+                                            autoSvg("fa-circle-question", size = 15)
                                             +"by Unknown"
                                             title("Owned by Unknown")
                                         }
@@ -256,7 +254,7 @@ fun RenderContext.ContentListingPage() {
                                         button("button is-small") {
                                             val name = if (entry.isDirectory) "directory" else "file"
                                             title("Delete $name")
-                                            autoFASvg("fa-trash-alt", "", size = 12)
+                                            autoSvg("fa-trash-alt", "", size = 12)
                                             clicks handledBy {
                                                 showDeleteFileEntryDialog.update(true)
                                                 selectedFileEntry.update("$currentPath/${entry.name}".removePrefix("/"))

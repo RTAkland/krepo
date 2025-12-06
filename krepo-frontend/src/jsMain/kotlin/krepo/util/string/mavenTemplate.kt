@@ -24,3 +24,7 @@ fun getMavenDependenciesTemplate(group: String, name: String, version: String) =
     |  <version>$version</version>
     |</dependency>
 """.trimMargin()
+
+fun getGradleKotlinDslPluginTemplate(group: String, version: String) = """
+    |id("$group") version "$version"
+""".trimMargin()

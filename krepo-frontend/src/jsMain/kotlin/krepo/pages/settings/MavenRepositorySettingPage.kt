@@ -11,7 +11,7 @@ package krepo.pages.settings
 
 import dev.fritz2.core.*
 import krepo.backendVersion
-import krepo.util.img.autoFASvg
+import krepo.util.img.autoSvg
 import krepo.components.showDialog
 import krepo.coroutineScope
 import krepo.entity.maven.GetRepositoriesResponse
@@ -54,7 +54,7 @@ fun RenderContext.MavenRepositorySettingPage() {
                     div("level-left") { h3("title is-4") { +"Repository List" } }
                     div("level-right") {
                         button("button") {
-                            autoFASvg("fa-plus")
+                            autoSvg("fa-plus")
                             +"Add Repository"
                             disabled(true)
                             clicks handledBy { showCreateRepositoryFormDialog.update(true) }
@@ -65,8 +65,8 @@ fun RenderContext.MavenRepositorySettingPage() {
                     div("box is-flex is-justify-content-space-between is-align-items-center") {
                         span {
                             when (repo.visibility) {
-                                RepositoryVisibility.Internal -> autoFASvg("fa-eye-slash")
-                                RepositoryVisibility.Public -> autoFASvg("fa-eye")
+                                RepositoryVisibility.Internal -> autoSvg("fa-eye-slash")
+                                RepositoryVisibility.Public -> autoSvg("fa-eye")
                             }
                             a("is-size-5") {
                                 +repo.name
@@ -77,7 +77,7 @@ fun RenderContext.MavenRepositorySettingPage() {
                         }
                         div {
                             button("button is-small mr-2") {
-                                autoFASvg("fa-user-pen")
+                                autoSvg("fa-user-pen")
                                 +"Edit"
                                 disabled(true)
                                 clicks handledBy {
@@ -86,7 +86,7 @@ fun RenderContext.MavenRepositorySettingPage() {
                                 }
                             }
                             button("button is-small") {
-                                autoFASvg("fa-trash-alt")
+                                autoSvg("fa-trash-alt")
                                 +"Delete"
                                 disabled(true)
                                 clicks handledBy {

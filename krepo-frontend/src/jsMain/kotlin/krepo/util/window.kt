@@ -9,8 +9,6 @@
 package krepo.util
 
 import kotlinx.browser.window
-import krepo.BackendVersions
-import krepo.backendVersion
 import krepo.developmentMode
 
 fun getCurrentHttpUrl(): String {
@@ -20,8 +18,8 @@ fun getCurrentHttpUrl(): String {
 }
 
 val customBacked
-    get() = if (!developmentMode) "https://repo.maven.rtast.cn" else if (developmentMode) "http://127.0.0.1:7071"
-    else if (backendVersion is BackendVersions.Legacy) getCurrentHttpUrl() else getCurrentHttpUrl()
+    get() = if (!developmentMode) "https://repo.maven.rtast.cn"
+    else if (developmentMode) "http://127.0.0.1:7071" else getCurrentHttpUrl()
 
 fun navTo(
     target: String,

@@ -24,7 +24,7 @@ import krepo.util.byte.fromProtoBuf
 import krepo.util.file.LocalStorage
 import krepo.util.file.checkPermission
 import krepo.util.httpRequest
-import krepo.util.img.autoFASvg
+import krepo.util.img.autoSvg
 import krepo.util.launchJob
 import krepo.util.setOctetBody
 import krepo.util.string.validateEmail
@@ -40,7 +40,7 @@ fun RenderContext.UserSettingsPage() = checkPermission {
         div("container") {
             inlineStyle("max-width: 600px;")
             h3("title is-3 has-text-centered mb-6") {
-                autoFASvg("fa-user-pen", "mr-2 mb-2", size = 32)
+                autoSvg("fa-user-pen", "mr-2 mb-2", size = 32)
                 +"User settings"
             }
             div("box mx-auto") {
@@ -55,7 +55,7 @@ fun RenderContext.UserSettingsPage() = checkPermission {
                                     placeholder("Input username here")
                                     value(user)
                                 }
-                                span("icon is-small is-left") { autoFASvg("fa-user", "") }
+                                span("icon is-small is-left") { autoSvg("fa-user", "") }
                             }
                         }
                     }
@@ -69,7 +69,7 @@ fun RenderContext.UserSettingsPage() = checkPermission {
                                     value(email.data)
                                     changes.values() handledBy email.update
                                 }
-                                span("icon is-small is-left") { autoFASvg("fa-envelope", "") }
+                                span("icon is-small is-left") { autoSvg("fa-envelope", "") }
                             }
                         }
                     }
@@ -83,19 +83,19 @@ fun RenderContext.UserSettingsPage() = checkPermission {
                                     value(password.data)
                                     changes.values() handledBy password.update
                                 }
-                                span("icon is-small is-left") { autoFASvg("fa-lock", "") }
+                                span("icon is-small is-left") { autoSvg("fa-lock", "") }
                             }
                         }
                     }
                     div("column is-full") {
                         div("field is-grouped is-grouped-right mt-5") {
                             button("button") {
-                                autoFASvg("fa-key")
+                                autoSvg("fa-key")
                                 +"Generate publish token"
                                 clicks handledBy { showGenerateNewPublishTokenDialogStore.update(true) }
                             }
                             button("button") updateInfoButton@{
-                                autoFASvg("fa-pen-to-square")
+                                autoSvg("fa-pen-to-square")
                                 +"Update user info"
                                 disabled(true)
                                 clicks handledBy { showUpdateUserDialog.update(true) }

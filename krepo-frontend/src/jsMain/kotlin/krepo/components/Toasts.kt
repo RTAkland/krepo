@@ -10,21 +10,21 @@
 package krepo.components
 
 import dev.fritz2.headless.components.toast
-import krepo.util.img.autoFASvg
+import krepo.util.img.autoSvg
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 fun warningToast(message: String, duration: Duration = 2.5.seconds) =
     toast("default", duration.inWholeMilliseconds) {
-        div("notification p-4 toast-message mb-2") { autoFASvg("fa-triangle-exclamation", size = 13);+message }
+        div("notification p-4 toast-message mb-2") { autoSvg("fa-triangle-exclamation", size = 13);+message }
     }
 
 fun errorToast(message: String, duration: Duration = 2.5.seconds) =
     toast("default", duration.inWholeMilliseconds) {
-        div("notification p-4 toast-message mb-2") { autoFASvg("fa-xmark", size = 13);+message }
+        div("notification p-4 toast-message mb-2") { autoSvg("fa-xmark", size = 13);+message }
     }
 
 fun infoToast(message: String, duration: Duration = 2.5.seconds) =
     toast("default", duration.inWholeMilliseconds) {
-        div("notification p-4 toast-message mb-2") { autoFASvg("fa-info-circle", size = 13   );+message }
+        div("notification p-4 toast-message mb-2") { autoSvg("fa-info-circle", size = 13   );+message }
     }

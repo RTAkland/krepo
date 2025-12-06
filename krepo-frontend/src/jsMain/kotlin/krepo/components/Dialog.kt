@@ -9,7 +9,7 @@ package krepo.components
 
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.Store
-import krepo.util.img.autoFASvg
+import krepo.util.img.autoSvg
 
 fun RenderContext.showDialog(
     showDialog: Store<Boolean>,
@@ -49,12 +49,12 @@ fun RenderContext.showDialog(
                     footer("modal-card-foot") {
                         div("buttons is-right") {
                             button("button is-right") {
-                                autoFASvg("fa-ban")
+                                autoSvg("fa-ban")
                                 +"Cancel"
                                 clicks handledBy { showDialog.update(false) }
                             }
                             button("button is-right") confirm@{
-                                autoFASvg("fa-check")
+                                autoSvg("fa-check")
                                 +"Confirm"
                                 clicks handledBy {
                                     showDialog.update(false)

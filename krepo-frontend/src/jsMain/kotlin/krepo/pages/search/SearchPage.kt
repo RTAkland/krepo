@@ -6,6 +6,7 @@
  */
 
 @file:Suppress("FunctionName")
+@file:OptIn(ExperimentalSerializationApi::class)
 
 package krepo.pages.search
 
@@ -13,9 +14,10 @@ import dev.fritz2.core.*
 import kotlinx.browser.window
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
+import kotlinx.serialization.ExperimentalSerializationApi
 import krepo.backendVersion
 import krepo.components.errorToast
-import krepo.util.img.autoFASvg
+import krepo.components.infoToast
 import krepo.components.warningToast
 import krepo.coroutineScope
 import krepo.entity.maven.ConfigRepositoryWithSize
@@ -23,9 +25,9 @@ import krepo.index.IndexMetadata
 import krepo.index.IndexSearchResponse
 import krepo.util.*
 import krepo.util.byte.toByteArray
+import krepo.util.img.autoSvg
 import krepo.util.repo.getRepositories
-import krepo.util.string.extractQueryParams
-import krepo.util.string.formatDate
+import krepo.util.string.*
 
 fun RenderContext.SearchPage() {
     val queryParam = extractQueryParams(window.location.href)
@@ -86,7 +88,7 @@ fun RenderContext.SearchPage() {
                                         +selected.ifEmpty { "releases" }
                                     }
                                 }
-                                span("icon is-small") { autoFASvg("fa-angle-down", "", size = 14) }
+                                span("icon is-small") { autoSvg("fa-angle-down", "", size = 14) }
                                 title("Select repository to search")
                             }
                         }
@@ -126,7 +128,7 @@ fun RenderContext.SearchPage() {
                         }
                         className(isLoadingClassName.data)
                         searchButtonTextStore.data.render {
-                            autoFASvg("fa-magnifying-glass")
+                            autoSvg("fa-magnifying-glass")
                             +it
                         }
                         clicks handledBy { searchInner() }
@@ -141,14 +143,8 @@ fun RenderContext.SearchPage() {
             }
             resultStore.data.render { result ->
                 when {
-                    result == null -> {
-                        div("has-text-centered has-text-grey mt-6") { +"Waiting for search..." }
-                    }
-
-                    result.data.isEmpty() -> {
-                        div("has-text-centered has-text-grey mt-6") { +"No results found" }
-                    }
-
+                    result == null -> div("has-text-centered has-text-grey mt-6") { +"Waiting for search results..." }
+                    result.data.isEmpty() -> div("has-text-centered has-text-grey mt-6") { +"No results found" }
                     else -> {
                         div("mb-3 has-text-weight-semibold is-flex is-justify-content-center is-align-items-center") {
                             +"Found "
@@ -156,18 +152,8 @@ fun RenderContext.SearchPage() {
                             +" results"
                         }
                         table("table is-striped is-hoverable is-fullwidth") {
-                            thead {
-                                tr {
-                                    th("has-text-centered") { }
-                                    th { }
-                                    th {}
-                                }
-                            }
-                            tbody {
-                                result.data.forEach { artifact ->
-                                    renderArtifactRow(artifact)
-                                }
-                            }
+                            thead { tr { th("has-text-centered") { }; th {}; th {}; th {}; th {} } }
+                            tbody { result.data.forEach { artifact -> renderArtifactRow(artifact) } }
                         }
                     }
                 }
@@ -211,8 +197,9 @@ private suspend fun search(
 }
 
 private fun RenderContext.renderArtifactRow(artifact: IndexMetadata) {
+    val isPlugin = artifact.artifact.endsWith(".gradle.plugin")
     tr {
-        td("has-text-centered") { +artifact.repo }
+        td("has-text-centered") { +artifact.repo; title("${artifact.repo} repository") }
         td {
             val gav = "${artifact.repo}/" +
                     "${artifact.group.replace(".", "/").removePrefix("/")}/" +
@@ -220,10 +207,61 @@ private fun RenderContext.renderArtifactRow(artifact: IndexMetadata) {
             a {
                 href("/#/$gav")
                 +gav
+                title("Go to contents page")
+            }
+        }
+        td { +formatDate(artifact.lastModified) }
+        td("has-text-centered") {
+            span("tag") {
+                if (isPlugin) {
+                    title("This artifact is a gradle plugin"); +"Plugin"
+                } else {
+                    title("This is artifact is a dependency"); +"Artifact"
+                }
             }
         }
         td {
-            +formatDate(artifact.lastModified)
+            button("button is-small mr-2") {
+                autoSvg("fa-copy", size = 12)
+                autoSvg("repo", "", size = 14)
+                title("Copy gradle(kts) repository config block")
+                clicks handledBy {
+                    window.navigator.clipboard.writeText(
+                        getGradleKotlinDslRepositoryTemplate(artifact.repo)
+                    )
+                    infoToast("Gradle(kts) repository config block copied")
+                }
+            }
+            button("button is-small") {
+                autoSvg("fa-copy", size = 12)
+                if (isPlugin) {
+                    autoSvg("plugin", "", size = 14)
+                    title("Copy gradle(kts) plugin")
+                } else {
+                    autoSvg("artifact", "", size = 14)
+                    title("Copy gradle(kts) dependency")
+                }
+                clicks handledBy {
+                    if (artifact.artifact.endsWith(".gradle.plugin")) {
+                        window.navigator.clipboard.writeText(
+                            getGradleKotlinDslPluginTemplate(
+                                artifact.group.removePrefix("."),
+                                artifact.version
+                            )
+                        )
+                        infoToast("Gradle(kts) plugin copied")
+                    } else {
+                        window.navigator.clipboard.writeText(
+                            getGradleKotlinDslDependenciesTemplate(
+                                artifact.group.removePrefix("."),
+                                artifact.artifact,
+                                artifact.version
+                            )
+                        )
+                        infoToast("Gradle(kts) dependency copied")
+                    }
+                }
+            }
         }
     }
 }

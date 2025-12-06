@@ -19,7 +19,7 @@ import krepo.entity.FrontendConfig
 import krepo.frontendConfig
 import krepo.util.*
 import krepo.util.file.checkPermission
-import krepo.util.img.autoFASvg
+import krepo.util.img.autoSvg
 
 fun RenderContext.CommonSettingPage() {
     checkPermission {
@@ -81,7 +81,7 @@ fun RenderContext.CommonSettingPage() {
                     div("is-grouped is-right buttons") {
                         div("control") {
                             button("button") {
-                                autoFASvg("fa-rotate-left")
+                                autoSvg("fa-rotate-left")
                                 +"Reset"
                                 disabled(true)
                                 clicks handledBy { showResetFrontConfigDialog.update(true) }
@@ -89,7 +89,7 @@ fun RenderContext.CommonSettingPage() {
                         }
                         div("control") {
                             button("button") {
-                                autoFASvg("fa-floppy-disk")
+                                autoSvg("fa-floppy-disk")
                                 +"Save"
                                 disabled(true)
                                 clicks handledBy { showSubmitSettingDialog.update(true) }

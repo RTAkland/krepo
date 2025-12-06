@@ -83,3 +83,18 @@ fun deleteRepository(
 ): HttpResponse {
     return request.notImplemented()
 }
+
+//@HttpRouting("/api/azure/repository/artifact/latest", [HttpMethod.POST])
+//fun getLatestArtifactVersion(
+//    request: HttpRequest<ByteArray>,
+//    context: HttpContext,
+//): HttpResponse {
+//    fun nullResponse() = request.respondProtobuf(GetArtifactLatestVersionResponse(null))
+//    val payload = request.body.fromProtobuf<GetArtifactLatestVersionRequest>()
+//    val mavenMetadataFile =
+//        getFileWithMetadata("${payload.repo}/${payload.group}/${payload.artifact}/maven-metadata.xml", null, null)
+//            ?: return nullResponse()
+//    val latestVersion = (mavenMetadataFile.bytes ?: return nullResponse()).decodeToString()
+//        .fromXmlString<MavenMetadata>().versioning.latest
+//    return request.respondProtobuf(GetArtifactLatestVersionResponse(latestVersion))
+//}
